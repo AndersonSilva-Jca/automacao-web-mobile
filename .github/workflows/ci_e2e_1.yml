@@ -18,7 +18,7 @@ jobs:
       - name: Checkout do Código
         uses: actions/checkout@v4
 
-      - name: Cypress Run - Testes E2E UTP
+      - name: Cypress Run - Testes E2E ODP/Giro/Wemobi/UTP
         uses: cypress-io/github-action@v7
         id: cypress
         continue-on-error: true
@@ -56,12 +56,12 @@ jobs:
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "✅[ESTÁVEL] Giro/Wemobi/UTP - Monit. Cont."
+          subject: "✅[ESTÁVEL] ODP/Giro/Wemobi/UTP - Monit. Cont."
           to: anderson.ssantos@jcatlm.com.br
           # cc: alfredo.junior@jcatlm.com.br
-          from: "Monitoramento Contínuo E2E"
+          from: "Monitoramento Contínuo"
           body: |
-            Monitoramento Cypress - UTP
+            Monitoramento Cypress - ODP/Giro/Wemobi/UTP
 
             O ciclo de monitoramento contínuo foi finalizado com sucesso.
 
@@ -85,10 +85,10 @@ jobs:
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "🚨[ALERTA] Giro/Wemobi/UTP - Monit. Cont."
+          subject: "🚨[ALERTA] ODP/Giro/Wemobi/UTP - Monit. Cont."
           to: anderson.ssantos@jcatlm.com.br
           cc: alfredo.junior@jcatlm.com.br
-          from: "Monitoramento Contínuo E2E"
+          from: "Monitoramento Contínuo"
           body: |
             🚨 RELATÓRIO DE FALHA DETECTADA
 
