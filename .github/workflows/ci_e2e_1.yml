@@ -87,7 +87,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "🚨[ALERTA] Giro/Wemobi/UTP - Monit. Cont."
           to: anderson.ssantos@jcatlm.com.br
-          # cc: alfredo.junior@jcatlm.com.br
+          cc: alfredo.junior@jcatlm.com.br
           from: "Monitoramento Contínuo E2E"
           body: |
             🚨 RELATÓRIO DE FALHA DETECTADA
