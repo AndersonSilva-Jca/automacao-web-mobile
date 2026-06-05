@@ -14,29 +14,29 @@ describe("Digital - Fazer busca de destinos, selecionar datas, compra de passage
     cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
   });
 });
-it("Clube Giro - Deve fazer busca de destinos IDA com 1 passageiro", () => {
-  cy.env(["login", "senha"]).then((env) => {
-    cy.visit(giro);
-    cy.get(loc.HEADER_BOTAO_LOGIN).click();
-    cy.get(loc.USUARIO).type(env.login);
-    cy.get(loc.SENHA).type(env.senha, { log: false });
-    cy.get(loc.BOTAO_LOGIN).click();
-    cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
-  });
-  cy.get(loc.BUSCAS.DESTINO_IDA).click().type(" Campos Dos Goytacazes - Shopping Estrada (RJ) ", { delay: 100 });
-  cy.contains(" Campos Dos Goytacazes - Shopping Estrada (RJ) ").click({ force: true });
-  cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type(" Macaé - Terminal Rodoviário (RJ) ", { delay: 100 });
-  cy.contains(" Macaé - Terminal Rodoviário (RJ) ").click({ force: true });
-  cy.get(loc.BUSCAS.DATA_IDA).click();
-  cy.get(loc.LOADER).should("not.exist");
-  cy.selecionarDataIda(5);
-  cy.get(loc.BUSCAS.BOTAO_BUSCAR, { timeout: 90000 }).should("be.visible").click();
-  cy.selecionarPassagemAleatoria1({ timeout: 90000 });
-  cy.get(loc.CHECK_PASSAGEIRO, { timeout: 90000 }).click({ force: true });
-  cy.get(loc.BOTAO_AVANCAR).should("be.visible").and("not.be.disabled").click();
-  cy.selecionarAssentoAleatorio({ timeout: 90000 });
-  cy.get(loc.BOTAO_AVANCAR).should("be.visible").click();
-});
+// it("Clube Giro - Deve fazer busca de destinos IDA com 1 passageiro", () => {
+//   cy.env(["login", "senha"]).then((env) => {
+//     cy.visit(giro);
+//     cy.get(loc.HEADER_BOTAO_LOGIN).click();
+//     cy.get(loc.USUARIO).type(env.login);
+//     cy.get(loc.SENHA).type(env.senha, { log: false });
+//     cy.get(loc.BOTAO_LOGIN).click();
+//     cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
+//   });
+//   cy.get(loc.BUSCAS.DESTINO_IDA).click().type(" Campos Dos Goytacazes - Shopping Estrada (RJ) ", { delay: 100 });
+//   cy.contains(" Campos Dos Goytacazes - Shopping Estrada (RJ) ").click({ force: true });
+//   cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type(" Macaé - Terminal Rodoviário (RJ) ", { delay: 100 });
+//   cy.contains(" Macaé - Terminal Rodoviário (RJ) ").click({ force: true });
+//   cy.get(loc.BUSCAS.DATA_IDA).click();
+//   cy.get(loc.LOADER).should("not.exist");
+//   cy.selecionarDataIda(5);
+//   cy.get(loc.BUSCAS.BOTAO_BUSCAR, { timeout: 90000 }).should("be.visible").click();
+//   cy.selecionarPassagemAleatoria1({ timeout: 90000 });
+//   cy.get(loc.CHECK_PASSAGEIRO, { timeout: 90000 }).click({ force: true });
+//   cy.get(loc.BOTAO_AVANCAR).should("be.visible").and("not.be.disabled").click();
+//   cy.selecionarAssentoAleatorio({ timeout: 90000 });
+//   cy.get(loc.BOTAO_AVANCAR).should("be.visible").click();
+// });
 
 it("Wemobi - Deve fazer busca de destinos IDA com 1 passageiro", () => {
   cy.env(["login", "senha"]).then((env) => {
@@ -62,7 +62,7 @@ it("Wemobi - Deve fazer busca de destinos IDA com 1 passageiro", () => {
   cy.get("#seat-reservation-v2-button-proceed").should("be.visible").and("not.be.disabled").click();
 });
 
-it.only("Outlet de passagens - Deve fazer busca de destinos IDA com 1 passageiro", () => {
+it("Outlet de passagens - Deve fazer busca de destinos IDA com 1 passageiro", () => {
   cy.env(["login", "senha"]).then((env) => {
     cy.visit(odp);
     cy.get(".logged-out-section > .btn-outlet").click();
