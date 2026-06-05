@@ -62,7 +62,7 @@ it("Wemobi - Deve fazer busca de destinos IDA com 1 passageiro", () => {
   cy.get("#seat-reservation-v2-button-proceed").should("be.visible").and("not.be.disabled").click();
 });
 
-it.only("Outlet de passagens - Deve fazer busca de destinos IDA com 1 passageiro", () => {
+it("Outlet de passagens - Deve fazer busca de destinos IDA com 1 passageiro", () => {
   cy.env(["login", "senha"]).then((env) => {
     cy.visit(odp);
     cy.get(".logged-out-section > .btn-outlet").click();
