@@ -64,7 +64,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "✅[ESTÁVEL] ODP/Giro/Wemobi/UTP - Monit. Cont."
           to: anderson.ssantos@jcatlm.com.br
-          # cc: alfredo.junior@jcatlm.com.br
+          cc: alfredo.junior@jcatlm.com.br
           from: "Monitoramento Contínuo"
           body: |
             Monitoramento Cypress - ODP/Giro/Wemobi/UTP

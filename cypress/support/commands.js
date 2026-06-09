@@ -684,3 +684,21 @@ Cypress.Commands.add("selecionarCidadeSugerida", (cidade) => {
 // Uso
 // cy.selecionarCidadeSugerida("São Paulo - Rodoviária Tietê (SP)");
 // cy.selecionarCidadeSugerida("Curitiba - Terminal Rodoviário (PR)");
+
+Cypress.Commands.add("fecharModalUpgradePoltrona", () => {
+  // Força o Cypress a ignorar erros internos do JavaScript do site
+  Cypress.on("uncaught:exception", () => false);
+
+  // Aguarda o modal terminar de carregar na tela
+  cy.wait(2500);
+
+  // Verifica se o botão de fechar existe na estrutura da página
+  cy.get("#modal-upsel").then(($el) => {
+    if ($el.length > 0) {
+      cy.wrap($el).invoke("remove");
+      cy.log("✅ Modal fechado com sucesso.");
+    } else {
+      cy.log("✅ Modal de Upgrade não apareceu nesta sessão. Seguindo fluxo...");
+    }
+  });
+});

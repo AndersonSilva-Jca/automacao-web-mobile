@@ -30,6 +30,7 @@ module.exports = defineConfig({
     senha: process.env.SENHA,
     mailUsername: process.env.MAIL_USERNAME,
     mailPassword: process.env.MAIL_PASSWORD,
+    appMailPassword: process.env.APPMAIL_PASSWORD,
   },
   e2e: {
     baseUrl: "https://www.viacaocometa.com.br",
@@ -50,48 +51,85 @@ module.exports = defineConfig({
       });
 
       on("task", {
-        // Altere a sua task para incluir a lógica de repetição (retries)
-        async buscarCodigoMFA({ email, senha }) {
-          console.log(`📬 Iniciando busca de e-mail para: ${email}`);
+        async buscarCodigo2FA({ email, appMailPassword }) {
+          console.log(`📬 Buscando código 2FA para: ${email}`);
 
-          const tempoMaximoEspera = 45000; // 45 segundos no total
-          const intervaloTentativas = 5000; // Checa a caixa de e-mail a cada 5 segundos
+          const tempoMaximo = 45000;
+          const intervalo = 5000;
           let tempoDecorrido = 0;
-          let codigoEncontrado = null;
 
-          // Começa o loop de tentativas
-          while (tempoDecorrido < tempoMaximoEspera) {
-            // 1. AQUI VAI A SUA LÓGICA ATUAL DE CONEXÃO IMAP/POP3
-            // Exemplo fictício do que você já deve ter rodando aí:
-            codigoEncontrado = await suaFuncaoQueLeOImap(email, senha);
+          // Configuração IMAP para Gmail
+          const config = {
+            imap: {
+              user: email,
+              password: `${(appMailPassword, { log: false })}`, // Use a senha do app para autenticação
+              host: "imap.gmail.com",
+              port: 993,
+              tls: true,
+              tlsOptions: { rejectUnauthorized: false },
+              authTimeout: 10000,
+              customAuth: {
+                PLAIN: (imap) => {
+                  return ["PLAIN", imap.user, imap.password];
+                },
+              },
+            },
+          };
 
-            // 💡 SIMULAÇÃO: Se a sua biblioteca de e-mail retornar o código de 6 dígitos:
-            if (codigoEncontrado) {
-              console.log(`✅ Código encontrado com sucesso: ${codigoEncontrado}`);
-              return codigoEncontrado; // Retorna o código para o Cypress e encerra o loop
+          while (tempoDecorrido < tempoMaximo) {
+            let connection;
+            try {
+              // Conecta ao IMAP
+              connection = await imaps.connect(config);
+              await connection.openBox("INBOX");
+
+              // Busca e-mails não lidos do Clube Giro dos últimos 5 minutos
+              const delay = new Date();
+              delay.setTime(delay.getTime() - 5 * 60 * 1000);
+
+              const searchCriteria = ["UNSEEN", ["FROM", "seuacesso@clubegiro.com.br"], ["SINCE", delay]];
+
+              const fetchOptions = {
+                bodies: ["TEXT", "HEADER"],
+                markSeen: true,
+              };
+
+              const messages = await connection.search(searchCriteria, fetchOptions);
+              console.log(`📨 E-mails encontrados: ${messages.length}`);
+
+              for (const msg of messages) {
+                const body = msg.parts.find((p) => p.which === "TEXT");
+                if (body) {
+                  const parsed = await simpleParser(body.body);
+                  const texto = parsed.text || "";
+
+                  // Extrai código de 6 dígitos
+                  const match = texto.match(/\b(\d{6})\b/);
+                  if (match) {
+                    console.log(`✅ Código encontrado: ${match[1]}`);
+                    await connection.end();
+                    return match[1];
+                  }
+                }
+              }
+
+              if (connection) await connection.end();
+            } catch (err) {
+              console.log(`⚠️ Erro IMAP: ${err.message}`);
+              if (connection) await connection.end().catch(() => {});
             }
 
-            // Se não encontrou, avisa no terminal e espera antes de tentar de novo
-            console.log(`⏳ E-mail ainda não chegou. Aguardando mais 5s... (${tempoDecorrido / 1000}s decorridos)`);
-            await wait(intervaloTentativas);
-            tempoDecorrido += intervaloTentativas;
+            console.log(`⏳ Aguardando e-mail... ${tempoDecorrido / 1000}s`);
+            await wait(intervalo);
+            tempoDecorrido += intervalo;
           }
 
-          // Se estourar os 45 segundos e sair do loop sem o código:
-          console.log(`❌ Fim do tempo limite de 45s. E-mail não localizado.`);
+          console.log("❌ Tempo esgotado — código não encontrado");
           return null;
         },
       });
-
-      // Seus outros eventos (como before:browser:launch) continuam aqui embaixo...
-      on("before:browser:launch", (browser = {}, launchOptions) => {
-        if (browser.family === "chromium") {
-          launchOptions.args.push("--ignore-certificate-errors");
-        }
-        return launchOptions;
-      });
     },
-    allowCypressEnv: false,
+    allowCypressEnv: true,
     trashAssetsBeforeRuns: true, // Evita deletar vídeos e screenshots antigos, útil para análise pós-falha
   },
 });

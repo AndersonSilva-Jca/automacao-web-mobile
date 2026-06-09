@@ -37,6 +37,7 @@ jobs:
           SENHA1: ${{ secrets.SENHA1 }}
           MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+          APPMAIL_PASSWORD: ${{ secrets.APPMAIL_PASSWORD }}
           NODE_TLS_REJECT_UNAUTHORIZED: "0"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # CYPRESS_INTERNAL_NPM_REGISTRY_DISABLE_SSL_VERIFICATION: "1" # Força o bypass no Cypress
@@ -64,7 +65,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "✅[ESTÁVEL] ODP/Giro/Wemobi/UTP - Monit. Cont."
           to: anderson.ssantos@jcatlm.com.br
-          # cc: alfredo.junior@jcatlm.com.br
+          cc: alfredo.junior@jcatlm.com.br
           from: "Monitoramento Contínuo"
           body: |
             Monitoramento Cypress - ODP/Giro/Wemobi/UTP
