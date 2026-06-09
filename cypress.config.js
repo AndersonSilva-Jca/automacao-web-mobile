@@ -49,7 +49,7 @@ module.exports = defineConfig({
         return launchOptions;
       });
 
-     on("task", {
+      on("task", {
         // Altere a sua task para incluir a lógica de repetição (retries)
         async buscarCodigoMFA({ email, senha }) {
           console.log(`📬 Iniciando busca de e-mail para: ${email}`);
@@ -61,11 +61,10 @@ module.exports = defineConfig({
 
           // Começa o loop de tentativas
           while (tempoDecorrido < tempoMaximoEspera) {
-            
             // 1. AQUI VAI A SUA LÓGICA ATUAL DE CONEXÃO IMAP/POP3
             // Exemplo fictício do que você já deve ter rodando aí:
             codigoEncontrado = await suaFuncaoQueLeOImap(email, senha);
-            
+
             // 💡 SIMULAÇÃO: Se a sua biblioteca de e-mail retornar o código de 6 dígitos:
             if (codigoEncontrado) {
               console.log(`✅ Código encontrado com sucesso: ${codigoEncontrado}`);
@@ -80,8 +79,8 @@ module.exports = defineConfig({
 
           // Se estourar os 45 segundos e sair do loop sem o código:
           console.log(`❌ Fim do tempo limite de 45s. E-mail não localizado.`);
-          return null; 
-        }
+          return null;
+        },
       });
 
       // Seus outros eventos (como before:browser:launch) continuam aqui embaixo...
@@ -92,7 +91,7 @@ module.exports = defineConfig({
         return launchOptions;
       });
     },
-    allowCypressEnv: true,
+    allowCypressEnv: false,
     trashAssetsBeforeRuns: true, // Evita deletar vídeos e screenshots antigos, útil para análise pós-falha
   },
 });

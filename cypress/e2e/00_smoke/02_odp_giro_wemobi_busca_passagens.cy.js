@@ -14,8 +14,8 @@ describe("Digital - Fazer busca de destinos, selecionar datas, compra de passage
     cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
   });
 });
-it.only("Clube Giro - Deve fazer busca de destinos IDA com 1 passageiro", () => {
-  Cypress.on('uncaught:exception', (err, runnable) => {
+it("Clube Giro - Deve fazer busca de destinos IDA com 1 passageiro", () => {
+  Cypress.on("uncaught:exception", (err, runnable) => {
     return false;
   });
 
@@ -32,35 +32,35 @@ it.only("Clube Giro - Deve fazer busca de destinos IDA com 1 passageiro", () => 
   cy.get(loc.BOTAO_LOGIN).click();
 
   // Pequena pausa para o modal ser renderizado na tela
-  cy.wait(4000); 
+  cy.wait(4000);
 
   cy.get("body").then(($body) => {
     // Verifica se o formulário do 2FA apareceu
     if ($body.find("form.form-twofa").length > 0 || $body.find("[data-js='modal-twofa-form']").length > 0) {
       cy.log("🔒 Modal de Segundo Fator interceptado! Aguardando o disparo do e-mail...");
-      
 
-      cy.task("buscarCodigoMFA", { 
-  email: "anderson.ssantos@jcatlm.com.br", 
-  senha: "Jc@@2k27" 
-}, { timeout: 60000 }).then((codigo) => { // Aumentamos o timeout da task no Cypress para 60s para dar margem
-  
-  if (!codigo) {
-    throw new Error("❌ Falha crítica: O e-mail com o código de 6 dígitos não foi localizado.");
-  }
-  
-  cy.log(`✅ Código MFA recuperado com sucesso: ${codigo}`);
-  // Aqui você digita o código no input da tela...
+      cy.task(
+        "buscarCodigoMFA",
+        {
+          email: "anderson.ssantos@jcatlm.com.br",
+          senha: "Jc@@2k27",
+        },
+        { timeout: 60000 },
+      ).then((codigo) => {
+        // Aumentamos o timeout da task no Cypress para 60s para dar margem
 
+        if (!codigo) {
+          throw new Error("❌ Falha crítica: O e-mail com o código de 6 dígitos não foi localizado.");
+        }
+
+        cy.log(`✅ Código MFA recuperado com sucesso: ${codigo}`);
+        // Aqui você digita o código no input da tela...
 
         // Clica no input correto baseado no HTML inspecionado e digita o token inteiro
-        cy.get('input[data-js="modal-input-password-twofa"]')
-          .focus()
-          .clear()
-          .type(codigo, { delay: 100 });
-        
+        cy.get('input[data-js="modal-input-password-twofa"]').focus().clear().type(codigo, { delay: 100 });
+
         // Clica no botão de confirmar mapeado por você
-        cy.get('.button-twofa').should('be.visible').click();
+        cy.get(".button-twofa").should("be.visible").click();
       });
     } else {
       cy.log("✅ Entrada direta permitida. Sem bloqueio de MFA neste ciclo.");
@@ -69,8 +69,6 @@ it.only("Clube Giro - Deve fazer busca de destinos IDA com 1 passageiro", () => 
 
   // Aguarda o login concluir com sucesso antes de prosseguir com a busca
   cy.get(loc.MENSAGEM_LOGADO, { timeout: 15000 }).should("contain", "Olá");
-
-
 
   cy.get(loc.BUSCAS.DESTINO_IDA).click().type(" Campos Dos Goytacazes - Shopping Estrada (RJ) ", { delay: 100 });
   cy.contains(" Campos Dos Goytacazes - Shopping Estrada (RJ) ").click({ force: true });
@@ -87,7 +85,7 @@ it.only("Clube Giro - Deve fazer busca de destinos IDA com 1 passageiro", () => 
   cy.get(loc.BOTAO_AVANCAR).should("be.visible").click();
 });
 
-it("Wemobi - Deve fazer busca de destinos IDA com 1 passageiro", () => {
+it.only("Wemobi - Deve fazer busca de destinos IDA com 1 passageiro", () => {
   cy.env(["login", "senha"]).then((env) => {
     cy.visit(wemobi);
     cy.get("#button-header-login").click();
@@ -111,7 +109,7 @@ it("Wemobi - Deve fazer busca de destinos IDA com 1 passageiro", () => {
   cy.get("#seat-reservation-v2-button-proceed").should("be.visible").and("not.be.disabled").click();
 });
 
-it("Outlet de passagens - Deve fazer busca de destinos IDA com 1 passageiro", () => {
+it.only("Outlet de passagens - Deve fazer busca de destinos IDA com 1 passageiro", () => {
   cy.env(["login", "senha"]).then((env) => {
     cy.visit(odp);
     cy.get(".logged-out-section > .btn-outlet").click();
