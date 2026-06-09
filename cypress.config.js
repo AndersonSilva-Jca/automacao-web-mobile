@@ -1,5 +1,9 @@
 const { defineConfig } = require("cypress");
+const imaps = require("imap-simple");
+const { simpleParser } = require("mailparser");
+
 require("dotenv").config();
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 module.exports = defineConfig({
   // projectId: "yc5eka",
   reporter: "cypress-mochawesome-reporter",
@@ -44,8 +48,51 @@ module.exports = defineConfig({
         }
         return launchOptions;
       });
+
+     on("task", {
+        // Altere a sua task para incluir a lógica de repetição (retries)
+        async buscarCodigoMFA({ email, senha }) {
+          console.log(`📬 Iniciando busca de e-mail para: ${email}`);
+
+          const tempoMaximoEspera = 45000; // 45 segundos no total
+          const intervaloTentativas = 5000; // Checa a caixa de e-mail a cada 5 segundos
+          let tempoDecorrido = 0;
+          let codigoEncontrado = null;
+
+          // Começa o loop de tentativas
+          while (tempoDecorrido < tempoMaximoEspera) {
+            
+            // 1. AQUI VAI A SUA LÓGICA ATUAL DE CONEXÃO IMAP/POP3
+            // Exemplo fictício do que você já deve ter rodando aí:
+            codigoEncontrado = await suaFuncaoQueLeOImap(email, senha);
+            
+            // 💡 SIMULAÇÃO: Se a sua biblioteca de e-mail retornar o código de 6 dígitos:
+            if (codigoEncontrado) {
+              console.log(`✅ Código encontrado com sucesso: ${codigoEncontrado}`);
+              return codigoEncontrado; // Retorna o código para o Cypress e encerra o loop
+            }
+
+            // Se não encontrou, avisa no terminal e espera antes de tentar de novo
+            console.log(`⏳ E-mail ainda não chegou. Aguardando mais 5s... (${tempoDecorrido / 1000}s decorridos)`);
+            await wait(intervaloTentativas);
+            tempoDecorrido += intervaloTentativas;
+          }
+
+          // Se estourar os 45 segundos e sair do loop sem o código:
+          console.log(`❌ Fim do tempo limite de 45s. E-mail não localizado.`);
+          return null; 
+        }
+      });
+
+      // Seus outros eventos (como before:browser:launch) continuam aqui embaixo...
+      on("before:browser:launch", (browser = {}, launchOptions) => {
+        if (browser.family === "chromium") {
+          launchOptions.args.push("--ignore-certificate-errors");
+        }
+        return launchOptions;
+      });
     },
-    allowCypressEnv: false,
+    allowCypressEnv: true,
     trashAssetsBeforeRuns: true, // Evita deletar vídeos e screenshots antigos, útil para análise pós-falha
   },
 });

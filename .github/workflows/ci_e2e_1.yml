@@ -35,6 +35,8 @@ jobs:
           SENHA: ${{ secrets.SENHA }}
           LOGIN1: ${{ secrets.LOGIN1 }}
           SENHA1: ${{ secrets.SENHA1 }}
+          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
           NODE_TLS_REJECT_UNAUTHORIZED: "0"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # CYPRESS_INTERNAL_NPM_REGISTRY_DISABLE_SSL_VERIFICATION: "1" # Força o bypass no Cypress
