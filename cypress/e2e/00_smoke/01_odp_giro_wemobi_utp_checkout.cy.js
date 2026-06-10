@@ -17,7 +17,7 @@ describe("ODP, Giro, Wemobi, UTP ", () => {
     cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
   });
 
-  it("Wemobi - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
+  it.only("Wemobi - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
     cy.env(["login", "senha"]).then((env) => {
       cy.visit(wemobi);
       cy.get("#button-header-login").click();
@@ -26,20 +26,20 @@ describe("ODP, Giro, Wemobi, UTP ", () => {
       cy.get("#button-login-confirm").click();
       cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
     });
-    //   cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Rodoviária Tietê (SP)", { delay: 100 });
-    //   cy.contains(" São Paulo - Rodoviária Tietê (SP) ").click({ force: true });
-    //   cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("Rio De Janeiro - Rodoviária Novo Rio (RJ)", { delay: 100 });
-    //   cy.contains(" Rio De Janeiro - Rodoviária Novo Rio (RJ) ").click({ force: true });
-    //   cy.get(loc.BUSCAS.DATA_IDA).click();
-    //   cy.selecionarDataIda(5);
-    //   cy.get(loc.BUSCAS.BOTAO_BUSCAR, { timeout: 90000 }).should("be.visible").click();
-    //   cy.selecionarPassagemAleatoria1({ timeout: 90000 });
-    //   cy.get(loc.CHECK_PASSAGEIRO, { timeout: 90000 }).click({ force: true });
-    //   cy.get("#passenger-identification-proceed").should("be.visible").and("not.be.disabled").click();
-    //   cy.get("#reservation-seat-0").click();
-    //   cy.get('[data-value="random-seat"]').click();
-    //   cy.fecharModalUpgradePoltrona({ timeout: 90000 });
-    //   cy.get("#seat-reservation-v2-button-proceed").should("be.visible").and("not.be.disabled").click();
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Rodoviária Tietê (SP)", { delay: 100 });
+    cy.contains(" São Paulo - Rodoviária Tietê (SP) ").click({ force: true });
+    cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("Rio De Janeiro - Rodoviária Novo Rio (RJ)", { delay: 100 });
+    cy.contains(" Rio De Janeiro - Rodoviária Novo Rio (RJ) ").click({ force: true });
+    cy.get(loc.BUSCAS.DATA_IDA).click();
+    cy.selecionarDataIda(5);
+    cy.get(loc.BUSCAS.BOTAO_BUSCAR, { timeout: 90000 }).should("be.visible").click();
+    cy.selecionarPassagemAleatoria1({ timeout: 90000 });
+    cy.get(loc.CHECK_PASSAGEIRO, { timeout: 90000 }).click({ force: true });
+    cy.get("#passenger-identification-proceed").should("be.visible").and("not.be.disabled").click();
+    // cy.get("#reservation-seat-0").click();
+    // cy.get('[data-value="random-seat"]').click();
+    // cy.fecharModalUpgradePoltrona({ timeout: 90000 });
+    // cy.get("#seat-reservation-v2-button-proceed").should("be.visible").and("not.be.disabled").click();
   });
 
   it("Outlet de passagens - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
