@@ -11,6 +11,7 @@
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
+    "@cypress/xpath": "^2.0.3",
     "@faker-js/faker": "^10.3.0",
     "cypress": "^15.16.0",
     "cypress-if": "^1.13.2",

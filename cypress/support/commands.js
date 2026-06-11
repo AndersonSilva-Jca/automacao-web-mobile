@@ -686,19 +686,14 @@ Cypress.Commands.add("selecionarCidadeSugerida", (cidade) => {
 // cy.selecionarCidadeSugerida("Curitiba - Terminal Rodoviário (PR)");
 
 Cypress.Commands.add("fecharModalUpgradePoltrona", () => {
-  // Força o Cypress a ignorar erros internos do JavaScript do site
-  Cypress.on("uncaught:exception", () => false);
-
-  // Aguarda o modal terminar de carregar na tela
-  cy.wait(2500);
-
-  // Verifica se o botão de fechar existe na estrutura da página
-  cy.get("#modal-upsel").then(($el) => {
-    if ($el.length > 0) {
-      cy.wrap($el).invoke("remove");
-      cy.log("✅ Modal fechado com sucesso.");
+  cy.wait(2000);
+  cy.get("body").then(($body) => {
+    if ($body.find("#modal-upsel").length > 0 && $body.find("#modal-upsel").is(":visible")) {
+      cy.log("⚠️ Modal de upgrade detectado — fechando...");
+      cy.get("#close-modal-upsel").click({ force: true });
+      cy.get("#modal-upsel").should("not.exist");
     } else {
-      cy.log("✅ Modal de Upgrade não apareceu nesta sessão. Seguindo fluxo...");
+      cy.log("✅ Sem modal de upgrade");
     }
   });
 });

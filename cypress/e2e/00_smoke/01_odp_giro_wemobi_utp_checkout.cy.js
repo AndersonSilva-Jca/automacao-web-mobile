@@ -1,5 +1,6 @@
-/// <reference types='cypress' />
-
+/// <reference types="cypress" />
+/// <reference types="@cypress/xpath" />
+require("cypress-xpath");
 // 06/06/2026 - incio com github actions
 import loc from "../../support/locators.js";
 const cometa = "https://www.viacaocometa.com.br";
@@ -15,9 +16,10 @@ describe("ODP, Giro, Wemobi, UTP ", () => {
   beforeEach(() => {
     cy.clearCookies();
     cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
+    cy.once("uncaught:exception", () => false);
   });
 
-  it.only("Wemobi - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
+  it("Wemobi - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
     cy.env(["login", "senha"]).then((env) => {
       cy.visit(wemobi);
       cy.get("#button-header-login").click();
@@ -26,10 +28,10 @@ describe("ODP, Giro, Wemobi, UTP ", () => {
       cy.get("#button-login-confirm").click();
       cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
     });
-    // cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Rodoviária Tietê (SP)", { delay: 100 });
-    // cy.contains(" São Paulo - Rodoviária Tietê (SP) ").click({ force: true });
+    // cy.get("#input-departure").click().type("São Paulo - Rodoviária Tietê (SP)", { delay: 100 });
+    // cy.xpath('//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]').click({ force: true });
     // cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("Rio De Janeiro - Rodoviária Novo Rio (RJ)", { delay: 100 });
-    // cy.contains(" Rio De Janeiro - Rodoviária Novo Rio (RJ) ").click({ force: true });
+    // cy.xpath('//*[@id="Rio-De-Janeiro---Rodoviária-Novo-Rio-(RJ)"]/p[1]').click({ force: true });
     // cy.get(loc.BUSCAS.DATA_IDA).click();
     // cy.selecionarDataIda(5);
     // cy.get(loc.BUSCAS.BOTAO_BUSCAR, { timeout: 90000 }).should("be.visible").click();
@@ -52,23 +54,22 @@ describe("ODP, Giro, Wemobi, UTP ", () => {
       cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
     });
 
-    // cy.wait(12000);
-    // cy.get(loc.BUSCAS.DESTINO_IDA).click().type(" Curitiba - Terminal Rodoviário (PR) ", { delay: 150 });
+    //   cy.wait(12000);
+    //   cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Rodoviária Tietê (SP)", { delay: 100 });
 
-    // cy.contains("Curitiba - Terminal Rodoviário (PR)").click({ force: true });
-    // cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type(" São Paulo - Rodoviária Tietê (SP) ", { delay: 150 });
-    // cy.get(loc.BUSCAS.DESTINO_VOLTA).click();
-    // cy.contains("São Paulo - Rodoviária Tietê (SP)").click({ force: true });
-    // cy.get(loc.BUSCAS.DATA_IDA).click();
-    // cy.selecionarDataIda(5);
-    // cy.get(loc.BUSCAS.BOTAO_BUSCAR, { timeout: 90000 }).should("be.visible").click();
+    //   cy.xpath('//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]').click({ force: true });
+    //   cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type(" Rio De Janeiro - Rodoviária Novo Rio (RJ) ", { delay: 100 });
+    //   cy.xpath('//*[@id="Rio-De-Janeiro---Rodoviária-Novo-Rio-(RJ)"]/p[1]').click({ force: true });
+    //   cy.get(loc.BUSCAS.DATA_IDA).click();
+    //   // cy.selecionarDataIda(5);
+    //   // cy.get(loc.BUSCAS.BOTAO_BUSCAR, { timeout: 90000 }).should("be.visible").click();
 
-    // cy.selecionarPassagemAleatoria1({ timeout: 90000 });
-    // cy.get(loc.CHECK_PASSAGEIRO, { timeout: 90000 }).click({ force: true });
-    // cy.get("#passenger-identification-proceed").should("be.visible").and("not.be.disabled").click();
-    // cy.get("#reservation-seat-0").click();
-    // cy.get('[data-value="random-seat"]').click();
-    // cy.get("#seat-reservation-v2-button-proceed").should("be.visible").and("not.be.disabled").click();
+    //   // cy.selecionarPassagemAleatoria1({ timeout: 90000 });
+    //   // cy.get(loc.CHECK_PASSAGEIRO, { timeout: 90000 }).click({ force: true });
+    //   // cy.get("#passenger-identification-proceed").should("be.visible").and("not.be.disabled").click();
+    //   // cy.get("#reservation-seat-0").click();
+    //   // cy.get('[data-value="random-seat"]').click();
+    //   // cy.get("#seat-reservation-v2-button-proceed").should("be.visible").and("not.be.disabled").click();
   });
 
   it("Viação Cometa - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {

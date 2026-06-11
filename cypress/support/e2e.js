@@ -14,31 +14,32 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import 'cypress-mochawesome-reporter/register';
+import "cypress-mochawesome-reporter/register";
+import "@cypress/xpath";
+import "./commands";
+import "cypress-if";
 
-import './commands'
-import 'cypress-if'
-require('cypress-xpath')
 Cypress.ElementSelector.defaults({
-    selectorPriority: ['data-*', 'id', 'class', 'attributes', 'tag', 'data-js', 'data-qa', 'nth-child', 'data-pagetype', 'name' ]
-})
+  selectorPriority: ["data-*", "id", "class", "attributes", "tag", "data-js", "data-qa", "nth-child", "data-pagetype", "name"],
+});
 
-Cypress.on('uncaught:exception', (err) => {
-  if (err.message.includes('VI_EC is not defined')) {
+Cypress.on("uncaught:exception", (err) => {
+  if (err.message.includes("VI_EC is not defined")) {
     return false;
   }
 });
 
-Cypress.on('uncaught:exception', (err, runnable) => {
+Cypress.on("uncaught:exception", (err, runnable) => {
   // Retornar false impede o Cypress de falhar o teste
   // quando o site dá erro de JavaScript interno
   if (err.message.includes("reading 'append'")) {
-    return false
+    return false;
   }
   // Se for outro erro, ele ainda falha (boa prática)
-  return false 
+  return false;
 
-  Cypress.on('uncaught:exception', (err, runnable) => {
-  return false; // impede o Cypress de falhar o teste por erros do site
+  Cypress.on("uncaught:exception", (err, runnable) => {
+    return false; // impede o Cypress de falhar o teste por erros do site
+  });
 });
-});
+require("cypress-xpath");
