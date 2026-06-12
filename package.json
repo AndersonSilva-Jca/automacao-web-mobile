@@ -25,9 +25,12 @@
     "mochawesome-report-generator": "^6.3.2"
   },
   "dependencies": {
+    "axios": "^1.17.0",
     "dotenv": "^17.4.2",
     "faker": "^5.5.3",
-    "imap-simple": "^5.1.0",
-    "mailparser": "^3.9.9"
+    "googleapis": "^173.0.0",
+    "imap-simple": "^1.6.3",
+    "mailparser": "^3.9.9",
+    "mailslurp-client": "^17.2.0"
   }
 }

@@ -1,6 +1,10 @@
 const { defineConfig } = require("cypress");
-const imaps = require("imap-simple");
-const { simpleParser } = require("mailparser");
+const { google } = require("googleapis");
+const OAuth2 = google.auth.OAuth2;
+const oauth2Client = new OAuth2(process.env.GMAIL_CLIENT_ID, process.env.GMAIL_CLIENT_SECRET, "urn:ietf:wg:oauth:2.0:oob");
+const axios = require("axios"); // Certifique-se de ter o axios instalado (npm install axios)
+const { MailSlurp } = require("mailslurp-client");
+require("dotenv").config();
 
 require("dotenv").config();
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -31,6 +35,11 @@ module.exports = defineConfig({
     mailUsername: process.env.MAIL_USERNAME,
     mailPassword: process.env.MAIL_PASSWORD,
     appMailPassword: process.env.APPMAIL_PASSWORD,
+    gmailClientId: process.env.GMAIL_CLIENT_ID,
+    gmailClientSecret: process.env.GMAIL_CLIENT_SECRET,
+    gmailRefreshToken: process.env.GMAIL_REFRESH_TOKEN,
+    mailslurpApiKey: process.env.MAILSLURP_API_KEY,
+    mailSac: process.env.MAILSAC,
   },
   e2e: {
     baseUrl: "https://www.viacaocometa.com.br",
@@ -49,83 +58,24 @@ module.exports = defineConfig({
         }
         return launchOptions;
       });
-
       on("task", {
-        async buscarCodigo2FA({ email, appMailPassword }) {
-          console.log(`📬 Buscando código 2FA para: ${email}`);
+        async pegarCodigoMailsac(email) {
+          // Extrai apenas a parte antes do @ para a API do Mailsac
+          const username = email.split("@")[0];
 
-          const tempoMaximo = 45000;
-          const intervalo = 5000;
-          let tempoDecorrido = 0;
+          // Faz uma busca pública na caixa de entrada do Mailsac
+          const url = `https://mailsac.com/api/public/dirty-messages/${username}`;
+          const resposta = await axios.get(url);
+          const mensagens = resposta.data;
 
-          // Configuração IMAP para Gmail
-          const config = {
-            imap: {
-              user: email,
-              password: `${(appMailPassword, { log: false })}`, // Use a senha do app para autenticação
-              host: "imap.gmail.com",
-              port: 993,
-              tls: true,
-              tlsOptions: { rejectUnauthorized: false },
-              authTimeout: 10000,
-              customAuth: {
-                PLAIN: (imap) => {
-                  return ["PLAIN", imap.user, imap.password];
-                },
-              },
-            },
-          };
+          if (mensagens.length === 0) return null;
 
-          while (tempoDecorrido < tempoMaximo) {
-            let connection;
-            try {
-              // Conecta ao IMAP
-              connection = await imaps.connect(config);
-              await connection.openBox("INBOX");
+          // Pega o texto do e-mail mais recente
+          const ultimoEmailTexto = mensagens[0].body || mensagens[0].snippet || "";
 
-              // Busca e-mails não lidos do Clube Giro dos últimos 5 minutos
-              const delay = new Date();
-              delay.setTime(delay.getTime() - 5 * 60 * 1000);
-
-              const searchCriteria = ["UNSEEN", ["FROM", "seuacesso@clubegiro.com.br"], ["SINCE", delay]];
-
-              const fetchOptions = {
-                bodies: ["TEXT", "HEADER"],
-                markSeen: true,
-              };
-
-              const messages = await connection.search(searchCriteria, fetchOptions);
-              console.log(`📨 E-mails encontrados: ${messages.length}`);
-
-              for (const msg of messages) {
-                const body = msg.parts.find((p) => p.which === "TEXT");
-                if (body) {
-                  const parsed = await simpleParser(body.body);
-                  const texto = parsed.text || "";
-
-                  // Extrai código de 6 dígitos
-                  const match = texto.match(/\b(\d{6})\b/);
-                  if (match) {
-                    console.log(`✅ Código encontrado: ${match[1]}`);
-                    await connection.end();
-                    return match[1];
-                  }
-                }
-              }
-
-              if (connection) await connection.end();
-            } catch (err) {
-              console.log(`⚠️ Erro IMAP: ${err.message}`);
-              if (connection) await connection.end().catch(() => {});
-            }
-
-            console.log(`⏳ Aguardando e-mail... ${tempoDecorrido / 1000}s`);
-            await wait(intervalo);
-            tempoDecorrido += intervalo;
-          }
-
-          console.log("❌ Tempo esgotado — código não encontrado");
-          return null;
+          // Captura os 6 dígitos do 2FA
+          const match = ultimoEmailTexto.match(/\b(\d{6})\b/);
+          return match ? match[1] : null;
         },
       });
     },

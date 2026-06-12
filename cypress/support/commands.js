@@ -697,3 +697,31 @@ Cypress.Commands.add("fecharModalUpgradePoltrona", () => {
     }
   });
 });
+
+Cypress.Commands.add("selecionarPeriodoEstadia", (diasDeEstadia = 3) => {
+  // 1. Busca apenas os botões de dia que estão habilitados para clique
+  cy.get('tbody.rdp-tbody button[name="day"]:not([disabled])').then(($botoesValidos) => {
+    // Garantir que temos dias suficientes no calendário para a estadia
+    const limiteMaximo = $botoesValidos.length - diasDeEstadia;
+
+    // 2. Sorteia o índice do dia de Check-in (Ida)
+    const indiceCheckIn = Math.floor(Math.random() * limiteMaximo);
+
+    // 3. Define o índice do dia de Check-out (Volta) baseado no intervalo
+    const indiceCheckOut = indiceCheckIn + diasDeEstadia;
+
+    // 4. Clica no Check-in (Ida)
+    cy.wrap($botoesValidos[indiceCheckIn]).click({ force: true });
+
+    // Pequena pausa técnica opcional para o calendário processar o primeiro clique
+    cy.wait(500);
+
+    // 5. Clica no Check-out (Volta)
+    cy.wrap($botoesValidos[indiceCheckOut]).click({ force: true });
+
+    // Exibe no log do Cypress os dias clicados para conferência
+    const diaIda = $botoesValidos[indiceCheckIn].textContent.trim();
+    const diaVolta = $botoesValidos[indiceCheckOut].textContent.trim();
+    cy.log(`📅 Período Selecionado: Dia ${diaIda} até Dia ${diaVolta} (${diasDeEstadia} noites)`);
+  });
+});

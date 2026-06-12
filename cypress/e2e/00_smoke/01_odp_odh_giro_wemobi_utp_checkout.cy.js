@@ -9,14 +9,41 @@ const catarinense = "https://www.catarinense.com.br/";
 const expressoSul = "https://www.expressodosul.com.br/";
 const rapidoRibeirao = "https://www.rapidoribeiraopreto.com.br/";
 const odp = "https://www.outletdepassagens.com.br";
+const odt = "https://www.outletdehoteis.com.br";
 const giro = "https://www.clubegiro.com.br";
 const wemobi = "https://www.wemobi.me";
 
-describe("ODP, Giro, Wemobi, UTP ", () => {
+describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
   beforeEach(() => {
     cy.clearCookies();
     cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.once("uncaught:exception", () => false);
+  });
+
+  it("Outlet de Hotéis - Busca de destinos, selecionar datas", () => {
+    cy.env(["login", "senha"]).then((env) => {
+      cy.visit(odt);
+      cy.contains("Minhas viagens").should("be.visible");
+      cy.contains("Carrinho").should("be.visible");
+      cy.wait(2000);
+      const cidades = ["Rio de Janeiro (e arredores)", "São Paulo (e arredores)", "Belo Horizonte (e arredores)", "Curitiba (e arredores)", "Salvador (e arredores)"];
+
+      // 2. Faz o sorteio aleatório de um índice da lista (de 0 a 4)
+      const indiceAleatorio = Math.floor(Math.random() * cidades.length);
+      const cidadeSorteada = cidades[indiceAleatorio];
+
+      // 3. Clica no campo e digita a cidade sorteada da vez
+      cy.get(".h-full > .flex > .min-w-0 > .w-full").click().type(cidadeSorteada, { delay: 150 });
+
+      // 4. Aguarda a lista carregar e clica exatamente na primeira opção correspondente à cidade sorteada
+      cy.get(`[cmdk-item][data-value="${cidadeSorteada}"]`).first().click({ force: true });
+      cy.log(`🏙️ Destino sorteado e selecionado para o teste: ${cidadeSorteada}`);
+
+      cy.get(".text-sm > .text-muted-foreground").click();
+      cy.selecionarPeriodoEstadia(3);
+      cy.get(".p-2 > .whitespace-nowrap").click();
+      cy.contains("Selecione a hospedagem ideal para sua viagem", { timeout: 30000 }).should("be.visible");
+    });
   });
 
   it("Wemobi - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
@@ -61,15 +88,15 @@ describe("ODP, Giro, Wemobi, UTP ", () => {
     //   cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type(" Rio De Janeiro - Rodoviária Novo Rio (RJ) ", { delay: 100 });
     //   cy.xpath('//*[@id="Rio-De-Janeiro---Rodoviária-Novo-Rio-(RJ)"]/p[1]').click({ force: true });
     //   cy.get(loc.BUSCAS.DATA_IDA).click();
-    //   // cy.selecionarDataIda(5);
-    //   // cy.get(loc.BUSCAS.BOTAO_BUSCAR, { timeout: 90000 }).should("be.visible").click();
+    // cy.selecionarDataIda(5);
+    // cy.get(loc.BUSCAS.BOTAO_BUSCAR, { timeout: 90000 }).should("be.visible").click();
 
-    //   // cy.selecionarPassagemAleatoria1({ timeout: 90000 });
-    //   // cy.get(loc.CHECK_PASSAGEIRO, { timeout: 90000 }).click({ force: true });
-    //   // cy.get("#passenger-identification-proceed").should("be.visible").and("not.be.disabled").click();
-    //   // cy.get("#reservation-seat-0").click();
-    //   // cy.get('[data-value="random-seat"]').click();
-    //   // cy.get("#seat-reservation-v2-button-proceed").should("be.visible").and("not.be.disabled").click();
+    // cy.selecionarPassagemAleatoria1({ timeout: 90000 });
+    // cy.get(loc.CHECK_PASSAGEIRO, { timeout: 90000 }).click({ force: true });
+    // cy.get("#passenger-identification-proceed").should("be.visible").and("not.be.disabled").click();
+    // cy.get("#reservation-seat-0").click();
+    // cy.get('[data-value="random-seat"]').click();
+    // cy.get("#seat-reservation-v2-button-proceed").should("be.visible").and("not.be.disabled").click();
   });
 
   it("Viação Cometa - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
