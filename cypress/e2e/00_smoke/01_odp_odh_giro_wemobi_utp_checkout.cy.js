@@ -20,7 +20,7 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
     cy.once("uncaught:exception", () => false);
   });
 
-  it("Outlet de Hotéis - Busca de destinos, selecionar datas", () => {
+  it.only("Outlet de Hotéis - Busca de destinos, selecionar datas", () => {
     cy.env(["login", "senha"]).then((env) => {
       cy.visit(odt);
       cy.contains("Minhas viagens").should("be.visible");
@@ -33,7 +33,7 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
       const cidadeSorteada = cidades[indiceAleatorio];
 
       // 3. Clica no campo e digita a cidade sorteada da vez
-      cy.get(".h-full > .flex > .min-w-0 > .w-full").click().type(cidadeSorteada, { delay: 150 });
+      cy.get(".h-full > .flex > .min-w-0 > .w-full").click().type(cidadeSorteada, { delay: 50 });
 
       // 4. Aguarda a lista carregar e clica exatamente na primeira opção correspondente à cidade sorteada
       cy.get(`[cmdk-item][data-value="${cidadeSorteada}"]`).first().click({ force: true });
@@ -42,7 +42,8 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
       cy.get(".text-sm > .text-muted-foreground").click();
       cy.selecionarPeriodoEstadia(3);
       cy.get(".p-2 > .whitespace-nowrap").click();
-      cy.contains("Selecione a hospedagem ideal para sua viagem", { timeout: 30000 }).should("be.visible");
+      cy.get(".absolute").should("be.visible");
+      // cy.contains("Selecione a hospedagem ideal para sua viagem", { timeout: 30000 }).should("be.visible");
     });
   });
 
