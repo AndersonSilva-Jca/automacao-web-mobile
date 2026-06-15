@@ -1,13 +1,8 @@
 const { defineConfig } = require("cypress");
-const { google } = require("googleapis");
-const OAuth2 = google.auth.OAuth2;
-const oauth2Client = new OAuth2(process.env.GMAIL_CLIENT_ID, process.env.GMAIL_CLIENT_SECRET, "urn:ietf:wg:oauth:2.0:oob");
-const axios = require("axios"); // Certifique-se de ter o axios instalado (npm install axios)
-const { MailSlurp } = require("mailslurp-client");
-require("dotenv").config();
 
+const { ImapFlow } = require("imapflow");
+const { simpleParser } = require("mailparser");
 require("dotenv").config();
-const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 module.exports = defineConfig({
   // projectId: "yc5eka",
   reporter: "cypress-mochawesome-reporter",
@@ -32,14 +27,12 @@ module.exports = defineConfig({
     senha1: process.env.SENHA1,
     login: process.env.LOGIN,
     senha: process.env.SENHA,
+    login2: process.env.LOGIN2,
+    senha2: process.env.SENHA2,
     mailUsername: process.env.MAIL_USERNAME,
     mailPassword: process.env.MAIL_PASSWORD,
-    appMailPassword: process.env.APPMAIL_PASSWORD,
-    gmailClientId: process.env.GMAIL_CLIENT_ID,
-    gmailClientSecret: process.env.GMAIL_CLIENT_SECRET,
-    gmailRefreshToken: process.env.GMAIL_REFRESH_TOKEN,
-    mailslurpApiKey: process.env.MAILSLURP_API_KEY,
-    mailSac: process.env.MAILSAC,
+    hotmailAppPass: process.env.HOTMAIL_APP_PASS,
+    hotmailMail: process.env.HOTMAIL_MAIL,
   },
   e2e: {
     baseUrl: "https://www.viacaocometa.com.br",
@@ -59,23 +52,45 @@ module.exports = defineConfig({
         return launchOptions;
       });
       on("task", {
-        async pegarCodigoMailsac(email) {
-          // Extrai apenas a parte antes do @ para a API do Mailsac
-          const username = email.split("@")[0];
+        async buscarCodigo2FAHotmail() {
+          // Procura a senha dentro do config.env do Cypress
+          const senhaRaw = config.env.hotmailAppPass || "";
 
-          // Faz uma busca pública na caixa de entrada do Mailsac
-          const url = `https://mailsac.com/api/public/dirty-messages/${username}`;
-          const resposta = await axios.get(url);
-          const mensagens = resposta.data;
+          if (!senhaRaw) {
+            throw new Error("❌ Erro: A variável 'hotmailAppPass' não foi definida no escopo do Cypress!");
+          }
 
-          if (mensagens.length === 0) return null;
+          const client = new ImapFlow({
+            host: "outlook.office365.com",
+            port: 993,
+            secure: true,
+            auth: {
+              user: config.env.hotmailMail,
+              pass: senhaRaw.replace(/\s/g, ""), // Limpa os espaços com segurança agora
+            },
+            logger: false,
+          });
 
-          // Pega o texto do e-mail mais recente
-          const ultimoEmailTexto = mensagens[0].body || mensagens[0].snippet || "";
+          await client.connect();
+          let lock = await client.getMailLock("INBOX");
+          let codigoSorteado = null;
 
-          // Captura os 6 dígitos do 2FA
-          const match = ultimoEmailTexto.match(/\b(\d{6})\b/);
-          return match ? match[1] : null;
+          try {
+            let generator = client.fetch({ last: 1 }, { source: true });
+            for await (let message of generator) {
+              let parsed = await simpleParser(message.source);
+              const corpoTexto = parsed.text || parsed.html || "";
+              const match = corpoTexto.match(/\b(\d{6})\b/);
+              if (match) {
+                codigoSorteado = match[1];
+              }
+            }
+          } finally {
+            lock.release();
+          }
+
+          await client.logout();
+          return codigoSorteado;
         },
       });
     },

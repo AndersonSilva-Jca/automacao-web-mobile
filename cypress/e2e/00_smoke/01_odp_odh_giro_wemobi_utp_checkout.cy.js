@@ -20,7 +20,7 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
     cy.once("uncaught:exception", () => false);
   });
 
-  it.only("Outlet de Hotéis - Busca de destinos, selecionar datas", () => {
+  it("Outlet de Hotéis - Busca de destinos, selecionar datas", () => {
     cy.env(["login", "senha"]).then((env) => {
       cy.visit(odt);
       cy.contains("Minhas viagens").should("be.visible");

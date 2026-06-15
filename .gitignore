@@ -16,6 +16,7 @@ mobile/appWemobi/resources/__pycache__
 .github/workflows/ci_e2e_3.yml
 .github/workflows/ci_e2e_4.yml
 .github/workflows/ci_e2e_5.yml
+.github/workflows/ci_teste.yml
 .github/workflows/ci_links_cards.yml
 .github/workflows/regressao.yml
 app
