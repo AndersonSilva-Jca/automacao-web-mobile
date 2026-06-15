@@ -84,29 +84,41 @@ module.exports = defineConfig({
             await client.connect();
 
             console.log("📂 [IMAP LOG] Abrindo Inbox...");
-            // 👇 LINHA CORRIGIDA AQUI: getMailBoxLock
-            let lock = await client.getMailBoxLock("INBOX");
+            let lock = await client.getMailboxLock("INBOX");
 
             try {
-              console.log("🔍 [IMAP LOG] Analisando mensagens recentes...");
-              let generator = client.fetch({ last: 3 }, { source: true });
+              console.log("🔍 [IMAP LOG] Varrendo e-mails recentes com critério limpo...");
 
-              for await (let message of generator) {
-                let parsed = await simpleParser(message.source);
-                const corpoTexto = parsed.text || parsed.html || "";
+              // 💡 Buscamos TODOS os e-mails da caixa. O retorno é uma Array de IDs numéricos simples.
+              const todosIds = await client.search({ all: true });
 
-                console.log(`📝 [IMAP LOG] Analisando assunto: "${parsed.subject}"`);
+              // Pegamos apenas os 3 últimos IDs da lista (as mensagens mais recentes)
+              const ultimosIds = todosIds.slice(-3);
+              console.log(`📊 [IMAP LOG] IDs das 3 mensagens mais recentes encontrados: [${ultimosIds.join(", ")}]`);
 
-                const match = corpoTexto.match(/\b(\d{6})\b/);
-                if (match) {
-                  codigoSorteado = match[1];
+              if (ultimosIds.length > 0) {
+                // Buscamos o conteúdo cru apenas desses 3 IDs específicos de forma cirúrgica
+                let generator = client.fetch(ultimosIds, { source: true });
+
+                for await (let message of generator) {
+                  let parsed = await simpleParser(message.source);
+                  const corpoTexto = parsed.text || parsed.html || "";
+
+                  console.log(`📝 [IMAP LOG] Analisando e-mail ID ${message.uid} - Assunto: "${parsed.subject}"`);
+
+                  // Procura a sequência de 6 dígitos do token 2FA
+                  const match = corpoTexto.match(/\b(\d{6})\b/);
+                  if (match) {
+                    codigoSorteado = match[1];
+                    console.log(`🎯 [IMAP LOG] Código localizado: ${codigoSorteado}`);
+                  }
                 }
               }
 
               if (codigoSorteado) {
-                console.log(`🎯 [IMAP LOG] Sucesso! Código localizado: ${codigoSorteado}`);
+                console.log(`🎯 [IMAP LOG] Envio com sucesso para o Cypress: ${codigoSorteado}`);
               } else {
-                console.log("⚠️ [IMAP LOG] E-mail chegou, mas nenhum código de 6 dígitos foi encontrado.");
+                console.log("⚠️ [IMAP LOG] Nenhuma mensagem continha um código de 6 dígitos válido.");
               }
             } finally {
               lock.release();

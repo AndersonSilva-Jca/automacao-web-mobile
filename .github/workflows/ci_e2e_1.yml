@@ -35,8 +35,12 @@ jobs:
           SENHA: ${{ secrets.SENHA }}
           LOGIN1: ${{ secrets.LOGIN1 }}
           SENHA1: ${{ secrets.SENHA1 }}
+          LOGIN2: ${{ secrets.LOGIN2 }}
+          SENHA2: ${{ secrets.SENHA2 }}
           MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+          HOTMAIL_MAIL: ${{ secrets.HOTMAIL_MAIL }}
+          HOTMAIL_APP_PASS: ${{ secrets.HOTMAIL_APP_PASS }}
           NODE_TLS_REJECT_UNAUTHORIZED: "0"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # CYPRESS_INTERNAL_NPM_REGISTRY_DISABLE_SSL_VERIFICATION: "1" # Força o bypass no Cypress
@@ -64,7 +68,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "✅[ESTÁVEL] ODH/ODP/Giro/Wemobi/UTP - Monit. Cont."
           to: anderson.ssantos@jcatlm.com.br
-          cc: alfredo.junior@jcatlm.com.br
+          # cc: alfredo.junior@jcatlm.com.br
           from: "Monitoramento Contínuo"
           body: |
             Monitoramento Cypress - ODH/ODP/Giro/Wemobi/UTP
@@ -92,7 +96,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "🚨[ALERTA] ODH/ODP/Giro/Wemobi/UTP - Monit. Cont."
           to: anderson.ssantos@jcatlm.com.br
-          cc: alfredo.junior@jcatlm.com.br
+          # cc: alfredo.junior@jcatlm.com.br
           from: "Monitoramento Contínuo"
           body: |
 

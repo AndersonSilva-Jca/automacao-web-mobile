@@ -27,24 +27,48 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
       cy.contains("Carrinho").should("be.visible");
       cy.wait(2000);
       const cidades = ["Rio de Janeiro (e arredores)", "São Paulo (e arredores)", "Belo Horizonte (e arredores)", "Curitiba (e arredores)", "Salvador (e arredores)"];
-
-      // 2. Faz o sorteio aleatório de um índice da lista (de 0 a 4)
       const indiceAleatorio = Math.floor(Math.random() * cidades.length);
       const cidadeSorteada = cidades[indiceAleatorio];
-
-      // 3. Clica no campo e digita a cidade sorteada da vez
       cy.get(".h-full > .flex > .min-w-0 > .w-full").click().type(cidadeSorteada, { delay: 50 });
-
-      // 4. Aguarda a lista carregar e clica exatamente na primeira opção correspondente à cidade sorteada
       cy.get(`[cmdk-item][data-value="${cidadeSorteada}"]`).first().click({ force: true });
       cy.log(`🏙️ Destino sorteado e selecionado para o teste: ${cidadeSorteada}`);
-
       cy.get(".text-sm > .text-muted-foreground").click();
       cy.selecionarPeriodoEstadia(3);
       cy.get(".p-2 > .whitespace-nowrap").click();
       cy.get(".absolute").should("be.visible");
       // cy.contains("Selecione a hospedagem ideal para sua viagem", { timeout: 30000 }).should("be.visible");
     });
+  });
+
+  it.only("Giro - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
+    const login = Cypress.env("login2");
+    const senha = Cypress.env("senha2");
+
+    cy.visit(giro);
+    cy.get(loc.HEADER_BOTAO_LOGIN).click();
+    cy.get(loc.USUARIO).type(login);
+    cy.get(loc.SENHA).type(senha, { log: false });
+    cy.get(loc.BOTAO_LOGIN).click();
+    cy.wait(10000);
+    cy.task("buscarCodigo2FAHotmail").then((codigo2FA) => {
+      expect(codigo2FA).to.not.be.null;
+      cy.get('input[data-js="modal-input-password-twofa"]').clear({ force: true }).type(codigo2FA, { force: true });
+      cy.get('button[data-js="modal-button-twofa"]').should("not.be.disabled").click({ force: true });
+      cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
+    });
+    // cy.get(loc.BUSCAS.DESTINO_IDA).click().type(" Campos Dos Goytacazes - Shopping Estrada (RJ) ", { delay: 100 });
+    // cy.contains(" Campos Dos Goytacazes - Shopping Estrada (RJ) ").click({ force: true });
+    // cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type(" Macaé - Terminal Rodoviário (RJ) ", { delay: 100 });
+    // cy.contains(" Macaé - Terminal Rodoviário (RJ) ").click({ force: true });
+    // cy.get(loc.BUSCAS.DATA_IDA).click();
+    // cy.get(loc.LOADER).should("not.exist");
+    // cy.selecionarDataIda(5);
+    // cy.get(loc.BUSCAS.BOTAO_BUSCAR, { timeout: 90000 }).should("be.visible").click();
+    // cy.selecionarPassagemAleatoria1({ timeout: 90000 });
+    // cy.get(loc.CHECK_PASSAGEIRO, { timeout: 90000 }).click({ force: true });
+    // cy.get(loc.BOTAO_AVANCAR).should("be.visible").and("not.be.disabled").click();
+    // cy.selecionarAssentoAleatorio({ timeout: 90000 });
+    // cy.get(loc.BOTAO_AVANCAR).should("be.visible").click();
   });
 
   it("Wemobi - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
@@ -72,7 +96,7 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
     // cy.get("#seat-reservation-v2-button-proceed").should("be.visible").and("not.be.disabled").click();
   });
 
-  it.only("Outlet de passagens - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
+  it("Outlet de passagens - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
     cy.env(["login", "senha"]).then((env) => {
       cy.visit(odp);
       cy.get(".logged-out-section > .btn-outlet").click();
