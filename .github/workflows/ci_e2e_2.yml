@@ -64,7 +64,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "✅[ESTÁVEL] ODH/ODP/Giro/Wemobi/UTP - Monit. Cont."
           to: anderson.ssantos@jcatlm.com.br
-          # cc: alfredo.junior@jcatlm.com.br
+          cc: alfredo.junior@jcatlm.com.br
           from: "Monitoramento Contínuo"
           body: |
             Monitoramento Cypress - ODH/ODP/Giro/Wemobi/UTP
@@ -92,7 +92,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "🚨[ALERTA] ODH/ODP/Giro/Wemobi/UTP - Monit. Cont."
           to: anderson.ssantos@jcatlm.com.br
-          # cc: alfredo.junior@jcatlm.com.br
+          cc: alfredo.junior@jcatlm.com.br
           from: "Monitoramento Contínuo"
           body: |
 
