@@ -1,9 +1,13 @@
 const { defineConfig } = require("cypress");
-
 const { ImapFlow } = require("imapflow");
 const { simpleParser } = require("mailparser");
-require("dotenv").config();
+const path = require("path"); // 💡 Importa o módulo de caminhos do Node
+
+// 🔥 Força o dotenv a carregar o arquivo .env correto usando o diretório atual
+require("dotenv").config({ path: path.resolve(__dirname, ".env") });
+
 module.exports = defineConfig({
+  // ... resto do seu código
   // projectId: "yc5eka",
   reporter: "cypress-mochawesome-reporter",
   reporterOptions: {
@@ -53,43 +57,70 @@ module.exports = defineConfig({
       });
       on("task", {
         async buscarCodigo2FAHotmail() {
-          // Procura a senha dentro do config.env do Cypress
-          const senhaRaw = config.env.hotmailAppPass || "";
+          console.log("\n==================================================");
+          console.log("🚀 [IMAP LOG] Iniciando busca estável do código 2FA...");
 
+          const senhaRaw = config.env.hotmailAppPass || "";
           if (!senhaRaw) {
-            throw new Error("❌ Erro: A variável 'hotmailAppPass' não foi definida no escopo do Cypress!");
+            throw new Error("A variável 'hotmailAppPass' não foi preenchida.");
           }
 
           const client = new ImapFlow({
-            host: "outlook.office365.com",
+            host: "imap.gmail.com",
             port: 993,
             secure: true,
             auth: {
               user: config.env.hotmailMail,
-              pass: senhaRaw.replace(/\s/g, ""), // Limpa os espaços com segurança agora
+              pass: senhaRaw.replace(/\s/g, ""),
             },
-            logger: false,
+            connectionTimeout: 30000,
+            greetingTimeout: 30000,
           });
 
-          await client.connect();
-          let lock = await client.getMailLock("INBOX");
           let codigoSorteado = null;
 
           try {
-            let generator = client.fetch({ last: 1 }, { source: true });
-            for await (let message of generator) {
-              let parsed = await simpleParser(message.source);
-              const corpoTexto = parsed.text || parsed.html || "";
-              const match = corpoTexto.match(/\b(\d{6})\b/);
-              if (match) {
-                codigoSorteado = match[1];
+            console.log("🔄 [IMAP LOG] Conectando ao Gmail...");
+            await client.connect();
+
+            console.log("📂 [IMAP LOG] Abrindo Inbox...");
+            // 👇 LINHA CORRIGIDA AQUI: getMailBoxLock
+            let lock = await client.getMailBoxLock("INBOX");
+
+            try {
+              console.log("🔍 [IMAP LOG] Analisando mensagens recentes...");
+              let generator = client.fetch({ last: 3 }, { source: true });
+
+              for await (let message of generator) {
+                let parsed = await simpleParser(message.source);
+                const corpoTexto = parsed.text || parsed.html || "";
+
+                console.log(`📝 [IMAP LOG] Analisando assunto: "${parsed.subject}"`);
+
+                const match = corpoTexto.match(/\b(\d{6})\b/);
+                if (match) {
+                  codigoSorteado = match[1];
+                }
               }
+
+              if (codigoSorteado) {
+                console.log(`🎯 [IMAP LOG] Sucesso! Código localizado: ${codigoSorteado}`);
+              } else {
+                console.log("⚠️ [IMAP LOG] E-mail chegou, mas nenhum código de 6 dígitos foi encontrado.");
+              }
+            } finally {
+              lock.release();
             }
+          } catch (error) {
+            console.log(`❌ [IMAP LOG] Erro controlado de protocolo: ${error.message}`);
           } finally {
-            lock.release();
+            try {
+              await client.logout();
+              console.log("🔌 [IMAP LOG] Sessão encerrada.");
+            } catch (e) {}
           }
 
-          await client.logout();
+          console.log("==================================================\n");
           return codigoSorteado;
         },
       });

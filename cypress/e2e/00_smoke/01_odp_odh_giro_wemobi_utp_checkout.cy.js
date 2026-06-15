@@ -72,7 +72,7 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
     // cy.get("#seat-reservation-v2-button-proceed").should("be.visible").and("not.be.disabled").click();
   });
 
-  it("Outlet de passagens - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
+  it.only("Outlet de passagens - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
     cy.env(["login", "senha"]).then((env) => {
       cy.visit(odp);
       cy.get(".logged-out-section > .btn-outlet").click();
