@@ -99,14 +99,14 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 29
-          target: default
+          target: google_apis
           arch: arm64-v8a
           profile: Nexus 6
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           script: |
-            # Com o emulador ativo e pronto na nuvem, executamos o comando do Robot Framework
+            adb wait-for-device
             robot -d ./public app/appGiro/login.robot app/appWemobi/login.robot
 
       - name: Publicar Relatório no GitHub Pages
