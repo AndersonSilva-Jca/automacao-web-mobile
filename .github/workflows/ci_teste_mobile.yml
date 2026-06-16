@@ -85,14 +85,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Instalar Appium e Driver UiAutomator2
+      - name: Instalar Appium v2 (Versão Estável)
         run: |
-          npm install -g appium
-          appium driver install uiautomator2
+          npm install -g appium@latest
+          appium --version
 
-      - name: Iniciar Servidor Appium
+      - name: Instalar Driver UiAutomator2 Compatível
         run: |
-          appium --log-level info &
+          appium driver install uiautomator2
         # O '&' faz o processo rodar em background para liberar o terminal para os próximos passos
 
       - name: Executar Testes com Emulador Android integrado
