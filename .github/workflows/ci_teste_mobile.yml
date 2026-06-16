@@ -95,10 +95,12 @@ jobs:
           appium driver install uiautomator2
         # O '&' faz o processo rodar em background para liberar o terminal para os próximos passos
 
-      - name: Configurar regras de hardware para KVM
+      - name: Enable KVM group perms
         run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm.rules
-          sudo udevadm control --reload-rules && sudo udevadm trigger
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          ls -al /dev/kvm
 
       - name: Executar Testes com Emulador Android integrado
         uses: reactivecircus/android-emulator-runner@v2
@@ -107,8 +109,8 @@ jobs:
           target: google_apis
           arch: x86_64
           profile: Nexus 6
-          force-avd-creation: true
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -cores 2 -memory 2048
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
 
           script: |
