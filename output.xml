@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 7.4.2 (Python 3.10.20 on linux)" generated="2026-06-16T16:51:14.943151" rpa="false" schemaversion="5">
+<robot generator="Robot 7.4.2 (Python 3.10.20 on linux)" generated="2026-06-16T17:05:04.868961" rpa="false" schemaversion="5">
 <suite id="s1" name="Login &amp; Login">
 <suite id="s1-s1" name="Login" source="/home/runner/work/automacao-web-mobile/automacao-web-mobile/app/appGiro/login.robot">
 <test id="s1-s1-t1" name="Deve realizar o login com sucesso" line="11">
@@ -8,78 +8,78 @@
 <kw name="Evaluate" owner="BuiltIn">
 <arg>__import__('dotenv').load_dotenv(dotenv_path='app/.env')</arg>
 <doc>Evaluates the given expression in Python and returns the result.</doc>
-<status status="PASS" start="2026-06-16T16:51:15.290378" elapsed="0.003834"/>
+<status status="PASS" start="2026-06-16T17:05:05.215578" elapsed="0.003867"/>
 </kw>
 <kw name="Get Environment Variable" owner="OperatingSystem">
-<msg time="2026-06-16T16:51:15.294662" level="INFO">${env_login2} = andynho1987@gmail.com</msg>
+<msg time="2026-06-16T17:05:05.219890" level="INFO">${env_login2} = andynho1987@gmail.com</msg>
 <var>${env_login2}</var>
 <arg>LOGIN2</arg>
 <doc>Returns the value of an environment variable with the given name.</doc>
-<status status="PASS" start="2026-06-16T16:51:15.294406" elapsed="0.000292"/>
+<status status="PASS" start="2026-06-16T17:05:05.219649" elapsed="0.000275"/>
 </kw>
 <kw name="Get Environment Variable" owner="OperatingSystem">
-<msg time="2026-06-16T16:51:15.294987" level="INFO">${env_senha2} = AndJca26</msg>
+<msg time="2026-06-16T17:05:05.220238" level="INFO">${env_senha2} = AndJca26</msg>
 <var>${env_senha2}</var>
 <arg>SENHA2</arg>
 <doc>Returns the value of an environment variable with the given name.</doc>
-<status status="PASS" start="2026-06-16T16:51:15.294822" elapsed="0.000195"/>
+<status status="PASS" start="2026-06-16T17:05:05.220077" elapsed="0.000189"/>
 </kw>
 <kw name="Get Environment Variable" owner="OperatingSystem">
-<msg time="2026-06-16T16:51:15.295281" level="INFO">${env_gmail_pass} = </msg>
+<msg time="2026-06-16T17:05:05.220531" level="INFO">${env_gmail_pass} = xhhq qfkh lhei coyr</msg>
 <var>${env_gmail_pass}</var>
 <arg>GMAIL_APP_PASS</arg>
 <doc>Returns the value of an environment variable with the given name.</doc>
-<status status="PASS" start="2026-06-16T16:51:15.295130" elapsed="0.000178"/>
+<status status="PASS" start="2026-06-16T17:05:05.220378" elapsed="0.000183"/>
 </kw>
 <kw name="Get Environment Variable" owner="OperatingSystem">
-<msg time="2026-06-16T16:51:15.295604" level="INFO">${env_gmail_user} = </msg>
+<msg time="2026-06-16T17:05:05.220824" level="INFO">${env_gmail_user} = </msg>
 <var>${env_gmail_user}</var>
 <arg>GMAIL_USER</arg>
 <doc>Returns the value of an environment variable with the given name.</doc>
-<status status="PASS" start="2026-06-16T16:51:15.295417" elapsed="0.000216"/>
+<status status="PASS" start="2026-06-16T17:05:05.220675" elapsed="0.000175"/>
 </kw>
 <kw name="Set Global Variable" owner="BuiltIn">
-<msg time="2026-06-16T16:51:15.296825" level="INFO">${LOGIN2} = andynho1987@gmail.com</msg>
-<arg>${LOGIN2}</arg>
+<msg time="2026-06-16T17:05:05.221477" level="INFO">${LOGIN2} = andynho1987@gmail.com</msg>
+<arg>$LOGIN2</arg>
 <arg>${env_login2}</arg>
 <doc>Makes a variable available globally in all tests and suites.</doc>
-<status status="PASS" start="2026-06-16T16:51:15.295762" elapsed="0.001116"/>
+<status status="PASS" start="2026-06-16T17:05:05.220999" elapsed="0.000526"/>
 </kw>
 <kw name="Set Global Variable" owner="BuiltIn">
-<msg time="2026-06-16T16:51:15.297961" level="INFO">${SENHA2} = AndJca26</msg>
-<arg>${SENHA2}</arg>
+<msg time="2026-06-16T17:05:05.222097" level="INFO">${SENHA2} = AndJca26</msg>
+<arg>$SENHA2</arg>
 <arg>${env_senha2}</arg>
 <doc>Makes a variable available globally in all tests and suites.</doc>
-<status status="PASS" start="2026-06-16T16:51:15.297009" elapsed="0.001002"/>
+<status status="PASS" start="2026-06-16T17:05:05.221654" elapsed="0.000496"/>
 </kw>
 <kw name="Set Global Variable" owner="BuiltIn">
-<msg time="2026-06-16T16:51:15.299080" level="INFO">${GMAIL_USER} = </msg>
-<arg>${GMAIL_USER}</arg>
+<msg time="2026-06-16T17:05:05.222678" level="INFO">${GMAIL_USER} = </msg>
+<arg>$GMAIL_USER</arg>
 <arg>${env_gmail_user}</arg>
 <doc>Makes a variable available globally in all tests and suites.</doc>
-<status status="PASS" start="2026-06-16T16:51:15.298136" elapsed="0.000993"/>
+<status status="PASS" start="2026-06-16T17:05:05.222290" elapsed="0.000433"/>
 </kw>
 <kw name="Set Global Variable" owner="BuiltIn">
-<msg time="2026-06-16T16:51:15.300130" level="INFO">${GMAIL_APP_PASS} = </msg>
-<arg>${GMAIL_APP_PASS}</arg>
+<msg time="2026-06-16T17:05:05.223252" level="INFO">${GMAIL_APP_PASS} = xhhq qfkh lhei coyr</msg>
+<arg>$GMAIL_APP_PASS</arg>
 <arg>${env_gmail_pass}</arg>
 <doc>Makes a variable available globally in all tests and suites.</doc>
-<status status="PASS" start="2026-06-16T16:51:15.299251" elapsed="0.000928"/>
+<status status="PASS" start="2026-06-16T17:05:05.222839" elapsed="0.000458"/>
 </kw>
 <doc>Carrega o arquivo .env e cria as variáveis globais para o teste.</doc>
-<status status="PASS" start="2026-06-16T16:51:15.289660" elapsed="0.010596"/>
+<status status="PASS" start="2026-06-16T17:05:05.214807" elapsed="0.008564"/>
 </kw>
 <kw name="Open Application" owner="AppiumLibrary">
-<msg time="2026-06-16T16:51:15.304538" level="WARN">Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [Errno 111] Connection refused")': /session</msg>
-<msg time="2026-06-16T16:51:15.305033" level="WARN">Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [Errno 111] Connection refused")': /session</msg>
-<msg time="2026-06-16T16:51:15.305435" level="WARN">Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [Errno 111] Connection refused")': /session</msg>
+<msg time="2026-06-16T17:05:05.227587" level="WARN">Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [Errno 111] Connection refused")': /session</msg>
+<msg time="2026-06-16T17:05:05.228087" level="WARN">Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [Errno 111] Connection refused")': /session</msg>
+<msg time="2026-06-16T17:05:05.228530" level="WARN">Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [Errno 111] Connection refused")': /session</msg>
 <kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2026-06-16T16:51:15.306282" level="FAIL">No application is open</msg>
+<msg time="2026-06-16T17:05:05.229507" level="FAIL">No application is open</msg>
 <doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2026-06-16T16:51:15.306015" elapsed="0.052119">No application is open</status>
+<status status="FAIL" start="2026-06-16T17:05:05.229196" elapsed="0.037120">No application is open</status>
 </kw>
-<msg time="2026-06-16T16:51:15.359343" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2026-06-16T16:51:15.359607" level="FAIL">MaxRetryError: HTTPConnectionPool(host='127.0.0.1', port=4723): Max retries exceeded with url: /session (Caused by NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [Errno 111] Connection refused"))</msg>
+<msg time="2026-06-16T17:05:05.268257" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
+<msg time="2026-06-16T17:05:05.268526" level="FAIL">MaxRetryError: HTTPConnectionPool(host='127.0.0.1', port=4723): Max retries exceeded with url: /session (Caused by NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [Errno 111] Connection refused"))</msg>
 <arg>http://127.0.0.1:4723</arg>
 <arg>platformName=Android</arg>
 <arg>appium:deviceName=emulator-5554</arg>
@@ -102,16 +102,16 @@ Please check https://appium.io/docs/en/2.19/guides/caps/
 | *Option*            | *Man.* | *Description*     |
 | remote_url          | Yes    | Appium server url |
 | alias               | No     | alias             |</doc>
-<status status="FAIL" start="2026-06-16T16:51:15.300406" elapsed="0.059598">MaxRetryError: HTTPConnectionPool(host='127.0.0.1', port=4723): Max retries exceeded with url: /session (Caused by NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [Errno 111] Connection refused"))</status>
+<status status="FAIL" start="2026-06-16T17:05:05.223497" elapsed="0.045702">MaxRetryError: HTTPConnectionPool(host='127.0.0.1', port=4723): Max retries exceeded with url: /session (Caused by NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [Errno 111] Connection refused"))</status>
 </kw>
-<status status="FAIL" start="2026-06-16T16:51:15.289238" elapsed="0.070972">MaxRetryError: HTTPConnectionPool(host='127.0.0.1', port=4723): Max retries exceeded with url: /session (Caused by NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [Errno 111] Connection refused"))</status>
+<status status="FAIL" start="2026-06-16T17:05:05.214417" elapsed="0.055087">MaxRetryError: HTTPConnectionPool(host='127.0.0.1', port=4723): Max retries exceeded with url: /session (Caused by NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [Errno 111] Connection refused"))</status>
 </kw>
 <kw name="Login" owner="base">
-<status status="NOT RUN" start="2026-06-16T16:51:15.360530" elapsed="0.000043"/>
+<status status="NOT RUN" start="2026-06-16T17:05:05.269978" elapsed="0.000056"/>
 </kw>
-<status status="FAIL" start="2026-06-16T16:51:15.288409" elapsed="0.072350">MaxRetryError: HTTPConnectionPool(host='127.0.0.1', port=4723): Max retries exceeded with url: /session (Caused by NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [Errno 111] Connection refused"))</status>
+<status status="FAIL" start="2026-06-16T17:05:05.213470" elapsed="0.056830">MaxRetryError: HTTPConnectionPool(host='127.0.0.1', port=4723): Max retries exceeded with url: /session (Caused by NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [Errno 111] Connection refused"))</status>
 </test>
-<status status="FAIL" start="2026-06-16T16:51:14.974902" elapsed="0.386733"/>
+<status status="FAIL" start="2026-06-16T17:05:04.900339" elapsed="0.371148"/>
 </suite>
 <suite id="s1-s2" name="Login" source="/home/runner/work/automacao-web-mobile/automacao-web-mobile/app/appWemobi/login.robot">
 <test id="s1-s2-t1" name="Deve realizar o login com sucesso" line="12">
@@ -120,47 +120,47 @@ Please check https://appium.io/docs/en/2.19/guides/caps/
 <kw name="Evaluate" owner="BuiltIn">
 <arg>__import__('dotenv').load_dotenv(dotenv_path='app/.env')</arg>
 <doc>Evaluates the given expression in Python and returns the result.</doc>
-<status status="PASS" start="2026-06-16T16:51:15.372125" elapsed="0.000481"/>
+<status status="PASS" start="2026-06-16T17:05:05.286253" elapsed="0.000652"/>
 </kw>
 <kw name="Get Environment Variable" owner="OperatingSystem">
-<msg time="2026-06-16T16:51:15.373004" level="FAIL">Environment variable 'LOGIN' does not exist.</msg>
+<msg time="2026-06-16T17:05:05.287424" level="FAIL">Environment variable 'LOGIN' does not exist.</msg>
 <var>${env_login}</var>
 <arg>LOGIN</arg>
 <doc>Returns the value of an environment variable with the given name.</doc>
-<status status="FAIL" start="2026-06-16T16:51:15.372818" elapsed="0.000271">Environment variable 'LOGIN' does not exist.</status>
+<status status="FAIL" start="2026-06-16T17:05:05.287199" elapsed="0.000406">Environment variable 'LOGIN' does not exist.</status>
 </kw>
 <kw name="Get Environment Variable" owner="OperatingSystem">
 <var>${env_senha}</var>
 <arg>SENHA</arg>
 <doc>Returns the value of an environment variable with the given name.</doc>
-<status status="NOT RUN" start="2026-06-16T16:51:15.373223" elapsed="0.000023"/>
+<status status="NOT RUN" start="2026-06-16T17:05:05.287811" elapsed="0.000033"/>
 </kw>
 <kw name="Get Environment Variable" owner="OperatingSystem">
 <var>${env_mail_username}</var>
 <arg>MAIL_USERNAME</arg>
 <doc>Returns the value of an environment variable with the given name.</doc>
-<status status="NOT RUN" start="2026-06-16T16:51:15.373354" elapsed="0.000021"/>
+<status status="NOT RUN" start="2026-06-16T17:05:05.288027" elapsed="0.000031"/>
 </kw>
 <kw name="Set Global Variable" owner="BuiltIn">
-<arg>${LOGIN}</arg>
+<arg>$LOGIN</arg>
 <arg>${env_login}</arg>
 <doc>Makes a variable available globally in all tests and suites.</doc>
-<status status="NOT RUN" start="2026-06-16T16:51:15.373517" elapsed="0.000025"/>
+<status status="NOT RUN" start="2026-06-16T17:05:05.288235" elapsed="0.000023"/>
 </kw>
 <kw name="Set Global Variable" owner="BuiltIn">
-<arg>${SENHA}</arg>
+<arg>$SENHA</arg>
 <arg>${env_senha}</arg>
 <doc>Makes a variable available globally in all tests and suites.</doc>
-<status status="NOT RUN" start="2026-06-16T16:51:15.373655" elapsed="0.000021"/>
+<status status="NOT RUN" start="2026-06-16T17:05:05.288366" elapsed="0.000020"/>
 </kw>
 <kw name="Set Global Variable" owner="BuiltIn">
-<arg>${MAIL_USERNAME}</arg>
+<arg>$MAIL_USERNAME</arg>
 <arg>${env_mail_username}</arg>
 <doc>Makes a variable available globally in all tests and suites.</doc>
-<status status="NOT RUN" start="2026-06-16T16:51:15.373781" elapsed="0.000020"/>
+<status status="NOT RUN" start="2026-06-16T17:05:05.288490" elapsed="0.000020"/>
 </kw>
 <doc>Carrega o arquivo .env e cria as variáveis globais para o teste.</doc>
-<status status="FAIL" start="2026-06-16T16:51:15.371850" elapsed="0.002053">Environment variable 'LOGIN' does not exist.</status>
+<status status="FAIL" start="2026-06-16T17:05:05.285854" elapsed="0.002757">Environment variable 'LOGIN' does not exist.</status>
 </kw>
 <kw name="Open Application" owner="AppiumLibrary">
 <arg>http://127.0.0.1:4723</arg>
@@ -185,26 +185,26 @@ Please check https://appium.io/docs/en/2.19/guides/caps/
 | *Option*            | *Man.* | *Description*     |
 | remote_url          | Yes    | Appium server url |
 | alias               | No     | alias             |</doc>
-<status status="NOT RUN" start="2026-06-16T16:51:15.374030" elapsed="0.000021"/>
+<status status="NOT RUN" start="2026-06-16T17:05:05.288732" elapsed="0.000021"/>
 </kw>
-<status status="FAIL" start="2026-06-16T16:51:15.371486" elapsed="0.002690">Environment variable 'LOGIN' does not exist.</status>
+<status status="FAIL" start="2026-06-16T17:05:05.285516" elapsed="0.003357">Environment variable 'LOGIN' does not exist.</status>
 </kw>
 <kw name="Login" owner="appWemobi_base">
-<status status="NOT RUN" start="2026-06-16T16:51:15.374393" elapsed="0.000027"/>
+<status status="NOT RUN" start="2026-06-16T17:05:05.289133" elapsed="0.000028"/>
 </kw>
 <kw name="Close Application" owner="AppiumLibrary">
 <doc>Closes the current application and the webdriver session.</doc>
-<status status="NOT RUN" start="2026-06-16T16:51:15.374544" elapsed="0.000023"/>
+<status status="NOT RUN" start="2026-06-16T17:05:05.289264" elapsed="0.000022"/>
 </kw>
 <kw name="Close All Applications" owner="AppiumLibrary" type="TEARDOWN">
 <doc>Closes all open applications.</doc>
-<status status="PASS" start="2026-06-16T16:51:15.374796" elapsed="0.001195"/>
+<status status="PASS" start="2026-06-16T17:05:05.289518" elapsed="0.002083"/>
 </kw>
-<status status="FAIL" start="2026-06-16T16:51:15.370955" elapsed="0.005096">Environment variable 'LOGIN' does not exist.</status>
+<status status="FAIL" start="2026-06-16T17:05:05.284845" elapsed="0.006823">Environment variable 'LOGIN' does not exist.</status>
 </test>
-<status status="FAIL" start="2026-06-16T16:51:15.362195" elapsed="0.014252"/>
+<status status="FAIL" start="2026-06-16T17:05:05.272165" elapsed="0.019989"/>
 </suite>
-<status status="FAIL" start="2026-06-16T16:51:14.944193" elapsed="0.432878"/>
+<status status="FAIL" start="2026-06-16T17:05:04.869928" elapsed="0.423524"/>
 </suite>
 <statistics>
 <total>
@@ -219,9 +219,9 @@ Please check https://appium.io/docs/en/2.19/guides/caps/
 </suite>
 </statistics>
 <errors>
-<msg time="2026-06-16T16:51:15.304538" level="WARN">Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [Errno 111] Connection refused")': /session</msg>
-<msg time="2026-06-16T16:51:15.305033" level="WARN">Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [Errno 111] Connection refused")': /session</msg>
-<msg time="2026-06-16T16:51:15.305435" level="WARN">Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [Errno 111] Connection refused")': /session</msg>
-<msg time="2026-06-16T16:51:15.359343" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
+<msg time="2026-06-16T17:05:05.227587" level="WARN">Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [Errno 111] Connection refused")': /session</msg>
+<msg time="2026-06-16T17:05:05.228087" level="WARN">Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [Errno 111] Connection refused")': /session</msg>
+<msg time="2026-06-16T17:05:05.228530" level="WARN">Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [Errno 111] Connection refused")': /session</msg>
+<msg time="2026-06-16T17:05:05.268257" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
 </errors>
 </robot>
