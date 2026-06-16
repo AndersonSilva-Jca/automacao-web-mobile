@@ -104,6 +104,16 @@ jobs:
 
       - name: Executar Testes com Emulador Android integrado
         uses: reactivecircus/android-emulator-runner@v2
+        env:
+          LOGIN: ${{ secrets.LOGIN }}
+          SENHA: ${{ secrets.SENHA }}
+          LOGIN2: ${{ secrets.LOGIN2 }}
+          SENHA2: ${{ secrets.SENHA2 }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASS: ${{ secrets.GMAIL_APP_PASS }}
+          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           api-level: 29
           target: google_apis
