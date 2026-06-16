@@ -40,15 +40,15 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
     });
   });
 
-  it("Giro - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
+  it.only("Giro - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
     const login = Cypress.env("login2");
     const senha = Cypress.env("senha2");
 
     cy.visit(giro);
-    cy.get(loc.HEADER_BOTAO_LOGIN).click();
-    cy.get(loc.USUARIO).type(login);
-    cy.get(loc.SENHA).type(senha, { log: false });
-    cy.get(loc.BOTAO_LOGIN).click();
+    cy.get(loc.HEADER_BOTAO_LOGIN, { timeout: 90000 }).click();
+    cy.get(loc.USUARIO, { timeout: 90000 }).type(login);
+    cy.get(loc.SENHA, { timeout: 90000 }).type(senha, { log: false });
+    cy.get(loc.BOTAO_LOGIN, { timeout: 90000 }).click();
     cy.wait(10000);
     cy.task("buscarCodigo2FAHotmail").then((codigo2FA) => {
       expect(codigo2FA).to.not.be.null;

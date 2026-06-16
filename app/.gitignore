@@ -18,3 +18,5 @@ output.xml
 log.html
 report.html
 *.png
+
+# adb shell pm path com.everymind.clubegiro
