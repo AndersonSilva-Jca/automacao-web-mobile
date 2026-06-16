@@ -1,0 +1,91 @@
+*** Settings ***
+Library     AppiumLibrary
+Library     OperatingSystem
+
+
+*** Variables ***
+${ENTRAR}       id=user
+
+
+*** Keywords ***
+Carregar Variaveis De Ambiente
+    [Documentation]    Carrega o arquivo .env e cria as variáveis globais para o teste.
+    Evaluate    __import__('dotenv').load_dotenv(dotenv_path='app/.env')
+
+    # 1. Coleta os dados do sistema operacional (.env local ou CI)
+    ${env_login}=    Get Environment Variable    LOGIN
+    ${env_senha}=    Get Environment Variable    SENHA
+    ${env_mail_username}=    Get Environment Variable    MAIL_USERNAME
+
+    # 2. Injeta os valores como GLOBAL
+    Set Global Variable    ${LOGIN}    ${env_login}
+    Set Global Variable    ${SENHA}    ${env_senha}
+    Set Global Variable    ${MAIL_USERNAME}    ${env_mail_username}
+
+Start session
+    # 🌟 O SEGREDO ESTÁ AQUI: Chamando a Keyword para alimentar as variáveis ANTES de abrir o Appium
+    Carregar Variaveis De Ambiente
+    Open Application    http://127.0.0.1:4723
+    ...    platformName=Android
+    ...    appium:deviceName=emulator-5554
+    ...    appium:automationName=UiAutomator2
+    ...    appium:appPackage=me.wemobi.wemobiapp
+    ...    appium:appActivity=.MainActivity
+    # ...    appium:noReset=${True}
+    ...    appium:autoGrantPermissions=${True}
+    ...    appium:ensureWebviewsHavePages=${True}
+    ...    appium:clearDeviceLogs=${True}
+    ...    appium:nativeWebScreenshot=${True}
+    ...    appium:uiautomator2ServerLaunchTimeout=${90000}
+    ...    appium:uiautomator2ServerInstallTimeout=${60000}
+    ...    appium:adbExecTimeout=${60000}
+    ...    appium:newCommandTimeout=${300}
+    ...    appium:connectHardwareKeyboard=${True}
+    ...    appium:socketConnectionTimeout=${90000}
+
+Login
+    Sleep    7s
+    Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="user"]    timeout=60s
+    Log To Console    \nFazendo o Login...
+    Input Text    xpath=//android.widget.EditText[@resource-id="user"]    ${LOGIN}
+    Input Password    xpath=//android.widget.EditText[@resource-id="password"]    ${SENHA}
+    Wait Until Element Is Visible
+    ...    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
+    ...    timeout=60s
+    Click Element    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
+    Sleep    5s
+    Wait Until Element Is Visible
+    ...    xpath=//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.widget.ScrollView/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup[3]/android.widget.ImageView
+    Log To Console    \nTela de Busca exibida com sucesso!
+    Click Element
+    ...    xpath=//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.widget.ScrollView/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup[3]/android.widget.ImageView
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="name"]
+    Log To Console    \nLogin realizado com sucesso!
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="name"]
+    Log To Console    \nOlá, Anderson Silva
+    Click Element
+    ...    xpath=//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.widget.ScrollView/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[2]/android.widget.ScrollView/android.view.ViewGroup/android.view.ViewGroup[1]/android.widget.ImageView
+
+    # Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Viagens"]    timeout=60s
+
+Close session
+    Close Application
+
+Tratar Banner De Cookie Se Aparecer
+    # 1. Verifica se o elemento aparece na tela em até 5 segundos
+    # O Robot guarda True (se achou) ou False (se não achou) na variável
+    ${cookie_visivel}=    Run Keyword And Return Status
+    ...    Wait Until Element Is Visible    xpath=//android.app.Dialog[@resource-id="cookie-banner"]    timeout=60s
+
+    # 2. Se a resposta for True, ele entra no bloco e clica para aceitar
+    IF    ${cookie_visivel}
+        Log To Console    \n[INFO] Banner de cookie detectado. Aceitando...
+        Click Element    xpath=//android.widget.Button[@resource-id="adopt-accept-all-button"]
+    ELSE
+        Log To Console    \n[INFO] Banner de cookie não apareceu. Seguindo o fluxo...
+    END
+
+Fechar modal do login
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Garanta AGORA até 55% OFF"]    timeout=120s
+
+    Tap With Positions    1000ms    ${952, 186}

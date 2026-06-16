@@ -1,0 +1,94 @@
+name: Execução Periódica de Testes Mobile (Robot Framework)
+
+on:
+  schedule:
+    - cron: "0 * * * *" # Executa de uma em uma hora
+  workflow_dispatch: # Permite execução manual pelo painel do GitHub
+
+# Permissões necessárias para publicar no GitHub Pages
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  executar-testes:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Instalar Dependências
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # 📱 Executa os testes do Robot e joga os resultados na pasta 'public'
+      - name: Executar Testes do Robot Framework
+        env:
+          LOGIN2: ${{ secrets.LOGIN2 }}
+          SENHA2: ${{ secrets.SENHA2 }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASS: ${{ secrets.GMAIL_APP_PASS }}
+          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          robot -d ./public app/appGiro/login.robot app/appwemobi/login.robot
+
+      # 🌐 Publica automaticamente os relatórios gerados no GitHub Pages
+      - name: Publicar Relatório no GitHub Pages
+        if: always() # Publica mesmo se o teste falhar
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          keep_files: false # Sobrescreve com o relatório mais recente de hora em hora
+
+      # 📧 Alerta de Sucesso por E-mail
+      - name: Enviar E-mail de Sucesso
+        if: success() # Só roda se todos os testes passarem
+        uses: dawidd6/action-send-mail@v4
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "✅ [TESTE MOBILE] Sucesso na execução horária!"
+          to: anderson.ssantos@jcatlm.com.br # Quem vai receber (pode colocar seu e-mail pessoal aqui)
+          from: "GitHub Actions CI"
+          body: |
+            Olá! O teste automatizado mobile do Clube Giro foi executado com SUCESSO.
+
+            🌐 O relatório atualizado já está online e pode ser visto aqui:
+            https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/report.html
+
+            Logs detalhados:
+            https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/log.html
+
+      # 🚨 Alerta de Falha por E-mail
+      - name: Enviar E-mail de Falha
+        if: failure() # Só roda se o Robot Framework acusar alguma falha de tela ou elemento
+        uses: dawidd6/action-send-mail@v4
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "🚨 [TESTE MOBILE] Falha detectada no fluxo do Clube Giro!"
+          to: anderson.ssantos@jcatlm.com.br
+          from: "GitHub Actions CI"
+          body: |
+            Atenção! O teste automatizado mobile do Clube Giro FALHOU ou quebrou durante a última execução.
+
+            🔍 Analise o erro imediatamente através do link do relatório online:
+            https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/report.html
+
+            Passos detalhados e prints integrados:
+            https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/log.html

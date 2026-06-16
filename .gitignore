@@ -19,6 +19,6 @@ mobile/appWemobi/resources/__pycache__
 .github/workflows/ci_teste.yml
 .github/workflows/ci_links_cards.yml
 .github/workflows/regressao.yml
-app
+
 gerar_token.js
 credentials.json
