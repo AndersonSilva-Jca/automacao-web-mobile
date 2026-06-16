@@ -41,7 +41,7 @@ jobs:
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          robot -d ./public app/appGiro/login.robot app/appwemobi/login.robot
+          robot -d ./public app/appGiro/login.robot app/appWemobi/login.robot
 
       # 🌐 Publica automaticamente os relatórios gerados no GitHub Pages
       - name: Publicar Relatório no GitHub Pages
