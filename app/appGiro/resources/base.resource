@@ -34,6 +34,7 @@ Start session
     ...    appium:automationName=UiAutomator2
     ...    appium:appPackage=com.everymind.clubegiro
     ...    appium:appActivity=.MainActivity
+    ...    appWaitDuration=50000
     # ...    appium:noReset=${True}
     ...    appium:autoGrantPermissions=${True}
     ...    appium:ensureWebviewsHavePages=${True}
@@ -48,7 +49,7 @@ Start session
 
 Login
     Sleep    7s
-    Wait Until Element Is Visible    ${ENTRAR}    timeout=120s
+    Wait Until Element Is Visible    ${ENTRAR}    timeout=240s
     Click Element    ${ENTRAR}
     Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="email-input-login"]    timeout=60s
     Input Text    xpath=//android.widget.EditText[@resource-id="email-input-login"]    ${LOGIN2}

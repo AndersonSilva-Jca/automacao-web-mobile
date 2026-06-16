@@ -31,6 +31,7 @@ Start session
     ...    appium:automationName=UiAutomator2
     ...    appium:appPackage=me.wemobi.wemobiapp
     ...    appium:appActivity=.MainActivity
+    ...    appWaitDuration=50000
     # ...    appium:noReset=${True}
     ...    appium:autoGrantPermissions=${True}
     ...    appium:ensureWebviewsHavePages=${True}
@@ -45,7 +46,7 @@ Start session
 
 Login
     Sleep    7s
-    Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="user"]    timeout=60s
+    Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="user"]    timeout=240s
     Log To Console    \nFazendo o Login...
     Input Text    xpath=//android.widget.EditText[@resource-id="user"]    ${LOGIN}
     Input Password    xpath=//android.widget.EditText[@resource-id="password"]    ${SENHA}

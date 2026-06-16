@@ -137,12 +137,11 @@ jobs:
             echo "Aguardando o Appium responder na porta 4723..."
             for i in $(seq 1 30); do if curl -s http://127.0.0.1:4723/status > /dev/null; then echo "Appium pronto!"; break; fi; sleep 2; done
 
-            # 🌟 INSTALAÇÃO DOS DOIS APLICATIVOS (MÚLTIPLOS APKs)
             echo "Instalando o Clube Giro..."
-            adb install-multiple ./app/apks/clube_giro_apks/*.apk
+            adb install-multiple ./app/apks/clube_giro/*.apk
 
             echo "Instalando o Wemobi..."
-            adb install-multiple ./app/apks/wemobi_apks/*.apk
+            adb install-multiple ./app/apks/wemobi/*.apk
 
             echo "Iniciando a execução dos testes com o Robot Framework..."
             robot -d ./public app/appGiro/login.robot app/appWemobi/login.robot
