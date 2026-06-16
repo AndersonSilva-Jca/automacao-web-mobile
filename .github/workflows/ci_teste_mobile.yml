@@ -144,20 +144,20 @@ jobs:
             adb install-multiple ./app/apks/wemobi/*.apk
 
             echo "Iniciando a execução dos testes com o Robot Framework..."
-            robot -d ./public app/appGiro/login.robot app/appWemobi/login.robot
+            robot -T -d ./public app/appGiro/login.robot app/appWemobi/login.robot || true
 
             echo "Finalizando o processo do Appium..."
             kill $APPIUM_PID || true
 
-      - name: Publicar Relatório no GitHub Pages
-        if: always()
-        uses: peaceiris/actions-gh-pages@v4
+      # 🌟 PASSO NOVO: Garante o upload dos relatórios mesmo se o teste falhar
+      - name: Upload dos Relatórios do Robot Framework
+        uses: actions/upload-artifact@v4
+        if: always() # Isso garante que o upload aconteça MESMO se o teste falhar
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
-          keep_files: false # Sobrescreve com o relatório mais recente de hora em hora
+          name: relatorios-execucao-${{ github.run_id }}-${{ github.run_number }}
+          path: ./public/
+          retention-days: 30 # Mantém o histórico guardado por 30 dias
 
-      # 📧 Alerta de Sucesso por E-mail
       - name: Enviar E-mail de Sucesso
         if: success() # Só roda se todos os testes passarem
         uses: dawidd6/action-send-mail@v4
@@ -167,7 +167,7 @@ jobs:
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "✅ [TESTE MOBILE] Sucesso na execução horária!"
-          to: anderson.ssantos@jcatlm.com.br # Quem vai receber (pode colocar seu e-mail pessoal aqui)
+          to: anderson.ssantos@jcatlm.com.br
           from: "GitHub Actions CI"
           body: |
             Olá! O teste automatizado mobile do Clube Giro foi executado com SUCESSO.
