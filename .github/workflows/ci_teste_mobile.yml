@@ -132,7 +132,7 @@ jobs:
 
             echo "Iniciando servidor Appium em background..."
             appium --log appium.log --log-level info &
-            APPIUM_PID=$!
+            MY_APPIUM_PID=$!
 
             echo "Aguardando o Appium responder na porta 4723..."
             for i in $(seq 1 30); do if curl -s http://127.0.0.1:4723/status > /dev/null; then echo "Appium pronto!"; break; fi; sleep 2; done
@@ -147,16 +147,16 @@ jobs:
             robot -T -d ./public app/appGiro/login.robot app/appWemobi/login.robot || true
 
             echo "Finalizando o processo do Appium..."
-            kill $APPIUM_PID || true
+            kill $MY_APPIUM_PID || true
 
       # 🌟 PASSO NOVO: Garante o upload dos relatórios mesmo se o teste falhar
       - name: Upload dos Relatórios do Robot Framework
         uses: actions/upload-artifact@v4
-        if: always() # Isso garante que o upload aconteça MESMO se o teste falhar
+        if: always()
         with:
           name: relatorios-execucao-${{ github.run_id }}-${{ github.run_number }}
           path: ./public/
-          retention-days: 30 # Mantém o histórico guardado por 30 dias
+          retention-days: 30
 
       - name: Enviar E-mail de Sucesso
         if: success() # Só roda se todos os testes passarem
