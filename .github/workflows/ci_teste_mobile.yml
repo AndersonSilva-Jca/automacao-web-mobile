@@ -100,7 +100,7 @@ jobs:
         with:
           api-level: 29
           target: default
-          arch: x86_64
+          arch: arm64
           profile: Nexus 6
           script: |
             # Com o emulador ativo e pronto na nuvem, executamos o comando do Robot Framework
