@@ -100,8 +100,11 @@ jobs:
         with:
           api-level: 29
           target: default
-          arch: arm64
+          arch: arm64-v8a
           profile: Nexus 6
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
           script: |
             # Com o emulador ativo e pronto na nuvem, executamos o comando do Robot Framework
             robot -d ./public app/appGiro/login.robot app/appWemobi/login.robot
