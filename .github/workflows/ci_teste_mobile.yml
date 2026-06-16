@@ -1,19 +1,70 @@
-name: Execução Periódica de Testes Mobile (Robot Framework)
+# name: Execução Periódica de Testes Mobile (Robot Framework)
+
+# on:
+#   schedule:
+#     - cron: "0 * * * *" # Executa de uma em uma hora
+#   workflow_dispatch: # Permite execução manual pelo painel do GitHub
+
+# # Permissões necessárias para publicar no GitHub Pages
+# permissions:
+#   contents: write
+#   pages: write
+#   id-token: write
+
+# jobs:
+#   executar-testes:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout do código
+#         uses: actions/checkout@v4
+
+#       - name: Configurar Python
+#         uses: actions/setup-python@v5
+#         with:
+#           python-version: "3.10"
+
+#       - name: Instalar Dependências
+#         run: |
+#           python -m pip install --upgrade pip
+#           pip install -r requirements.txt
+
+#       # 📱 Executa os testes do Robot e joga os resultados na pasta 'public'
+#       - name: Executar Testes do Robot Framework
+#         if: always()
+#         env:
+#           LOGIN: ${{ secrets.LOGIN }}
+#           SENHA: ${{ secrets.SENHA }}
+#           LOGIN2: ${{ secrets.LOGIN2 }}
+#           SENHA2: ${{ secrets.SENHA2 }}
+#           GMAIL_USER: ${{ secrets.GMAIL_USER }}
+#           GMAIL_APP_PASS: ${{ secrets.GMAIL_APP_PASS }}
+#           MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+#           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#         run: |
+#           robot -d ./public app/appGiro/login.robot app/appWemobi/login.robot
+
+#       # 🌐 Publica automaticamente os relatórios gerados no GitHub Pages
+#       - name: Publicar Relatório no GitHub Pages
+#         if: always() # Publica mesmo se o teste falhar
+#         uses: peaceiris/actions-gh-pages@v4
+#         with:
+#           github_token: ${{ secrets.GITHUB_TOKEN }}
+#           publish_dir: ./public
+
+name: Executar Testes Mobile
 
 on:
-  schedule:
-    - cron: "0 * * * *" # Executa de uma em uma hora
-  workflow_dispatch: # Permite execução manual pelo painel do GitHub
-
-# Permissões necessárias para publicar no GitHub Pages
-permissions:
-  contents: write
-  pages: write
-  id-token: write
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
 
 jobs:
-  executar-testes:
-    runs-on: ubuntu-latest
+  test:
+    # Importante: macOS ou runners auto-hospedados são necessários para aceleração de hardware (KVM/Nested Virtualization) para rodar emuladores Android fluidos no GitHub Actions
+    runs-on: macos-latest
 
     steps:
       - name: Checkout do código
@@ -24,30 +75,39 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: Instalar Dependências
+      - name: Configurar Node.js (Necessário para o Appium)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Instalar Dependências do Python
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # 📱 Executa os testes do Robot e joga os resultados na pasta 'public'
-      - name: Executar Testes do Robot Framework
-        if: always()
-        env:
-          LOGIN: ${{ secrets.LOGIN }}
-          SENHA: ${{ secrets.SENHA }}
-          LOGIN2: ${{ secrets.LOGIN2 }}
-          SENHA2: ${{ secrets.SENHA2 }}
-          GMAIL_USER: ${{ secrets.GMAIL_USER }}
-          GMAIL_APP_PASS: ${{ secrets.GMAIL_APP_PASS }}
-          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
-          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Instalar Appium e Driver UiAutomator2
         run: |
-          robot -d ./public app/appGiro/login.robot app/appWemobi/login.robot
+          npm install -g appium
+          appium driver install uiautomator2
 
-      # 🌐 Publica automaticamente os relatórios gerados no GitHub Pages
+      - name: Iniciar Servidor Appium
+        run: |
+          appium --log-level info &
+        # O '&' faz o processo rodar em background para liberar o terminal para os próximos passos
+
+      - name: Executar Testes com Emulador Android integrado
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 29
+          target: default
+          arch: x86_64
+          profile: Nexus 6
+          script: |
+            # Com o emulador ativo e pronto na nuvem, executamos o comando do Robot Framework
+            robot -d ./public app/appGiro/login.robot app/appWemobi/login.robot
+
       - name: Publicar Relatório no GitHub Pages
-        if: always() # Publica mesmo se o teste falhar
+        if: always()
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
