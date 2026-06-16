@@ -31,6 +31,7 @@ jobs:
 
       # 📱 Executa os testes do Robot e joga os resultados na pasta 'public'
       - name: Executar Testes do Robot Framework
+        if: always()
         env:
           LOGIN2: ${{ secrets.LOGIN2 }}
           SENHA2: ${{ secrets.SENHA2 }}
