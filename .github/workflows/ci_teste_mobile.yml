@@ -30,16 +30,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Start Appium
+      - name: Instalar Appium v2 (Versão Estável)
         run: |
-          appium --log appium.log > /dev/null 2>&1 &
-          echo $! > appium.pid
-          sleep 15
+          npm install -g appium@latest
+          appium --version
 
-      # - name: Instalar Appium v2 (Versão Estável)
-      #   run: |
-      #     npm install -g appium@latest
-      #     appium --version
       - name: Instalar Driver UiAutomator2 Compatível
         run: |
           appium driver install uiautomator2
