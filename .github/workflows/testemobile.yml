@@ -118,6 +118,9 @@ jobs:
 
             adb install-multiple ./app/apks/wemobi/*.apk
 
+            adb shell screencap -p /sdcard/inicial.png
+            adb pull /sdcard/inicial.png .
+
             echo "===== PACOTES ====="
 
             adb shell pm list packages | grep giro || true
@@ -129,9 +132,22 @@ jobs:
 
             echo "===== EXECUTANDO TESTES ====="
 
+            adb shell screenrecord /sdcard/teste.mp4 &
+
             robot -T -d ./public app/
 
             robot -T -d ./public app/appGiro/login.robot app/appWemobi/login.robot || true
+
+            adb pull /sdcard/teste.mp4 .
+
+      - name: Capturar Evidências
+        if: always()
+        run: |
+          adb devices
+
+          adb exec-out screencap -p > tela_final.png || true
+
+          adb logcat -d > android.log || true
 
       - name: Exibir Log Appium
         if: always()
@@ -143,4 +159,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: robot-reports
-          path: public
+          path: |
+            public
+            appium.log
+            tela_final.png
+            android.log
+            teste.mp4
