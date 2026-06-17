@@ -25,29 +25,36 @@ jobs:
       - name: Configurar Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.10"
 
-      - name: Configurar Node
+      - name: Configurar Node.js (Necessário para o Appium)
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: "20"
 
-      - name: Instalar dependências Python
+      - name: Instalar Dependências do Python
         run: |
-          pip install --upgrade pip
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Instalar Appium
+      - name: Instalar Appium v2 (Versão Estável)
         run: |
-          npm install -g appium
+          npm install -g appium@latest
+          appium --version
+
+      - name: Instalar Driver UiAutomator2 Compatível
+        run: |
           appium driver install uiautomator2
+        # O '&' faz o processo rodar em background para liberar o terminal para os próximos passos
 
-      - name: Iniciar Appium
+      - name: Enable KVM group perms
         run: |
-          nohup appium > appium.log 2>&1 &
-          sleep 20
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          ls -al /dev/kvm
 
-      - name: Executar Emulador Android
+      - name: Executar Testes com Emulador Android integrado
         uses: reactivecircus/android-emulator-runner@v2
         env:
           LOGIN: ${{ secrets.LOGIN }}
@@ -60,9 +67,15 @@ jobs:
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          api-level: 34
-          arch: x86_64
-          profile: pixel_6
+          api-level: 26
+          target: default
+          arch: x86
+          profile: Nexus 4
+          emulator-build: 10427806
+          avd-name: test
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
           script: |
             adb devices
             adb install-multiple ./app/apks/clube_giro/*.apk
