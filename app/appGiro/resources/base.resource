@@ -19,10 +19,10 @@ Carregar Variaveis De Ambiente
     ${env_gmail_user}=    Get Environment Variable    GMAIL_USER
 
     # 2. Injeta os valores como GLOBAL
-    Set Global Variable    $LOGIN2    ${env_login2}
-    Set Global Variable    $SENHA2    ${env_senha2}
-    Set Global Variable    $GMAIL_USER    ${env_gmail_user}
-    Set Global Variable    $GMAIL_APP_PASS    ${env_gmail_pass}
+    Set Global Variable    ${LOGIN2}    ${env_login2}
+    Set Global Variable    ${SENHA2}    ${env_senha2}
+    Set Global Variable    ${GMAIL_USER}    ${env_gmail_user}
+    Set Global Variable    ${GMAIL_APP_PASS}    ${env_gmail_pass}
 
 Start session
     # 🌟 O SEGREDO ESTÁ AQUI: Chamando a Keyword para alimentar as variáveis ANTES de abrir o Appium
@@ -50,8 +50,8 @@ Start session
 
 Login
     Sleep    7s
-    Wait Until Element Is Visible    ${ENTRAR}    timeout=240s
-    Click Element    ${ENTRAR}
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Entrar"]    timeout=240s
+    Click Element    xpath=//android.widget.TextView[@text="Entrar"]
     Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="email-input-login"]    timeout=60s
     Input Text    xpath=//android.widget.EditText[@resource-id="email-input-login"]    ${LOGIN2}
     Input Password    xpath=//android.widget.EditText[@resource-id="password-input-login"]    ${SENHA2}
