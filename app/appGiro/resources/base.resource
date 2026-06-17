@@ -4,7 +4,7 @@ Library     OperatingSystem
 
 
 *** Variables ***
-${ENTRAR}       xpath=//android.view.ViewGroup[@content-desc="Entrar"]
+${ENTRAR}       xpath=//android.widget.TextView[@text="Entrar"]
 
 
 *** Keywords ***

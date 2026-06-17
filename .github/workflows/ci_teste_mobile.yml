@@ -82,7 +82,11 @@ jobs:
             echo "Iniciando a execução dos testes com o Robot Framework..."
             robot -T -d ./public app/appWemobi/login.robot || true
             echo "Finalizando o processo do Appium..."
-            kill $MY_APPIUM_PID || true
+            appium --log appium.log &
+            MY_APPIUM_PID=$!
+
+            echo "PID: $MY_APPIUM_PID"
+            kill $MY_APPIUM_PID
       # 🌟 PASSO NOVO: Garante o upload dos relatórios mesmo se o teste falhar
       - name: Upload dos Relatórios do Robot Framework
         uses: actions/upload-artifact@v4
