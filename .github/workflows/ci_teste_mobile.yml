@@ -124,16 +124,12 @@ jobs:
           target: default
           arch: x86
           profile: Nexus 4
+          emulator-build: 10427806
+          avd-name: test
           force-avd-creation: false
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
-
           script: |
-
-            # Garante limpeza total antes de começar
-            adb kill-server
-            adb start-server
-            adb wait-for-device
 
             echo "Iniciando Appium com permissão de override..."
             # --session-override permite que a nova sessão force a morte da antiga
@@ -152,8 +148,8 @@ jobs:
             done
 
             # Instalação dos apps
-            adb install-multiple ./app/apks/clube_giro_apks/*.apk
-            adb install-multiple ./app/apks/wemobi_apks/*.apk
+            adb install-multiple ./app/apks/clube_giro/*.apk
+            adb install-multiple ./app/apks/wemobi/*.apk
 
             # Execução dos testes
             robot -T -d ./public app/appGiro/login.robot app/appWemobi/login.robot || true
