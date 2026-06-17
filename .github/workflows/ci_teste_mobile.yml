@@ -29,10 +29,17 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      - name: Instalar Appium v2 (Versão Estável)
+
+      - name: Start Appium
         run: |
-          npm install -g appium@latest
-          appium --version
+          appium --log appium.log > /dev/null 2>&1 &
+          echo $! > appium.pid
+          sleep 15
+
+      # - name: Instalar Appium v2 (Versão Estável)
+      #   run: |
+      #     npm install -g appium@latest
+      #     appium --version
       - name: Instalar Driver UiAutomator2 Compatível
         run: |
           appium driver install uiautomator2
@@ -81,13 +88,14 @@ jobs:
             # adb install-multiple ./app/apks/wemobi/*.apk
             echo "Iniciando a execução dos testes com o Robot Framework..."
             robot -T -d ./public app/appGiro/login.robot || true
-            echo "Finalizando o processo do Appium..."
-            appium --log appium.log &
-            MY_APPIUM_PID=$!
 
-            echo "PID: $MY_APPIUM_PID"
-            kill $MY_APPIUM_PID
-      # 🌟 PASSO NOVO: Garante o upload dos relatórios mesmo se o teste falhar
+      - name: Stop Appium
+        if: always()
+        run: |
+          if [ -f appium.pid ]; then
+            kill $(cat appium.pid) || true
+          fi
+
       - name: Upload dos Relatórios do Robot Framework
         uses: actions/upload-artifact@v4
         if: always()
