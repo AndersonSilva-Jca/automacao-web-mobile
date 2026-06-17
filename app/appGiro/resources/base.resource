@@ -50,8 +50,10 @@ Start session
 
 Login
     Sleep    7s
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Entrar"]    timeout=240s
-    Click Element    xpath=//android.widget.TextView[@text="Entrar"]
+    Wait Until Element Is Visible
+    ...    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
+    ...    timeout=60s
+    Click Element    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
     Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="email-input-login"]    timeout=60s
     Input Text    xpath=//android.widget.EditText[@resource-id="email-input-login"]    ${LOGIN2}
     Input Password    xpath=//android.widget.EditText[@resource-id="password-input-login"]    ${SENHA2}
