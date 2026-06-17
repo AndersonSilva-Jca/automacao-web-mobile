@@ -37,9 +37,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Instalar Appium v2 (Versão Estável)
+      - name: Instalar Appium
         run: |
-          npm install -g appium@latest
+          npm uninstall -g appium || true
+          npm install -g appium@2.19.0
+
+          appium driver install uiautomator2
+
           appium --version
 
       - name: Instalar Driver UiAutomator2 Compatível
@@ -76,22 +80,62 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           script: |
+            echo "===== INICIANDO APPIUM ====="
+
+            appium --log appium.log --log-level debug --session-override > appium.log 2>&1 &
+
+            sleep 20
+
+            echo "===== VALIDANDO APPIUM ====="
+
+            curl http://127.0.0.1:4723/status || true
+
+            echo "===== PROCESSOS APPIUM ====="
+
+            ps -ef | grep appium || true
+
+            echo "===== PORTA 4723 ====="
+
+            netstat -tulpn | grep 4723 || true
+
+            echo "===== DISPOSITIVOS ====="
+
             adb devices
 
-            echo "APKs Clube Giro"
+            echo "===== APKS CLUBE GIRO ====="
+
             ls -la ./app/apks/clube_giro
 
-            echo "APKs Wemobi"
+            echo "===== APKS WEMOBI ====="
+
             ls -la ./app/apks/wemobi
+
+            echo "===== INSTALANDO CLUBE GIRO ====="
 
             adb install-multiple ./app/apks/clube_giro/*.apk
 
+            echo "===== INSTALANDO WEMOBI ====="
+
             adb install-multiple ./app/apks/wemobi/*.apk
+
+            echo "===== PACOTES INSTALADOS ====="
 
             adb shell pm list packages | grep giro || true
             adb shell pm list packages | grep wemobi || true
 
-            robot -T -d ./public app/appGiro/login.robot app/appWemobi/login.robot
+            echo "===== ARQUIVOS ROBOT ====="
+
+            find . -name "*.robot"
+
+            echo "===== EXECUTANDO TESTES ====="
+
+            robot -T -d ./public \
+              app/appGiro/resources/login.robot \
+              app/appWemobi/resources/login.robot
+
+            echo "===== LOG APPIUM ====="
+
+            cat appium.log || true
 
       - name: Upload Reports
         if: always()
