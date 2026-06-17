@@ -1,0 +1,80 @@
+name: Testes Mobile Robot Framework
+
+on:
+  schedule:
+    - cron: "0 * * * *" # roda a cada hora
+
+  workflow_dispatch:
+
+jobs:
+  android-tests:
+    runs-on: ubuntu-latest
+
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Configurar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar dependências Python
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Instalar Appium
+        run: |
+          npm install -g appium
+          appium driver install uiautomator2
+
+      - name: Iniciar Appium
+        run: |
+          nohup appium > appium.log 2>&1 &
+          sleep 20
+
+      - name: Executar Emulador Android
+        uses: reactivecircus/android-emulator-runner@v2
+        env:
+          LOGIN: ${{ secrets.LOGIN }}
+          SENHA: ${{ secrets.SENHA }}
+          LOGIN2: ${{ secrets.LOGIN2 }}
+          SENHA2: ${{ secrets.SENHA2 }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASS: ${{ secrets.GMAIL_APP_PASS }}
+          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          api-level: 34
+          arch: x86_64
+          profile: pixel_6
+          script: |
+            adb devices
+            adb install-multiple ./app/apks/clube_giro/*.apk
+            adb install-multiple ./app/apks/wemobi/*.apk
+
+            robot \
+            -d reports \
+            app/appGiro/login.robot app/appWemobi/login.robot || true
+
+      - name: Upload Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: robot-reports
+          path: reports
