@@ -56,10 +56,15 @@
 name: Executar Testes Mobile
 
 on:
-  push:
-    branches: ["main"]
-  pull_request:
-    branches: ["main"]
+  schedule:
+    - cron: "0 * * * *" # Executa de uma em uma hora
+  workflow_dispatch: # Permite execução manual pelo painel do GitHub
+
+  # Permissões necessárias para publicar no GitHub Pages
+permissions:
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
   test:
