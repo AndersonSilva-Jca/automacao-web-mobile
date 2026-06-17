@@ -18,9 +18,9 @@ Carregar Variaveis De Ambiente
     ${env_mail_username}=    Get Environment Variable    MAIL_USERNAME
 
     # 2. Injeta os valores como GLOBAL
-    Set Global Variable    $LOGIN    ${env_login}
-    Set Global Variable    $SENHA    ${env_senha}
-    Set Global Variable    $MAIL_USERNAME    ${env_mail_username}
+    Set Global Variable    ${LOGIN}    ${env_login}
+    Set Global Variable    ${SENHA}    ${env_senha}
+    Set Global Variable    ${MAIL_USERNAME}    ${env_mail_username}
 
 Start session
     # 🌟 O SEGREDO ESTÁ AQUI: Chamando a Keyword para alimentar as variáveis ANTES de abrir o Appium
