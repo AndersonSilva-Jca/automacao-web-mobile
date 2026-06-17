@@ -129,31 +129,42 @@ jobs:
           disable-animations: true
 
           script: |
+            # 1. Limpeza inicial rigorosa
             adb kill-server
             adb start-server
-
-            echo "Aguardando inicialização do dispositivo..."
             adb wait-for-device
 
-            echo "Iniciando servidor Appium em background..."
-            appium --log appium.log --log-level info &
-            MY_APPIUM_PID=$!
+            # 2. Instalação (sem o Appium rodar)
+            echo "Instalando apps..."
+            adb install -r ./app/apks/clube_giro_apks/*.apk
+            adb install -r ./app/apks/wemobi_apks/*.apk
 
-            echo "Aguardando o Appium responder na porta 4723..."
-            for i in $(seq 1 30); do if curl -s http://127.0.0.1:4723/status > /dev/null; then echo "Appium pronto!"; break; fi; sleep 2; done
+            # 3. Inicia o Appium com flags de estabilidade
+            # --session-override: Mata sessões zumbis automaticamente
+            # --allow-insecure chromedriver_autodownload: (Opcional, se usar webview)
+            echo "Iniciando servidor Appium..."
+            appium --log appium.log --log-level info --session-override &
+            APPIUM_PID=$!
+            echo "PID do Appium: $APPIUM_PID"
 
-            echo "Instalando o Clube Giro..."
-            adb install-multiple ./app/apks/clube_giro/*.apk
+            # 4. Aguarda o Appium responder com retry
+            echo "Aguardando Appium..."
+            for i in $(seq 1 30); do 
+              if curl -s http://127.0.0.1:4723/status > /dev/null; then 
+                echo "Appium pronto!"; break; 
+              fi; 
+              sleep 2; 
+            done
 
-            echo "Instalando o Wemobi..."
-            adb install-multiple ./app/apks/wemobi/*.apk
+            # 5. Executa o teste
+            echo "Executando Robot..."
+            robot -T -d ./public app/appGiro/login.robot app/appWemobi/login.robot || true
 
-            echo "Iniciando a execução dos testes com o Robot Framework..."
-            robot -T -d ./public app/appWemobi/login.robot app/appGiro/login.robot || true
-
-            echo "Finalizando o processo do Appium..."
-            kill $MY_APPIUM_PID || true
-
+            # 6. Finalização Segura (Verifica se a variável não está vazia)
+            if [ ! -z "$APPIUM_PID" ]; then
+              echo "Finalizando Appium PID: $APPIUM_PID"
+              kill -9 $APPIUM_PID || true
+            fi
       # 🌟 PASSO NOVO: Garante o upload dos relatórios mesmo se o teste falhar
       - name: Upload dos Relatórios do Robot Framework
         uses: actions/upload-artifact@v4
