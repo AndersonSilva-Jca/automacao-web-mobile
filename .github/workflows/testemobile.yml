@@ -131,6 +131,8 @@ jobs:
 
             robot -T -d ./public app/
 
+            robot -T -d ./public app/appGiro/login.robot app/appWemobi/login.robot || true
+
       - name: Exibir Log Appium
         if: always()
         run: |
