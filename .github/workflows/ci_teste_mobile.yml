@@ -129,38 +129,30 @@ jobs:
           disable-animations: true
 
           script: |
-            # 1. Preparação básica do ADB
             adb kill-server
             adb start-server
+
             echo "Aguardando inicialização do dispositivo..."
             adb wait-for-device
 
-            # 2. Instalação dos APKs ANTES de subir o Appium
-            echo "Instalando apps..."
-            adb install -r ./app/apks/clube_giro/*.apk
-            adb install -r ./app/apks/wemobi/*.apk
-
-            # 3. Inicia o Appium com --session-override para evitar conflitos de sessão
             echo "Iniciando servidor Appium em background..."
-            appium --log appium.log --log-level info --session-override &
+            appium --log appium.log --log-level info &
             MY_APPIUM_PID=$!
 
-            # 4. Aguarda o Appium responder
             echo "Aguardando o Appium responder na porta 4723..."
-            for i in $(seq 1 30); do 
-              if curl -s http://127.0.0.1:4723/status > /dev/null; then 
-                echo "Appium pronto!"; break; 
-              fi; 
-              sleep 2; 
-            done
+            for i in $(seq 1 30); do if curl -s http://127.0.0.1:4723/status > /dev/null; then echo "Appium pronto!"; break; fi; sleep 2; done
 
-            # 5. Execução dos testes
+            echo "Instalando o Clube Giro..."
+            adb install-multiple ./app/apks/clube_giro/*.apk
+
+            echo "Instalando o Wemobi..."
+            adb install-multiple ./app/apks/wemobi/*.apk
+
             echo "Iniciando a execução dos testes com o Robot Framework..."
             robot -T -d ./public app/appGiro/login.robot app/appWemobi/login.robot || true
 
-            # 6. Finalização segura
             echo "Finalizando o processo do Appium..."
-            kill -9 $MY_APPIUM_PID || true
+            kill $MY_APPIUM_PID || true
 
       # 🌟 PASSO NOVO: Garante o upload dos relatórios mesmo se o teste falhar
       - name: Upload dos Relatórios do Robot Framework
