@@ -2,14 +2,17 @@ name: Testes Mobile Robot Framework
 
 on:
   schedule:
-    - cron: "0 * * * *" # roda a cada hora
-
+    - cron: "0 * * * *"
   workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
   android-tests:
     runs-on: ubuntu-latest
-
     timeout-minutes: 60
 
     steps:
@@ -27,29 +30,27 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: Configurar Node.js (Necessário para o Appium)
+      - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
 
-      - name: Instalar Dependências do Python
+      - name: Instalar Dependências Python
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Instalar Appium
+      - name: Instalar Appium 2
         run: |
           npm uninstall -g appium || true
+
           npm install -g appium@2.19.0
 
-          appium driver install uiautomator2
+          appium driver install --source=npm appium-uiautomator2-driver@3.7.10
 
           appium --version
 
-      - name: Instalar Driver UiAutomator2 Compatível
-        run: |
-          appium driver install uiautomator2
-        # O '&' faz o processo rodar em background para liberar o terminal para os próximos passos
+          appium driver list --installed
 
       - name: Enable KVM group perms
         run: |
@@ -58,7 +59,7 @@ jobs:
           sudo udevadm trigger --name-match=kvm
           ls -al /dev/kvm
 
-      - name: Executar Testes com Emulador Android integrado
+      - name: Executar Testes Mobile
         uses: reactivecircus/android-emulator-runner@v2
         env:
           LOGIN: ${{ secrets.LOGIN }}
@@ -70,36 +71,74 @@ jobs:
           MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
         with:
           api-level: 34
           target: google_apis
           arch: x86_64
           profile: pixel_6
           avd-name: test
-          force-avd-creation: false
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+
+          emulator-options: >
+            -no-window
+            -gpu swiftshader_indirect
+            -noaudio
+            -no-boot-anim
+
           disable-animations: true
+
           script: |
-            echo "Subindo Appium"
+            echo "===== INICIANDO APPIUM ====="
 
-            appium --log appium.log --log-level debug --session-override > appium.log 2>&1 &
+            appium --log appium.log --log-level info --session-override > appium.log 2>&1 &
 
-            sleep 15
+            sleep 20
+
+            echo "===== STATUS APPIUM ====="
 
             curl http://127.0.0.1:4723/status || true
 
+            echo "===== DEVICES ====="
+
             adb devices
 
+            echo "===== APKS CLUBE GIRO ====="
+
+            ls -la ./app/apks/clube_giro
+
+            echo "===== APKS WEMOBI ====="
+
+            ls -la ./app/apks/wemobi
+
+            echo "===== INSTALANDO CLUBE GIRO ====="
+
             adb install-multiple ./app/apks/clube_giro/*.apk
+
+            echo "===== INSTALANDO WEMOBI ====="
+
             adb install-multiple ./app/apks/wemobi/*.apk
+
+            echo "===== PACOTES ====="
+
+            adb shell pm list packages | grep giro || true
+            adb shell pm list packages | grep wemobi || true
+
+            echo "===== ARQUIVOS ROBOT ====="
 
             find . -name "*.robot"
 
-            robot -T -d ./public app/appGiro/login.robot app/appWemobi/login.robot
+            echo "===== EXECUTANDO TESTES ====="
+
+            robot -T -d ./public app/
+
+      - name: Exibir Log Appium
+        if: always()
+        run: |
+          cat appium.log || true
 
       - name: Upload Reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: robot-reports
-          path: reports
+          path: public
