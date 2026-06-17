@@ -35,8 +35,8 @@ module.exports = defineConfig({
     senha2: process.env.SENHA2,
     mailUsername: process.env.MAIL_USERNAME,
     mailPassword: process.env.MAIL_PASSWORD,
-    hotmailAppPass: process.env.HOTMAIL_APP_PASS,
-    hotmailMail: process.env.HOTMAIL_MAIL,
+    gmailAppPass: process.env.GMAIL_APP_PASS,
+    gmailMail: process.env.GMAIL_MAIL,
   },
   e2e: {
     baseUrl: "https://www.viacaocometa.com.br",
@@ -56,13 +56,13 @@ module.exports = defineConfig({
         return launchOptions;
       });
       on("task", {
-        async buscarCodigo2FAHotmail() {
+        async buscarCodigo2FAGmail() {
           console.log("\n==================================================");
           console.log("🚀 [IMAP LOG] Iniciando busca estável do código 2FA...");
 
-          const senhaRaw = config.env.hotmailAppPass || "";
+          const senhaRaw = config.env.gmailAppPass || "";
           if (!senhaRaw) {
-            throw new Error("A variável 'hotmailAppPass' não foi preenchida.");
+            throw new Error("A variável 'gmailAppPass' não foi preenchida.");
           }
 
           const client = new ImapFlow({
@@ -70,7 +70,7 @@ module.exports = defineConfig({
             port: 993,
             secure: true,
             auth: {
-              user: config.env.hotmailMail,
+              user: config.env.gmailMail,
               pass: senhaRaw.replace(/\s/g, ""),
             },
             connectionTimeout: 30000,

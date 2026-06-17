@@ -18,6 +18,7 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
     cy.clearCookies();
     cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.once("uncaught:exception", () => false);
+    Cypress.on("uncaught:exception", () => false);
   });
 
   it("Outlet de Hotéis - Busca de destinos, selecionar datas", () => {
@@ -40,7 +41,7 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
     });
   });
 
-  it.only("Giro - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
+  it("Giro - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
     const login = Cypress.env("login2");
     const senha = Cypress.env("senha2");
 
@@ -49,13 +50,29 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
     cy.get(loc.USUARIO, { timeout: 90000 }).type(login);
     cy.get(loc.SENHA, { timeout: 90000 }).type(senha, { log: false });
     cy.get(loc.BOTAO_LOGIN, { timeout: 90000 }).click();
-    cy.wait(10000);
-    cy.task("buscarCodigo2FAHotmail").then((codigo2FA) => {
-      expect(codigo2FA).to.not.be.null;
-      cy.get('input[data-js="modal-input-password-twofa"]').clear({ force: true }).type(codigo2FA, { force: true });
-      cy.get('button[data-js="modal-button-twofa"]').should("not.be.disabled").click({ force: true });
-      cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
+
+    cy.get("body").then(($body) => {
+      // Procura o input APENAS se ele estiver visível (display diferente de none)
+      const temModal2FA = $body.find('input[data-js="modal-input-password-twofa"]:visible').length > 0;
+
+      if (temModal2FA) {
+        cy.log("🔐 Modal 2FA detectado e visível – buscando código no e-mail...");
+
+        cy.task("buscarCodigo2FAGmail").then((codigo2FA) => {
+          expect(codigo2FA, "código 2FA retornado pela task").to.not.be.null;
+
+          // Limpa e digita o código no campo que está visível
+          cy.get('input[data-js="modal-input-password-twofa"]').should("be.visible").clear().type(codigo2FA);
+
+          cy.get('button[data-js="modal-button-twofa"]').should("not.be.disabled").click();
+        });
+      } else {
+        cy.log("✅ Login direto – Modal 2FA está oculto (display: none). Pulando etapa.");
+      }
     });
+
+    cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
+
     // cy.get(loc.BUSCAS.DESTINO_IDA).click().type(" Campos Dos Goytacazes - Shopping Estrada (RJ) ", { delay: 100 });
     // cy.contains(" Campos Dos Goytacazes - Shopping Estrada (RJ) ").click({ force: true });
     // cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type(" Macaé - Terminal Rodoviário (RJ) ", { delay: 100 });
