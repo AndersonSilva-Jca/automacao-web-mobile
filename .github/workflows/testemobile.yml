@@ -91,9 +91,7 @@ jobs:
             adb shell pm list packages | grep giro || true
             adb shell pm list packages | grep wemobi || true
 
-            robot -T -d ./public \
-              app/appGiro/login.robot \
-              app/appWemobi/login.robot
+            robot -T -d ./public app/appGiro/login.robot app/appWemobi/login.robot
 
       - name: Upload Reports
         if: always()
