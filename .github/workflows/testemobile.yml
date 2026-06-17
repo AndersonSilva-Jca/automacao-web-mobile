@@ -77,13 +77,28 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           script: |
-            adb devices
+            echo "Iniciando Appium com permissão de override..."
+            appium --log appium.log --log-level info --session-override &
+
+            MY_APPIUM_PID=$!
+            echo "Appium rodando com PID: $MY_APPIUM_PID"
+
+            for i in $(seq 1 30); do 
+              if curl -s http://127.0.0.1:4723/status > /dev/null; then 
+                echo "Appium pronto!"; break; 
+              fi; 
+              sleep 2; 
+            done
+
             adb install-multiple ./app/apks/clube_giro/*.apk
             adb install-multiple ./app/apks/wemobi/*.apk
 
-            robot \
-            -d reports \
-            app/appGiro/login.robot app/appWemobi/login.robot || true
+            robot -T -d ./public app/appGiro/login.robot app/appWemobi/login.robot || true
+
+            if [ -n "$MY_APPIUM_PID" ]; then
+              echo "Finalizando Appium PID: $MY_APPIUM_PID"
+              kill -9 $MY_APPIUM_PID || true
+            fi
 
       - name: Upload Reports
         if: always()
