@@ -80,7 +80,7 @@ jobs:
             echo "Instalando o Wemobi..."
             adb install-multiple ./app/apks/wemobi/*.apk
             echo "Iniciando a execução dos testes com o Robot Framework..."
-            robot -T -d ./public app/appGiro/login.robot || true
+            robot -T -d ./public app/appWemobi/login.robot || true
             echo "Finalizando o processo do Appium..."
             appium --log appium.log &
             MY_APPIUM_PID=$!
