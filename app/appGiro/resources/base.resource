@@ -34,18 +34,19 @@ Start session
     ...    appium:automationName=UiAutomator2
     ...    appium:appPackage=com.everymind.clubegiro
     ...    appium:appActivity=.MainActivity
-    ...    appWaitDuration=50000
+    ...    appWaitDuration=60000
     # ...    appium:noReset=${True}
     ...    appium:autoGrantPermissions=${True}
     ...    appium:ensureWebviewsHavePages=${True}
     ...    appium:clearDeviceLogs=${True}
     ...    appium:nativeWebScreenshot=${True}
-    ...    appium:uiautomator2ServerLaunchTimeout=${90000}
+    ...    appium:uiautomator2ServerLaunchTimeout=${120000}
     ...    appium:uiautomator2ServerInstallTimeout=${60000}
     ...    appium:adbExecTimeout=${60000}
     ...    appium:newCommandTimeout=${300}
     ...    appium:connectHardwareKeyboard=${True}
     ...    appium:socketConnectionTimeout=${90000}
+    ...    appium:androidInstallTimeout= ${120000}
 
 Login
     Sleep    7s
@@ -54,6 +55,9 @@ Login
     Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="email-input-login"]    timeout=60s
     Input Text    xpath=//android.widget.EditText[@resource-id="email-input-login"]    ${LOGIN2}
     Input Password    xpath=//android.widget.EditText[@resource-id="password-input-login"]    ${SENHA2}
+    Wait Until Element Is Visible
+    ...    xpath=//android.view.ViewGroup[@content-desc="ACESSAR"]/android.view.ViewGroup
+    ...    timeout=60s
     Wait Until Element Is Visible
     ...    xpath=//android.view.ViewGroup[@content-desc="ACESSAR"]/android.view.ViewGroup
     ...    timeout=60s

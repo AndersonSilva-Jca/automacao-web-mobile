@@ -120,10 +120,10 @@ jobs:
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          api-level: 29
-          target: google_apis
-          arch: x86_64
-          profile: Nexus 6
+          api-level: 26
+          target: default
+          arch: x86
+          profile: Nexus 4
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
@@ -149,7 +149,7 @@ jobs:
             adb install-multiple ./app/apks/wemobi/*.apk
 
             echo "Iniciando a execução dos testes com o Robot Framework..."
-            robot -T -d ./public app/appGiro/login.robot app/appWemobi/login.robot || true
+            robot -T -d ./public app/appWemobi/login.robot app/appGiro/login.robot || true
 
             echo "Finalizando o processo do Appium..."
             kill $MY_APPIUM_PID || true
