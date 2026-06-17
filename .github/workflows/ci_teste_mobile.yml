@@ -1,15 +1,10 @@
 name: Executar Testes Mobile
 
 on:
-  schedule:
-    - cron: "0 * * * *" # Executa de uma em uma hora
-  workflow_dispatch: # Permite execução manual pelo painel do GitHub
-
-  # Permissões necessárias para publicar no GitHub Pages
-permissions:
-  contents: write
-  pages: write
-  id-token: write
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
 
 jobs:
   test:
@@ -34,12 +29,10 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-
       - name: Instalar Appium v2 (Versão Estável)
         run: |
           npm install -g appium@latest
           appium --version
-
       - name: Instalar Driver UiAutomator2 Compatível
         run: |
           appium driver install uiautomator2
@@ -51,7 +44,6 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
           ls -al /dev/kvm
-
       - name: Executar Testes com Emulador Android integrado
         uses: reactivecircus/android-emulator-runner@v2
         env:
@@ -65,46 +57,32 @@ jobs:
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          api-level: 26
-          target: default
-          arch: x86
-          profile: Nexus 4
-          emulator-build: 10427806
-          avd-name: test
+          api-level: 29
+          target: google_apis
+          arch: x86_64
+          profile: Nexus 6
           force-avd-creation: false
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
+
           script: |
-
-            echo "Iniciando Appium com permissão de override..."
-            # --session-override permite que a nova sessão force a morte da antiga
-            appium --log appium.log --log-level info --session-override &
-
-            # Captura o PID de forma mais segura
+            adb kill-server
+            adb start-server
+            echo "Aguardando inicialização do dispositivo..."
+            adb wait-for-device
+            echo "Iniciando servidor Appium em background..."
+            appium --log appium.log --log-level info &
             MY_APPIUM_PID=$!
-            echo "Appium rodando com PID: $MY_APPIUM_PID"
-
-            # Aguarda o Appium ficar online
-            for i in $(seq 1 30); do 
-              if curl -s http://127.0.0.1:4723/status > /dev/null; then 
-                echo "Appium pronto!"; break; 
-              fi; 
-              sleep 2; 
-            done
-
-            # Instalação dos apps
+            echo "Aguardando o Appium responder na porta 4723..."
+            for i in $(seq 1 30); do if curl -s http://127.0.0.1:4723/status > /dev/null; then echo "Appium pronto!"; break; fi; sleep 2; done
+            echo "Instalando o Clube Giro..."
             adb install-multiple ./app/apks/clube_giro/*.apk
+            echo "Instalando o Wemobi..."
             adb install-multiple ./app/apks/wemobi/*.apk
-
-            # Execução dos testes
+            echo "Iniciando a execução dos testes com o Robot Framework..."
             robot -T -d ./public app/appGiro/login.robot app/appWemobi/login.robot || true
-
-            # Finalização segura
-            if [ -n "$MY_APPIUM_PID" ]; then
-              echo "Finalizando Appium PID: $MY_APPIUM_PID"
-              kill -9 $MY_APPIUM_PID || true
-            fi
-
+            echo "Finalizando o processo do Appium..."
+            kill $MY_APPIUM_PID || true
       # 🌟 PASSO NOVO: Garante o upload dos relatórios mesmo se o teste falhar
       - name: Upload dos Relatórios do Robot Framework
         uses: actions/upload-artifact@v4
@@ -127,13 +105,10 @@ jobs:
           from: "GitHub Actions CI"
           body: |
             Olá! O teste automatizado mobile do Clube Giro foi executado com SUCESSO.
-
             🌐 O relatório atualizado já está online e pode ser visto aqui:
             https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/report.html
-
             Logs detalhados:
             https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/log.html
-
       # 🚨 Alerta de Falha por E-mail
       - name: Enviar E-mail de Falha
         if: failure() # Só roda se o Robot Framework acusar alguma falha de tela ou elemento
@@ -148,9 +123,7 @@ jobs:
           from: "GitHub Actions CI"
           body: |
             Atenção! O teste automatizado mobile do Clube Giro FALHOU ou quebrou durante a última execução.
-
             🔍 Analise o erro imediatamente através do link do relatório online:
             https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/report.html
-
             Passos detalhados e prints integrados:
             https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/log.html
