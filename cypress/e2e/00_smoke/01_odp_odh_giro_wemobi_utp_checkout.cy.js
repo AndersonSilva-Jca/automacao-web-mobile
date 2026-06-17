@@ -41,15 +41,23 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
     });
   });
 
-  it("Giro - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
-    const login = Cypress.env("login2");
-    const senha = Cypress.env("senha2");
+  it.only("Giro - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
+    // const login = Cypress.env("login2");
+    // const senha = Cypress.env("senha2");
 
-    cy.visit(giro);
-    cy.get(loc.HEADER_BOTAO_LOGIN, { timeout: 90000 }).click();
-    cy.get(loc.USUARIO, { timeout: 90000 }).type(login);
-    cy.get(loc.SENHA, { timeout: 90000 }).type(senha, { log: false });
-    cy.get(loc.BOTAO_LOGIN, { timeout: 90000 }).click();
+    // cy.visit(giro);
+    // cy.get(loc.HEADER_BOTAO_LOGIN, { timeout: 90000 }).click();
+    // cy.get(loc.USUARIO, { timeout: 90000 }).type(login);
+    // cy.get(loc.SENHA, { timeout: 90000 }).type(senha, { log: false });
+    // cy.get(loc.BOTAO_LOGIN, { timeout: 90000 }).click();
+    cy.env(["login2", "senha2"]).then((env) => {
+      cy.visit(giro);
+      cy.get(loc.HEADER_BOTAO_LOGIN).click();
+      cy.get(loc.USUARIO).type(env.login2);
+      cy.get(loc.SENHA).type(env.senha2, { log: false });
+      cy.get(loc.BOTAO_LOGIN).click({ force: true });
+      // cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
+    });
 
     cy.get("body").then(($body) => {
       // Procura o input APENAS se ele estiver visível (display diferente de none)
