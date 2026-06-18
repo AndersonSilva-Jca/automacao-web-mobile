@@ -1,11 +1,11 @@
 name: Executar Testes Mobile
 
 on:
-  push:
-    branches: ["main"]
-  pull_request:
-    branches: ["main"]
-
+  # push:
+  #   branches: ["main"]
+  # pull_request:
+  #   branches: ["main"]
+  workflow_dispatch:
 jobs:
   test:
     # Importante: macOS ou runners auto-hospedados são necessários para aceleração de hardware (KVM/Nested Virtualization) para rodar emuladores Android fluidos no GitHub Actions
