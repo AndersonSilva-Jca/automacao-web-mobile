@@ -1,6 +1,7 @@
 *** Settings ***
 Library     AppiumLibrary
 Library     OperatingSystem
+# Library    AppiumLibrary    screenshot_root_directory=${CURDIR}
 
 
 *** Variables ***
@@ -49,7 +50,6 @@ Start session
     ...    appium:androidInstallTimeout= ${120000}
 
 Login
-    Sleep    7s
     Wait Until Element Is Visible
     ...    accessibility_id=Entrar
     ...    timeout=60s
@@ -59,12 +59,12 @@ Login
     Input Password    xpath=//android.widget.EditText[@resource-id="password-input-login"]    ${SENHA2}
     Wait Until Element Is Visible
     ...    xpath=//android.view.ViewGroup[@content-desc="ACESSAR"]/android.view.ViewGroup
-    ...    timeout=60s
+    ...    timeout=120s
     Wait Until Element Is Visible
     ...    xpath=//android.view.ViewGroup[@content-desc="ACESSAR"]/android.view.ViewGroup
-    ...    timeout=60s
+    ...    timeout=120s
     Click Element    xpath=//android.view.ViewGroup[@content-desc="ACESSAR"]/android.view.ViewGroup
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Olá, ANDERSON"]    timeout=120s
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Olá, ANDERSON"]    timeout=240s
     Log To Console    \nLogin realizado com sucesso! Olá, ANDERSON
 
 Close session

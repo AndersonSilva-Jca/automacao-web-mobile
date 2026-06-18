@@ -1,6 +1,7 @@
 *** Settings ***
 Library     AppiumLibrary
 Library     OperatingSystem
+# Library    AppiumLibrary    screenshot_root_directory=${CURDIR}/../../public
 
 
 *** Variables ***

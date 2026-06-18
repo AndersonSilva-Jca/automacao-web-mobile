@@ -52,7 +52,7 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
     // cy.get(loc.BOTAO_LOGIN, { timeout: 90000 }).click();
     cy.env(["login2", "senha2"]).then((env) => {
       cy.visit(giro);
-      cy.get(loc.HEADER_BOTAO_LOGIN).click();
+      cy.get(loc.HEADER_BOTAO_LOGIN).should("be.visible").click();
       cy.get(".login-title").should("contain", "Faça seu login");
       cy.get(loc.USUARIO).should("be.visible").type(env.login2, { delay: 150 });
       cy.get(loc.SENHA).should("be.visible").type(env.senha2, { log: false }, { delay: 150 });

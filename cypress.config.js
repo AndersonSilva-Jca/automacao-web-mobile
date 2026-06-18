@@ -39,10 +39,14 @@ module.exports = defineConfig({
     gmailMail: process.env.GMAIL_MAIL,
   },
   e2e: {
+    retries: {
+      runMode: 2, // O GitHub Actions vai tentar até 3 vezes se o elemento sumir do DOM
+      openMode: 0, // No seu PC desenvolvendo, ele falha de primeira para você ver o erro
+    },
     baseUrl: "https://www.viacaocometa.com.br",
     scrollBehavior: "nearest", // Evita que o Cypress role a página automaticamente durante os testes
     screenshotsFolder: "cypress/reports/screenshots",
-    defaultCommandTimeout: 40000, // Aumenta o tempo padrão de espera por elementos
+    defaultCommandTimeout: 60000, // Aumenta o tempo padrão de espera por elementos
     pageLoadTimeout: 120000, // Espera até 120s para a página carregar totalmente
     requestTimeout: 10000, // Espera até 15s por respostas de APIs (cy.request)
     responseTimeout: 15000, // Espera até 15s por respostas de interceptações

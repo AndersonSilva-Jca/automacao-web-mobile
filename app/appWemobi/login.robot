@@ -12,4 +12,3 @@ Test Teardown       Close All Applications
 Deve realizar o login com sucesso
     Start session
     Login
-    Close Application
