@@ -141,7 +141,7 @@ module.exports = defineConfig({
         },
       });
     },
-    allowCypressEnv: false,
+    allowCypressEnv: true,
     trashAssetsBeforeRuns: true, // Evita deletar vídeos e screenshots antigos, útil para análise pós-falha
   },
 });

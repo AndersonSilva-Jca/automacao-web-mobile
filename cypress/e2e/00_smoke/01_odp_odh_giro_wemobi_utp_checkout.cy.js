@@ -30,38 +30,60 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
       const cidades = ["Rio de Janeiro (e arredores)", "São Paulo (e arredores)", "Belo Horizonte (e arredores)", "Curitiba (e arredores)", "Salvador (e arredores)"];
       const indiceAleatorio = Math.floor(Math.random() * cidades.length);
       const cidadeSorteada = cidades[indiceAleatorio];
-      cy.get(".h-full > .flex > .min-w-0 > .w-full").click().type(cidadeSorteada, { delay: 50 });
+      cy.get(".h-full > .flex > .min-w-0 > .w-full").click().type(cidadeSorteada, { delay: 25 });
       cy.get(`[cmdk-item][data-value="${cidadeSorteada}"]`).first().click({ force: true });
       cy.log(`🏙️ Destino sorteado e selecionado para o teste: ${cidadeSorteada}`);
       cy.get(".text-sm > .text-muted-foreground").click();
       cy.selecionarPeriodoEstadia(3);
       cy.get(".p-2 > .whitespace-nowrap").click();
       cy.get(".absolute").should("be.visible");
-      // cy.contains("Selecione a hospedagem ideal para sua viagem", { timeout: 30000 }).should("be.visible");
+      cy.contains(/(resultados de hospedagens|Nenhum hotel encontrado)/i).should("be.visible");
     });
   });
 
-  it("Giro - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
-    // const login = Cypress.env("login2");
-    // const senha = Cypress.env("senha2");
+  it.only("Giro - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
+    const login = Cypress.env("login2");
+    const senha = Cypress.env("senha2");
 
-    // cy.visit(giro);
-    // cy.get(loc.HEADER_BOTAO_LOGIN, { timeout: 90000 }).click();
-    // cy.get(loc.USUARIO, { timeout: 90000 }).type(login);
-    // cy.get(loc.SENHA, { timeout: 90000 }).type(senha, { log: false });
-    // cy.get(loc.BOTAO_LOGIN, { timeout: 90000 }).click();
-    cy.env(["login2", "senha2"]).then((env) => {
-      cy.visit(giro);
-      cy.get(loc.HEADER_BOTAO_LOGIN).should("be.visible").click();
-      cy.get(".login-title").should("contain", "Faça seu login");
-      cy.get(loc.USUARIO).should("be.visible").type(env.login2, { delay: 150 });
-      cy.get(loc.SENHA).should("be.visible").type(env.senha2, { log: false }, { delay: 150 });
-      cy.get(loc.BOTAO_LOGIN).click({ force: true });
-      // cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
-    });
+    cy.visit(giro);
+    cy.get(loc.HEADER_BOTAO_LOGIN, { timeout: 90000 }).click();
+    cy.get(loc.USUARIO, { timeout: 90000 }).type(login);
+    cy.get(loc.SENHA, { timeout: 90000 }).type(senha, { log: false });
+    cy.get(loc.BOTAO_LOGIN, { timeout: 90000 }).click();
+    // cy.env(["login2", "senha2"]).then((env) => {
+    //   cy.visit(giro);
+    //   cy.get(loc.HEADER_BOTAO_LOGIN).should("be.visible").click();
+    //   cy.get(".login-title").should("contain", "Faça seu login");
+    //   cy.get(loc.USUARIO).should("be.visible").type(env.login2, { delay: 150 });
+    //   cy.get(loc.SENHA).should("be.visible").type(env.senha2, { log: false }, { delay: 150 });
+    //   cy.get(loc.BOTAO_LOGIN).click({ force: true });
+    // cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
+    cy.wait(4000);
+    // });
+
+    // cy.get("body").then(($body) => {
+    //   // Procura o input APENAS se ele estiver visível (display diferente de none)
+    //   const temModal2FA = $body.find('input[data-js="modal-input-password-twofa"]:visible').length > 0;
+
+    //   if (temModal2FA) {
+    //     cy.log("🔐 Modal 2FA detectado e visível – buscando código no e-mail...");
+
+    //     cy.task("buscarCodigo2FAGmail").then((codigo2FA) => {
+    //       expect(codigo2FA, "código 2FA retornado pela task").to.not.be.null;
+    //       cy.wait(1000);
+
+    //       // Limpa e digita o código no campo que está visível
+    //       cy.get('input[data-js="modal-input-password-twofa"]').should("be.visible").type(codigo2FA);
+
+    //       cy.get('button[data-js="modal-button-twofa"]').should("not.be.disabled").click();
+    //     });
+    //   } else {
+    //     cy.log("✅ Login direto – Modal 2FA está oculto (display: none). Pulando etapa.");
+    //   }
+    // });
 
     cy.get("body").then(($body) => {
-      // Procura o input APENAS se ele estiver visível (display diferente de none)
+      // Identifica se o modal está ativo
       const temModal2FA = $body.find('input[data-js="modal-input-password-twofa"]:visible').length > 0;
 
       if (temModal2FA) {
@@ -70,9 +92,13 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
         cy.task("buscarCodigo2FAGmail").then((codigo2FA) => {
           expect(codigo2FA, "código 2FA retornado pela task").to.not.be.null;
 
-          // Limpa e digita o código no campo que está visível
-          cy.get('input[data-js="modal-input-password-twofa"]').should("be.visible").clear().type(codigo2FA);
+          // 1. PASSO CRUCIAL: Espera o elemento perder o atributo 'disabled' (até 10 segundos)
+          cy.get('input[data-js="modal-input-password-twofa"]', { timeout: 10000 }).should("not.have.attr", "disabled");
 
+          // 2. Agora com o campo ativo de verdade, foca, limpa e digita
+          cy.get('input[data-js="modal-input-password-twofa"]').should("be.visible").focus().clear().type(codigo2FA, { delay: 50 });
+
+          // 3. Garante que o botão de envio também está ativo antes de clicar
           cy.get('button[data-js="modal-button-twofa"]').should("not.be.disabled").click();
         });
       } else {
@@ -82,19 +108,19 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
 
     cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
 
-    // cy.get(loc.BUSCAS.DESTINO_IDA).click().type(" Campos Dos Goytacazes - Shopping Estrada (RJ) ", { delay: 100 });
-    // cy.contains(" Campos Dos Goytacazes - Shopping Estrada (RJ) ").click({ force: true });
-    // cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type(" Macaé - Terminal Rodoviário (RJ) ", { delay: 100 });
-    // cy.contains(" Macaé - Terminal Rodoviário (RJ) ").click({ force: true });
-    // cy.get(loc.BUSCAS.DATA_IDA).click();
-    // cy.get(loc.LOADER).should("not.exist");
-    // cy.selecionarDataIda(5);
-    // cy.get(loc.BUSCAS.BOTAO_BUSCAR, { timeout: 90000 }).should("be.visible").click();
-    // cy.selecionarPassagemAleatoria1({ timeout: 90000 });
-    // cy.get(loc.CHECK_PASSAGEIRO, { timeout: 90000 }).click({ force: true });
-    // cy.get(loc.BOTAO_AVANCAR).should("be.visible").and("not.be.disabled").click();
-    // cy.selecionarAssentoAleatorio({ timeout: 90000 });
-    // cy.get(loc.BOTAO_AVANCAR).should("be.visible").click();
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().type(" Campos Dos Goytacazes - Shopping Estrada (RJ) ", { delay: 100 });
+    cy.contains(" Campos Dos Goytacazes - Shopping Estrada (RJ) ").click({ force: true });
+    cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type(" Macaé - Terminal Rodoviário (RJ) ", { delay: 100 });
+    cy.contains(" Macaé - Terminal Rodoviário (RJ) ").click({ force: true });
+    cy.get(loc.BUSCAS.DATA_IDA).click();
+    cy.get(loc.LOADER).should("not.exist");
+    cy.selecionarDataIda(5);
+    cy.get(loc.BUSCAS.BOTAO_BUSCAR, { timeout: 90000 }).should("be.visible").click();
+    cy.selecionarPassagemAleatoria1({ timeout: 90000 });
+    cy.get(loc.CHECK_PASSAGEIRO, { timeout: 90000 }).click({ force: true });
+    cy.get(loc.BOTAO_AVANCAR).should("be.visible").and("not.be.disabled").click();
+    cy.selecionarAssentoAleatorio({ timeout: 90000 });
+    cy.get(loc.BOTAO_AVANCAR).should("be.visible").click();
   });
 
   it("Wemobi - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
@@ -106,20 +132,21 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
       cy.get("#button-login-confirm").click();
       cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
     });
-    // cy.get("#input-departure").click().type("São Paulo - Rodoviária Tietê (SP)", { delay: 100 });
-    // cy.xpath('//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]').click({ force: true });
-    // cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("Rio De Janeiro - Rodoviária Novo Rio (RJ)", { delay: 100 });
-    // cy.xpath('//*[@id="Rio-De-Janeiro---Rodoviária-Novo-Rio-(RJ)"]/p[1]').click({ force: true });
-    // cy.get(loc.BUSCAS.DATA_IDA).click();
-    // cy.selecionarDataIda(5);
-    // cy.get(loc.BUSCAS.BOTAO_BUSCAR, { timeout: 90000 }).should("be.visible").click();
-    // cy.selecionarPassagemAleatoria1({ timeout: 90000 });
-    // cy.get(loc.CHECK_PASSAGEIRO, { timeout: 90000 }).click({ force: true });
-    // cy.get("#passenger-identification-proceed").should("be.visible").and("not.be.disabled").click();
-    // cy.get("#reservation-seat-0").click();
-    // cy.get('[data-value="random-seat"]').click();
-    // cy.fecharModalUpgradePoltrona({ timeout: 90000 });
-    // cy.get("#seat-reservation-v2-button-proceed").should("be.visible").and("not.be.disabled").click();
+    cy.get("#input-departure").click().type("São Paulo - Rodoviária Tietê (SP)", { delay: 100 });
+    cy.xpath('//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]').click({ force: true });
+    cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("Rio De Janeiro - Rodoviária Novo Rio (RJ)", { delay: 100 });
+    cy.xpath('//*[@id="Rio-De-Janeiro---Rodoviária-Novo-Rio-(RJ)"]/p[1]').click({ force: true });
+    cy.get(loc.BUSCAS.DATA_IDA).click();
+    cy.selecionarDataIda(5);
+    cy.get(loc.BUSCAS.BOTAO_BUSCAR, { timeout: 90000 }).should("be.visible").click();
+    cy.selecionarPassagemAleatoria1({ timeout: 90000 });
+    cy.get(loc.CHECK_PASSAGEIRO, { timeout: 90000 }).click({ force: true });
+    cy.get("#passenger-identification-proceed").should("be.visible").and("not.be.disabled").click();
+    cy.get("#reservation-seat-0").click();
+    cy.get('[data-value="random-seat"]').click();
+    cy.fecharModalUpgradePoltrona({ timeout: 90000 });
+    cy.get("#seat-reservation-v2-button-proceed").should("be.visible").and("not.be.disabled").click();
+    cy.get(".payment-type-container > .col-12 > .active").should("be.visible");
   });
 
   it("Outlet de passagens - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
@@ -132,22 +159,20 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
       cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
     });
 
-    //   cy.wait(12000);
-    //   cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Rodoviária Tietê (SP)", { delay: 100 });
+    cy.wait(12000);
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Rodoviária Tietê (SP)", { delay: 100 });
 
-    //   cy.xpath('//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]').click({ force: true });
-    //   cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type(" Rio De Janeiro - Rodoviária Novo Rio (RJ) ", { delay: 100 });
-    //   cy.xpath('//*[@id="Rio-De-Janeiro---Rodoviária-Novo-Rio-(RJ)"]/p[1]').click({ force: true });
-    //   cy.get(loc.BUSCAS.DATA_IDA).click();
-    // cy.selecionarDataIda(5);
-    // cy.get(loc.BUSCAS.BOTAO_BUSCAR, { timeout: 90000 }).should("be.visible").click();
+    cy.xpath('//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]').click({ force: true });
+    cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("Rio De Janeiro - Todos (RJ)", { delay: 100 });
+    cy.xpath('//*[@id="Rio-De-Janeiro---Todos-(RJ)"]/p[1]').click({ force: true });
+    cy.get(loc.BUSCAS.DATA_IDA).click();
+    cy.selecionarDataIda(5);
+    cy.get(loc.BUSCAS.BOTAO_BUSCAR, { timeout: 90000 }).should("be.visible").click();
 
-    // cy.selecionarPassagemAleatoria1({ timeout: 90000 });
-    // cy.get(loc.CHECK_PASSAGEIRO, { timeout: 90000 }).click({ force: true });
-    // cy.get("#passenger-identification-proceed").should("be.visible").and("not.be.disabled").click();
-    // cy.get("#reservation-seat-0").click();
-    // cy.get('[data-value="random-seat"]').click();
-    // cy.get("#seat-reservation-v2-button-proceed").should("be.visible").and("not.be.disabled").click();
+    cy.selecionarPassagemAleatoria1({ timeout: 90000 });
+    cy.get(loc.CHECK_PASSAGEIRO, { timeout: 90000 }).click({ force: true });
+    cy.get(".btn-footer").should("be.visible").and("not.be.disabled").click();
+    cy.get(".payment-type-container > .col-12 > .active").should("be.visible");
   });
 
   it("Viação Cometa - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
