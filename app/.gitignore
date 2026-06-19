@@ -2,6 +2,7 @@ node_modules
 .env
 appGiro\resources\__pycache__
 appWemobi\resources\__pycache__
+# appCometa\resources\__pycache__
 # 🐍 Caches do Python (Limpa as pastas __pycache__ que aparecem no seu VS Code)
 **/__pycache__/
 *.pyc

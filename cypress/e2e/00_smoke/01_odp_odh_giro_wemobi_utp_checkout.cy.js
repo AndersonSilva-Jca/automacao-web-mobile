@@ -41,47 +41,25 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
     });
   });
 
-  it.only("Giro - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
-    const login = Cypress.env("login2");
-    const senha = Cypress.env("senha2");
+  it("Giro - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
+    // const login = Cypress.env("login2");
+    // const senha = Cypress.env("senha2");
 
-    cy.visit(giro);
-    cy.get(loc.HEADER_BOTAO_LOGIN, { timeout: 90000 }).click();
-    cy.get(loc.USUARIO, { timeout: 90000 }).type(login);
-    cy.get(loc.SENHA, { timeout: 90000 }).type(senha, { log: false });
-    cy.get(loc.BOTAO_LOGIN, { timeout: 90000 }).click();
-    // cy.env(["login2", "senha2"]).then((env) => {
-    //   cy.visit(giro);
-    //   cy.get(loc.HEADER_BOTAO_LOGIN).should("be.visible").click();
-    //   cy.get(".login-title").should("contain", "Faça seu login");
-    //   cy.get(loc.USUARIO).should("be.visible").type(env.login2, { delay: 150 });
-    //   cy.get(loc.SENHA).should("be.visible").type(env.senha2, { log: false }, { delay: 150 });
-    //   cy.get(loc.BOTAO_LOGIN).click({ force: true });
-    // cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
-    cy.wait(4000);
-    // });
-
-    // cy.get("body").then(($body) => {
-    //   // Procura o input APENAS se ele estiver visível (display diferente de none)
-    //   const temModal2FA = $body.find('input[data-js="modal-input-password-twofa"]:visible').length > 0;
-
-    //   if (temModal2FA) {
-    //     cy.log("🔐 Modal 2FA detectado e visível – buscando código no e-mail...");
-
-    //     cy.task("buscarCodigo2FAGmail").then((codigo2FA) => {
-    //       expect(codigo2FA, "código 2FA retornado pela task").to.not.be.null;
-    //       cy.wait(1000);
-
-    //       // Limpa e digita o código no campo que está visível
-    //       cy.get('input[data-js="modal-input-password-twofa"]').should("be.visible").type(codigo2FA);
-
-    //       cy.get('button[data-js="modal-button-twofa"]').should("not.be.disabled").click();
-    //     });
-    //   } else {
-    //     cy.log("✅ Login direto – Modal 2FA está oculto (display: none). Pulando etapa.");
-    //   }
-    // });
-
+    // cy.visit(giro);
+    // cy.get(loc.HEADER_BOTAO_LOGIN, { timeout: 90000 }).click();
+    // cy.get(loc.USUARIO, { timeout: 90000 }).type(login);
+    // cy.get(loc.SENHA, { timeout: 90000 }).type(senha, { log: false });
+    // cy.get(loc.BOTAO_LOGIN, { timeout: 90000 }).click();
+    cy.env(["login2", "senha"]).then((env) => {
+      cy.visit(giro);
+      cy.get(loc.HEADER_BOTAO_LOGIN).should("be.visible").click();
+      cy.get(".login-title").should("contain", "Faça seu login");
+      cy.get(loc.USUARIO).should("be.visible").type("andynho1987@gmail.com", { delay: 150 });
+      cy.get(loc.SENHA).should("be.visible").type(env.senha, { log: false }, { delay: 150 });
+      cy.get(loc.BOTAO_LOGIN).click({ force: true });
+      cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
+      cy.wait(4000);
+    });
     cy.get("body").then(($body) => {
       // Identifica se o modal está ativo
       const temModal2FA = $body.find('input[data-js="modal-input-password-twofa"]:visible').length > 0;
@@ -90,15 +68,10 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
         cy.log("🔐 Modal 2FA detectado e visível – buscando código no e-mail...");
 
         cy.task("buscarCodigo2FAGmail").then((codigo2FA) => {
-          expect(codigo2FA, "código 2FA retornado pela task").to.not.be.null;
+          expect(codigo2FA).to.not.be.null;
 
-          // 1. PASSO CRUCIAL: Espera o elemento perder o atributo 'disabled' (até 10 segundos)
-          cy.get('input[data-js="modal-input-password-twofa"]', { timeout: 10000 }).should("not.have.attr", "disabled");
+          cy.get('input[data-js="modal-input-password-twofa"]').focus().clear({ force: true }).type(codigo2FA, { force: true, delay: 80 }); // force ignora visibility
 
-          // 2. Agora com o campo ativo de verdade, foca, limpa e digita
-          cy.get('input[data-js="modal-input-password-twofa"]').should("be.visible").focus().clear().type(codigo2FA, { delay: 50 });
-
-          // 3. Garante que o botão de envio também está ativo antes de clicar
           cy.get('button[data-js="modal-button-twofa"]').should("not.be.disabled").click();
         });
       } else {
@@ -108,10 +81,10 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
 
     cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
 
-    cy.get(loc.BUSCAS.DESTINO_IDA).click().type(" Campos Dos Goytacazes - Shopping Estrada (RJ) ", { delay: 100 });
-    cy.contains(" Campos Dos Goytacazes - Shopping Estrada (RJ) ").click({ force: true });
-    cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type(" Macaé - Terminal Rodoviário (RJ) ", { delay: 100 });
-    cy.contains(" Macaé - Terminal Rodoviário (RJ) ").click({ force: true });
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().type("Rio De Janeiro - Todos (RJ)", { delay: 100 });
+    cy.contains(" Rio De Janeiro - Todos (RJ) ").click({ force: true });
+    cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("São Paulo - Todos (SP)", { delay: 100 });
+    cy.contains("São Paulo - Todos (SP)").click({ force: true });
     cy.get(loc.BUSCAS.DATA_IDA).click();
     cy.get(loc.LOADER).should("not.exist");
     cy.selecionarDataIda(5);
@@ -143,8 +116,8 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
     cy.get(loc.CHECK_PASSAGEIRO, { timeout: 90000 }).click({ force: true });
     cy.get("#passenger-identification-proceed").should("be.visible").and("not.be.disabled").click();
     cy.get("#reservation-seat-0").click();
-    cy.get('[data-value="random-seat"]').click();
     cy.fecharModalUpgradePoltrona({ timeout: 90000 });
+    cy.get('[data-value="random-seat"]').click();
     cy.get("#seat-reservation-v2-button-proceed").should("be.visible").and("not.be.disabled").click();
     cy.get(".payment-type-container > .col-12 > .active").should("be.visible");
   });

@@ -5,7 +5,11 @@ Library     OperatingSystem
 
 
 *** Variables ***
-${ENTRAR}       id=user
+${ENTRAR}               id=user
+${LOGIN}                ${EMPTY}
+${SENHA}                ${EMPTY}
+${MAIL_USERNAME}        ${EMPTY}
+${GMAIL_APP_PASS}       ${EMPTY}
 
 
 *** Keywords ***

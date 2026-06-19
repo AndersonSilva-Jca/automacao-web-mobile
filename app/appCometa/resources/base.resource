@@ -5,9 +5,8 @@ Library     OperatingSystem
 
 
 *** Variables ***
-${ENTRAR}               xpath=//android.widget.TextView[@text="Entrar"]
-${LOGIN2}               ${EMPTY}
-${SENHA2}               ${EMPTY}
+${LOGIN}                ${EMPTY}
+${SENHA}                ${EMPTY}
 ${GMAIL_USER}           ${EMPTY}
 ${GMAIL_APP_PASS}       ${EMPTY}
 
@@ -18,14 +17,14 @@ Carregar Variaveis De Ambiente
     Evaluate    __import__('dotenv').load_dotenv(dotenv_path='app/.env')
 
     # 1. Coleta os dados do sistema operacional (.env local ou CI)
-    ${env_login2}=    Get Environment Variable    LOGIN2
-    ${env_senha2}=    Get Environment Variable    SENHA2
+    ${env_login}=    Get Environment Variable    LOGIN
+    ${env_senha}=    Get Environment Variable    SENHA
     ${env_gmail_pass}=    Get Environment Variable    GMAIL_APP_PASS
     ${env_gmail_user}=    Get Environment Variable    GMAIL_USER
 
     # 2. Injeta os valores como GLOBAL
-    Set Global Variable    ${LOGIN2}    ${env_login2}
-    Set Global Variable    ${SENHA2}    ${env_senha2}
+    Set Global Variable    ${LOGIN}    ${env_login}
+    Set Global Variable    ${SENHA}    ${env_senha}
     Set Global Variable    ${GMAIL_USER}    ${env_gmail_user}
     Set Global Variable    ${GMAIL_APP_PASS}    ${env_gmail_pass}
 
@@ -37,7 +36,7 @@ Start session
     ...    platformName=Android
     ...    appium:deviceName=emulator-5554
     ...    appium:automationName=UiAutomator2
-    ...    appium:appPackage=com.everymind.clubegiro
+    ...    appium:appPackage=br.com.viacaocometa.cometaapp
     ...    appium:appActivity=.MainActivity
     ...    appWaitDuration=60000
     # ...    appium:noReset=${True}
@@ -54,22 +53,18 @@ Start session
     ...    appium:androidInstallTimeout= ${120000}
 
 Login
-    Wait Until Element Is Visible
-    ...    accessibility_id=Entrar
-    ...    timeout=60s
-    Click Element    accessibility_id=Entrar
-    Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="email-input-login"]    timeout=60s
-    Input Text    xpath=//android.widget.EditText[@resource-id="email-input-login"]    ${LOGIN2}
-    Input Password    xpath=//android.widget.EditText[@resource-id="password-input-login"]    ${SENHA2}
-    Wait Until Element Is Visible
-    ...    xpath=//android.view.ViewGroup[@content-desc="ACESSAR"]/android.view.ViewGroup
-    ...    timeout=120s
-    Wait Until Element Is Visible
-    ...    xpath=//android.view.ViewGroup[@content-desc="ACESSAR"]/android.view.ViewGroup
-    ...    timeout=120s
-    Click Element    xpath=//android.view.ViewGroup[@content-desc="ACESSAR"]/android.view.ViewGroup
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Olá, ANDERSON"]    timeout=240s
-    Log To Console    \nLogin realizado com sucesso! Olá, ANDERSON
+    Sleep    3s
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Acesse sua conta"]    timeout=60s
+    Log To Console    \n Assert Acesse sua conta
+    Click Element    xpath=//android.widget.EditText[@resource-id="user"]
+    Input Text    xpath=//android.widget.EditText[@resource-id="user"]    ${LOGIN}
+    Input Password    xpath=//android.widget.EditText[@resource-id="password"]    ${SENHA}
+    Click Element    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Buscar"]    timeout=60s
+    Log To Console    \n Logado
+    Click Element    android=new UiSelector().className("android.widget.ImageView").instance(0)
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="name"]    timeout=60s
+    Log To Console    \n Usuário logado com sucesso.
 
 Close session
     Close Application
