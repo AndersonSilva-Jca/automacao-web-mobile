@@ -7,9 +7,9 @@ on:
     # Roda nos minutos 0 and 40 das horas pares (0, 2, 4, 6...)
     # - cron: "30 0-22/2 * * *"
     # Roda no minuto 20 das horas ímpares (1, 3, 5, 7...)
-    - cron: "0 1-23/2 * * *"
-    - cron: "30 1-23/2 * * *"
-    # - cron: "15 * * * *"
+    # - cron: "0 1-23/2 * * *"
+    # - cron: "30 1-23/2 * * *"
+    - cron: "30 * * * *"
   workflow_dispatch:
 
 permissions:
