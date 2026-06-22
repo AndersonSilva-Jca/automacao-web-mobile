@@ -1,38 +1,37 @@
 *** Settings ***
-Library     AppiumLibrary
-Library     OperatingSystem
-# Library    AppiumLibrary    screenshot_root_directory=${CURDIR}
-
-
+Documentation     Suite de testes para automação mobile com tratamento condicional de 2FA por e-mail.
+Library           AppiumLibrary
+Library           OperatingSystem
+Library           String
+Library           ../../libraries/GmailHelper.py
 *** Variables ***
-${ENTRAR}               xpath=//android.widget.TextView[@text="Entrar"]
 ${LOGIN2}               ${EMPTY}
 ${SENHA2}               ${EMPTY}
 ${GMAIL_USER}           ${EMPTY}
 ${GMAIL_APP_PASS}       ${EMPTY}
-
+${REMETENTE_APP}        ${EMPTY}
+${XPATH_TITULO_2FA}     xpath=//android.widget.TextView[@text="Verifique seu e-mail"]
 
 *** Keywords ***
 Carregar Variaveis De Ambiente
     [Documentation]    Carrega o arquivo .env e cria as variáveis globais para o teste.
     Evaluate    __import__('dotenv').load_dotenv(dotenv_path='app/.env')
 
-    # 1. Coleta os dados do sistema operacional (.env local ou CI)
-    ${env_login2}=    Get Environment Variable    LOGIN2
-    ${env_senha2}=    Get Environment Variable    SENHA2
-    ${env_gmail_pass}=    Get Environment Variable    GMAIL_APP_PASS
-    ${env_gmail_user}=    Get Environment Variable    GMAIL_USER
+    ${env_login2}=           Get Environment Variable    LOGIN2
+    ${env_senha2}=           Get Environment Variable    SENHA2
+    ${env_gmail_pass}=       Get Environment Variable    GMAIL_APP_PASS
+    ${env_gmail_user}=       Get Environment Variable    GMAIL_USER
+    ${env_remetente_app}=    Get Environment Variable    REMETENTE_APP
 
-    # 2. Injeta os valores como GLOBAL
-    Set Global Variable    ${LOGIN2}    ${env_login2}
-    Set Global Variable    ${SENHA2}    ${env_senha2}
-    Set Global Variable    ${GMAIL_USER}    ${env_gmail_user}
+    Set Global Variable    ${LOGIN2}            ${env_login2}
+    Set Global Variable    ${SENHA2}            ${env_senha2}
+    Set Global Variable    ${GMAIL_USER}        ${env_gmail_user}
     Set Global Variable    ${GMAIL_APP_PASS}    ${env_gmail_pass}
+    Set Global Variable    ${REMETENTE_APP}     ${env_remetente_app}
 
 Start session
-    # 🌟 O SEGREDO ESTÁ AQUI: Chamando a Keyword para alimentar as variáveis ANTES de abrir o Appium
+    [Documentation]    Inicializa o aplicativo configurando o ambiente previamente.
     Carregar Variaveis De Ambiente
-
     Open Application    http://127.0.0.1:4723
     ...    platformName=Android
     ...    appium:deviceName=emulator-5554
@@ -40,7 +39,6 @@ Start session
     ...    appium:appPackage=com.everymind.clubegiro
     ...    appium:appActivity=.MainActivity
     ...    appWaitDuration=60000
-    # ...    appium:noReset=${True}
     ...    appium:autoGrantPermissions=${True}
     ...    appium:ensureWebviewsHavePages=${True}
     ...    appium:clearDeviceLogs=${True}
@@ -50,47 +48,45 @@ Start session
     ...    appium:adbExecTimeout=${60000}
     ...    appium:newCommandTimeout=${300}
     ...    appium:connectHardwareKeyboard=${True}
-    ...    appium:socketConnectionTimeout=${90000}
-    ...    appium:androidInstallTimeout= ${120000}
 
-Login
-    Wait Until Element Is Visible
-    ...    accessibility_id=Entrar
-    ...    timeout=60s
+Executar Fluxo De Login Completo
+    [Documentation]    Insere as credenciais, clica em acessar e despacha para verificação de 2FA.
+    Wait Until Element Is Visible    accessibility_id=Entrar    timeout=60s
     Click Element    accessibility_id=Entrar
+    
     Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="email-input-login"]    timeout=60s
-    Input Text    xpath=//android.widget.EditText[@resource-id="email-input-login"]    ${LOGIN2}
-    Input Password    xpath=//android.widget.EditText[@resource-id="password-input-login"]    ${SENHA2}
-    Wait Until Element Is Visible
-    ...    xpath=//android.view.ViewGroup[@content-desc="ACESSAR"]/android.view.ViewGroup
-    ...    timeout=120s
-    Wait Until Element Is Visible
-    ...    xpath=//android.view.ViewGroup[@content-desc="ACESSAR"]/android.view.ViewGroup
-    ...    timeout=120s
+    Input Text       xpath=//android.widget.EditText[@resource-id="email-input-login"]    ${LOGIN2}
+    Input Password   xpath=//android.widget.EditText[@resource-id="password-input-login"]   ${SENHA2}
+    
+    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="ACESSAR"]/android.view.ViewGroup    timeout=120s
     Click Element    xpath=//android.view.ViewGroup[@content-desc="ACESSAR"]/android.view.ViewGroup
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Olá, ANDERSON"]    timeout=240s
-    Log To Console    \nLogin realizado com sucesso! Olá, ANDERSON
+
+    Sleep    10
+
+    # 🔥 RESOLVIDO: Removido o Sleep 30. O direcionamento vai direto e dinâmico para a condicional.
+    Tratar Fluxo De 2FA Se Necessario
+    
+    # Valida a Home após o fluxo do 2FA finalizar (ou se ele foi pulado)
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Olá, ANDERSON"]    timeout=60s
+    Log To Console    \n[SUCESSO] Login realizado com sucesso! Olá, ANDERSON
+
+Tratar Fluxo De 2FA Se Necessario
+    [Documentation]    Verifica dinamicamente se a tela de 2FA apareceu em até 15 segundos.
+    ${status}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${XPATH_TITULO_2FA}    timeout=15s
+    
+    IF    ${status}
+        Log To Console    \n[INFO] Tela de 2FA detectada. Acessando caixa de e-mail...
+        ${codigo_verificacao}=    Buscar Codigo 2FA No Email
+        Log To Console    \n[INFO] Código capturado: ${codigo_verificacao}
+        
+        # Insere o código e clica em confirmar tudo dentro do bloco correto
+        Inserir Codigo No Aplicativo    ${codigo_verificacao}
+        
+        Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Confirmar"]/..    timeout=10s
+        Click Element                    xpath=//android.widget.TextView[@text="Confirmar"]/..
+    ELSE
+        Log To Console    \n[INFO] Tela de 2FA não foi apresentada após 15s. Verificando se já foi direto para a Home...
+    END
 
 Close session
     Close Application
-
-Tratar Banner De Cookie Se Aparecer
-    # 1. Verifica se o elemento aparece na tela em até 5 segundos
-    # O Robot guarda True (se achou) ou False (se não achou) na variável
-    ${cookie_visivel}=    Run Keyword And Return Status
-    ...    Wait Until Element Is Visible
-    ...    xpath=//android.app.AlertDialog[@resource-id="cookie-banner"]
-    ...    timeout=60s
-
-    # 2. Se a resposta for True, ele entra no bloco e clica para aceitar
-    IF    ${cookie_visivel}
-        Log To Console    \n[INFO] Banner de cookie detectado. Aceitando...
-        Click Element    xpath=//android.widget.Button[@resource-id="adopt-accept-all-button"]
-    ELSE
-        Log To Console    \n[INFO] Banner de cookie não apareceu. Seguindo o fluxo...
-    END
-
-Fechar modal do login
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Garanta AGORA até 55% OFF"]    timeout=120s
-
-    Tap With Positions    1000ms    ${952, 186}

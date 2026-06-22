@@ -1,4 +1,5 @@
 import imaplib
+import quopri
 import email
 import re
 from email.header import decode_header
@@ -86,3 +87,50 @@ class GmailHelper:
             print(f"❌ [IMAP LOG] Erro controlado de protocolo: {str(e)}")
             
         return codigo_encontrado
+
+
+def obter_codigo_verificacao_do_gmail(usuario, senha, remetente):
+    # Conecta ao servidor IMAP do Gmail
+    mail = imaplib.IMAP4_SSL("imap.gmail.com")
+    mail.login(usuario, senha)
+    mail.select("inbox")
+    
+    # Busca por e-mails não lidos vindos do remetente correto
+    status, mensagens = mail.search(None, f'(UNSEEN FROM "{remetente}")')
+    
+    # Se não achar não lidos, busca os últimos e-mails num geral do remetente
+    if not mensagens[0].split():
+        status, mensagens = mail.search(None, f'(FROM "{remetente}")')
+        
+    id_lista = mensagens[0].split()
+    if id_lista:
+        latest_email_id = id_lista[-1] # Pega o e-mail mais recente
+        status, dados = mail.fetch(latest_email_id, "(RFC822)")
+        
+        raw_email = dados[0][1]
+        msg = email.message_from_bytes(raw_email)
+        
+        corpo = ""
+        if msg.is_multipart():
+            for parte in msg.walk():
+                if parte.get_content_type() == "text/html":
+                    corpo = parte.get_payload(decode=True)
+                    break
+        else:
+            corpo = msg.get_payload(decode=True)
+            
+        # Decodifica de forma segura removendo os problemas de Quoted-Printable
+        texto_limpo = quopri.decodestring(corpo).decode('utf-8', errors='ignore')
+        
+        # Encontra a primeira sequência de 6 números no corpo do e-mail
+        codigo = re.search(r'\b\d{6}\b', texto_limpo)
+        
+        mail.close()
+        mail.logout()
+        
+        if codigo:
+            return codigo.group(0)
+            
+    mail.close()
+    mail.logout()
+    raise Exception(f"Código de 2FA não foi localizado no e-mail do remetente {remetente}")
