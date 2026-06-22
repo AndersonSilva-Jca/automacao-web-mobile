@@ -2,9 +2,12 @@ const loc = {
   SP_TODOS: "São Paulo (Todos) (SP)",
   RJ_TODOS: "Rio de Janeiro (Todos) (RJ)",
   HEADER_BOTAO_LOGIN: "#header-login-button",
+  WEMOBI_BOTAO_LOGIN: "#button-header-login",
   USUARIO: "#input-login",
   SENHA: "#input-password",
   BOTAO_LOGIN: "#button-login",
+  WEMOBI_BOTAO_LOGIN: "#button-login-confirm",
+
   LOADER: '[alt="loader"]',
 
   LINK_INFO_VIAGEM: ".header-nav-container > :nth-child(1) > :nth-child(1) > .focusable",

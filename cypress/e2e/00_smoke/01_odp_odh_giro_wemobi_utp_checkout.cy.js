@@ -42,14 +42,6 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
   });
 
   it("Giro - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
-    // const login = Cypress.env("login2");
-    // const senha = Cypress.env("senha2");
-
-    // cy.visit(giro);
-    // cy.get(loc.HEADER_BOTAO_LOGIN, { timeout: 90000 }).click();
-    // cy.get(loc.USUARIO, { timeout: 90000 }).type(login);
-    // cy.get(loc.SENHA, { timeout: 90000 }).type(senha, { log: false });
-    // cy.get(loc.BOTAO_LOGIN, { timeout: 90000 }).click();
     cy.env(["login2", "senha"]).then((env) => {
       cy.visit(giro);
       cy.get(loc.HEADER_BOTAO_LOGIN).should("be.visible").click();
@@ -61,26 +53,19 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
       cy.wait(4000);
     });
     cy.get("body").then(($body) => {
-      // Identifica se o modal está ativo
       const temModal2FA = $body.find('input[data-js="modal-input-password-twofa"]:visible').length > 0;
-
       if (temModal2FA) {
         cy.log("🔐 Modal 2FA detectado e visível – buscando código no e-mail...");
-
         cy.task("buscarCodigo2FAGmail").then((codigo2FA) => {
           expect(codigo2FA).to.not.be.null;
-
           cy.get('input[data-js="modal-input-password-twofa"]').focus().clear({ force: true }).type(codigo2FA, { force: true, delay: 80 }); // force ignora visibility
-
           cy.get('button[data-js="modal-button-twofa"]').should("not.be.disabled").click();
         });
       } else {
         cy.log("✅ Login direto – Modal 2FA está oculto (display: none). Pulando etapa.");
       }
     });
-
     cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
-
     cy.get(loc.BUSCAS.DESTINO_IDA).click().type("Rio De Janeiro - Todos (RJ)", { delay: 100 });
     cy.contains(" Rio De Janeiro - Todos (RJ) ").click({ force: true });
     cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("São Paulo - Todos (SP)", { delay: 100 });
@@ -99,13 +84,13 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
   it("Wemobi - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
     cy.env(["login", "senha"]).then((env) => {
       cy.visit(wemobi);
-      cy.get("#button-header-login").click();
+      cy.get(loc.WEMOBI_BOTAO_LOGIN).click();
       cy.get(loc.USUARIO).type(env.login);
       cy.get(loc.SENHA).type(env.senha, { log: false });
-      cy.get("#button-login-confirm").click();
+      cy.get(loc.WEMOBI_BOTAO_LOGIN).click();
       cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
     });
-    cy.get("#input-departure").click().type("São Paulo - Rodoviária Tietê (SP)", { delay: 100 });
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Rodoviária Tietê (SP)", { delay: 100 });
     cy.xpath('//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]').click({ force: true });
     cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("Rio De Janeiro - Rodoviária Novo Rio (RJ)", { delay: 100 });
     cy.xpath('//*[@id="Rio-De-Janeiro---Rodoviária-Novo-Rio-(RJ)"]/p[1]').click({ force: true });
