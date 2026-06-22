@@ -54,15 +54,12 @@ Executar Fluxo De Login Completo
     [Documentation]    Insere as credenciais, clica em acessar e despacha para verificação de 2FA.
     Wait Until Element Is Visible    accessibility_id=Entrar    timeout=60s
     Click Element    accessibility_id=Entrar
-    
     Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="email-input-login"]    timeout=60s
     Input Text       xpath=//android.widget.EditText[@resource-id="email-input-login"]    ${LOGIN2}
     Input Password   xpath=//android.widget.EditText[@resource-id="password-input-login"]   ${SENHA2}
     
     Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="ACESSAR"]/android.view.ViewGroup    timeout=120s
     Click Element    xpath=//android.view.ViewGroup[@content-desc="ACESSAR"]/android.view.ViewGroup
-
-    Tratar Fluxo De 2FA Se Necessario
     
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Olá, ANDERSON"]    timeout=60s
     Log To Console    \n[SUCESSO] Login realizado com sucesso! Olá, ANDERSON
@@ -85,24 +82,35 @@ Tratar Fluxo De 2FA Se Necessario
     END
 
 Buscar Codigo 2FA No Email
-    [Documentation]    Ponte para chamar o método correto de dentro da classe GmailHelper.
-    # 🌟 CORRIGIDO: Chamando a função da classe e removendo o argumento do remetente
-    ${codigo}=    Buscar Codigo 2fa Gmail    ${GMAIL_USER}    ${GMAIL_APP_PASS}
+    [Documentation]    Usa a segunda função do Python que filtra por remetente e e-mails não lidos.
+    
+    # Também é bom manter uma pequena espera para o e-mail chegar
+    Sleep    5s
+    
+    # Chamando a segunda função do seu arquivo Python
+    ${codigo}=    Obter Codigo Verificacao Do Gmail    ${GMAIL_USER}    ${GMAIL_APP_PASS}    ${REMETENTE_APP}
     RETURN        ${codigo}
 
 Inserir Codigo No Aplicativo
     [Arguments]    ${codigo}
     [Documentation]    Identifica o input unificado do Android e insere o código completo.
-    ${INPUT_NATIVO_2FA}=    Set Variable    xpath=//android.widget.EditText
     Wait Until Element Is Visible    android=new UiSelector().className("android.widget.EditText").instance(0)    timeout=30s
-    Input Text                       android=new UiSelector().className("android.widget.EditText").instance(0)    ${codigo}
-    Input Text                       android=new UiSelector().className("android.widget.EditText").instance(1)    ${codigo}
-    Input Text                       android=new UiSelector().className("android.widget.EditText").instance(2)    ${codigo}
-    Input Text                       android=new UiSelector().className("android.widget.EditText").instance(3)    ${codigo}
-    Input Text                       android=new UiSelector().className("android.widget.EditText").instance(4)    ${codigo}
-    Input Text                       android=new UiSelector().className("android.widget.EditText").instance(5)    ${codigo}
+    
+    ${d1}=    Get Substring    ${codigo}    0    1
+    ${d2}=    Get Substring    ${codigo}    1    2
+    ${d3}=    Get Substring    ${codigo}    2    3
+    ${d4}=    Get Substring    ${codigo}    3    4
+    ${d5}=    Get Substring    ${codigo}    4    5
+    ${d6}=    Get Substring    ${codigo}    5    6
 
-    Log To Console    \n[INFO] Código de 6 dígitos enviado para o input nativo.
+    Input Text    android=new UiSelector().className("android.widget.EditText").instance(0)    ${d1}
+    Input Text    android=new UiSelector().className("android.widget.EditText").instance(1)    ${d2}
+    Input Text    android=new UiSelector().className("android.widget.EditText").instance(2)    ${d3}
+    Input Text    android=new UiSelector().className("android.widget.EditText").instance(3)    ${d4}
+    Input Text    android=new UiSelector().className("android.widget.EditText").instance(4)    ${d5}
+    Input Text    android=new UiSelector().className("android.widget.EditText").instance(5)    ${d6}
+
+    Log To Console    \n[INFO] Código de 6 dígitos distribuído perfeitamente entre os inputs nativos.
 
 Close session
     Close Application

@@ -87,6 +87,7 @@ class GmailHelper:
             print(f"❌ [IMAP LOG] Erro controlado de protocolo: {str(e)}")
             
         return codigo_encontrado
+    
 
 
 def obter_codigo_verificacao_do_gmail(usuario, senha, remetente):
