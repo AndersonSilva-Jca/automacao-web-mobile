@@ -231,12 +231,12 @@ jobs:
         if: always()
         uses: dawidd6/action-send-mail@v3
         with:
-          server_address: ${{ secrets.MAIL_SERVER }}
-          server_port: ${{ secrets.MAIL_PORT }}
+          server_address: smtp.gmail.com
+          server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
           to: anderson.ssantos@jcatlm.com.br
-          from: "CI/CD Automação <${{ secrets.MAIL_USERNAME }}>"
+          from: "CI/CD Automação"
           subject: >
             [${{ steps.metrics.outputs.status }}] Testes Mobile — Run #${{ github.run_number }}
             | ${{ steps.metrics.outputs.passed }}✅ ${{ steps.metrics.outputs.failed }}❌

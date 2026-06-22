@@ -1,0 +1,1 @@
+{"uuid": "9ba96757-c1a8-41bd-944a-a5ffbac117c8", "children": ["3cce9eb9-d1de-4017-994d-6b40925cf91a"], "afters": [{"name": "AppiumLibrary.Close All Applications", "status": "passed", "statusDetails": {}, "stop": 1782136257427}]}
