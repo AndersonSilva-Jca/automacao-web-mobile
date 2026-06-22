@@ -9,6 +9,7 @@ on:
     # Roda no minuto 20 das horas ímpares (1, 3, 5, 7...)
     # - cron: "0 1-23/2 * * *"
     # - cron: "30 1-23/2 * * *"
+    - cron: "00 * * * *"
     - cron: "30 * * * *"
   workflow_dispatch:
 
