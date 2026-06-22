@@ -6,7 +6,7 @@ const loc = {
   USUARIO: "#input-login",
   SENHA: "#input-password",
   BOTAO_LOGIN: "#button-login",
-  WEMOBI_BOTAO_LOGIN: "#button-login-confirm",
+  WEMOBI_BOTAO_ENTRAR: "#button-login-confirm",
 
   LOADER: '[alt="loader"]',
 

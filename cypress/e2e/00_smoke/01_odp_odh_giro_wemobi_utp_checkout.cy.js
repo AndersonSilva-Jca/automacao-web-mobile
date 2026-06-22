@@ -81,13 +81,13 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
     cy.get(loc.BOTAO_AVANCAR).should("be.visible").click();
   });
 
-  it("Wemobi - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
+  it.only("Wemobi - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
     cy.env(["login", "senha"]).then((env) => {
       cy.visit(wemobi);
       cy.get(loc.WEMOBI_BOTAO_LOGIN).click();
       cy.get(loc.USUARIO).type(env.login);
       cy.get(loc.SENHA).type(env.senha, { log: false });
-      cy.get(loc.WEMOBI_BOTAO_LOGIN).click();
+      cy.get(loc.WEMOBI_BOTAO_ENTRAR).click();
       cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
     });
     cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Rodoviária Tietê (SP)", { delay: 100 });

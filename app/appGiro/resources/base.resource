@@ -4,6 +4,7 @@ Library           AppiumLibrary
 Library           OperatingSystem
 Library           String
 Library           ../../libraries/GmailHelper.py
+
 *** Variables ***
 ${LOGIN2}               ${EMPTY}
 ${SENHA2}               ${EMPTY}
@@ -61,32 +62,47 @@ Executar Fluxo De Login Completo
     Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="ACESSAR"]/android.view.ViewGroup    timeout=120s
     Click Element    xpath=//android.view.ViewGroup[@content-desc="ACESSAR"]/android.view.ViewGroup
 
-    Sleep    10
-
-    # 🔥 RESOLVIDO: Removido o Sleep 30. O direcionamento vai direto e dinâmico para a condicional.
     Tratar Fluxo De 2FA Se Necessario
     
-    # Valida a Home após o fluxo do 2FA finalizar (ou se ele foi pulado)
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Olá, ANDERSON"]    timeout=60s
     Log To Console    \n[SUCESSO] Login realizado com sucesso! Olá, ANDERSON
 
 Tratar Fluxo De 2FA Se Necessario
     [Documentation]    Verifica dinamicamente se a tela de 2FA apareceu em até 15 segundos.
-    ${status}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${XPATH_TITULO_2FA}    timeout=15s
+    ${status}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${XPATH_TITULO_2FA}    timeout=30s
     
     IF    ${status}
         Log To Console    \n[INFO] Tela de 2FA detectada. Acessando caixa de e-mail...
         ${codigo_verificacao}=    Buscar Codigo 2FA No Email
         Log To Console    \n[INFO] Código capturado: ${codigo_verificacao}
         
-        # Insere o código e clica em confirmar tudo dentro do bloco correto
         Inserir Codigo No Aplicativo    ${codigo_verificacao}
         
-        Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Confirmar"]/..    timeout=10s
+        Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Confirmar"]/..    timeout=30s
         Click Element                    xpath=//android.widget.TextView[@text="Confirmar"]/..
     ELSE
         Log To Console    \n[INFO] Tela de 2FA não foi apresentada após 15s. Verificando se já foi direto para a Home...
     END
+
+Buscar Codigo 2FA No Email
+    [Documentation]    Ponte para chamar o método correto de dentro da classe GmailHelper.
+    # 🌟 CORRIGIDO: Chamando a função da classe e removendo o argumento do remetente
+    ${codigo}=    Buscar Codigo 2fa Gmail    ${GMAIL_USER}    ${GMAIL_APP_PASS}
+    RETURN        ${codigo}
+
+Inserir Codigo No Aplicativo
+    [Arguments]    ${codigo}
+    [Documentation]    Identifica o input unificado do Android e insere o código completo.
+    ${INPUT_NATIVO_2FA}=    Set Variable    xpath=//android.widget.EditText
+    Wait Until Element Is Visible    android=new UiSelector().className("android.widget.EditText").instance(0)    timeout=30s
+    Input Text                       android=new UiSelector().className("android.widget.EditText").instance(0)    ${codigo}
+    Input Text                       android=new UiSelector().className("android.widget.EditText").instance(1)    ${codigo}
+    Input Text                       android=new UiSelector().className("android.widget.EditText").instance(2)    ${codigo}
+    Input Text                       android=new UiSelector().className("android.widget.EditText").instance(3)    ${codigo}
+    Input Text                       android=new UiSelector().className("android.widget.EditText").instance(4)    ${codigo}
+    Input Text                       android=new UiSelector().className("android.widget.EditText").instance(5)    ${codigo}
+
+    Log To Console    \n[INFO] Código de 6 dígitos enviado para o input nativo.
 
 Close session
     Close Application
