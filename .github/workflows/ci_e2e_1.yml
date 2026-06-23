@@ -10,8 +10,7 @@ on:
     # - cron: "0 1-23/2 * * *"
     # - cron: "30 1-23/2 * * *"
     - cron: "00 * * * *"
-
-    - cron: "30 * * * *"
+    - cron: "40 * * * *"
   workflow_dispatch:
 
 permissions:
