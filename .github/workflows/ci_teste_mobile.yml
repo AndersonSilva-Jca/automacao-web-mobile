@@ -66,26 +66,49 @@ jobs:
           disable-animations: true
 
           script: |
-            adb kill-server
-            adb start-server
-            echo "Aguardando inicialização do dispositivo..."
-            adb wait-for-device
             echo "Iniciando servidor Appium em background..."
             appium --log appium.log --log-level info &
-            MY_APPIUM_PID=$!
+            APPIUM_PID=$!
+
             echo "Aguardando o Appium responder na porta 4723..."
-            for i in $(seq 1 30); do if curl -s http://127.0.0.1:4723/status > /dev/null; then echo "Appium pronto!"; break; fi; sleep 2; done
-            # echo "Instalando o Clube Giro..."
-            # adb install-multiple ./app/apks/clube_giro/*.apk
-            echo "Instalando o Wemobi..."
+            for i in $(seq 1 30); do 
+              if curl -s http://127.0.0.1:4723/status > /dev/null; then 
+                echo "Appium pronto!"
+                break
+              fi
+              sleep 2
+            done
+
+            echo "Instalando o aplicativo wemobi..."
             adb install-multiple ./app/apks/wemobi/*.apk
+
             echo "Iniciando a execução dos testes com o Robot Framework..."
-            robot -T -d ./public app/appWemobi/login.robot || true
-            echo "Finalizando o processo do Appium..."
-            appium --log appium.log &
-            MY_APPIUM_PID=$!
-            echo "PID: $MY_APPIUM_PID"
-            kill $MY_APPIUM_PID
+            # Remova o "|| true" se quiser que o GitHub Actions acuse falha caso o teste quebre
+            robot -T -d ./public app/appWemobi/login.robot
+
+            echo "Finalizando o processo do Appium de forma segura..."
+            kill $APPIUM_PID
+            # adb kill-server
+            # adb start-server
+            # echo "Aguardando inicialização do dispositivo..."
+            # adb wait-for-device
+            # echo "Iniciando servidor Appium em background..."
+            # appium --log appium.log --log-level info &
+            # MY_APPIUM_PID=$!
+            # echo "Aguardando o Appium responder na porta 4723..."
+            # for i in $(seq 1 30); do if curl -s http://127.0.0.1:4723/status > /dev/null; then echo "Appium pronto!"; break; fi; sleep 2; done
+            # # echo "Instalando o Clube Giro..."
+            # # adb install-multiple ./app/apks/clube_giro/*.apk
+            # echo "Instalando o Wemobi..."
+            # adb install-multiple ./app/apks/wemobi/*.apk
+            # echo "Iniciando a execução dos testes com o Robot Framework..."
+            # robot -T -d ./public app/appWemobi/login.robot
+            # echo "Finalizando o processo do Appium..."
+            # appium --log appium.log &
+            # MY_APPIUM_PID=$!
+            # echo "PID: $MY_APPIUM_PID"
+            # kill $MY_APPIUM_PID
+
       # 🌟 PASSO NOVO: Garante o upload dos relatórios mesmo se o teste falhar
       - name: Upload dos Relatórios do Robot Framework
         uses: actions/upload-artifact@v4

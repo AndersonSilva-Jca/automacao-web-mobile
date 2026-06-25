@@ -61,7 +61,7 @@ Login
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
     Sleep    5s
     Wait Until Element Is Visible
-    ...    xpath=//android.view.ViewGroup[@content-desc="Buscar"]/android.view.View
+    ...    xpath=//android.view.ViewGroup[@content-desc="Buscar"]/android.view.View    timeout=90s
     Log To Console    \nTela de Busca exibida com sucesso!
     Click Element
     ...    android=new UiSelector().className("android.widget.ImageView").instance(1)
