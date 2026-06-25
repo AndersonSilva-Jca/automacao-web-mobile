@@ -2,9 +2,9 @@
 Library     AppiumLibrary
 # Library    ../appCometa/resources/GeradorDataIda.py
 # Library    ../appCometa/resources/GeradorDataVolta.py
-Resource    ../appCometa/resources/base.resource
+Resource    ../appCatarinense/resources/base.resource
 Library     ../libraries/GmailHelper.py
-Test Teardown    Close All Applications
+# Test Teardown    Close All Applications
 
 
 *** Test Cases ***

@@ -9,9 +9,9 @@ Library           ImapLibrary
 Resource          ../appGiro/resources/base.resource
 
 Test Setup        Start session
-# Test Teardown     Close session
 
 *** Test Cases ***
 Deve Realizar O Login Com Sucesso Tratando 2FA Se Solicitado
     [Tags]    smoke    login
     Executar Fluxo De Login Completo
+    Close session

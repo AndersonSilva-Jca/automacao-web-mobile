@@ -65,19 +65,19 @@ Login
     Click Element    android=new UiSelector().className("android.widget.ImageView").instance(0)
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="name"]    timeout=60s
     Log To Console    \n Usuário logado com sucesso.
+    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Sair"]    timeout=15s
+    Click Element    xpath=//android.view.ViewGroup[@content-desc="Sair"]
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Acesse sua conta"]    timeout=60s
+    Log To Console    \n Usuário deslogado com sucesso.
 
 Close session
     Close Application
 
-Tratar Banner De Cookie Se Aparecer
-    # 1. Verifica se o elemento aparece na tela em até 5 segundos
-    # O Robot guarda True (se achou) ou False (se não achou) na variável
+
     ${cookie_visivel}=    Run Keyword And Return Status
     ...    Wait Until Element Is Visible
     ...    xpath=//android.app.AlertDialog[@resource-id="cookie-banner"]
     ...    timeout=60s
-
-    # 2. Se a resposta for True, ele entra no bloco e clica para aceitar
     IF    ${cookie_visivel}
         Log To Console    \n[INFO] Banner de cookie detectado. Aceitando...
         Click Element    xpath=//android.widget.Button[@resource-id="adopt-accept-all-button"]

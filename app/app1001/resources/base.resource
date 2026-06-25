@@ -29,7 +29,6 @@ Carregar Variaveis De Ambiente
     Set Global Variable    ${GMAIL_APP_PASS}    ${env_gmail_pass}
 
 Start session
-    # 🌟 O SEGREDO ESTÁ AQUI: Chamando a Keyword para alimentar as variáveis ANTES de abrir o Appium
     Carregar Variaveis De Ambiente
 
     Open Application    http://127.0.0.1:4723
@@ -67,19 +66,20 @@ Login
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="name"]
     Log To Console    \nLogin realizado com sucesso!
     Log To Console    \nOlá, Anderson Silva
-    Sleep    5s
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Sair"]    timeout=15s
+    Click Element    xpath=//android.widget.TextView[@text="Sair"]
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Digite seu CPF ou E-mail"]    timeout=60s
+    Log To Console    \nUsuário deslogado com sucesso!
+    Sleep    3s
 Close session
     Close Application
 
 Tratar Banner De Cookie Se Aparecer
-    # 1. Verifica se o elemento aparece na tela em até 5 segundos
-    # O Robot guarda True (se achou) ou False (se não achou) na variável
     ${cookie_visivel}=    Run Keyword And Return Status
     ...    Wait Until Element Is Visible
     ...    xpath=//android.app.AlertDialog[@resource-id="cookie-banner"]
     ...    timeout=60s
 
-    # 2. Se a resposta for True, ele entra no bloco e clica para aceitar
     IF    ${cookie_visivel}
         Log To Console    \n[INFO] Banner de cookie detectado. Aceitando...
         Click Element    xpath=//android.widget.Button[@resource-id="adopt-accept-all-button"]

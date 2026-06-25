@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation     Suite de testes para automação mobile com tratamento condicional de 2FA por e-mail.
+Documentation     Suite de testes — automação mobile com tratamento condicional de 2FA por e-mail.
 Library           AppiumLibrary
 Library           OperatingSystem
 Library           String
@@ -11,27 +11,29 @@ ${SENHA2}               ${EMPTY}
 ${GMAIL_USER}           ${EMPTY}
 ${GMAIL_APP_PASS}       ${EMPTY}
 ${REMETENTE_APP}        ${EMPTY}
-${XPATH_TITULO_2FA}     xpath=//android.widget.TextView[@text="Verifique seu e-mail"]
+${ULTIMO_EMAIL_ID}      0
+
+${XPATH_TITULO_2FA}         xpath=//android.widget.TextView[@text="Verifique seu e-mail"]
+${XPATH_BTN_CONFIRMAR}      xpath=//android.widget.TextView[@text="Confirmar"]/..
+${XPATH_CODIGO_INVALIDO}    xpath=//android.widget.TextView[@text="Código inválido. Tente novamente."]
 
 *** Keywords ***
+# ─────────────────────────────────────────────────────────────────────────────
 Carregar Variaveis De Ambiente
-    [Documentation]    Carrega o arquivo .env e cria as variáveis globais para o teste.
     Evaluate    __import__('dotenv').load_dotenv(dotenv_path='app/.env')
-
     ${env_login2}=           Get Environment Variable    LOGIN2
     ${env_senha2}=           Get Environment Variable    SENHA2
     ${env_gmail_pass}=       Get Environment Variable    GMAIL_APP_PASS
     ${env_gmail_user}=       Get Environment Variable    GMAIL_USER
     ${env_remetente_app}=    Get Environment Variable    REMETENTE_APP
-
     Set Global Variable    ${LOGIN2}            ${env_login2}
     Set Global Variable    ${SENHA2}            ${env_senha2}
     Set Global Variable    ${GMAIL_USER}        ${env_gmail_user}
     Set Global Variable    ${GMAIL_APP_PASS}    ${env_gmail_pass}
     Set Global Variable    ${REMETENTE_APP}     ${env_remetente_app}
 
+# ─────────────────────────────────────────────────────────────────────────────
 Start session
-    [Documentation]    Inicializa o aplicativo configurando o ambiente previamente.
     Carregar Variaveis De Ambiente
     Open Application    http://127.0.0.1:4723
     ...    platformName=Android
@@ -50,52 +52,104 @@ Start session
     ...    appium:newCommandTimeout=${300}
     ...    appium:connectHardwareKeyboard=${True}
 
+# ─────────────────────────────────────────────────────────────────────────────
 Executar Fluxo De Login Completo
-    [Documentation]    Insere as credenciais, clica em acessar e despacha para verificação de 2FA.
-    Wait Until Element Is Visible    accessibility_id=Entrar    timeout=60s
-    Click Element    accessibility_id=Entrar
-    Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="email-input-login"]    timeout=60s
-    Input Text       xpath=//android.widget.EditText[@resource-id="email-input-login"]    ${LOGIN2}
-    Input Password   xpath=//android.widget.EditText[@resource-id="password-input-login"]   ${SENHA2}
-    
-    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="ACESSAR"]/android.view.ViewGroup    timeout=120s
-    Click Element    xpath=//android.view.ViewGroup[@content-desc="ACESSAR"]/android.view.ViewGroup
-    
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Olá, ANDERSON"]    timeout=60s
-    Log To Console    \n[SUCESSO] Login realizado com sucesso! Olá, ANDERSON
+    [Documentation]
+    ...    Preenche credenciais e clica ACESSAR.
+    ...    ► Antes de clicar: fotografa o ID do último e-mail (âncora).
+    ...    ► Após clicar: verifica 2FA usando apenas e-mails com ID > âncora.
 
+    Wait Until Element Is Visible    accessibility_id=Entrar    timeout=60s
+    Click Element                    accessibility_id=Entrar
+
+    Wait Until Element Is Visible
+    ...    xpath=//android.widget.EditText[@resource-id="email-input-login"]    timeout=60s
+    Input Text
+    ...    xpath=//android.widget.EditText[@resource-id="email-input-login"]    ${LOGIN2}
+    Input Password
+    ...    xpath=//android.widget.EditText[@resource-id="password-input-login"]    ${SENHA2}
+
+    # ── Fotografa âncora ANTES de clicar ACESSAR ─────────────────────────────
+    # ${id_ancora}=    Obter Id Ultimo Email Do Remetente
+    # ...    ${GMAIL_USER}    ${GMAIL_APP_PASS}    ${REMETENTE_APP}
+    # Set Global Variable    ${ULTIMO_EMAIL_ID}    ${id_ancora}
+    # Log To Console    \n[2FA] Âncora definida: ID=${id_ancora} — só e-mails com ID maior serão lidos
+
+    Wait Until Element Is Visible
+    ...    xpath=//android.view.ViewGroup[@content-desc="ACESSAR"]/android.view.ViewGroup    timeout=120s
+    Click Element
+    ...    xpath=//android.view.ViewGroup[@content-desc="ACESSAR"]/android.view.ViewGroup
+
+    Tratar Fluxo De 2FA Se Necessario
+
+    Wait Until Element Is Visible
+    ...    xpath=//android.widget.TextView[@text="Olá, ANDERSON"]    timeout=60s
+    Log To Console    \n[SUCESSO] Login realizado com sucesso!
+    Click Element    xpath=//android.widget.TextView[@text="Menu"]
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Acessar minha conta"]    timeout=20s
+    Swipe    start_x=545    start_y=2280    end_x=559    end_y=78    duration=1s
+    Swipe    start_x=556    start_y=1995    end_x=553    end_y=542    duration=1s
+    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Sair do app"]    timeout=30s
+    Click Element    xpath=//android.view.ViewGroup[@content-desc="Sair do app"]
+    Wait Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button1"]    timeout=15s
+    Click Element    xpath=//android.widget.Button[@resource-id="android:id/button1"]
+    Log To Console    \nSaindo do App Giro.
+    Wait Until Element Is Visible    accessibility_id=Entrar    timeout=60s
+# ─────────────────────────────────────────────────────────────────────────────
 Tratar Fluxo De 2FA Se Necessario
-    [Documentation]    Verifica dinamicamente se a tela de 2FA apareceu em até 15 segundos.
-    ${status}=    Run Keyword And Return Status    Wait Until Element Is Visible    ${XPATH_TITULO_2FA}    timeout=30s
-    
-    IF    ${status}
-        Log To Console    \n[INFO] Tela de 2FA detectada. Acessando caixa de e-mail...
-        ${codigo_verificacao}=    Buscar Codigo 2FA No Email
-        Log To Console    \n[INFO] Código capturado: ${codigo_verificacao}
-        
-        Inserir Codigo No Aplicativo    ${codigo_verificacao}
-        
-        Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Confirmar"]/..    timeout=30s
-        Click Element                    xpath=//android.widget.TextView[@text="Confirmar"]/..
+    [Documentation]
+    ...    Aguarda até 45s pelo modal de 2FA.
+    ...    SE aparecer → insere código com até 3 tentativas de retry.
+    ...    SE não aparecer → login foi direto, sem 2FA.
+
+    ${modal}=    Run Keyword And Return Status
+    ...    Wait Until Element Is Visible    ${XPATH_TITULO_2FA}    timeout=45s
+
+    IF    ${modal}
+        Log To Console    \n[2FA] Modal detectado. Buscando código no Gmail...
+        ${codigo_invalido}=    Set Variable    ${EMPTY}
+
+        FOR    ${tentativa}    IN RANGE    1    4
+            Log To Console    \n[2FA] Tentativa ${tentativa}/3...
+
+            ${codigo}=    Obter Codigo Verificacao Do Gmail
+            ...    ${GMAIL_USER}
+            ...    ${GMAIL_APP_PASS}
+            ...    ${REMETENTE_APP}
+            ...    ignorar_codigo=${codigo_invalido}
+            ...    id_anterior=${ULTIMO_EMAIL_ID}
+
+            Log To Console    \n[2FA] Código capturado: ${codigo}
+
+            Inserir Codigo No Aplicativo    ${codigo}
+
+            Wait Until Element Is Visible    ${XPATH_BTN_CONFIRMAR}    timeout=45s
+            Click Element                    ${XPATH_BTN_CONFIRMAR}
+
+            Sleep    3s
+
+            ${invalido}=    Run Keyword And Return Status
+            ...    Element Should Be Visible    ${XPATH_CODIGO_INVALIDO}
+
+            IF    ${invalido}
+                Log To Console    \n[2FA] Código ${codigo} rejeitado pelo app. Buscando novo e-mail...
+                ${codigo_invalido}=    Set Variable    ${codigo}
+                Limpar Campos Do Codigo 2FA
+            ELSE
+                Log To Console    \n[2FA] Código ${codigo} aceito na tentativa ${tentativa}!
+                BREAK
+            END
+        END
     ELSE
-        Log To Console    \n[INFO] Tela de 2FA não foi apresentada após 15s. Verificando se já foi direto para a Home...
+        Log To Console    \n[2FA] Modal não apareceu — login direto sem 2FA.
     END
 
-Buscar Codigo 2FA No Email
-    [Documentation]    Usa a segunda função do Python que filtra por remetente e e-mails não lidos.
-    
-    # Também é bom manter uma pequena espera para o e-mail chegar
-    Sleep    5s
-    
-    # Chamando a segunda função do seu arquivo Python
-    ${codigo}=    Obter Codigo Verificacao Do Gmail    ${GMAIL_USER}    ${GMAIL_APP_PASS}    ${REMETENTE_APP}
-    RETURN        ${codigo}
-
+# ─────────────────────────────────────────────────────────────────────────────
 Inserir Codigo No Aplicativo
     [Arguments]    ${codigo}
-    [Documentation]    Identifica o input unificado do Android e insere o código completo.
-    Wait Until Element Is Visible    android=new UiSelector().className("android.widget.EditText").instance(0)    timeout=30s
-    
+    Wait Until Element Is Visible
+    ...    android=new UiSelector().className("android.widget.EditText").instance(0)    timeout=45s
+
     ${d1}=    Get Substring    ${codigo}    0    1
     ${d2}=    Get Substring    ${codigo}    1    2
     ${d3}=    Get Substring    ${codigo}    2    3
@@ -110,7 +164,20 @@ Inserir Codigo No Aplicativo
     Input Text    android=new UiSelector().className("android.widget.EditText").instance(4)    ${d5}
     Input Text    android=new UiSelector().className("android.widget.EditText").instance(5)    ${d6}
 
-    Log To Console    \n[INFO] Código de 6 dígitos distribuído perfeitamente entre os inputs nativos.
+    Log To Console    \n[2FA] Código ${codigo} inserido nos 6 inputs.
+    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Continuar"]    timeout=45s
+    Click Element    xpath=//android.view.ViewGroup[@content-desc="Continuar"]
 
+# ─────────────────────────────────────────────────────────────────────────────
+Limpar Campos Do Codigo 2FA
+    FOR    ${i}    IN RANGE    0    6
+        ${loc}=    Set Variable
+        ...    android=new UiSelector().className("android.widget.EditText").instance(${i})
+        ${ok}=    Run Keyword And Return Status    Element Should Be Visible    ${loc}
+        IF    ${ok}    Clear Text    ${loc}
+    END
+    Log To Console    \n[2FA] Campos limpos para nova tentativa.
+
+# ─────────────────────────────────────────────────────────────────────────────
 Close session
     Close Application

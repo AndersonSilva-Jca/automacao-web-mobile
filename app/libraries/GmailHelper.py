@@ -2,136 +2,183 @@ import imaplib
 import quopri
 import email
 import re
+import time
 from email.header import decode_header
+
 
 class GmailHelper:
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
 
-    def buscar_codigo_2fa_gmail(self, usuario, senha_app):
-        """
-        Acessa o Gmail via IMAP, analisa os e-mails mais recentes
-        e extrai de forma estável o token contendo 6 dígitos sequenciais.
-        """
-        print(f"🚀 [IMAP LOG] Iniciando busca estável do código 2FA para: {usuario}")
-        codigo_encontrado = None
-        
+    def _conectar(self, usuario, senha):
+        mail = imaplib.IMAP4_SSL("imap.gmail.com", 993)
+        mail.login(usuario, senha)
+        return mail
+
+    def _desconectar(self, mail):
         try:
-            # Estabelece conexão SSL segura com os servidores do Gmail
-            mail = imaplib.IMAP4_SSL("imap.gmail.com", 993)
-            mail.login(usuario, senha_app)
-            
-            # Abre a caixa de entrada principal
-            mail.select("INBOX")
-            
-            # Executa uma busca por todas as mensagens para indexar os IDs numéricos
-            status, mensagens = mail.search(None, "ALL")
-            if status != "OK":
-                print("❌ [IMAP LOG] Falha ao ler os registros de e-mail da Inbox.")
-                return None
-                
-            lista_ids = mensagens[0].split()
-            if not lista_ids:
-                print("⚠️ [IMAP LOG] A caixa de entrada está totalmente vazia.")
-                return None
-                
-            # Filtra cirurgicamente apenas os IDs das 3 últimas mensagens recebidas
-            ultimos_ids = lista_ids[-3:]
-            # Inverte o array para varrer cronologicamente do mais novo para o mais antigo
-            ultimos_ids.reverse() 
-            
-            for email_id in ultimos_ids:
-                status, dados_email = mail.fetch(email_id, "(RFC822)")
-                if status != "OK":
-                    continue
-                    
-                for resposta in dados_email:
-                    if isinstance(resposta, tuple):
-                        # Converte a resposta em um formato tratável de e-mail
-                        msg = email.message_from_bytes(resposta[1])
-                        
-                        # Captura e decodifica o assunto da mensagem para fins de log
-                        assunto, encoding = decode_header(msg["Subject"])[0]
-                        if isinstance(assunto, bytes):
-                            assunto = assunto.decode(encoding if encoding else "utf-8", errors="ignore")
-                        print(f"📝 [IMAP LOG] Analisando e-mail recente - Assunto: \"{assunto}\"")
-                        
-                        # Mapeamento do corpo do texto (Multipart ou Texto Puro)
-                        corpo_texto = ""
-                        if msg.is_multipart():
-                            for parte in msg.walk():
-                                tipo_conteudo = parte.get_content_type()
-                                if tipo_conteudo in ["text/plain", "text/html"]:
-                                    try:
-                                        corpo_texto += parte.get_payload(decode=True).decode("utf-8", errors="ignore")
-                                    except:
-                                        pass
-                        else:
-                            corpo_texto = msg.get_payload(decode=True).decode("utf-8", errors="ignore")
-                        
-                        # Expressão regular idêntica à do Cypress para extrair os 6 dígitos sequenciais
-                        match = re.search(r'\b(\d{6})\b', corpo_texto)
-                        if match:
-                            codigo_encontrado = match.group(1)
-                            print(f"🎯 [IMAP LOG] Código localizado com sucesso: {codigo_encontrado}")
-                            break 
-                            
-                if codigo_encontrado:
-                    break
-                    
-            # Desconexão limpa do protocolo
             mail.close()
             mail.logout()
-            print("🔌 [IMAP LOG] Sessão encerrada.")
-            
-        except Exception as e:
-            print(f"❌ [IMAP LOG] Erro controlado de protocolo: {str(e)}")
-            
-        return codigo_encontrado
-    
+        except Exception:
+            pass
 
+    # ------------------------------------------------------------------
+    # KEYWORD 1 — Chamar ANTES de clicar ACESSAR
+    # Retorna o ID IMAP do último e-mail do remetente agora.
+    # Se não houver nenhum retorna "0".
+    # ------------------------------------------------------------------
+    def obter_id_ultimo_email_do_remetente(self, usuario, senha, remetente):
+        """
+        Fotografa o estado atual da caixa de entrada ANTES do login.
+        Qualquer e-mail com ID maior que o retornado aqui é garantidamente
+        novo — gerado por esta sessão de teste.
+        """
+        print(f"📸 [IMAP] Capturando âncora para '{remetente}'...")
+        mail = self._conectar(usuario, senha)
+        try:
+            mail.select("INBOX")
+            status, msgs = mail.search(None, f'(FROM "{remetente}")')
+            id_lista = msgs[0].split() if (status == "OK" and msgs[0]) else []
+            ancora = id_lista[-1].decode() if id_lista else "0"
+            print(f"📸 [IMAP] Âncora = {ancora}  ({len(id_lista)} e-mail(s) pré-existente(s))")
+            return ancora
+        finally:
+            self._desconectar(mail)
 
-def obter_codigo_verificacao_do_gmail(usuario, senha, remetente):
-    # Conecta ao servidor IMAP do Gmail
-    mail = imaplib.IMAP4_SSL("imap.gmail.com")
-    mail.login(usuario, senha)
-    mail.select("inbox")
-    
-    # Busca por e-mails não lidos vindos do remetente correto
-    status, mensagens = mail.search(None, f'(UNSEEN FROM "{remetente}")')
-    
-    # Se não achar não lidos, busca os últimos e-mails num geral do remetente
-    if not mensagens[0].split():
-        status, mensagens = mail.search(None, f'(FROM "{remetente}")')
-        
-    id_lista = mensagens[0].split()
-    if id_lista:
-        latest_email_id = id_lista[-1] # Pega o e-mail mais recente
-        status, dados = mail.fetch(latest_email_id, "(RFC822)")
-        
-        raw_email = dados[0][1]
-        msg = email.message_from_bytes(raw_email)
-        
-        corpo = ""
-        if msg.is_multipart():
-            for parte in msg.walk():
-                if parte.get_content_type() == "text/html":
-                    corpo = parte.get_payload(decode=True)
-                    break
-        else:
-            corpo = msg.get_payload(decode=True)
-            
-        # Decodifica de forma segura removendo os problemas de Quoted-Printable
-        texto_limpo = quopri.decodestring(corpo).decode('utf-8', errors='ignore')
-        
-        # Encontra a primeira sequência de 6 números no corpo do e-mail
-        codigo = re.search(r'\b\d{6}\b', texto_limpo)
-        
-        mail.close()
-        mail.logout()
-        
-        if codigo:
-            return codigo.group(0)
-            
-    mail.close()
-    mail.logout()
-    raise Exception(f"Código de 2FA não foi localizado no e-mail do remetente {remetente}")
+    # ------------------------------------------------------------------
+    # KEYWORD 2 — Chamar APÓS clicar ACESSAR
+    # Aguarda um e-mail com ID > id_anterior e extrai o código.
+    # Se o código devolvido tiver sido inválido no app, passa
+    # ignorar_codigo e a função espera o PRÓXIMO e-mail diferente.
+    # ------------------------------------------------------------------
+    def obter_codigo_verificacao_do_gmail(
+        self,
+        usuario,
+        senha,
+        remetente,
+        ignorar_codigo=None,
+        id_anterior="0",
+        max_tentativas=20,
+        espera=4,
+    ):
+        """
+        Parâmetros
+        ----------
+        id_anterior    : ID âncora capturado antes do ACESSAR (string).
+                         Só aceita e-mails com ID ESTRITAMENTE MAIOR.
+        ignorar_codigo : código que o app rejeitou — aguarda e-mail novo
+                         com código diferente.
+        max_tentativas : polling até 20 × 4 s = 80 s por padrão.
+        """
+        ancora       = int(id_anterior) if str(id_anterior).strip().isdigit() else 0
+        max_tent     = int(max_tentativas)
+        espera_s     = int(espera)
+        ignorar      = str(ignorar_codigo).strip() if ignorar_codigo else None
+        id_ja_lido   = ancora          # avança quando ignorar_codigo bate
+
+        print(f"🚀 [IMAP] Aguardando e-mail de '{remetente}' com ID > {ancora}...")
+        if ignorar:
+            print(f"⚠️  [IMAP] Código a ignorar: {ignorar}")
+
+        mail = self._conectar(usuario, senha)
+        try:
+            for tent in range(1, max_tent + 1):
+                mail.select("INBOX")          # força refresh
+                status, msgs = mail.search(None, f'(FROM "{remetente}")')
+                id_lista = msgs[0].split() if (status == "OK" and msgs[0]) else []
+
+                # Filtra IDs maiores que id_ja_lido (começa em âncora,
+                # avança quando um código inválido é descartado)
+                novos = [i for i in id_lista if int(i) > id_ja_lido]
+
+                if not novos:
+                    print(
+                        f"⏳ [IMAP] {tent}/{max_tent} — aguardando novo e-mail "
+                        f"(referência atual: {id_ja_lido})..."
+                    )
+                    time.sleep(espera_s)
+                    continue
+
+                email_id = novos[-1]          # mais recente dos novos
+                print(f"📬 [IMAP] Novo e-mail encontrado: ID={email_id.decode()}")
+
+                # Baixa o e-mail
+                status, dados = mail.fetch(email_id, "(RFC822)")
+                if status != "OK" or not dados or dados[0] is None:
+                    print("❌ [IMAP] Falha ao baixar o e-mail.")
+                    time.sleep(espera_s)
+                    continue
+
+                msg = email.message_from_bytes(dados[0][1])
+
+                # Log do assunto
+                raw_subj, enc = decode_header(msg.get("Subject", ""))[0]
+                assunto = (
+                    raw_subj.decode(enc or "utf-8", errors="ignore")
+                    if isinstance(raw_subj, bytes) else raw_subj
+                )
+                print(f"📝 [IMAP] Assunto: \"{assunto}\"")
+
+                # Extrai corpo (HTML → plain)
+                corpo = b""
+                if msg.is_multipart():
+                    for parte in msg.walk():
+                        if parte.get_content_type() == "text/html":
+                            corpo = parte.get_payload(decode=True) or b""
+                            break
+                    if not corpo:
+                        for parte in msg.walk():
+                            if parte.get_content_type() == "text/plain":
+                                corpo = parte.get_payload(decode=True) or b""
+                                break
+                else:
+                    corpo = msg.get_payload(decode=True) or b""
+
+                texto = quopri.decodestring(corpo).decode("utf-8", errors="ignore")
+
+                # ── Estratégia 1: número de 6 dígitos isolado entre tags HTML ──
+                # Corresponde ao padrão do e-mail: <div ...> 983091 </div>
+                # Ignora números embutidos em URLs, classes CSS, atributos, etc.
+                codigo = None
+                match_html = re.search(r'>\s*(\d{6})\s*<', texto)
+                if match_html:
+                    codigo = match_html.group(1)
+                    print(f"✅ [IMAP] Código extraído via tag HTML: {codigo}")
+
+                # ── Estratégia 2: último número de 6 dígitos no texto puro ────
+                # Remove todas as tags HTML e busca o último 6-dígitos encontrado.
+                # "Último" porque o código fica no corpo, e URLs/IDs ficam antes.
+                if not codigo:
+                    texto_puro = re.sub(r'<[^>]+>', ' ', texto)
+                    todos = re.findall(r'\b\d{6}\b', texto_puro)
+                    if todos:
+                        # Log de todos os candidatos para diagnóstico
+                        print(f"🔍 [IMAP] Candidatos encontrados no texto puro: {todos}")
+                        codigo = todos[-1]
+                        print(f"✅ [IMAP] Código extraído (último candidato): {codigo}")
+
+                if not codigo:
+                    print("⚠️  [IMAP] Código de 6 dígitos não encontrado no corpo.")
+                    time.sleep(espera_s)
+                    continue
+
+                # Código é o mesmo que foi inválido? Avança a referência e espera
+                # o PRÓXIMO e-mail (não fica preso no mesmo)
+                if ignorar and codigo == ignorar:
+                    print(
+                        f"⚠️  [IMAP] Código {codigo} é o mesmo inválido. "
+                        f"Avançando referência para ID={email_id.decode()} e aguardando novo e-mail..."
+                    )
+                    id_ja_lido = int(email_id)   # <── CORREÇÃO DO BUG
+                    time.sleep(espera_s)
+                    continue
+
+                print(f"🎯 [IMAP] Código válido extraído: {codigo}  (ID={email_id.decode()})")
+                return codigo
+
+        finally:
+            self._desconectar(mail)
+
+        raise Exception(
+            f"Nenhum e-mail novo de '{remetente}' chegou após "
+            f"{max_tent} tentativas (~{max_tent * espera_s}s)."
+        )
