@@ -72,7 +72,6 @@ jobs:
           echo "Appium PID: $APPIUM_PID"
 
           echo "Aguardando Appium responder na porta 4723..."
-          for i in $(seq 1 40); do
             if curl -sf http://localhost:4723/status 2>/dev/null | grep -q '"ready":true'; then
               echo "✅ Appium pronto após ${i}s"
               break
@@ -82,6 +81,22 @@ jobs:
           done
 
           curl -sf http://localhost:4723/status || (echo "❌ Appium não respondeu" && exit 1)
+
+      - name: Wait for Appium
+        shell: bash
+        run: |
+          echo "Aguardando Appium..."
+
+          timeout 60 bash -c '
+            until curl -s http://127.0.0.1:4723/status | grep -q "\"ready\":true"
+            do
+              sleep 2
+            done
+                '
+
+          echo "Appium iniciado."
+
+          curl http://127.0.0.1:4723/status
 
       # ── Emulator + testes ────────────────────────────────────────────────
       - name: Run Tests with Android Emulator
@@ -98,16 +113,15 @@ jobs:
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          api-level: 29
-          target: google_apis # google_apis = boot ~30s vs ~7min sem KVM
+          api-level: 34
+
           arch: x86_64
-          profile: Nexus 6
-          ram-size: 2048M
-          heap-size: 512M
-          disk-size: 4000M
+
+          profile: pixel_7
+
           disable-animations: true
-          # boot-timeout: 300
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
           script: |
             echo "=== Emulator pronto ==="
             adb devices
@@ -138,18 +152,6 @@ jobs:
             echo "Instalando o aplicativo wemobi..."
             adb install-multiple ./app/apks/wemobi/*.apk
 
-              echo "Iniciando servidor Appium em background..."
-            appium --log appium.log --log-level info &
-            APPIUM_PID=$!
-
-            echo "Aguardando o Appium responder na porta 4723..."
-            for i in $(seq 1 30); do 
-              if curl -s http://127.0.0.1:4723/status > /dev/null; then 
-                echo "Appium pronto!"
-                break
-              fi
-              sleep 3
-            done
             robot -T -d ./results app/appWemobi/login.robot
         # env:
         #   LOGIN: ${{ secrets.APP_LOGIN }}
