@@ -20,14 +20,14 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Cache pip dependencies
+      - name: Cache pip
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
           restore-keys: ${{ runner.os }}-pip-
 
-      - name: Install dependencies
+      - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
@@ -35,12 +35,13 @@ jobs:
 
       - name: Install Allure CLI
         run: |
-          wget -qO allure.tgz https://github.com/allure-framework/allure2/releases/download/2.27.0/allure-2.27.0.tgz
+          wget -qO allure.tgz \
+            https://github.com/allure-framework/allure2/releases/download/2.27.0/allure-2.27.0.tgz
           sudo tar -xzf allure.tgz -C /opt
           sudo ln -s /opt/allure-2.27.0/bin/allure /usr/local/bin/allure
           allure --version
 
-      - name: Setup Node
+      - name: Setup Node 20
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -49,53 +50,58 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.appium
-          key: ${{ runner.os }}-appium-uiautomator2
+          key: ${{ runner.os }}-appium-uiautomator2-v2
 
-      - name: Install Appium
+      - name: Install Appium + uiautomator2
         run: |
           npm install -g appium
           appium driver install uiautomator2 || true
 
-      - name: Run tests with Android Emulator
+      # ── Appium em step separado (run: aceita for-loop normalmente) ───────
+      - name: Start Appium e aguardar
+        run: |
+          appium \
+            --allow-insecure chromedriver_autodownload \
+            --relaxed-security \
+            --log-timestamp \
+            --log-no-colors \
+            --log appium.log &
+
+          APPIUM_PID=$!
+          echo "APPIUM_PID=$APPIUM_PID" >> $GITHUB_ENV
+          echo "Appium PID: $APPIUM_PID"
+
+          echo "Aguardando Appium responder na porta 4723..."
+          for i in $(seq 1 40); do
+            if curl -sf http://localhost:4723/status 2>/dev/null | grep -q '"ready":true'; then
+              echo "✅ Appium pronto após ${i}s"
+              break
+            fi
+            echo "  ${i}/40 aguardando..."
+            sleep 2
+          done
+
+          curl -sf http://localhost:4723/status || (echo "❌ Appium não respondeu" && exit 1)
+
+      # ── Emulator + testes ────────────────────────────────────────────────
+      - name: Run Tests with Android Emulator
         id: run_tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 33
+          api-level: 29
+          target: google_apis # google_apis = boot ~30s vs ~7min sem KVM
           arch: x86_64
-          profile: pixel_6
-          target: default
-          ram-size: 4096M
-          heap-size: 576M
-          disk-size: 6000M
+          profile: Nexus 6
+          ram-size: 2048M
+          heap-size: 512M
+          disk-size: 4000M
           disable-animations: true
-          emulator-options: >
-            -no-snapshot
-            -no-window
-            -no-audio
-            -no-boot-anim
-            -gpu swiftshader_indirect
-            -accel off
+          boot-timeout: 300
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: |
-            adb wait-for-device
-            adb shell input keyevent 82
+            echo "=== Emulator pronto ==="
             adb devices
-
-            appium --allow-insecure chromedriver_autodownload \
-                   --log-timestamp \
-                   --log-no-colors > appium.log 2>&1 &
-            echo "APPIUM_PID=$!" >> $GITHUB_ENV
-
-            echo "Aguardando Appium iniciar..."
-            for i in $(seq 1 30); do
-              if curl -s http://localhost:4723/status | grep -q '"ready":true'; then
-                echo "Appium pronto em ${i}s"
-                break
-              fi
-              sleep 1
-            done
-
             mkdir -p $RESULTS_DIR $ALLURE_DIR
-
             robot \
               --outputdir $RESULTS_DIR \
               --listener allure_robotframework:$ALLURE_DIR \
@@ -103,89 +109,43 @@ jobs:
               --loglevel DEBUG \
               app/appWemobi/login.robot
         env:
-          LOGIN: ${{ secrets.LOGIN }}
-          SENHA: ${{ secrets.SENHA }}
-          LOGIN2: ${{ secrets.LOGIN2 }}
-          SENHA2: ${{ secrets.SENHA2 }}
-          GMAIL_USER: ${{ secrets.GMAIL_USER }}
-          GMAIL_APP_PASS: ${{ secrets.GMAIL_APP_PASS }}
-          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
-          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LOGIN: ${{ secrets.APP_LOGIN }}
+          PASSWORD: ${{ secrets.APP_PASSWORD }}
 
-      # ---------------------------------------------------------------
-      # Extrai métricas do output.xml para usar no email
-      # ---------------------------------------------------------------
-      - name: Extrair métricas dos testes
-        if: always()
-        id: metrics
-        run: |
-          OUTPUT_FILE=$(find $RESULTS_DIR -name "output*.xml" | head -1)
-
-          if [ -f "$OUTPUT_FILE" ]; then
-            PASSED=$(grep -oP 'pass="\K[0-9]+' "$OUTPUT_FILE" | tail -1)
-            FAILED=$(grep -oP 'fail="\K[0-9]+' "$OUTPUT_FILE" | tail -1)
-            SKIPPED=$(grep -oP 'skip="\K[0-9]+' "$OUTPUT_FILE" | tail -1)
-            TOTAL=$(( ${PASSED:-0} + ${FAILED:-0} + ${SKIPPED:-0} ))
-
-            echo "passed=${PASSED:-0}"   >> $GITHUB_OUTPUT
-            echo "failed=${FAILED:-0}"   >> $GITHUB_OUTPUT
-            echo "skipped=${SKIPPED:-0}" >> $GITHUB_OUTPUT
-            echo "total=${TOTAL}"        >> $GITHUB_OUTPUT
-          else
-            echo "passed=0"  >> $GITHUB_OUTPUT
-            echo "failed=0"  >> $GITHUB_OUTPUT
-            echo "skipped=0" >> $GITHUB_OUTPUT
-            echo "total=0"   >> $GITHUB_OUTPUT
-          fi
-
-          # Status geral
-          if [ "${{ steps.run_tests.outcome }}" == "success" ]; then
-            echo "status=PASSOU ✅"   >> $GITHUB_OUTPUT
-            echo "status_raw=success" >> $GITHUB_OUTPUT
-          else
-            echo "status=FALHOU ❌"   >> $GITHUB_OUTPUT
-            echo "status_raw=failure" >> $GITHUB_OUTPUT
-          fi
-
-          # Data/hora no fuso de São Paulo
-          echo "datetime=$(TZ='America/Sao_Paulo' date '+%d/%m/%Y às %H:%M')" >> $GITHUB_OUTPUT
-
-      # ---------------------------------------------------------------
-      # Gera relatório Allure
-      # ---------------------------------------------------------------
+      # ── Geração de relatório ─────────────────────────────────────────────
       - name: Gera relatório Allure
         if: always()
         run: |
-          allure generate $ALLURE_DIR --clean -o allure-report
+          if [ -d "$ALLURE_DIR" ] && [ "$(ls -A $ALLURE_DIR 2>/dev/null)" ]; then
+            allure generate $ALLURE_DIR --clean -o allure-report
+          else
+            mkdir -p allure-report
+            echo "<html><body><h2>Sem dados de teste — emulador ou Appium falhou.</h2></body></html>" \
+              > allure-report/index.html
+          fi
 
-      # ---------------------------------------------------------------
-      # Publica relatório Allure no GitHub Pages (persistente por run)
-      # ---------------------------------------------------------------
-      - name: Deploy Allure Report no GitHub Pages
+      - name: Deploy Allure no GitHub Pages
         if: always()
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: allure-report
           destination_dir: reports/run-${{ github.run_number }}
-          keep_files: true # mantém relatórios anteriores
-          commit_message: "report: run #${{ github.run_number }} - ${{ steps.metrics.outputs.status }}"
+          keep_files: true
+          commit_message: "report: run #${{ github.run_number }}"
 
       - name: Stop Appium
         if: always()
         run: kill $APPIUM_PID 2>/dev/null || true
 
-      # ---------------------------------------------------------------
-      # Upload de artefatos (backup + acesso direto)
-      # ---------------------------------------------------------------
+      # ── Artefatos ────────────────────────────────────────────────────────
       - name: Upload Allure Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: allure-report-run-${{ github.run_number }}
           path: allure-report
-          retention-days: 90 # 3 meses de histórico
+          retention-days: 90
 
       - name: Upload Robot Results
         if: always()
@@ -203,150 +163,97 @@ jobs:
           path: appium.log
           retention-days: 30
 
-      # ---------------------------------------------------------------
-      # GitHub Actions Job Summary
-      # ---------------------------------------------------------------
-      - name: Publicar resumo no GitHub Summary
+      # ── Métricas ─────────────────────────────────────────────────────────
+      - name: Extrair métricas
+        if: always()
+        id: metrics
+        run: |
+          OUTPUT_FILE=$(find "$RESULTS_DIR" -name "output*.xml" 2>/dev/null | head -1)
+          if [ -n "$OUTPUT_FILE" ] && [ -f "$OUTPUT_FILE" ]; then
+            PASSED=$(grep -oP 'pass="\K[0-9]+' "$OUTPUT_FILE" | tail -1)
+            FAILED=$(grep -oP 'fail="\K[0-9]+' "$OUTPUT_FILE" | tail -1)
+            SKIPPED=$(grep -oP 'skip="\K[0-9]+' "$OUTPUT_FILE" | tail -1)
+          else
+            PASSED=0; FAILED=0; SKIPPED=0
+          fi
+          TOTAL=$(( ${PASSED:-0} + ${FAILED:-0} + ${SKIPPED:-0} ))
+          echo "passed=${PASSED:-0}"   >> $GITHUB_OUTPUT
+          echo "failed=${FAILED:-0}"   >> $GITHUB_OUTPUT
+          echo "skipped=${SKIPPED:-0}" >> $GITHUB_OUTPUT
+          echo "total=${TOTAL}"        >> $GITHUB_OUTPUT
+          if [ "${{ steps.run_tests.outcome }}" = "success" ] && [ "${FAILED:-0}" = "0" ] && [ "${TOTAL}" != "0" ]; then
+            echo "status=PASSOU ✅"   >> $GITHUB_OUTPUT
+            echo "status_raw=success" >> $GITHUB_OUTPUT
+          else
+            echo "status=FALHOU ❌"   >> $GITHUB_OUTPUT
+            echo "status_raw=failure" >> $GITHUB_OUTPUT
+          fi
+          echo "datetime=$(TZ='America/Sao_Paulo' date '+%d/%m/%Y às %H:%M')" >> $GITHUB_OUTPUT
+
+      - name: GitHub Summary
         if: always()
         run: |
           PAGES_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/run-${{ github.run_number }}"
-          RUN_URL="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-
-          echo "## ${{ steps.metrics.outputs.status }} — Execução #${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Métrica | Valor |" >> $GITHUB_STEP_SUMMARY
-          echo "|---------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "## ${{ steps.metrics.outputs.status }} — Run #${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+          echo "| | Qtd |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
           echo "| ✅ Passed  | ${{ steps.metrics.outputs.passed }}  |" >> $GITHUB_STEP_SUMMARY
           echo "| ❌ Failed  | ${{ steps.metrics.outputs.failed }}  |" >> $GITHUB_STEP_SUMMARY
           echo "| ⏭️ Skipped | ${{ steps.metrics.outputs.skipped }} |" >> $GITHUB_STEP_SUMMARY
           echo "| 🔢 Total   | ${{ steps.metrics.outputs.total }}   |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "🔗 [Ver Relatório Allure (GitHub Pages)]($PAGES_URL)" >> $GITHUB_STEP_SUMMARY
-          echo "🔗 [Ver execução no GitHub Actions]($RUN_URL)" >> $GITHUB_STEP_SUMMARY
+          echo "🔗 [Allure Report]($PAGES_URL)" >> $GITHUB_STEP_SUMMARY
 
-      # ---------------------------------------------------------------
-      # Envia e-mail com HTML completo
-      # ---------------------------------------------------------------
-      - name: Enviar e-mail de notificação
+      - name: Enviar e-mail
         if: always()
         uses: dawidd6/action-send-mail@v3
         with:
-          server_address: smtp.gmail.com
-          server_port: 465
+          server_address: ${{ secrets.MAIL_SERVER }}
+          server_port: ${{ secrets.MAIL_PORT }}
+          secure: true
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          to: anderson.ssantos@jcatlm.com.br
-          from: "CI/CD Automação"
+          to: ${{ secrets.MAIL_TO }}
+          from: "CI Automação Mobile <${{ secrets.MAIL_USERNAME }}>"
           subject: >
             [${{ steps.metrics.outputs.status }}] Testes Mobile — Run #${{ github.run_number }}
-            | ${{ steps.metrics.outputs.passed }}✅ ${{ steps.metrics.outputs.failed }}❌
+            (${{ steps.metrics.outputs.passed }}✅ ${{ steps.metrics.outputs.failed }}❌)
           convert_markdown: false
           html_body: |
-            <!DOCTYPE html>
-            <html lang="pt-BR">
-            <head>
-              <meta charset="UTF-8">
-              <style>
-                body        { font-family: Arial, sans-serif; background:#f4f4f4; margin:0; padding:20px; }
-                .container  { max-width:640px; margin:auto; background:#fff; border-radius:8px;
-                              box-shadow:0 2px 8px rgba(0,0,0,.1); overflow:hidden; }
-                .header     { padding:28px 32px; text-align:center; }
-                .header.ok  { background:#1a7f37; }
-                .header.fail{ background:#cf222e; }
-                .header h1  { color:#fff; margin:0; font-size:24px; }
-                .header p   { color:rgba(255,255,255,.85); margin:6px 0 0; font-size:14px; }
-                .body       { padding:28px 32px; }
-                .metrics    { display:flex; gap:12px; margin-bottom:24px; flex-wrap:wrap; }
-                .metric     { flex:1; min-width:110px; text-align:center; padding:16px 8px;
-                              border-radius:6px; background:#f6f8fa; border:1px solid #e1e4e8; }
-                .metric .num{ font-size:28px; font-weight:700; display:block; }
-                .metric .lbl{ font-size:12px; color:#57606a; margin-top:4px; }
-                .num.green  { color:#1a7f37; }
-                .num.red    { color:#cf222e; }
-                .num.gray   { color:#57606a; }
-                .num.blue   { color:#0969da; }
-                .btn        { display:block; width:100%; text-align:center; padding:14px;
-                              border-radius:6px; text-decoration:none; font-weight:700;
-                              font-size:15px; margin-bottom:12px; box-sizing:border-box; }
-                .btn-primary{ background:#0969da; color:#fff; }
-                .btn-secondary{ background:#f6f8fa; color:#24292f; border:1px solid #d0d7de; }
-                .info-box   { background:#f6f8fa; border:1px solid #e1e4e8; border-radius:6px;
-                              padding:14px 16px; margin-top:20px; font-size:13px; color:#57606a; }
-                .info-box p { margin:4px 0; }
-                .footer     { background:#f6f8fa; border-top:1px solid #e1e4e8; padding:16px 32px;
-                              text-align:center; font-size:12px; color:#57606a; }
-              </style>
-            </head>
-            <body>
-            <div class="container">
-
-              <!-- Header colorido por status -->
-              <div class="header ${{ steps.metrics.outputs.status_raw == 'success' && 'ok' || 'fail' }}">
+            <!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
+            <style>
+              body{font-family:Arial,sans-serif;background:#f4f4f4;padding:20px}
+              .wrap{max-width:620px;margin:auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+              .hdr{padding:28px 32px;text-align:center}
+              .hdr.ok{background:#1a7f37}.hdr.fail{background:#cf222e}
+              .hdr h1{color:#fff;margin:0;font-size:24px}
+              .hdr p{color:rgba(255,255,255,.8);margin:6px 0 0;font-size:13px}
+              .body{padding:28px 32px}
+              .cards{display:flex;gap:10px;margin-bottom:24px}
+              .card{flex:1;text-align:center;padding:16px 6px;border-radius:6px;background:#f6f8fa;border:1px solid #e1e4e8}
+              .card .n{font-size:28px;font-weight:800;display:block}
+              .card .l{font-size:11px;color:#57606a;margin-top:4px}
+              .green{color:#1a7f37}.red{color:#cf222e}.gray{color:#57606a}.blue{color:#0969da}
+              a.btn{display:block;text-align:center;padding:13px;border-radius:6px;text-decoration:none;font-weight:700;font-size:14px;margin-bottom:10px}
+              .btn-blue{background:#0969da;color:#fff}
+              .btn-gray{background:#f6f8fa;color:#24292f;border:1px solid #d0d7de}
+              .footer{background:#f6f8fa;border-top:1px solid #e1e4e8;padding:14px 32px;text-align:center;font-size:11px;color:#8c959f}
+            </style></head><body>
+            <div class="wrap">
+              <div class="hdr ${{ steps.metrics.outputs.status_raw == 'success' && 'ok' || 'fail' }}">
                 <h1>${{ steps.metrics.outputs.status }}</h1>
-                <p>Testes Mobile — Execução #${{ github.run_number }} · ${{ steps.metrics.outputs.datetime }}</p>
+                <p>Run #${{ github.run_number }} · ${{ steps.metrics.outputs.datetime }}</p>
               </div>
-
               <div class="body">
-
-                <!-- Métricas -->
-                <div class="metrics">
-                  <div class="metric">
-                    <span class="num green">${{ steps.metrics.outputs.passed }}</span>
-                    <div class="lbl">✅ Passed</div>
-                  </div>
-                  <div class="metric">
-                    <span class="num red">${{ steps.metrics.outputs.failed }}</span>
-                    <div class="lbl">❌ Failed</div>
-                  </div>
-                  <div class="metric">
-                    <span class="num gray">${{ steps.metrics.outputs.skipped }}</span>
-                    <div class="lbl">⏭️ Skipped</div>
-                  </div>
-                  <div class="metric">
-                    <span class="num blue">${{ steps.metrics.outputs.total }}</span>
-                    <div class="lbl">🔢 Total</div>
-                  </div>
+                <div class="cards">
+                  <div class="card"><span class="n green">${{ steps.metrics.outputs.passed }}</span><div class="l">✅ Passed</div></div>
+                  <div class="card"><span class="n red">${{ steps.metrics.outputs.failed }}</span><div class="l">❌ Failed</div></div>
+                  <div class="card"><span class="n gray">${{ steps.metrics.outputs.skipped }}</span><div class="l">⏭ Skipped</div></div>
+                  <div class="card"><span class="n blue">${{ steps.metrics.outputs.total }}</span><div class="l">🔢 Total</div></div>
                 </div>
-
-                <!-- Links de relatório -->
-                <p style="font-weight:600; margin-bottom:12px;">📊 Relatórios</p>
-
-                <a class="btn btn-primary"
-                   href="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/run-${{ github.run_number }}">
-                  🔍 Ver Relatório Allure (GitHub Pages)
-                </a>
-
-                <a class="btn btn-secondary"
-                   href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}">
-                  ⚙️ Ver Execução no GitHub Actions
-                </a>
-
-                <a class="btn btn-secondary"
-                   href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts">
-                  📦 Download dos Artefatos (90 dias)
-                </a>
-
-                <!-- Info da execução -->
-                <div class="info-box">
-                  <p><strong>Repositório:</strong> ${{ github.repository }}</p>
-                  <p><strong>Branch:</strong> ${{ github.ref_name }}</p>
-                  <p><strong>Commit:</strong> ${{ github.sha }}</p>
-                  <p><strong>Disparado por:</strong> ${{ github.triggering_actor }}</p>
-                  <p><strong>Histórico completo:</strong>
-                    <a href="https://github.com/${{ github.repository }}/actions/workflows/mobile-tests.yml">
-                      Ver todas as execuções
-                    </a>
-                  </p>
-                </div>
-
+                <a class="btn btn-blue" href="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/run-${{ github.run_number }}">🔍 Relatório Allure (GitHub Pages)</a>
+                <a class="btn btn-gray" href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}">⚙️ Ver Execução no GitHub Actions</a>
+                <a class="btn btn-gray" href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts">📦 Download Artefatos (90 dias)</a>
               </div>
-
-              <div class="footer">
-                Este e-mail foi gerado automaticamente pelo GitHub Actions.<br>
-                Relatórios ficam disponíveis por <strong>90 dias</strong> nos Artifacts e
-                <strong>permanentemente</strong> no GitHub Pages.
-              </div>
-
-            </div>
-            </body>
-            </html>
+              <div class="footer">Gerado automaticamente · Não responda este e-mail</div>
+            </div></body></html>
