@@ -163,7 +163,7 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
       cy.get(loc.USUARIO).type(env.login1);
       cy.get(loc.SENHA).type(env.senha1, { log: false });
       cy.get(loc.BOTAO_LOGIN).click({ force: true });
-      cy.get(loc.MENSAGEM_LOGADO).should("contain", "TESTE");
+      cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
     });
     cy.get(loc.BUSCAS.DESTINO_IDA).click().type(loc.SP_TODOS, { delay: 100 }).should("exist").invoke("show");
     cy.contains(loc.SP_TODOS).click({ force: true });
