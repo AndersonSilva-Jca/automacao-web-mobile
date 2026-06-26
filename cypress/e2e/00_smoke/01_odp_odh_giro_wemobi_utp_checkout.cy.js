@@ -156,7 +156,7 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
     cy.get(".payment-type-container > .col-12 > .active").should("be.visible");
   });
 
-  it.only("Viação Cometa - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
+  it("Viação Cometa - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
     cy.env(["login1", "senha1"]).then((env) => {
       cy.visit(cometa);
       cy.get(loc.HEADER_BOTAO_LOGIN).click();
