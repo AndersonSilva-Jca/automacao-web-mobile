@@ -58,43 +58,23 @@ jobs:
           appium driver install uiautomator2 || true
 
       # ── Appium em step separado (run: aceita for-loop normalmente) ───────
-      - name: Start Appium e aguardar
+      - name: Start Appium
+        shell: bash
         run: |
           appium \
             --allow-insecure chromedriver_autodownload \
             --relaxed-security \
-            --log-timestamp \
-            --log-no-colors \
-            --log appium.log &
+            --log appium.log \
+            > appium.log 2>&1 &
 
-          APPIUM_PID=$!
-          echo "APPIUM_PID=$APPIUM_PID" >> $GITHUB_ENV
-          echo "Appium PID: $APPIUM_PID"
+          echo $! > appium.pid
 
-          echo "Aguardando Appium responder na porta 4723..."
-            if curl -sf http://localhost:4723/status 2>/dev/null | grep -q '"ready":true'; then
-              echo "✅ Appium pronto após ${i}s"
-              break
-            fi
-            echo "  ${i}/40 aguardando..."
-            sleep 2
-          done
-
-          curl -sf http://localhost:4723/status || (echo "❌ Appium não respondeu" && exit 1)
-
-      - name: Wait for Appium
-        shell: bash
-        run: |
-          echo "Aguardando Appium..."
-
-          timeout 60 bash -c '
+          timeout 90 bash -c '
             until curl -s http://127.0.0.1:4723/status | grep -q "\"ready\":true"
             do
               sleep 2
             done
-                '
-
-          echo "Appium iniciado."
+          '
 
           curl http://127.0.0.1:4723/status
 
@@ -125,6 +105,8 @@ jobs:
           script: |
             echo "=== Emulator pronto ==="
             adb devices
+            echo "Instalando o aplicativo wemobi..."
+            adb install-multiple ./app/apks/wemobi/*.apk
             adb wait-for-device
 
             until adb shell getprop sys.boot_completed | grep -m 1 "1"
@@ -149,10 +131,11 @@ jobs:
             adb shell dumpsys activity
             mkdir -p $RESULTS_DIR $ALLURE_DIR
 
-            echo "Instalando o aplicativo wemobi..."
-            adb install-multiple ./app/apks/wemobi/*.apk
 
             robot -T -d ./results app/appWemobi/login.robot
+
+            echo $! > appium.pid
+            kill $(cat appium.pid) || true
         # env:
         #   LOGIN: ${{ secrets.APP_LOGIN }}
         #   PASSWORD: ${{ secrets.APP_PASSWORD }}
