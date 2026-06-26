@@ -66,7 +66,7 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
     });
   });
 
-  it("Giro - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
+  it("Giro - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
     cy.env(["login2", "senha"]).then((env) => {
       cy.visit(giro);
       cy.get(loc.HEADER_BOTAO_LOGIN).should("be.visible").click();
@@ -106,7 +106,7 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
     cy.get(loc.BOTAO_AVANCAR).should("be.visible").click();
   });
 
-  it("Wemobi - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
+  it("Wemobi - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
     cy.env(["login", "senha"]).then((env) => {
       cy.visit(wemobi);
       cy.get(loc.WEMOBI_BOTAO_LOGIN).click();
@@ -132,7 +132,7 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
     cy.get(".payment-type-container > .col-12 > .active").should("be.visible");
   });
 
-  it("Outlet de passagens - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
+  it("Outlet de passagens - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
     cy.env(["login", "senha"]).then((env) => {
       cy.visit(odp);
       cy.get(".logged-out-section > .btn-outlet").click();
@@ -156,7 +156,7 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
     cy.get(".payment-type-container > .col-12 > .active").should("be.visible");
   });
 
-  it("Viação Cometa - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
+  it("Viação Cometa - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
     cy.env(["login1", "senha1"]).then((env) => {
       cy.visit(cometa);
       cy.get(loc.HEADER_BOTAO_LOGIN).click();
@@ -189,7 +189,7 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
     // cy.get('#payment-submit').should('be.visible').and('not.be.disabled').click();
   });
 
-  it("1001 - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
+  it("1001 - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
     cy.env(["login1", "senha1"]).then((env) => {
       cy.visit(viacao1001);
       cy.get(loc.HEADER_BOTAO_LOGIN).click();
@@ -223,7 +223,7 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
     // cy.get('#payment-submit').should('be.visible').and('not.be.disabled').click();
   });
 
-  it("Catarinense - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
+  it("Catarinense - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
     cy.env(["login", "senha"]).then((env) => {
       cy.visit(catarinense);
       cy.get(loc.HEADER_BOTAO_LOGIN).click();
@@ -258,7 +258,7 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
     // cy.get('#payment-submit').should('be.visible').and('not.be.disabled').click();
   });
 
-  it("Expresso Sul - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
+  it("Expresso Sul - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
     cy.env(["login1", "senha1"]).then((env) => {
       cy.visit(expressoSul);
       cy.get(loc.HEADER_BOTAO_LOGIN).click();
@@ -291,7 +291,7 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
     // cy.get('.conditions-check', { timeout: 20000 }).click({ force: true })
     // cy.get('#payment-submit').should('be.visible').and('not.be.disabled').click();
   });
-  it("Rapidão Ribeirão - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
+  it("Rapidão Ribeirão - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
     cy.env(["login", "senha"]).then((env) => {
       cy.visit(rapidoRibeirao);
       cy.get(loc.HEADER_BOTAO_LOGIN).click();
