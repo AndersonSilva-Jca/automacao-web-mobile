@@ -111,9 +111,45 @@ jobs:
           script: |
             echo "=== Emulator pronto ==="
             adb devices
+            adb wait-for-device
+
+            until adb shell getprop sys.boot_completed | grep -m 1 "1"
+            do
+                sleep 2
+            done
+            adb shell settings put global window_animation_scale 0
+            adb shell settings put global transition_animation_scale 0
+            adb shell settings put global animator_duration_scale 0
+            adb devices
+
+            adb shell pm list packages | grep everymind
+
+            curl http://localhost:4723/status
+
+            adb devices
+
+            adb shell getprop ro.build.version.release
+
+            adb shell pm list packages
+
+            adb shell dumpsys activity
             mkdir -p $RESULTS_DIR $ALLURE_DIR
+
             echo "Instalando o aplicativo wemobi..."
             adb install-multiple ./app/apks/wemobi/*.apk
+
+              echo "Iniciando servidor Appium em background..."
+            appium --log appium.log --log-level info &
+            APPIUM_PID=$!
+
+            echo "Aguardando o Appium responder na porta 4723..."
+            for i in $(seq 1 30); do 
+              if curl -s http://127.0.0.1:4723/status > /dev/null; then 
+                echo "Appium pronto!"
+                break
+              fi
+              sleep 3
+            done
             robot -T -d ./results app/appWemobi/login.robot
         # env:
         #   LOGIN: ${{ secrets.APP_LOGIN }}
