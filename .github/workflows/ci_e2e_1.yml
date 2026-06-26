@@ -59,6 +59,18 @@ jobs:
           destination_dir: reports/${{ github.run_number }}/01_e2e
           keep_files: true
           force_orphan: false
+          # 👇 Não espera o Pages terminar de publicar
+          enable_jekyll: false
+          commit_message: "ci: deploy report run ${{ github.run_number }}"
+      # - name: Deploy do Relatório para GitHub Pages
+      #   if: always()
+      #   uses: peaceiris/actions-gh-pages@v3
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     publish_dir: ./cypress/reports
+      #     destination_dir: reports/${{ github.run_number }}/01_e2e
+      #     keep_files: true
+      #     force_orphan: false
 
       - name: Enviar E-mail de SUCESSO ✅
         if: steps.cypress.outcome == 'success'
