@@ -68,9 +68,9 @@ jobs:
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "✅ ODH/ODP/Giro/Wemobi/UTP - Monit. Cont."
+          subject: "TESTE ✅ ODH/ODP/Giro/Wemobi/UTP - Monit. Cont."
           to: anderson.ssantos@jcatlm.com.br
-          # cc: alfredo.junior@jcatlm.com.br
+          cc: alfredo.junior@jcatlm.com.br,fabiano.britto@externo-jcatlm.com.br
           from: "Monitoramento Contínuo"
           body: |
             Monitoramento Cypress - ODH/ODP/Giro/Wemobi/UTP
@@ -82,9 +82,7 @@ jobs:
             🔗 PAINEL EXECUTIVO (HTML): https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/${{ github.run_number }}/01_e2e/index.html
 
             📂 ÁREAS VALIDADAS:
-            • [00] Smoke Tests - Críticos (Busca de Destinos, Datas, Passagens e Assentos ) - (Não implementado: Cupons,  finalização de compra, Remarcação, Cancelamento)
-            • [01] Autenticação
-            • [02/07] Integridade de Links
+            • [00] Smoke Tests - Críticos (Busca de Destinos, Datas, Passagens e Assentos ) - (Não implementado: Cupom, Compra com Pix/Cartão de crédito/ Conta Giro , Remarcação, Cancelamento)
 
             Detalhes técnicos: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
@@ -96,9 +94,9 @@ jobs:
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "🚨[ALERTA] ODH/ODP/Giro/Wemobi/UTP - Monit. Cont."
+          subject: "TESTE 🚨[ALERTA] ODH/ODP/Giro/Wemobi/UTP - Monit. Cont."
           to: anderson.ssantos@jcatlm.com.br
-          cc: alfredo.junior@jcatlm.com.br
+          cc: alfredo.junior@jcatlm.com.br,fabiano.britto@externo-jcatlm.com.br
           from: "Monitoramento Contínuo"
           body: |
 

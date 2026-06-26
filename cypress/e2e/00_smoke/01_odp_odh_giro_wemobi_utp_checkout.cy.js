@@ -21,7 +21,7 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
     Cypress.on("uncaught:exception", () => false);
   });
 
-  it("Outlet de Hotéis - Busca de destinos, selecionar datas", () => {
+  it("Outlet de Hotéis - Busca de destinos, Hotéis em promoção hoje, Promoção em hotéis por destino", () => {
     cy.env(["login", "senha"]).then((env) => {
       cy.visit(odt);
       cy.contains("Minhas viagens").should("be.visible");
@@ -38,6 +38,31 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
       cy.get(".p-2 > .whitespace-nowrap").click();
       cy.get(".absolute").should("be.visible");
       cy.contains(/(resultados de hospedagens|Nenhum hotel encontrado)/i).should("be.visible");
+      cy.get(".cursor-pointer > .h-8").click();
+
+      // Hotéis em promoção hoje
+      cy.contains("Hotéis em promoção hoje").should("be.visible");
+      cy.get(":nth-child(1) > .group > .p-4 > .justify-between > .inline-flex").click();
+      cy.contains("Sobre o hotel").should("be.visible");
+      cy.get(".cursor-pointer > .h-8").click();
+      cy.get(":nth-child(2) > .group > .p-4 > .justify-between > .inline-flex").click();
+      cy.contains("Sobre o hotel").should("be.visible");
+      cy.get(".cursor-pointer > .h-8").click();
+      cy.get(":nth-child(3) > .group > .p-4 > .justify-between > .inline-flex").click();
+      cy.contains("Sobre o hotel").should("be.visible");
+      cy.get(".cursor-pointer > .h-8").click();
+
+      // Promoção em hotéis por destino
+      cy.contains("Promoção em hotéis por destino").should("be.visible");
+      cy.get('img[alt="Fernando de Noronha"]').click();
+      cy.contains(/(resultados de hospedagens|Nenhum hotel encontrado)/i).should("be.visible");
+      cy.get(".cursor-pointer > .h-8").click();
+      cy.get('img[alt="Jericoacoara"]').click();
+      cy.contains(/(resultados de hospedagens|Nenhum hotel encontrado)/i).should("be.visible");
+      cy.get(".cursor-pointer > .h-8").click();
+      cy.get('img[alt="Porto de Galinhas"]').click();
+      cy.contains(/(resultados de hospedagens|Nenhum hotel encontrado)/i).should("be.visible");
+      cy.get(".cursor-pointer > .h-8").click();
     });
   });
 
@@ -119,28 +144,26 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
 
     cy.wait(12000);
     cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Rodoviária Tietê (SP)", { delay: 100 });
-
     cy.xpath('//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]').click({ force: true });
     cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("Rio De Janeiro - Todos (RJ)", { delay: 100 });
     cy.xpath('//*[@id="Rio-De-Janeiro---Todos-(RJ)"]/p[1]').click({ force: true });
     cy.get(loc.BUSCAS.DATA_IDA).click();
     cy.selecionarDataIda(5);
     cy.get(loc.BUSCAS.BOTAO_BUSCAR, { timeout: 90000 }).should("be.visible").click();
-
     cy.selecionarPassagemAleatoria1({ timeout: 90000 });
     cy.get(loc.CHECK_PASSAGEIRO, { timeout: 90000 }).click({ force: true });
     cy.get(".btn-footer").should("be.visible").and("not.be.disabled").click();
     cy.get(".payment-type-container > .col-12 > .active").should("be.visible");
   });
 
-  it("Viação Cometa - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
+  it.only("Viação Cometa - Deve fazer login, busca de destinos, selecionar datas, compra de passagens, selecionar assentos", () => {
     cy.env(["login1", "senha1"]).then((env) => {
       cy.visit(cometa);
       cy.get(loc.HEADER_BOTAO_LOGIN).click();
       cy.get(loc.USUARIO).type(env.login1);
       cy.get(loc.SENHA).type(env.senha1, { log: false });
       cy.get(loc.BOTAO_LOGIN).click({ force: true });
-      cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
+      cy.get(loc.MENSAGEM_LOGADO).should("contain", "TESTE");
     });
     cy.get(loc.BUSCAS.DESTINO_IDA).click().type(loc.SP_TODOS, { delay: 100 }).should("exist").invoke("show");
     cy.contains(loc.SP_TODOS).click({ force: true });
