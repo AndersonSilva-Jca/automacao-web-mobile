@@ -102,12 +102,7 @@ jobs:
             echo "=== Emulator pronto ==="
             adb devices
             mkdir -p $RESULTS_DIR $ALLURE_DIR
-            robot \
-              --outputdir $RESULTS_DIR \
-              --listener allure_robotframework:$ALLURE_DIR \
-              --timestampoutputs \
-              --loglevel DEBUG \
-              app/appWemobi/login.robot
+            robot -T -d ./results app/appWemobi/login.robot
         env:
           LOGIN: ${{ secrets.APP_LOGIN }}
           PASSWORD: ${{ secrets.APP_PASSWORD }}
