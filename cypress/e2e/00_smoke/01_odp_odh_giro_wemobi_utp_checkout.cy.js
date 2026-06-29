@@ -80,6 +80,7 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
       const temModal2FA = $body.find('input[data-js="modal-input-password-twofa"]:visible').length > 0;
       if (temModal2FA) {
         cy.log("🔐 Modal 2FA detectado e visível – buscando código no e-mail...");
+        cy.wait(4000);
         cy.task("buscarCodigo2FAGmail").then((codigo2FA) => {
           expect(codigo2FA).to.not.be.null;
           cy.get('input[data-js="modal-input-password-twofa"]').focus().clear({ force: true }).type(codigo2FA, { force: true, delay: 80 }); // force ignora visibility
