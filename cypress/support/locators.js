@@ -7,6 +7,8 @@ const loc = {
   SENHA: "#input-password",
   BOTAO_LOGIN: "#button-login",
   WEMOBI_BOTAO_ENTRAR: "#button-login-confirm",
+  GIRO_BOTAO_LOGIN: '[data-js="header-login-button"]',
+  GIRO_BOTAO_ENTRAR: ".row > .btn-giro",
 
   LOADER: '[alt="loader"]',
 
@@ -71,6 +73,7 @@ const loc = {
   ASSERT_ID_JOVEM: "#IDJovem > p",
 
   MENSAGEM_LOGADO: ".logged-message",
+  MENSAGEM_LOGADO_GIRO: ".logged-message > .user-name",
   CHECK_PASSAGEIRO: "#buyer-check-1",
   BOTAO_AVANCAR: "#btn-proceed",
   NOME_PASSAGEIRO_2: "#input-name-2",

@@ -69,12 +69,11 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
   it("Giro - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
     cy.env(["login2", "senha"]).then((env) => {
       cy.visit(giro);
-      cy.get(loc.HEADER_BOTAO_LOGIN).should("be.visible").click();
-      cy.get(".login-title").should("contain", "Faça seu login");
-      cy.get(loc.USUARIO).should("be.visible").type("andynho1987@gmail.com", { delay: 150 });
-      cy.get(loc.SENHA).should("be.visible").type(env.senha, { log: false }, { delay: 150 });
-      cy.get(loc.BOTAO_LOGIN).click({ force: true });
-      cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
+      cy.get(loc.GIRO_BOTAO_LOGIN).should("be.visible").click();
+      cy.get(".login-title > p").should("contain", "Acesse o Giro");
+      cy.get(loc.USUARIO).should("be.visible").type("andynho1987@gmail.com", { delay: 100 });
+      cy.get(loc.SENHA).should("be.visible").type(env.senha, { log: false }, { delay: 100 });
+      cy.get(loc.GIRO_BOTAO_ENTRAR).click({ force: true });
       cy.wait(4000);
     });
     cy.get("body").then(($body) => {
@@ -90,7 +89,7 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
         cy.log("✅ Login direto – Modal 2FA está oculto (display: none). Pulando etapa.");
       }
     });
-    cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
+    cy.get(loc.MENSAGEM_LOGADO).should("contain", "ANDERSON");
     cy.get(loc.BUSCAS.DESTINO_IDA).click().type("Rio De Janeiro - Todos (RJ)", { delay: 100 });
     cy.contains(" Rio De Janeiro - Todos (RJ) ").click({ force: true });
     cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("São Paulo - Todos (SP)", { delay: 100 });
