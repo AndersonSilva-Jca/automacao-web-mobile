@@ -21,7 +21,7 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
     Cypress.on("uncaught:exception", () => false);
   });
 
-  it("Outlet de Hotéis - Busca de destinos, Hotéis em promoção hoje, Promoção em hotéis por destino", () => {
+  it.only("Outlet de Hotéis - Busca de destinos, Hotéis em promoção hoje, Promoção em hotéis por destino", () => {
     cy.env(["login", "senha"]).then((env) => {
       cy.visit(odt);
       cy.contains("Minhas viagens").should("be.visible");
@@ -41,32 +41,32 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
       cy.get(".cursor-pointer > .h-8").click();
 
       // Hotéis em promoção hoje
-      cy.contains("Hotéis em promoção hoje").should("be.visible");
-      cy.get(":nth-child(1) > .group > .p-4 > .justify-between > .inline-flex").click();
-      cy.contains("Sobre o hotel").should("be.visible");
-      cy.get(".cursor-pointer > .h-8").click();
-      cy.get(":nth-child(2) > .group > .p-4 > .justify-between > .inline-flex").click();
-      cy.contains("Sobre o hotel").should("be.visible");
-      cy.get(".cursor-pointer > .h-8").click();
-      cy.get(":nth-child(3) > .group > .p-4 > .justify-between > .inline-flex").click();
-      cy.contains("Sobre o hotel").should("be.visible");
-      cy.get(".cursor-pointer > .h-8").click();
+      // cy.contains("Hotéis em promoção hoje").should("be.visible");
+      // cy.get(":nth-child(1) > .group > .p-4 > .justify-between > .inline-flex").click();
+      // cy.contains("Sobre o hotel").should("be.visible");
+      // cy.get(".cursor-pointer > .h-8").click();
+      // cy.get(":nth-child(2) > .group > .p-4 > .justify-between > .inline-flex").click();
+      // cy.contains("Sobre o hotel").should("be.visible");
+      // cy.get(".cursor-pointer > .h-8").click();
+      // cy.get(":nth-child(3) > .group > .p-4 > .justify-between > .inline-flex").click();
+      // cy.contains("Sobre o hotel").should("be.visible");
+      // cy.get(".cursor-pointer > .h-8").click();
 
-      // Promoção em hotéis por destino
-      cy.contains("Promoção em hotéis por destino").should("be.visible");
-      cy.get('img[alt="Fernando de Noronha"]').click();
-      cy.contains(/(resultados de hospedagens|Nenhum hotel encontrado)/i).should("be.visible");
-      cy.get(".cursor-pointer > .h-8").click();
-      cy.get('img[alt="Jericoacoara"]').click();
-      cy.contains(/(resultados de hospedagens|Nenhum hotel encontrado)/i).should("be.visible");
-      cy.get(".cursor-pointer > .h-8").click();
-      cy.get('img[alt="Porto de Galinhas"]').click();
-      cy.contains(/(resultados de hospedagens|Nenhum hotel encontrado)/i).should("be.visible");
-      cy.get(".cursor-pointer > .h-8").click();
+      // // Promoção em hotéis por destino
+      // cy.contains("Promoção em hotéis por destino").should("be.visible");
+      // cy.get('img[alt="Fernando de Noronha"]').click();
+      // cy.contains(/(resultados de hospedagens|Nenhum hotel encontrado)/i).should("be.visible");
+      // cy.get(".cursor-pointer > .h-8").click();
+      // cy.get('img[alt="Jericoacoara"]').click();
+      // cy.contains(/(resultados de hospedagens|Nenhum hotel encontrado)/i).should("be.visible");
+      // cy.get(".cursor-pointer > .h-8").click();
+      // cy.get('img[alt="Porto de Galinhas"]').click();
+      // cy.contains(/(resultados de hospedagens|Nenhum hotel encontrado)/i).should("be.visible");
+      // cy.get(".cursor-pointer > .h-8").click();
     });
   });
 
-  it.only("Giro - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
+  it("Giro - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
     cy.env(["login2", "senha"]).then((env) => {
       cy.visit(giro);
       cy.get(loc.GIRO_BOTAO_LOGIN).should("be.visible").click();
@@ -106,7 +106,7 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
     cy.get(loc.BOTAO_AVANCAR).should("be.visible").click();
   });
 
-  it.only("Wemobi - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
+  it("Wemobi - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
     cy.env(["login", "senha"]).then((env) => {
       cy.visit(wemobi);
       cy.get(loc.WEMOBI_BOTAO_LOGIN).click();

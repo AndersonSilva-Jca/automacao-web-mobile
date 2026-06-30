@@ -72,6 +72,67 @@ jobs:
       #     keep_files: true
       #     force_orphan: false
 
+      # - name: Enviar E-mail de SUCESSO ✅
+      #   if: steps.cypress.outcome == 'success'
+      #   uses: dawidd6/action-send-mail@v3
+      #   with:
+      #     server_address: smtp.gmail.com
+      #     server_port: 465
+      #     username: ${{ secrets.MAIL_USERNAME }}
+      #     password: ${{ secrets.MAIL_PASSWORD }}
+      #     subject: "✅ ODH/ODP/Giro/Wemobi/UTP - Monit. Cont."
+      #     to: anderson.ssantos@jcatlm.com.br
+      #     cc: fabiano.britto@externo-jcatlm.com.br
+      #     from: "Monitoramento Contínuo"
+      #     body: |
+      #       Monitoramento Cypress - ODH/ODP/Giro/Wemobi/UTP
+
+      #       O ciclo de monitoramento contínuo foi finalizado com sucesso.
+
+      #       📂 RELATÓRIO DISPONÍVEL:
+
+      #       🔗 PAINEL EXECUTIVO (HTML): https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/${{ github.run_number }}/01_e2e/index.html
+
+      #       📂 ÁREAS VALIDADAS:
+      #       • [00] Smoke Tests - Críticos (Busca de Destinos, Datas, Passagens e Assentos ) - (Não implementado: Cupom, Compra com Pix/Cartão de crédito/ Conta Giro , Remarcação, Cancelamento)
+
+      #       Detalhes técnicos: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+      # - name: Enviar E-mail de FALHA 🚨
+      #   if: steps.cypress.outcome == 'failure'
+      #   uses: dawidd6/action-send-mail@v3
+      #   with:
+      #     server_address: smtp.gmail.com
+      #     server_port: 465
+      #     username: ${{ secrets.MAIL_USERNAME }}
+      #     password: ${{ secrets.MAIL_PASSWORD }}
+      #     subject: "🚨[ALERTA] ODH/ODP/Giro/Wemobi/UTP - Monit. Cont."
+      #     to: anderson.ssantos@jcatlm.com.br
+      #     cc: alfredo.junior@jcatlm.com.br,fabiano.britto@externo-jcatlm.com.br
+      #     from: "Monitoramento Contínuo"
+      #     body: |
+
+      #       Monitoramento Cypress - ODH/ODP/Giro/Wemobi/UTP
+
+      #       🚨 RELATÓRIO DE FALHA DETECTADA
+
+      #       🔍 INVESTIGAÇÃO RÁPIDA
+
+      #       📊 ACESSAR RELATÓRIO COMPLETO:
+      #       https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/${{ github.run_number }}/01_e2e/index.html
+
+      #       💡 POSSÍVEIS CAUSAS:
+
+      #       1. Deploy's.
+      #       1. Instabilidade na API de busca ou login do site.
+      #       2. Alteração de seletores (Placeholders/IDs/Classes) no front-end.
+      #       3. Lentidão excessiva no carregamento (Timeout).
+
+      #       🛠️ LOGS GERAIS:
+      #       🔗 https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+      #       Este alerta foi gerado automaticamente pelo sistema de Qualidade de Software.
+
       - name: Enviar E-mail de SUCESSO ✅
         if: steps.cypress.outcome == 'success'
         uses: dawidd6/action-send-mail@v3
@@ -80,23 +141,112 @@ jobs:
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "TESTE ✅ ODH/ODP/Giro/Wemobi/UTP - Monit. Cont."
+          subject: "✅ [OK] ODH/ODP/Giro/Wemobi/UTP - Monitoramento Contínuo"
           to: anderson.ssantos@jcatlm.com.br
-          cc: fabiano.britto@externo-jcatlm.com.br
-          from: "Monitoramento Contínuo"
+          # cc: fabiano.britto@externo-jcatlm.com.br
+          from: "Monitoramento Contínuo - QA"
+          content_type: text/html
           body: |
-            Monitoramento Cypress - ODH/ODP/Giro/Wemobi/UTP
+            <!DOCTYPE html>
+            <html lang="pt-BR">
+            <body style="margin:0; padding:0; background-color:#f4f5f7; font-family: Arial, Helvetica, sans-serif;">
+              <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f5f7; padding:24px 0;">
+                <tr>
+                  <td align="center">
+                    <table width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.1);">
 
-            O ciclo de monitoramento contínuo foi finalizado com sucesso.
+                      <!-- Header -->
+                      <tr>
+                        <td style="background-color:#1e8e3e; padding:20px 32px;">
+                          <table width="100%" cellpadding="0" cellspacing="0">
+                            <tr>
+                              <td>
+                                <span style="color:#ffffff; font-size:18px; font-weight:bold;">✅ Monitoramento Contínuo</span><br>
+                                <span style="color:#d4f1de; font-size:13px;">ODH · ODP · Giro · Wemobi · UTP</span>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
 
-            📂 RELATÓRIO DISPONÍVEL:
-              
-            🔗 PAINEL EXECUTIVO (HTML): https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/${{ github.run_number }}/01_e2e/index.html
+                      <!-- Status -->
+                      <tr>
+                        <td style="padding:24px 32px 8px 32px;">
+                          <p style="font-size:15px; color:#202124; margin:0 0 4px 0;">
+                            O ciclo de monitoramento automatizado foi concluído <strong>com sucesso</strong>. Todos os fluxos críticos validados estão operacionais.
+                          </p>
+                        </td>
+                      </tr>
 
-            📂 ÁREAS VALIDADAS:
-            • [00] Smoke Tests - Críticos (Busca de Destinos, Datas, Passagens e Assentos ) - (Não implementado: Cupom, Compra com Pix/Cartão de crédito/ Conta Giro , Remarcação, Cancelamento)
+                      <!-- Info box -->
+                      <tr>
+                        <td style="padding:16px 32px;">
+                          <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f0f9f1; border-left:4px solid #1e8e3e; border-radius:4px;">
+                            <tr>
+                              <td style="padding:14px 18px;">
+                                <table width="100%" cellpadding="4" cellspacing="0" style="font-size:13px; color:#3c4043;">
+                                  <tr><td style="width:140px; color:#5f6368;">Execução</td><td>#${{ github.run_number }}</td></tr>
+                                  <tr><td style="color:#5f6368;">Data/hora</td><td>$(date -u -d '-3 hours' '+%d/%m/%Y às %H:%M')  (UTC-3)</td></tr>
+                                  <tr><td style="color:#5f6368;">Branch</td><td>${{ github.ref_name }}</td></tr>
+                                  <tr><td style="color:#5f6368;">Status</td><td><strong style="color:#1e8e3e;">Aprovado</strong></td></tr>
+                                </table>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
 
-            Detalhes técnicos: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+                      <!-- Áreas validadas -->
+                      <tr>
+                        <td style="padding:8px 32px;">
+                          <p style="font-size:13px; color:#5f6368; text-transform:uppercase; letter-spacing:0.5px; margin:16px 0 8px 0; font-weight:bold;">
+                            Áreas validadas
+                          </p>
+                          <table width="100%" cellpadding="0" cellspacing="0" style="font-size:14px; color:#3c4043;">
+                            <tr>
+                              <td style="padding:6px 0; border-bottom:1px solid #eee;">
+                                <strong>Smoke Tests (Críticos)</strong><br>
+                                <span style="color:#5f6368; font-size:13px;">Busca de destinos, seleção de datas, passagens e assentos</span>
+                              </td>
+                            </tr>
+                          </table>
+                          <p style="font-size:12px; color:#9aa0a6; margin:10px 0 0 0;">
+                            Ainda não cobertos por automação: cupom, compra (Pix/Cartão/Conta Giro), remarcação e cancelamento.
+                          </p>
+                        </td>
+                      </tr>
+
+                      <!-- CTA -->
+                      <tr>
+                        <td style="padding:24px 32px;">
+                          <a href="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/${{ github.run_number }}/01_e2e/index.html"
+                             style="display:inline-block; background-color:#1e8e3e; color:#ffffff; text-decoration:none; padding:11px 22px; border-radius:6px; font-size:14px; font-weight:bold;">
+                            Ver relatório completo
+                          </a>
+                        </td>
+                      </tr>
+
+                      <!-- Footer -->
+                      <tr>
+                        <td style="padding:16px 32px 24px 32px; border-top:1px solid #eee;">
+                          <p style="font-size:12px; color:#9aa0a6; margin:0;">
+                            Detalhes técnicos (logs da execução):
+                            <a href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" style="color:#1a73e8;">
+                              github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+                            </a>
+                          </p>
+                          <p style="font-size:11px; color:#bdc1c6; margin:12px 0 0 0;">
+                            Mensagem gerada automaticamente pelo sistema de Qualidade de Software (QA). Não responda este e-mail.
+                          </p>
+                        </td>
+                      </tr>
+
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </body>
+            </html>
 
       - name: Enviar E-mail de FALHA 🚨
         if: steps.cypress.outcome == 'failure'
@@ -106,27 +256,151 @@ jobs:
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "TESTE🚨[ALERTA] ODH/ODP/Giro/Wemobi/UTP - Monit. Cont."
+          subject: "🚨 [ALERTA] ODH/ODP/Giro/Wemobi/UTP - Falha no Monitoramento Contínuo"
           to: anderson.ssantos@jcatlm.com.br
-          cc: alfredo.junior@jcatlm.com.br,fabiano.britto@externo-jcatlm.com.br
-          from: "Monitoramento Contínuo"
+          # cc: alfredo.junior@jcatlm.com.br,fabiano.britto@externo-jcatlm.com.br
+          from: "Monitoramento Contínuo - QA"
+          content_type: text/html
           body: |
+            <!DOCTYPE html>
+            <html lang="pt-BR">
+            <body style="margin:0; padding:0; background-color:#f4f5f7; font-family: Arial, Helvetica, sans-serif;">
+              <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f5f7; padding:24px 0;">
+                <tr>
+                  <td align="center">
+                    <table width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff; border-radius:8px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.1);">
 
-            Monitoramento Cypress - ODH/ODP/Giro/Wemobi/UTP
+                      <!-- Header -->
+                      <tr>
+                        <td style="background-color:#c5221f; padding:20px 32px;">
+                          <table width="100%" cellpadding="0" cellspacing="0">
+                            <tr>
+                              <td>
+                                <span style="color:#ffffff; font-size:18px; font-weight:bold;">🚨 Falha no Monitoramento</span><br>
+                                <span style="color:#fad2cf; font-size:13px;">ODH · ODP · Giro · Wemobi · UTP</span>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
 
-            🚨 RELATÓRIO DE FALHA DETECTADA
+                      <!-- Status -->
+                      <tr>
+                        <td style="padding:24px 32px 8px 32px;">
+                          <p style="font-size:15px; color:#202124; margin:0 0 4px 0;">
+                            Foi detectada uma <strong>falha</strong> durante a execução automatizada dos fluxos críticos. Recomenda-se validação manual imediata do site para confirmar se o impacto é real para o usuário final.
+                          </p>
+                        </td>
+                      </tr>
 
-            🔍 INVESTIGAÇÃO RÁPIDA
+                      <!-- Info box -->
+                      <tr>
+                        <td style="padding:16px 32px;">
+                          <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#fdeded; border-left:4px solid #c5221f; border-radius:4px;">
+                            <tr>
+                              <td style="padding:14px 18px;">
+                                <table width="100%" cellpadding="4" cellspacing="0" style="font-size:13px; color:#3c4043;">
+                                  <tr><td style="width:140px; color:#5f6368;">Execução</td><td>#${{ github.run_number }}</td></tr>
+                                  <tr><td style="color:#5f6368;">Branch</td><td>${{ github.ref_name }}</td></tr>
+                                  <tr><td style="color:#5f6368;">Status</td><td><strong style="color:#c5221f;">Falhou</strong></td></tr>
+                                </table>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
 
-            📊 ACESSAR RELATÓRIO COMPLETO: 
-            https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/${{ github.run_number }}/01_e2e/index.html
+                      <!-- Causas prováveis -->
+                      <tr>
+                        <td style="padding:8px 32px;">
+                          <p style="font-size:13px; color:#5f6368; text-transform:uppercase; letter-spacing:0.5px; margin:16px 0 10px 0; font-weight:bold;">
+                            Causas prováveis a investigar
+                          </p>
 
-            💡 POSSÍVEIS CAUSAS:
-            1. Instabilidade na API de busca ou login do site.
-            2. Alteração de seletores (Placeholders/IDs) no front-end.
-            3. Lentidão excessiva no carregamento (Timeout).
+                          <table width="100%" cellpadding="0" cellspacing="0" style="font-size:13px; color:#3c4043; margin-bottom:6px;">
+                            <tr>
+                              <td style="padding:10px 0; border-bottom:1px solid #f1f1f1;">
+                                <strong style="color:#202124;">🚀 Deploy / Release</strong><br>
+                                <span style="color:#5f6368;">Deploy recente em produção alterou comportamento, layout ou regras de negócio do fluxo testado.</span>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td style="padding:10px 0; border-bottom:1px solid #f1f1f1;">
+                                <strong style="color:#202124;">🎨 Front-end</strong><br>
+                                <span style="color:#5f6368;">Alteração de seletores (IDs, classes, data-js), reestruturação de componentes ou mudança visual que quebrou a automação.</span>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td style="padding:10px 0; border-bottom:1px solid #f1f1f1;">
+                                <strong style="color:#202124;">⚙️ Back-end / API</strong><br>
+                                <span style="color:#5f6368;">Instabilidade, latência ou erro nas APIs de login, busca de destinos, datas, passagens ou assentos.</span>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td style="padding:10px 0; border-bottom:1px solid #f1f1f1;">
+                                <strong style="color:#202124;">🌐 Disponibilidade do site</strong><br>
+                                <span style="color:#5f6368;">Site fora do ar, em manutenção programada, ou retornando erro 5xx.</span>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td style="padding:10px 0; border-bottom:1px solid #f1f1f1;">
+                                <strong style="color:#202124;">📧 Autenticação / 2FA</strong><br>
+                                <span style="color:#5f6368;">Falha ao receber ou validar o código de verificação por e-mail durante o login.</span>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td style="padding:10px 0;">
+                                <strong style="color:#202124;">⏱️ Performance</strong><br>
+                                <span style="color:#5f6368;">Lentidão excessiva no carregamento de páginas ou componentes, ultrapassando o tempo limite (timeout).</span>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
 
-            🛠️ LOGS GERAIS: 
-            🔗 https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+                      <!-- Próximos passos -->
+                      <tr>
+                        <td style="padding:8px 32px 0 32px;">
+                          <p style="font-size:13px; color:#5f6368; text-transform:uppercase; letter-spacing:0.5px; margin:16px 0 10px 0; font-weight:bold;">
+                            Próximos passos sugeridos
+                          </p>
+                          <ol style="font-size:13px; color:#3c4043; margin:0; padding-left:18px; line-height:1.8;">
+                            <li>Validar manualmente o fluxo afetado no site em produção.</li>
+                            <li>Consultar o relatório com screenshots do ponto exato da falha.</li>
+                            <li>Verificar se houve deploy nas últimas horas (changelog / release notes).</li>
+                            <li>Se confirmado bug real, acionar o time responsável (front-end ou back-end).</li>
+                          </ol>
+                        </td>
+                      </tr>
 
-            Este alerta foi gerado automaticamente pelo sistema de Qualidade de Software.
+                      <!-- CTA -->
+                      <tr>
+                        <td style="padding:24px 32px;">
+                          <a href="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/${{ github.run_number }}/01_e2e/index.html"
+                             style="display:inline-block; background-color:#c5221f; color:#ffffff; text-decoration:none; padding:11px 22px; border-radius:6px; font-size:14px; font-weight:bold;">
+                            Ver relatório completo (com prints da falha)
+                          </a>
+                        </td>
+                      </tr>
+
+                      <!-- Footer -->
+                      <tr>
+                        <td style="padding:16px 32px 24px 32px; border-top:1px solid #eee;">
+                          <p style="font-size:12px; color:#9aa0a6; margin:0;">
+                            Logs técnicos completos da execução:
+                            <a href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" style="color:#1a73e8;">
+                              github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+                            </a>
+                          </p>
+                          <p style="font-size:11px; color:#bdc1c6; margin:12px 0 0 0;">
+                            Mensagem gerada automaticamente pelo sistema de Qualidade de Software (QA). Não responda este e-mail.
+                          </p>
+                        </td>
+                      </tr>
+
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </body>
+            </html>
