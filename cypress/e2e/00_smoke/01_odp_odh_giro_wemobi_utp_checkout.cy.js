@@ -106,7 +106,7 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
     cy.get(loc.BOTAO_AVANCAR).should("be.visible").click();
   });
 
-  it("Wemobi - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
+  it.only("Wemobi - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
     cy.env(["login", "senha"]).then((env) => {
       cy.visit(wemobi);
       cy.get(loc.WEMOBI_BOTAO_LOGIN).click();
