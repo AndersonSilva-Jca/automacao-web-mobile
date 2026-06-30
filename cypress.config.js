@@ -43,7 +43,7 @@ module.exports = defineConfig({
       runMode: 2, // O GitHub Actions vai tentar até 3 vezes se o elemento sumir do DOM
       openMode: 0, // No seu PC desenvolvendo, ele falha de primeira para você ver o erro
     },
-    baseUrl: "https://www.viacaocometa.com.br",
+    // baseUrl: "https://www.viacaocometa.com.br",
     scrollBehavior: "nearest", // Evita que o Cypress role a página automaticamente durante os testes
     screenshotsFolder: "cypress/reports/screenshots",
     defaultCommandTimeout: 40000, // Aumenta o tempo padrão de espera por elementos
@@ -61,7 +61,7 @@ module.exports = defineConfig({
       });
       on("task", {
         async buscarCodigo2FAGmail() {
-          console.log("\n==================================================");
+          console.log("\n===========================================================================================================");
           console.log("🚀 [IMAP LOG] Iniciando busca estável do código 2FA...");
 
           const senhaRaw = config.env.gmailAppPass || "";

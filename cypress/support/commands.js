@@ -686,7 +686,7 @@ Cypress.Commands.add("selecionarCidadeSugerida", (cidade) => {
 // cy.selecionarCidadeSugerida("Curitiba - Terminal Rodoviário (PR)");
 
 Cypress.Commands.add("fecharModalUpgradePoltrona", () => {
-  cy.wait(2000);
+  cy.wait(3000);
   cy.get("body").then(($body) => {
     if ($body.find("#modal-upsel").length > 0 && $body.find("#modal-upsel").is(":visible")) {
       cy.log("⚠️ Modal de upgrade detectado — fechando...");
@@ -695,20 +695,9 @@ Cypress.Commands.add("fecharModalUpgradePoltrona", () => {
     } else {
       cy.log("✅ Sem modal de upgrade");
     }
-    cy.get("#reservation-seat-0").click();
-  });
-});
-
-Cypress.Commands.add("fecharModalUpgradePoltrona", () => {
-  cy.wait(4000);
-  cy.get("body").then(($body) => {
-    if ($body.find("#modal-upsel").length > 0 && $body.find("#modal-upsel").is(":visible")) {
-      cy.log("⚠️ Modal de upgrade detectado — fechando...");
-      cy.get("#close-modal-upsel").click({ force: true });
-      cy.get("#modal-upsel").should("not.exist");
-    } else {
-      cy.log("✅ Sem modal de upgrade");
-    }
+    cy.get('[data-value="random-seat"]').click();
+    cy.get("#seat-reservation-v2-button-proceed").should("be.visible").and("not.be.disabled").click();
+    cy.log("✅ Sem modal de upgrade, indo para a tela checkout");
   });
 });
 

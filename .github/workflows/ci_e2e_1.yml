@@ -80,7 +80,7 @@ jobs:
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "✅ ODH/ODP/Giro/Wemobi/UTP - Monit. Cont."
+          subject: "TESTE ✅ ODH/ODP/Giro/Wemobi/UTP - Monit. Cont."
           to: anderson.ssantos@jcatlm.com.br
           cc: fabiano.britto@externo-jcatlm.com.br
           from: "Monitoramento Contínuo"
@@ -89,7 +89,7 @@ jobs:
 
             O ciclo de monitoramento contínuo foi finalizado com sucesso.
 
-            📂 RELATÓRIOS DISPONÍVEIS:
+            📂 RELATÓRIO DISPONÍVEL:
               
             🔗 PAINEL EXECUTIVO (HTML): https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/${{ github.run_number }}/01_e2e/index.html
 
@@ -106,7 +106,7 @@ jobs:
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "🚨[ALERTA] ODH/ODP/Giro/Wemobi/UTP - Monit. Cont."
+          subject: "TESTE🚨[ALERTA] ODH/ODP/Giro/Wemobi/UTP - Monit. Cont."
           to: anderson.ssantos@jcatlm.com.br
           cc: alfredo.junior@jcatlm.com.br,fabiano.britto@externo-jcatlm.com.br
           from: "Monitoramento Contínuo"
