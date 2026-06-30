@@ -41,8 +41,8 @@ jobs:
           SENHA2: ${{ secrets.SENHA2 }}
           MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
-          HOTMAIL_MAIL: ${{ secrets.HOTMAIL_MAIL }}
-          HOTMAIL_APP_PASS: ${{ secrets.HOTMAIL_APP_PASS }}
+          GMAIL_MAIL: ${{ secrets.GMAIL_MAIL }}
+          GMAIL_APP_PASS: ${{ secrets.GMAIL_APP_PASS }}
           NODE_TLS_REJECT_UNAUTHORIZED: "0"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # CYPRESS_INTERNAL_NPM_REGISTRY_DISABLE_SSL_VERIFICATION: "1" # Força o bypass no Cypress
