@@ -29,7 +29,7 @@ jobs:
         id: cypress
         continue-on-error: true
         with:
-          command: npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/**/*.cy.js'
+          command: npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/**/*.cy.js' --config video=true
           # --spec "cypress/e2e/{05_link_conexao,06_cards_duvidas_frequentes}/**/*"
 
         env:
@@ -46,6 +46,15 @@ jobs:
           NODE_TLS_REJECT_UNAUTHORIZED: "0"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # CYPRESS_INTERNAL_NPM_REGISTRY_DISABLE_SSL_VERIFICATION: "1" # Força o bypass no Cypress
+      - name: Salvar Evidências em Caso de Falha (Vídeos e Screenshots)
+        if: steps.cypress.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidencias-cypress-falhas
+          path: |
+            cypress/videos/
+            cypress/screenshots/
+          retention-days: 30
 
       - name: Debug - listar arquivos
         run: ls -R cypress/reports || true

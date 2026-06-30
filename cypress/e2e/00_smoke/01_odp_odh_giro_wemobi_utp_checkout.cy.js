@@ -24,7 +24,7 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
   it.only("Outlet de Hotéis - Busca de destinos, Hotéis em promoção hoje, Promoção em hotéis por destino", () => {
     cy.env(["login", "senha"]).then((env) => {
       cy.visit(odt);
-      cy.contains("Minhas viagens").should("be.visible");
+      cy.contains("Minhas viagens1").should("be.visible");
       cy.contains("Carrinho").should("be.visible");
       cy.wait(2000);
       const cidades = ["Rio de Janeiro (e arredores)", "São Paulo (e arredores)", "Belo Horizonte (e arredores)", "Curitiba (e arredores)", "Salvador (e arredores)"];
@@ -66,7 +66,7 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
     });
   });
 
-  it("Giro - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
+  it.only("Giro - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
     cy.env(["login2", "senha"]).then((env) => {
       cy.visit(giro);
       cy.get(loc.GIRO_BOTAO_LOGIN).should("be.visible").click();
