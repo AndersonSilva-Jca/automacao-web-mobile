@@ -162,6 +162,30 @@ jobs:
               <p>Olá, Equipe,</p>
               <p>O ciclo de testes automatizados de monitoramento contínuo foi executado nas plataformas operacionais e <strong>todas as validações críticas passaram com sucesso</strong>.</p>
               
+                            <div style="border: 1px solid #00ffa2; margin: 25px 0; border-radius: 6px; overflow: hidden; background-color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+              
+              <div style="background-color: #f8fafc; padding: 14px 20px; border-bottom: 1px solid #e2e8f0;">
+                <table style="width: 100%; border-collapse: collapse; border: 0;">
+                  <tr>
+                    <td style="padding: 0; width: 90px; vertical-align: middle;">
+                      <img src="https://www.cypress.io/_astro/cypress-logo.D87396b0.svg" alt="Cypress Logo" style="width: 80px; height: 32px; display: block; border: 0;" />
+                    </td>
+                    <td style="padding: 0; vertical-align: middle; padding-left: 10px;">
+                      <span style="color: #1b1e2e; font-family: Arial, sans-serif; font-size: 13px; font-weight: bold; letter-spacing: 0.5px; text-transform: uppercase;">| AUTOMATION REPORT</span>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+              
+              <div style="background-color: #ebfff6; border-left: 4px solid #84e4a1; padding: 15px; margin: 20px 0;">
+                <h4 style="margin: 0 0 12px 0; color: #0db94f; font-size: 15px; font-family: Arial, sans-serif;">📊 Relatórios e Evidências Disponíveis:</h4>
+                <p style="margin: 0; line-height: 1.6; font-family: Arial, sans-serif;">
+                  🔹 <a href="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/${{ github.run_number }}/01_e2e/index.html" style="color: #1565c0; font-weight: bold; text-decoration: none; font-size: 14px;">Clique aqui para Acessar o Relatório dos Testes</a><br>
+                  <span style="display: inline-block; margin-top: 8px;">🔹 <a href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" style="color: #000000; text-decoration: none; font-size: 13px;">Analisar Logs Técnicos da Pipeline (GitHub Actions)</a></span>
+                </p>
+              </div>
+            </div>
+              
               <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
                 <tr style="background-color: #f8f9fa;">
                   <td style="padding: 12px; border: 1px solid #ddd; font-weight: bold; width: 25%;">Ambientes:</td>
@@ -173,17 +197,9 @@ jobs:
                 </tr>
                 <tr style="background-color: #f8f9fa;">
                   <td style="padding: 12px; border: 1px solid #ddd; font-weight: bold;">Não Implementado:</td>
-                  <td style="padding: 12px; border: 1px solid #ddd; color: #666; font-size: 13px;">Cupom, Compra com Pix/Cartão, Conta Giro, Remarcação e Cancelamento.</td>
+                  <td style="padding: 12px; border: 1px solid #ddd; color: #666; font-size: 13px;"> validação de Cupom, Compra com Pix/Cartão/Conta Giro, Remarcação e Cancelamento de passagens.</td>
                 </tr>
               </table>
-
-              <div style="background-color: #e8f5e9; border-left: 4px solid #2e7d32; padding: 15px; margin: 20px 0;">
-                <h4 style="margin: 0 0 8px 0; color: #1b5e20;">📊 Relatórios Disponíveis:</h4>
-                <p style="margin: 0;">
-                  🔹 <a href="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/${{ github.run_number }}/01_e2e/index.html" style="color: #1565c0; font-weight: bold; text-decoration: none;">Acessar Painel Executivo (HTML)</a><br>
-                  <span style="display: inline-block; margin-top: 5px;">🔹 <a href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" style="color: #1565c0; text-decoration: none; font-size: 13px;">Ver Detalhes Técnicos (Logs do GitHub)</a></span>
-                </p>
-              </div>
 
               <hr style="border: 0; border-top: 1px solid #eee; margin: 25px 0;">
               <p style="font-size: 12px; color: #999; margin: 0;">Este é um e-mail automático gerado pelo sistema de Qualidade de Software (QA).</p>
@@ -209,12 +225,26 @@ jobs:
               <p>Olá, Equipe,</p>
               <p>Identificamos uma quebra no fluxo operacional durante a execução dos testes automatizados. O problema requer uma investigação para avaliar o impacto nos sites produtivos.</p>
               
-              <div style="background-color: #ffebee; border-left: 4px solid #c62828; padding: 15px; margin: 20px 0;">
-                <h4 style="margin: 0 0 8px 0; color: #b71c1c;">📊 Ações Imediatas:</h4>
-                <p style="margin: 0;">
-                  ⚠️ <strong><a href="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/${{ github.run_number }}/01_e2e/index.html" style="color: #b71c1c; font-weight: bold; text-decoration: underline;">Clique aqui para abrir o Relatório de Evidências (HTML)</a></strong><br>
-                  <span style="display: inline-block; margin-top: 5px;">🛠️ <a href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" style="color: #1565c0; text-decoration: none; font-size: 13px;">Analisar Logs Técnicos da Pipeline</a></span>
+              <div style="border: 1px solid #ff0000; margin: 25px 0; border-radius: 6px; overflow: hidden; background-color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+            <div style="background-color: #f8fafc; padding: 14px 20px; border-bottom: 1px solid #e2e8f0;">
+                <table style="width: 100%; border-collapse: collapse; border: 0;">
+                  <tr>
+                    <td style="padding: 0; width: 90px; vertical-align: middle;">
+                      <img src="https://www.cypress.io/_astro/cypress-logo.D87396b0.svg" alt="Cypress Logo" style="width: 80px; height: 32px; display: block; border: 0;" />
+                    </td>
+                    <td style="padding: 0; vertical-align: middle; padding-left: 10px;">
+                      <span style="color: #1b1e2e; font-family: Arial, sans-serif; font-size: 13px; font-weight: bold; letter-spacing: 0.5px; text-transform: uppercase;">| AUTOMATION REPORT</span>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            <div style="background-color: #ffebee; border-left: 4px solid #c62828; padding: 15px; margin: 20px 0;">
+                <h4 style="margin: 0 0 12px 0; color: #b71c1c;">📊 Ações Imediatas:</h4>
+                <p style="margin: 0; line-height: 1.6; font-family: Arial, sans-serif;">
+                  ⚠️ <strong><a href="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/${{ github.run_number }}/01_e2e/index.html" style="color: #b71c1c; font-weight: bold; text-decoration: underline;">Clique aqui para abrir o Relatório de Evidências dos Testes</a></strong><br>
+                  <span style="display: inline-block; margin-top: 8px;">🛠️ <a href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" style="color: #000000; text-decoration: none; font-size: 13px;">Analisar Logs Técnicos da Pipeline (Logs do GitHub Actions)</a></span>
                 </p>
+              </div>
               </div>
 
               <h3 style="color: #37474f; margin-top: 25px; border-bottom: 1px solid #eee; padding-bottom: 5px;">🔍 Diagnóstico Operacional (Possíveis Causas):</h3>

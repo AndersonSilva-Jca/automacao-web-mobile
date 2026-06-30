@@ -66,7 +66,7 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
     });
   });
 
-  it.only("Giro - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
+  it("Giro - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
     cy.env(["login2", "senha"]).then((env) => {
       cy.visit(giro);
       cy.get(loc.GIRO_BOTAO_LOGIN).should("be.visible").click();
