@@ -129,7 +129,7 @@ jobs:
 
             echo "Iniciando a execução do Robot Framework com Allure..."
             # AJUSTADO: Adicionado o listener do Allure para alimentar o painel de monitoramento
-            robot -T -d ./results --name "Wemobi Login Test" --listener allure_robotframework app/appWemobi/login.robot
+            robot -T -d ./results --listener allure_robotframework --name "WEMOBI LOGIN Mobile" app/appWemobi/login.robot
 
             echo $! > appium.pid
             kill $(cat appium.pid) || true
@@ -240,7 +240,7 @@ jobs:
           subject: "✅ [TESTE MOBILE] Sucesso na execução horária!"
           to: anderson.ssantos@jcatlm.com.br
           from: "GitHub Actions CI"
-          body: |
+          html_body: |
             <!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
             <style>
               body{font-family:Arial,sans-serif;background:#f4f4f4;padding:20px}

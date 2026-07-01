@@ -10,6 +10,8 @@ Test Teardown       Close All Applications
 
 *** Test Cases ***
 Deve realizar o login com sucesso
+    
     Start session
     Login
+    
     Close session
