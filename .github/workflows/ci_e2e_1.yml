@@ -150,7 +150,7 @@ jobs:
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "✅Monitoramento Contínuo - ODH/ODP/Giro/Wemobi/UTP"
+          subject: "✅ODH/ODP/Giro/Wemobi/UTP - Monit. Cont."
           to: anderson.ssantos@jcatlm.com.br
           cc: fabiano.britto@externo-jcatlm.com.br
           from: "Monitoramento Contínuo"
@@ -214,14 +214,14 @@ jobs:
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "🚨 [ALERTA] Falha Detectada no Monitoramento - ODH/ODP/Giro/Wemobi/UTP"
+          subject: "🚨 [ALERTA] ODH/ODP/Giro/Wemobi/UTP - Monit. Cont"
           to: anderson.ssantos@jcatlm.com.br
           cc: alfredo.junior@jcatlm.com.br,fabiano.britto@externo-jcatlm.com.br
           from: "Monitoramento Contínuo "
           # Alterado para html_body para suportar formatação profissional
           html_body: |
             <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6; max-width: 850px; margin: 0 auto; padding: 10px 0;">
-            <h2 style="color: #c62828; border-bottom: 2px solid #c62828; padding-bottom: 12px; margin-top: 0;">🚨 Alerta: Falha no Monitoramento Contínuo</h2>
+            <h2 style="color: #c62828; border-bottom: 2px solid #c62828; padding-bottom: 12px; margin-top: 0;">🚨 Alerta: Falha no Monitoramento Contínuo ODH/ODP/Giro/Wemobi/UTP</h2>
 
 
             <p>Identificamos uma quebra no fluxo operacional durante a execução dos testes automatizados. O problema requer uma investigação para avaliar o impacto nos sites produtivos.</p>
