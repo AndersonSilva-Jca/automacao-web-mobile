@@ -13,7 +13,7 @@ const odt = "https://www.outletdehoteis.com.br";
 const giro = "https://www.clubegiro.com.br";
 const wemobi = "https://www.wemobi.me";
 
-describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
+describe("Clube Giro", () => {
   beforeEach(() => {
     cy.clearCookies();
     cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });

@@ -3,17 +3,9 @@
 require("cypress-xpath");
 // 06/06/2026 - incio com github actions
 import loc from "../../support/locators.js";
-const cometa = "https://www.viacaocometa.com.br";
-const viacao1001 = "https://www.autoviacao1001.com.br";
-const catarinense = "https://www.catarinense.com.br/";
-const expressoSul = "https://www.expressodosul.com.br/";
-const rapidoRibeirao = "https://www.rapidoribeiraopreto.com.br/";
-const odp = "https://www.outletdepassagens.com.br";
-const odt = "https://www.outletdehoteis.com.br";
-const giro = "https://www.clubegiro.com.br";
 const wemobi = "https://www.wemobi.me";
 
-describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
+describe("Wemobi", () => {
   beforeEach(() => {
     cy.clearCookies();
     cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });

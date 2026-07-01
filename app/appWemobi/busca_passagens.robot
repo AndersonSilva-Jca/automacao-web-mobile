@@ -76,8 +76,8 @@ Deve realizar a busca de passagens com sucesso
     ...    timeout=60s
     Log To Console    \nBusca realizada com sucesso!
     //android.view.ViewGroup[@resource-id="routeServiceCardContainer"]
-
-    Swipe    ${562}    ${1714}    ${570}    ${1005}
+    
+    Swipe    start_x=562    start_y=1714    end_x=570    end_y=1005    duration=1s
 
     //android.view.ViewGroup[@content-desc="Comprar"]/android.view.View
 
