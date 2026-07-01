@@ -82,10 +82,10 @@ Executar Fluxo De Login Completo
 
     Tratar Fluxo De 2FA Se Necessario
 
-    Wait Until Element Is Visible
-    ...    xpath=//android.widget.TextView[@text="Olá, ANDERSON"]    timeout=60s
     Log To Console    \n[SUCESSO] Login realizado com sucesso!
     Click Element    xpath=//android.widget.TextView[@text="Menu"]
+    Wait Until Element Is Visible
+    ...    xpath=//android.widget.TextView[@text="Olá, ANDERSON"]    timeout=60s
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Acessar minha conta"]    timeout=20s
     Swipe    start_x=545    start_y=2280    end_x=559    end_y=78    duration=1s
     Swipe    start_x=556    start_y=1995    end_x=553    end_y=542    duration=1s

@@ -58,6 +58,12 @@ jobs:
           appium driver install uiautomator2 || true
 
       # ── Appium em step separado (run: aceita for-loop normalmente) ───────
+      # ── Configurar KVM para aceleração de hardware ───────────────────────
+      - name: Enable KVM group permissions
+        run: |
+          sudo chmod 666 /dev/kvm
+
+      # ── Appium em step separado ──────────────────────────────────────────
       - name: Start Appium
         shell: bash
         run: |
@@ -75,10 +81,9 @@ jobs:
               sleep 2
             done
           '
-
           curl http://127.0.0.1:4723/status
 
-      # ── Emulator + testes ────────────────────────────────────────────────
+      # ── Emulator + testes otimizados ─────────────────────────────────────
       - name: Run Tests with Android Emulator
         id: run_tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -93,45 +98,33 @@ jobs:
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          api-level: 34
-
+          # Alterado para API 30 para ganho massivo de performance.
+          # Se precisar REALMENTE da 34, mude de volta, mas o KVM acima já vai ajudar.
+          api-level: 30
           arch: x86_64
-
           profile: pixel_7
-
           disable-animations: true
-
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
+
           script: |
-            echo "=== Emulator pronto ==="
+            echo "=== Emulator pronto e bootado automaticamente pela Action ==="
             adb devices
+
             echo "Instalando o aplicativo wemobi..."
             adb install-multiple ./app/apks/wemobi/*.apk
-            adb wait-for-device
 
-            until adb shell getprop sys.boot_completed | grep -m 1 "1"
-            do
-                sleep 2
-            done
+            echo "Garantindo que as animações do sistema estão desligadas..."
             adb shell settings put global window_animation_scale 0
             adb shell settings put global transition_animation_scale 0
             adb shell settings put global animator_duration_scale 0
-            adb devices
 
-            adb shell pm list packages | grep everymind
-
-            curl http://localhost:4723/status
-
-            adb devices
-
-            adb shell getprop ro.build.version.release
-
-            adb shell pm list packages
-
-            adb shell dumpsys activity
+            echo "Criando pastas de resultados..."
             mkdir -p $RESULTS_DIR $ALLURE_DIR
 
+            echo "Verificando status do Appium..."
+            curl http://localhost:4723/status
 
+            echo "Iniciando a execução do Robot Framework..."
             robot -T -d ./results app/appWemobi/login.robot
 
             echo $! > appium.pid
@@ -290,7 +283,7 @@ jobs:
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "🚨 [TESTE MOBILE] Falha detectada no fluxo do Clube Giro!"
+          subject: "🚨 [TESTE MOBILE] Falha detectada no fluxo do mobile"
           to: anderson.ssantos@jcatlm.com.br
           from: "GitHub Actions CI"
           body: |
