@@ -17,13 +17,6 @@ Carregar Variaveis De Ambiente
     [Documentation]    Carrega o arquivo .env e cria as variáveis globais para o teste.
     Evaluate    __import__('dotenv').load_dotenv(dotenv_path='app/.env')
 
-Encerrar Sessao E Gravar Video
-    # Se o teste falhar, tira um print screen imediatamente para o Allure
-    Run Keyword If Test Failed    Capture Page Screenshot
-    # Para a gravação e gera o ficheiro mp4
-    Finalizar E Salvar Video
-    # Fecha a aplicação no emulador
-    Close session
     
 
 
@@ -106,3 +99,9 @@ Fechar modal do login
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Garanta AGORA até 55% OFF"]    timeout=120s
 
     Tap With Positions    1000ms    ${952, 186}
+
+Encerrar Sessao E Gravar Video
+    [Documentation]    Garante capturas de evidência e fecha o app
+    Run Keyword If Test Failed    Capture Page Screenshot
+    Finalizar E Salvar Video
+    Close session
