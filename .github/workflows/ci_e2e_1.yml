@@ -54,7 +54,7 @@ jobs:
           path: |
             cypress/videos/
             cypress/screenshots/
-          retention-days: 1
+          retention-days: 3
 
       - name: Debug - listar arquivos
         run: ls -R cypress/reports || true
