@@ -12,4 +12,3 @@ Deve realizar o login com sucesso
     [Setup]       Iniciar Gravacao Do Video
     Start session
     Login
-    # Nota: Removemos o "Close session" daqui porque o Test Teardown já o fará automaticamente, mesmo se o teste falhar a meio.

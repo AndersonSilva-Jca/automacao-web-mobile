@@ -17,9 +17,6 @@ Carregar Variaveis De Ambiente
     [Documentation]    Carrega o arquivo .env e cria as variáveis globais para o teste.
     Evaluate    __import__('dotenv').load_dotenv(dotenv_path='app/.env')
 
-    
-
-
     # 1. Coleta os dados do sistema operacional (.env local ou CI)
     ${env_login}=    Get Environment Variable    LOGIN
     ${env_senha}=    Get Environment Variable    SENHA
@@ -99,6 +96,14 @@ Fechar modal do login
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Garanta AGORA até 55% OFF"]    timeout=120s
 
     Tap With Positions    1000ms    ${952, 186}
+
+Iniciar Gravacao Do Video
+    [Documentation]    Inicia a gravação da tela do emulador
+    Start Recording Screen
+
+Finalizar E Salvar Video
+    [Documentation]    Para a gravação e gera o arquivo video-execucao.mp4
+    Stop Recording Screen    filename=video-execucao
 
 Encerrar Sessao E Gravar Video
     [Documentation]    Garante capturas de evidência e fecha o app
