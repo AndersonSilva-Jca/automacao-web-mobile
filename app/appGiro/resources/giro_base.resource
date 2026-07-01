@@ -42,6 +42,7 @@ Start session
     ...    appium:appPackage=com.everymind.clubegiro
     ...    appium:appActivity=.MainActivity
     ...    appWaitDuration=60000
+    ...    appium:noReset=${True}
     ...    appium:autoGrantPermissions=${True}
     ...    appium:ensureWebviewsHavePages=${True}
     ...    appium:clearDeviceLogs=${True}
@@ -53,13 +54,14 @@ Start session
     ...    appium:connectHardwareKeyboard=${True}
 
 # ─────────────────────────────────────────────────────────────────────────────
-Executar Fluxo De Login Completo
+Login
     [Documentation]
     ...    Preenche credenciais e clica ACESSAR.
     ...    ► Antes de clicar: fotografa o ID do último e-mail (âncora).
     ...    ► Após clicar: verifica 2FA usando apenas e-mails com ID > âncora.
-
-    Wait Until Element Is Visible    accessibility_id=Entrar    timeout=60s
+    Sleep    7s
+    Wait Until Element Is Visible    accessibility_id=Entrar    timeout=240s
+     Log To Console    \nFazendo o Login...
     Click Element                    accessibility_id=Entrar
 
     Wait Until Element Is Visible
@@ -83,18 +85,6 @@ Executar Fluxo De Login Completo
     Tratar Fluxo De 2FA Se Necessario
 
     Log To Console    \n[SUCESSO] Login realizado com sucesso!
-    Click Element    xpath=//android.widget.TextView[@text="Menu"]
-    Wait Until Element Is Visible
-    ...    xpath=//android.widget.TextView[@text="Olá, ANDERSON"]    timeout=60s
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Acessar minha conta"]    timeout=20s
-    Swipe    start_x=545    start_y=2280    end_x=559    end_y=78    duration=1s
-    Swipe    start_x=556    start_y=1995    end_x=553    end_y=542    duration=1s
-    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Sair do app"]    timeout=30s
-    Click Element    xpath=//android.view.ViewGroup[@content-desc="Sair do app"]
-    Wait Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button1"]    timeout=15s
-    Click Element    xpath=//android.widget.Button[@resource-id="android:id/button1"]
-    Log To Console    \nSaindo do App Giro.
-    Wait Until Element Is Visible    accessibility_id=Entrar    timeout=60s
 # ─────────────────────────────────────────────────────────────────────────────
 Tratar Fluxo De 2FA Se Necessario
     [Documentation]
@@ -179,5 +169,19 @@ Limpar Campos Do Codigo 2FA
     Log To Console    \n[2FA] Campos limpos para nova tentativa.
 
 # ─────────────────────────────────────────────────────────────────────────────
+
+Tratar Banner De Cookie Se Aparecer
+    # 1. Verifica se o elemento aparece na tela em até 5 segundos
+    # O Robot guarda True (se achou) ou False (se não achou) na variável
+    ${cookie_visivel}=    Run Keyword And Return Status
+    ...    Wait Until Element Is Visible    xpath=//android.app.Dialog[@resource-id="cookie-banner"]    timeout=30s
+
+    # 2. Se a resposta for True, ele entra no bloco e clica para aceitar
+    IF    ${cookie_visivel}
+        Log To Console    \n[INFO] Banner de cookie detectado. Aceitando...
+        Click Element    xpath=//android.widget.Button[@resource-id="adopt-accept-all-button"]
+    ELSE
+        Log To Console    \n[INFO] Banner de cookie não apareceu. Seguindo o fluxo...
+    END
 Close session
     Close Application

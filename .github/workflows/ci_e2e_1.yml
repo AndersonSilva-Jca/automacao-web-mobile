@@ -189,7 +189,7 @@ jobs:
              <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
              <tr style="background-color: #f8f9fa;">
                  <td style="padding: 12px; border: 1px solid #00ffa2; font-weight: bold; width: 25%;">Ambientes:</td>
-                 <td style="padding: 12px; border: 1px solid #00ffa2;">ODH / ODP / Giro / Wemobi / UTP</td>
+                 <td style="padding: 12px; border: 1px solid #00ffa2;">ODH / ODP /Clube Giro / Wemobi / UTP</td>
                </tr>
                <tr>
                <td style="padding: 12px; border: 1px solid #00ffa2; font-weight: bold;">Escopo Validado:</td>

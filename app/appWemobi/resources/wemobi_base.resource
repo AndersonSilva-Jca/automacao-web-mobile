@@ -112,3 +112,18 @@ Encerrar Sessao E Gravar Video
     Run Keyword If Test Failed    Capture Page Screenshot
     Finalizar E Salvar Video
     Close session
+
+
+Start Recording Screen
+    [Arguments]    ${arg1}=${EMPTY}
+    # Start recording screen via AppiumLibrary if available; allow being called without args
+    Run Keyword And Ignore Error    Start Screen Recording
+
+
+Stop Recording Screen
+    [Arguments]    ${arg1}=${EMPTY}    ${filename}=${EMPTY}
+    # Stop recording screen and save file if supported
+    ${res}=    Run Keyword And Ignore Error    Stop Screen Recording
+    Run Keyword If    '${res[0]}' == 'PASS' and '${filename}' != ''    ${NONE}=    Set Variable    ${res}
+    ...    ELSE    Log To Console    \n[INFO] Stop Screen Recording not supported or failed: ${res}
+

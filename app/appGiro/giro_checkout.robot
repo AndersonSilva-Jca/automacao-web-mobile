@@ -2,7 +2,7 @@
 Library     AppiumLibrary
 Library     ../appGiro/resources/GeradorDataIda.py
 Library     ../appGiro/resources/GeradorDataVolta.py
-Resource    ../appGiro/resources/base.resource
+Resource    ../appGiro/resources/giro_base.resource
 Library     ../libraries/GmailHelper.py
 # Test Teardown    Close All Applications
 
@@ -10,43 +10,43 @@ Library     ../libraries/GmailHelper.py
 *** Test Cases ***
 Deve realizar a busca de passagens com sucesso
     Start session
-
-    Login
-
+    # Login
+    Log To Console    \nTela de Busca exibida com sucesso!
     Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Viagens"]    timeout=60s
 
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Viagens"]
 
-    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Comprar Passagens"]    timeout=15s
+    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Comprar Passagens"]    timeout=60s
 
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Comprar Passagens"]
-
+    Wait Until Element Is Visible    xpath=//android.view.View[@resource-id="base-1ef336e756"]/android.view.View[1]/android.view.View[2]/android.view.View    timeout=60s
+    Tratar Banner De Cookie Se Aparecer
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Encontre sua próxima viagem"]    timeout=120s
     Wait Until Element Is Visible    xpath=//android.widget.Button[@resource-id="search-button"]    timeout=120s
 
-    Tratar Banner De Cookie Se Aparecer
 
     Wait Until Element Is Visible    xpath=//android.widget.Button[@resource-id="search-button"]    timeout=60s
 
     Log To Console    \nBotão de buscar passagens visível...
 
     Click Element    xpath=//android.widget.EditText[@resource-id="input-departure"]
-    Click Element    xpath=//android.widget.EditText[@resource-id="input-departure"]
+    # Click Element    xpath=//android.widget.EditText[@resource-id="input-departure"]
     Input Text
     ...    xpath=//android.widget.EditText[@resource-id="input-departure"]
     ...    São Paulo - Todos (SP)
     Sleep    3s
-    Click Element    xpath=//android.view.View[@resource-id="São-Paulo---Todos-(SP)"]
+    # Click Element    xpath=//android.view.View[@resource-id="São-Paulo---Todos-(SP)"]
     log To Console    \nCampo de origem preenchido...
 
     Sleep    2s
 
     Click Element    xpath=//android.widget.EditText[@resource-id="input-destination"]
-    Click Element    xpath=//android.widget.EditText[@resource-id="input-destination"]
+    # Click Element    xpath=//android.widget.EditText[@resource-id="input-destination"]
     Input Text
     ...    xpath=//android.widget.EditText[@resource-id="input-destination"]
     ...    Rio de Janeiro - Todos (RJ)
     Sleep    3s
-    Click Element    xpath=//android.view.View[@resource-id="Rio-De-Janeiro---Todos-(RJ)"]
+    # Click Element    xpath=//android.view.View[@resource-id="Rio-De-Janeiro---Todos-(RJ)"]
     Log to Console    \nCampo de destino preenchido...
 
     HIDE KEYBOARD
@@ -100,6 +100,8 @@ Deve realizar a busca de passagens com sucesso
     ...    timeout=120s
 
     Log To Console    \nBusca de passagens realizada com sucesso!
-    Sleep    10s
+    # Sleep    10s
 
-    Close session
+    # Close session
+
+

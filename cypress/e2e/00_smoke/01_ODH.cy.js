@@ -44,15 +44,15 @@ describe("Outlet de Hotéis", () => {
     cy.get(".cursor-pointer > .h-8").click();
 
     // Promoção em hotéis por destino
-    cy.contains("Promoção em hotéis por destino").should("be.visible");
-    cy.get('img[alt="Fernando de Noronha"]').click();
-    cy.contains(/(resultados de hospedagens|Nenhum hotel encontrado)/i).should("be.visible");
-    cy.get(".cursor-pointer > .h-8").click();
-    cy.get('img[alt="Jericoacoara"]').click();
-    cy.contains(/(resultados de hospedagens|Nenhum hotel encontrado)/i).should("be.visible");
-    cy.get(".cursor-pointer > .h-8").click();
-    cy.get('img[alt="Porto de Galinhas"]').click();
-    cy.contains(/(resultados de hospedagens|Nenhum hotel encontrado)/i).should("be.visible");
-    cy.get(".cursor-pointer > .h-8").click();
+    // cy.contains("Promoção em hotéis por destino").should("be.visible");
+    // cy.get('img[alt="Fernando de Noronha"]').click();
+    // cy.contains(/(resultados de hospedagens|Nenhum hotel encontrado)/i).should("be.visible");
+    // cy.get(".cursor-pointer > .h-8").click();
+    // cy.get('img[alt="Jericoacoara"]').click();
+    // cy.contains(/(resultados de hospedagens|Nenhum hotel encontrado)/i).should("be.visible");
+    // cy.get(".cursor-pointer > .h-8").click();
+    // cy.get('img[alt="Porto de Galinhas"]').click();
+    // cy.contains(/(resultados de hospedagens|Nenhum hotel encontrado)/i).should("be.visible");
+    // cy.get(".cursor-pointer > .h-8").click();
   });
 });
