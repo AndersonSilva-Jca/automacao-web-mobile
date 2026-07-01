@@ -129,7 +129,7 @@ describe("ODH, ODP, Giro, Wemobi, UTP ", () => {
     cy.get(".payment-type-container > .col-12 > .active").should("be.visible");
   });
 
-  it.only("Outlet de passagens - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
+  it("Outlet de passagens - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
     cy.env(["login", "senha"]).then((env) => {
       cy.visit(odp);
       cy.get(".logged-out-section > .btn-outlet").click();

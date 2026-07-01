@@ -37,7 +37,7 @@ Start session
     ...    appium:appPackage=me.wemobi.wemobiapp
     ...    appium:appActivity=.MainActivity
     ...    appWaitDuration=50000
-    # ...    appium:noReset=${True}
+    ...    appium:noReset=${True}
     ...    appium:autoGrantPermissions=${True}
     ...    appium:ensureWebviewsHavePages=${True}
     ...    appium:clearDeviceLogs=${True}
@@ -64,15 +64,15 @@ Login
     Wait Until Element Is Visible
     ...    xpath=//android.view.ViewGroup[@content-desc="Buscar"]/android.view.View    timeout=90s
     Log To Console    \nTela de Busca exibida com sucesso!
-    Click Element
-    ...    android=new UiSelector().className("android.widget.ImageView").instance(1)
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="name"]
-    Log To Console    \nLogin realizado com sucesso!
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="name"]
-    Log To Console    \nOlá, Anderson Silva
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Sair"]    timeout=30s
-    Log To Console    \nClicando em Sair...
-    Click Element    xpath=//android.widget.TextView[@text="Sair"]
+    # Click Element
+    # ...    android=new UiSelector().className("android.widget.ImageView").instance(1)
+    # Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="name"]
+    # Log To Console    \nLogin realizado com sucesso!
+    # Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="name"]
+    # Log To Console    \nOlá, Anderson Silva
+    # Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Sair"]    timeout=30s
+    # Log To Console    \nClicando em Sair...
+    # Click Element    xpath=//android.widget.TextView[@text="Sair"]
     # Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Viagens"]    timeout=60s
 
 Close session

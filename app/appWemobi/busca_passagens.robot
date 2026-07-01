@@ -1,20 +1,20 @@
 *** Settings ***
-Library     AppiumLibrary
-Library     ../appWemobi/resources/GeradorDataIda.py
-Library     ../appWemobi/resources/GeradorDataVolta.py
-# Test Teardown    Close All Applications
-Resource    ../appWemobi/resources/appWemobi_base.resource
+Library             AppiumLibrary
+Library             ../appWemobi/resources/GeradorDataIda.py
+Library             ../appWemobi/resources/GeradorDataVolta.py
+Resource            ../appWemobi/resources/appWemobi_base.resource
+Library             ../libraries/GmailHelper.py
 
 
 *** Test Cases ***
 Deve realizar a busca de passagens com sucesso
     Start session
-
-    Login
+    # Login
 
     Click Element    xpath=//android.widget.EditText[@resource-id="origin"]
 
-    Wait Until Element Is Visible    //android.view.ViewGroup[@resource-id="originDestinationContainer"]    timeout=60s
+    Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="locationSearch"]    timeout=60s
+    Click Element    xpath=//android.widget.EditText[@resource-id="locationSearch"]
 
     Tap With Positions    1s    ${274, 418}
 
@@ -22,11 +22,11 @@ Deve realizar a busca de passagens com sucesso
 
     Wait Until Element Is Visible
     ...    xpath=//android.view.ViewGroup[@content-desc="São Paulo - Todos (SP), Localidade de Grupo"]
-    ...    timeout=15s
+    ...    timeout=30s
 
     Click Element    xpath=//android.view.ViewGroup[@content-desc="São Paulo - Todos (SP), Localidade de Grupo"]
 
-    Click Element    xpath=//android.view.ViewGroup[@content-desc="São Paulo - Todos (SP), Localidade de Grupo"]
+    # Click Element    xpath=//android.view.ViewGroup[@content-desc="São Paulo - Todos (SP), Localidade de Grupo"]
 
     Tap With Positions    1s    ${274, 418}
 
@@ -35,14 +35,14 @@ Deve realizar a busca de passagens com sucesso
     Input Text    android=new UiSelector().className("android.widget.EditText")    Rio de Janeiro - Todos (RJ)
 
     Wait Until Element Is Visible
-    ...    xpath=//android.view.ViewGroup[@content-desc="Rio de Janeiro - Todos (RJ), Localidade de Grupo"]
+    ...    accessibility_id=Rio de Janeiro - Todos (RJ), Localidade de Grupo
     ...    timeout=15s
 
-    Click Element    xpath=//android.view.ViewGroup[@content-desc="Rio de Janeiro - Todos (RJ), Localidade de Grupo"]
+    Click Element    accessibility_id=Rio de Janeiro - Todos (RJ), Localidade de Grupo
 
-    Click Element    xpath=//android.view.ViewGroup[@content-desc="Rio de Janeiro - Todos (RJ), Localidade de Grupo"]
+    # Click Element    accessibility_id=Rio de Janeiro - Todos (RJ), Localidade de Grupo
 
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Data"]    timeout=15s
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Data"]    timeout=30s
 
     Sleep    5s
 
@@ -51,7 +51,7 @@ Deve realizar a busca de passagens com sucesso
 # retorna: 02/06/2026
 
     Input Text
-    ...    xpath=//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.widget.EditText[1]
+    ...    xpath=//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[3]/android.widget.EditText[1]
     ...    ${data_ida}
 
     Wait Until Element Is Visible
@@ -75,3 +75,15 @@ Deve realizar a busca de passagens com sucesso
     ...    xpath=//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.widget.ScrollView/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup[6]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup[24]/android.widget.ScrollView/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[13]
     ...    timeout=60s
     Log To Console    \nBusca realizada com sucesso!
+    //android.view.ViewGroup[@resource-id="routeServiceCardContainer"]
+
+    Swipe    ${562}    ${1714}    ${570}    ${1005}
+
+    //android.view.ViewGroup[@content-desc="Comprar"]/android.view.View
+
+    //android.widget.TextView[@text="Passageiro 1"]
+
+    //android.widget.TextView[@text="Adicione um passageiro salvo"]
+
+    //android.widget.TextView[@text="Adicione um passageiro salvo"]
+
