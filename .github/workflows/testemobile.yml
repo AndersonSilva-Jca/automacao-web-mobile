@@ -64,25 +64,22 @@ jobs:
           sudo chmod 666 /dev/kvm
 
       # ── Appium em step separado ──────────────────────────────────────────
-      - name: Start Appium
-        shell: bash
-        run: |
-          appium \
-            --allow-insecure chromedriver_autodownload \
-            --relaxed-security \
-            --log appium.log \
-            > appium.log 2>&1 &
-
-          echo $! > appium.pid
-
-          timeout 90 bash -c '
-            until curl -s http://127.0.0.1:4723/status | grep -q "\"ready\":true"
-            do
-              sleep 2
-            done
-          '
-          curl http://127.0.0.1:4723/status
-
+      # - name: Start Appium
+      #   shell: bash
+      #   run: |
+      #     appium \
+      #       --allow-insecure chromedriver_autodownload \
+      #       --relaxed-security \
+      #       --log appium.log \
+      #       > appium.log 2>&1 &
+      #     echo $! > appium.pid
+      #     timeout 90 bash -c '
+      #       until curl -s http://127.0.0.1:4723/status | grep -q "\"ready\":true"
+      #       do
+      #         sleep 2
+      #       done
+      #     '
+      #     curl http://127.0.0.1:4723/status
       # ── Emulator + testes otimizados ─────────────────────────────────────
       - name: Run Tests with Android Emulator
         id: run_tests
@@ -107,6 +104,20 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
 
           script: |
+
+            echo "Iniciando servidor Appium em background..."
+            appium --log appium.log --log-level info &
+            APPIUM_PID=$!
+
+            echo "Aguardando o Appium responder na porta 4723..."
+            for i in $(seq 1 30); do 
+              if curl -s http://127.0.0.1:4723/status > /dev/null; then 
+                echo "Appium pronto!"
+                break
+              fi
+              sleep 2
+            done
+
             echo "=== Emulator pronto e bootado automaticamente pela Action ==="
             adb devices
 
