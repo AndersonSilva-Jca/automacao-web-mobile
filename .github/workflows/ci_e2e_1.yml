@@ -159,7 +159,7 @@ jobs:
             <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6; max-width: 850px; margin: 0 auto; padding: 10px 0;">
              <h2 style="color: #2e7d32; border-bottom: 2px solid #2e7d32; padding-bottom: 12px; margin-top: 0;">✅ Ciclo de Monitoramento Finalizado com Sucesso</h2>
              
-             <p>Olá, Equipe,</p>
+
              <p>O ciclo de testes automatizados de monitoramento contínuo foi executado nas plataformas operacionais e <strong>todas as validações críticas passaram com sucesso</strong>.</p>
              
                            <div style="border: 1px solid #00ffa2; margin: 25px 0; border-radius: 6px; overflow: hidden; background-color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
