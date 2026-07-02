@@ -51,6 +51,17 @@ module.exports = defineConfig({
     requestTimeout: 20000, // Espera até 15s por respostas de APIs (cy.request)
     responseTimeout: 15000, // Espera até 15s por respostas de interceptações
     setupNodeEvents(on, config) {
+      on("after:spec", (spec, results) => {
+        if (results && results.video) {
+          // Verifica se houve alguma falha no arquivo de teste atual
+          const teveFalha = results.tests.some((test) => test.state === "failed");
+
+          // Se não houve falha e o arquivo de vídeo existe localmente, apaga ele
+          if (!teveFalha && fs.existsSync(results.video)) {
+            fs.unlinkSync(results.video);
+          }
+        }
+      });
       require("cypress-mochawesome-reporter/plugin")(on);
       // implement node event listeners here
       on("before:browser:launch", (browser = {}, launchOptions) => {

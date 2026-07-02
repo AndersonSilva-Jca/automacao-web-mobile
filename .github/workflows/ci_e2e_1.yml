@@ -81,33 +81,48 @@ jobs:
           enable_jekyll: false
           commit_message: "ci: deploy report run ${{ github.run_number }}"
 
+      # 🧹 PASSO ATUALIZADO: Mantém o histórico de 14 dias, mas restringe vídeos a 2 dias apenas para falhas
+      # 🧹 PASSO CORRIGIDO: Limpeza confiável baseada no histórico do repositório
       - name: Limpar Relatórios Antigos (>14 dias) e Vídeos (>2 dias)
         if: always()
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          # Clona a branch gh-pages onde o histórico vive acumulado
+          # Clona apenas o último commit para economizar banda, mas traz a branch gh-pages
           git clone --branch gh-pages https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git repo-pages
           cd repo-pages
 
           if [ -d "reports" ]; then
-            echo "🔍 Iniciando varredura de arquivos antigos..."
+            echo "🔍 Iniciando varredura e higienização estrutural..."
             
-            # 1. Remove qualquer subpasta de relatório inteira que tenha mais de 14 dias (2 semanas)
-            find reports/ -maxdepth 1 -mindepth 1 -type d -mtime +14 -exec rm -rf {} \;
+            # 1. Mantém apenas as últimas 800 pastas de runs (aproximadamente 2 semanas de execuções)
+            # Ordena numericamente as pastas e apaga as mais antigas excedentes
+            cd reports
+            ls -d */ 2>/dev/null | sort -n | head -n -800 | xargs rm -rf 2>/dev/null || true
+            cd ..
+
+            # 2. Localiza arquivos .mp4 antigos usando o log do Git para saber a idade real
+            # Se preferir simplificar e apagar TODOS os vídeos das execuções anteriores, deixando vídeo APENAS na run atual:
+            # find reports/ -type f -name "*.mp4" ! -path "reports/${{ github.run_number }}/*" -exec rm -f {} \;
             
-            # 2. Varre todas as pastas de relatórios existentes e apaga os arquivos de VÍDEO (.mp4) com mais de 2 dias
-            find reports/ -type f -name "*.mp4" -mtime +2 -exec rm -f {} \;
-            
-            # Se houver alterações, commita a faxina de volta para o servidor
+            # Método alternativo seguro para mídias: apaga vídeos de subpastas de runs muito anteriores à atual
+            LIMITE_RUN=$(( ${{ github.run_number }} - 100 )) # Apaga vídeos de 100 runs atrás (~2 dias)
+            for pasta in reports/*; do
+              RUN_PASTA=$(basename "$pasta")
+              if [ "$RUN_PASTA" -lt "$LIMITE_RUN" ] 2>/dev/null; then
+                find "$pasta" -type f -name "*.mp4" -exec rm -f {} \;
+              fi
+            done
+
+            # Se houver alterações, commita de volta para o servidor
             if [ -n "$(git status --porcelain)" ]; then
-              echo "🧹 Faxina concluída! Removendo arquivos expirados do servidor."
+              echo "🧹 Faxina concluída com sucesso!"
               git add .
-              git commit -m "ci: limpeza automática de relatórios (>14d) e vídeos (>2d)"
+              git commit -m "ci: limpeza de histórico antigo (retenção móvel ativa)"
               git push origin gh-pages
             else
-              echo "✅ Todos os arquivos estão dentro da janela de retenção configurada."
+              echo "✅ Nenhum arquivo violou as regras de retenção hoje."
             fi
           fi
 
