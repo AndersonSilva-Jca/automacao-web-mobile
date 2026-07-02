@@ -251,7 +251,7 @@ jobs:
             <p style="font-size: 12px; color: #999; margin: 0;">Este é um alerta automático gerado pelo sistema de Qualidade de Software (QA).</p>
             </div>
 
-      - name: Enviar Alerta no WhatsApp Privado
+      - name: Enviar Alerta no WhatsApp Privado Anderson
         if: steps.cypress.outcome == 'failure'
         run: |
           # 1. Localiza o primeiro screenshot de falha gerada pelo Cypress localmente
@@ -289,6 +289,46 @@ jobs:
           # 6. Dispara o curl para o seu WhatsApp (Anderson)
           echo "📱 Disparando alerta para Anderson..."
           curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ANDERSON }}&text=${TEXTO_CODIFICADO}&apikey=7972786"
+
+
+          # 🚨 FIX: Força o GitHub Actions a marcar o Job como FALHA (esteira vermelha)
+          echo "❌ O teste do Cypress falhou. Forçando status de erro na esteira."
+          exit 1
+
+      - name: Enviar Alerta no WhatsApp Privado ALFREDO
+        if: steps.cypress.outcome == 'failure'
+        run: |
+          # 1. Localiza o primeiro screenshot de falha gerada pelo Cypress localmente
+          SCREENSHOT_FILE=$(find cypress/screenshots -type f -name "*.png" | head -n 1)
+
+          # 2. Se a imagem existir, faz o upload temporário instantâneo para termos visualização imediata
+          LINK_IMAGEM_DIRETA="Sem imagem disponível"
+          if [ -f "$SCREENSHOT_FILE" ]; then
+            LINK_IMAGEM_DIRETA=$(curl -s -F "file=@$SCREENSHOT_FILE" https://file.io | python3 -c "import sys, json; data=json.load(sys.stdin); print(data.get('link', 'Erro ao subir imagem'))")
+          fi
+
+          # 3. Monta o link do relatório oficial do Pages
+          LINK_RELATORIO="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/${{ github.run_number }}/01_e2e/index.html"
+
+          # 4. Mensagem com a foto do erro direto no gatilho
+          TEXTO_BRUTO="🚨 *ALERTA DE MONITORAMENTO CRÍTICO*
+
+          Os testes E2E do Cypress falharam no ambiente de Operação.
+
+          📸 *IMAGEM COMPROVATÓRIA DO ERRO (ABRE NA HORA):*
+          $LINK_IMAGEM_DIRETA
+
+          *📊 INFORMAÇÕES DA EXECUÇÃO:*
+          • *ID da Run:* #${{ github.run_number }}
+          • *Data:* ${{ env.DATA_ALERTA }}
+          • *Hora:* ${{ env.HORA_ALERTA }} (Brasília)
+          • *Ferramenta:* Cypress Web
+
+          *🖥️ LINK DO RELATÓRIO HTML COMPLETO:*
+          $LINK_RELATORIO"
+
+          # 5. Faz o URL Encode usando Python para evitar quebras no curl
+          TEXTO_CODIFICADO=$(python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))" "$TEXTO_BRUTO")
 
           # 7. Dispara o curl para o WhatsApp do Alfredo (Substitua a apikey fixa se ele tiver uma própria)
           echo "📱 Disparando alerta para Alfredo..."
