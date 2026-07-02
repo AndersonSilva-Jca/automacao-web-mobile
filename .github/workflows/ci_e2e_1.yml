@@ -29,8 +29,8 @@ jobs:
         id: cypress
         continue-on-error: true
         with:
-          # command: npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/**/*.cy.js' --config video=true
-          command: npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/01_ODH.cy.js' --config video=true
+          command: npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/**/*.cy.js' --config video=true
+          # command: npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/01_ODH.cy.js' --config video=true
 
         env:
           LOGIN: ${{ secrets.LOGIN }}
@@ -89,7 +89,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "✅ODH/ODP/Giro/Wemobi/UTP - Monit. Cont."
           to: anderson.ssantos@jcatlm.com.br
-          # cc: fabiano.britto@externo-jcatlm.com.br
+          cc: fabiano.britto@externo-jcatlm.com.br
           from: "Monitoramento Contínuo"
           # Alterado para html_body para suportar formatação profissional
           html_body: |
@@ -153,7 +153,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "🚨 [ALERTA] ODH/ODP/Giro/Wemobi/UTP - Monit. Cont"
           to: anderson.ssantos@jcatlm.com.br
-          # cc: alfredo.junior@jcatlm.com.br,fabiano.britto@externo-jcatlm.com.br
+          cc: alfredo.junior@jcatlm.com.br,fabiano.britto@externo-jcatlm.com.br
           from: "Monitoramento Contínuo "
           # Alterado para html_body para suportar formatação profissional
           html_body: |
