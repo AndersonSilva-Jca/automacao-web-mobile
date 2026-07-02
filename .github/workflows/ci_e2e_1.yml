@@ -45,6 +45,8 @@ jobs:
           GMAIL_APP_PASS: ${{ secrets.GMAIL_APP_PASS }}
           NODE_TLS_REJECT_UNAUTHORIZED: "0"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WA_PHONE_ANDERSON: ${{ secrets.WA_PHONE_ANDERSON }}
+          WA_API_KEY_ANDERSON: ${{ secrets.WA_API_KEY_ANDERSON }}
           # CYPRESS_INTERNAL_NPM_REGISTRY_DISABLE_SSL_VERIFICATION: "1" # Força o bypass no Cypress
       - name: Salvar Evidências em Caso de Falha (Vídeos e Screenshots)
         if: steps.cypress.outcome == 'failure'
@@ -236,4 +238,4 @@ jobs:
           TEXTO_CODIFICADO=$(python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))" "$TEXTO_BRUTO")
 
           # 4. Dispara o curl injetando diretamente o seu número e a apikey que você acabou de receber
-          curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE }}&text=${TEXTO_CODIFICADO}&apikey=${{ secrets.WA_API_KEY }}"
+          curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ANDERSON }}&text=This+is+a+test&apikey=${{ secrets.WA_API_KEY_ANDERSON }}"
