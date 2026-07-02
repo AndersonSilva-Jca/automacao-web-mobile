@@ -13,9 +13,9 @@ describe("Outlet de Hotéis", () => {
     Cypress.on("uncaught:exception", () => false);
   });
 
-  it("Outlet de Hotéis - Busca de destinos, Hotéis em promoção hoje, Promoção em hotéis por destino", () => {
+  it.only("Outlet de Hotéis - Busca de destinos, Hotéis em promoção hoje, Promoção em hotéis por destino", () => {
     cy.visit(odt);
-    cy.contains("Minhas viagens").should("be.visible");
+    cy.contains("Minhas viagens1").should("be.visible");
     cy.contains("Carrinho").should("be.visible");
     cy.wait(2000);
     const cidades = ["Rio de Janeiro (e arredores)", "São Paulo (e arredores)", "Belo Horizonte (e arredores)", "Curitiba (e arredores)", "Salvador (e arredores)"];
