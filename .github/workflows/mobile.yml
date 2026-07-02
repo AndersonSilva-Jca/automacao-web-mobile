@@ -197,33 +197,79 @@ jobs:
           path: appium.log
           retention-days: 30
 
-      # ── Métricas ─────────────────────────────────────────────────────────
       - name: Extrair métricas
         if: always()
         id: metrics
+        shell: python
         run: |
-          OUTPUT_FILE=$(find "$RESULTS_DIR" -name "output*.xml" 2>/dev/null | head -1)
-          if [ -n "$OUTPUT_FILE" ] && [ -f "$OUTPUT_FILE" ]; then
-            PASSED=$(grep -oP 'pass="\K[0-9]+' "$OUTPUT_FILE" | tail -1)
-            FAILED=$(grep -oP 'fail="\K[0-9]+' "$OUTPUT_FILE" | tail -1)
-            SKIPPED=$(grep -oP 'skip="\K[0-9]+' "$OUTPUT_FILE" | tail -1)
-          else
-            PASSED=0; FAILED=0; SKIPPED=0
-          fi
-          TOTAL=$(( ${PASSED:-0} + ${FAILED:-0} + ${SKIPPED:-0} ))
-          echo "passed=${PASSED:-0}"   >> $GITHUB_OUTPUT
-          echo "failed=${FAILED:-0}"   >> $GITHUB_OUTPUT
-          echo "skipped=${SKIPPED:-0}" >> $GITHUB_OUTPUT
-          echo "total=${TOTAL}"        >> $GITHUB_OUTPUT
-          if [ "${{ steps.run_tests.outcome }}" = "success" ] && [ "${FAILED:-0}" = "0" ] && [ "${TOTAL}" != "0" ]; then
-            echo "status=PASSOU ✅"   >> $GITHUB_OUTPUT
-            echo "status_raw=success" >> $GITHUB_OUTPUT
-          else
-            echo "status=FALHOU ❌"   >> $GITHUB_OUTPUT
-            echo "status_raw=failure" >> $GITHUB_OUTPUT
-          fi
-          echo "datetime=$(TZ='America/Sao_Paulo' date '+%d/%m/%Y às %H:%M')" >> $GITHUB_OUTPUT
+          import os
+          import re
+          import xml.etree.ElementTree as ET
+          from datetime import datetime
+          import zoneinfo
 
+          results_dir = os.environ.get("RESULTS_DIR", "results")
+          passed, failed, skipped = 0, 0, 0
+          error_details = "Nenhuma falha crítica registrada no arquivo de resultados."
+
+          # Localiza o arquivo output.xml do Robot
+          output_file = None
+          if os.path.exists(results_dir):
+              for f in os.listdir(results_dir):
+                  if f.startswith("output") and f.endswith(".xml"):
+                      output_file = os.path.join(results_dir, f)
+                      break
+
+          if output_file and os.path.getsize(output_file) > 0:
+              try:
+                  tree = ET.parse(output_file)
+                  root = tree.getroot()
+                  
+                  # Captura totais do bloco <total>
+                  stat_elem = root.find(".//total/stat")
+                  if stat_elem is not None:
+                      passed = int(stat_elem.get("pass", 0))
+                      failed = int(stat_elem.get("fail", 0))
+                      skipped = int(stat_elem.get("skip", 0))
+                  
+                  # Captura detalhes dos testes falhados
+                  if failed > 0:
+                      errors_list = []
+                      for test in root.findall(".//test"):
+                          status = test.find("status")
+                          if status is not None and status.get("status") == "FAIL":
+                              test_name = test.get("name", "Unknown Test")
+                              err_msg = status.text if status.text else "Sem mensagem de erro detalhada."
+                              # Sanitiza strings para o GitHub Output e HTML
+                              err_msg = err_msg.replace("\n", " ").replace("\r", "").strip()
+                              errors_list.append(f"<li><strong>{test_name}:</strong> {err_msg}</li>")
+                      if errors_list:
+                          error_details = "".join(errors_list)
+              except Exception as e:
+                  error_details = f"<li>Erro ao ler arquivo XML de resultados: {str(e)}</li>"
+                  failed = 1
+
+          total = passed + failed + skipped
+
+          # Define o status geral
+          status_str = "PASSOU ✅" if failed == 0 and total > 0 else "FALHOU ❌"
+          status_raw = "success" if failed == 0 and total > 0 else "failure"
+
+          sp_tz = zoneinfo.ZoneInfo("America/Sao_Paulo")
+          now_str = datetime.now(sp_tz).strftime("%d/%m/%Y às %H:%M")
+
+          # Escreve as saídas no arquivo de Outputs do GitHub
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as f:
+              f.write(f"passed={passed}\n")
+              f.write(f"failed={failed}\n")
+              f.write(f"skipped={skipped}\n")
+              f.write(f"total={total}\n")
+              f.write(f"status={status_str}\n")
+              f.write(f"status_raw={status_raw}\n")
+              f.write(f"datetime={now_str}\n")
+              f.write(f"errors={error_details}\n")
+
+      # ── Geração do GitHub Step Summary ───────────────────────────────────
       - name: GitHub Summary
         if: always()
         run: |
