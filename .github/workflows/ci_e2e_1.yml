@@ -128,7 +128,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "✅ODH/ODP/Giro/Wemobi/UTP - Monit. Cont."
           to: anderson.ssantos@jcatlm.com.br
-          cc: fabiano.britto@externo-jcatlm.com.br
+          # cc: fabiano.britto@externo-jcatlm.com.br
           from: "Monitoramento Contínuo"
           # Alterado para html_body para suportar formatação profissional
           html_body: |
@@ -192,7 +192,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "🚨 [ALERTA] ODH/ODP/Giro/Wemobi/UTP - Monit. Cont"
           to: anderson.ssantos@jcatlm.com.br
-          cc: alfredo.junior@jcatlm.com.br,fabiano.britto@externo-jcatlm.com.br
+          # cc: alfredo.junior@jcatlm.com.br,fabiano.britto@externo-jcatlm.com.br
           from: "Monitoramento Contínuo "
           # Alterado para html_body para suportar formatação profissional
           html_body: |
@@ -254,25 +254,10 @@ jobs:
       - name: Enviar Alerta no WhatsApp Privado Anderson
         if: steps.cypress.outcome == 'failure'
         run: |
-          # 1. Localiza o primeiro screenshot de falha gerada pelo Cypress localmente
-          SCREENSHOT_FILE=$(find cypress/screenshots -type f -name "*.png" | head -n 1)
 
-          # 2. Se a imagem existir, faz o upload temporário instantâneo para termos visualização imediata
-          LINK_IMAGEM_DIRETA="Sem imagem disponível"
-          if [ -f "$SCREENSHOT_FILE" ]; then
-            LINK_IMAGEM_DIRETA=$(curl -s -F "file=@$SCREENSHOT_FILE" https://file.io | python3 -c "import sys, json; data=json.load(sys.stdin); print(data.get('link', 'Erro ao subir imagem'))")
-          fi
-
-          # 3. Monta o link do relatório oficial do Pages
-          LINK_RELATORIO="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/${{ github.run_number }}/01_e2e/index.html"
-
-          # 4. Mensagem com a foto do erro direto no gatilho
           TEXTO_BRUTO="🚨 *ALERTA DE MONITORAMENTO CRÍTICO*
 
           Os testes E2E do Cypress falharam no ambiente de Operação.
-
-          📸 *IMAGEM COMPROVATÓRIA DO ERRO (ABRE NA HORA):*
-          $LINK_IMAGEM_DIRETA
 
           *📊 INFORMAÇÕES DA EXECUÇÃO:*
           • *ID da Run:* #${{ github.run_number }}
