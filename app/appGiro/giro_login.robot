@@ -14,6 +14,8 @@ Test Setup        Start session
 Deve Realizar O Login Com Sucesso Tratando 2FA Se Solicitado
     [Tags]    smoke    login
     Login
+    Sleep    10s
+    Tratar Banner De Login Se Aparecer
     Click Element    xpath=//android.widget.TextView[@text="Menu"]
     Wait Until Element Is Visible
     ...    xpath=//android.widget.TextView[@text="Olá, ANDERSON"]    timeout=60s

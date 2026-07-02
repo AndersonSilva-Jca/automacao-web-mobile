@@ -117,6 +117,12 @@ jobs:
             adb install-multiple ./app/apks/wemobi/*.apk
             echo "Instalando o aplicativo Clube Giro..."
             adb install-multiple ./app/apks/clube_giro/*.apk
+            echo "Instalando o aplicativo cometa..."
+            adb install-multiple ./app/apks/cometa/*.apk
+            echo "Instalando o aplicativo 1001..."
+            adb install-multiple ./app/apks/1001/*.apk
+            echo "Instalando o aplicativo catarinense..."
+            adb install-multiple ./app/apks/catarinense/*.apk
 
             echo "Garantindo que as animações do sistema estão desligadas..."
             adb shell settings put global window_animation_scale 0
@@ -131,7 +137,7 @@ jobs:
 
             echo "Iniciando a execução do Robot Framework com Allure..."
             # AJUSTADO: Adicionado o listener do Allure para alimentar o painel de monitoramento
-            robot -T -d ./results --listener allure_robotframework:$ALLURE_DIR --name "WEMOBI LOGIN Mobile" app/appWemobi/login.robot
+            robot -T -d ./results --listener allure_robotframework:$ALLURE_DIR --name "WEMOBI LOGIN Mobile" app/appWemobi/wemobi_login.robot --name "GIRO LOGIN Mobile" app/appGiro/girologin.robot --name "COMETA LOGIN Mobile" app/appCometa/cometa_login.robot --name "1001 LOGIN Mobile" app/app1001/1001_login.robot --name "CATARINENSE LOGIN Mobile" app/appCatarinense/catarinense_login.robot
 
             echo $! > appium.pid
             kill $(cat appium.pid) || true

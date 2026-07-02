@@ -37,7 +37,7 @@ Start session
     ...    appium:appPackage=me.wemobi.wemobiapp
     ...    appium:appActivity=.MainActivity
     ...    appWaitDuration=50000
-    ...    appium:noReset=${True}
+    # ...    appium:noReset=${True}
     ...    appium:autoGrantPermissions=${True}
     ...    appium:ensureWebviewsHavePages=${True}
     ...    appium:clearDeviceLogs=${True}
