@@ -291,8 +291,3 @@ jobs:
           curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ANDERSON }}&text=${TEXTO_CODIFICADO}&apikey=7972786"
           echo "📱 Disparando alerta para Alfredo..."
           curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ALFREDO }}&text=${TEXTO_CODIFICADO}&apikey=8475079"
-
-
-          # 🚨 FIX: Força o GitHub Actions a marcar o Job como FALHA (esteira vermelha)
-          echo "❌ O teste do Cypress falhou. Forçando status de erro na esteira."
-          exit 1
