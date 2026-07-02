@@ -5,7 +5,7 @@ Library             ../appWemobi/resources/GeradorDataVolta.py
 Resource            ../appWemobi/resources/wemobi_base.resource
 Library             ../libraries/GmailHelper.py
 # Alterado para uma keyword personalizada que fecha a app e guarda o vídeo com segurança
-Test Teardown       Encerrar Sessao E Gravar Video
+
 
 *** Test Cases ***
 Deve realizar o login com sucesso
@@ -21,4 +21,4 @@ Deve realizar o login com sucesso
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Sair"]    timeout=30s
     Log To Console    \nClicando em Sair...
     Click Element    xpath=//android.widget.TextView[@text="Sair"]
-    Close session
+
