@@ -238,4 +238,4 @@ jobs:
           TEXTO_CODIFICADO=$(python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))" "$TEXTO_BRUTO")
 
           # 4. Dispara o curl injetando diretamente o seu número e a apikey que você acabou de receber
-          curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ANDERSON }}&text=This+is+a+test&apikey=${{ secrets.WA_API_KEY_ANDERSON }}"
+          curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ANDERSON }}&text=${TEXTO_CODIFICADO}&apikey=7972786"
