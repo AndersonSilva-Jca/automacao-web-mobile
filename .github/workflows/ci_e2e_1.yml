@@ -81,6 +81,36 @@ jobs:
           enable_jekyll: false
           commit_message: "ci: deploy report run ${{ github.run_number }}"
 
+      - name: Limpar Relatórios Antigos (>14 dias) e Vídeos (>2 dias)
+        if: always()
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Clona a branch gh-pages onde o histórico vive acumulado
+          git clone --branch gh-pages https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git repo-pages
+          cd repo-pages
+
+          if [ -d "reports" ]; then
+            echo "🔍 Iniciando varredura de arquivos antigos..."
+            
+            # 1. Remove qualquer subpasta de relatório inteira que tenha mais de 14 dias (2 semanas)
+            find reports/ -maxdepth 1 -mindepth 1 -type d -mtime +14 -exec rm -rf {} \;
+            
+            # 2. Varre todas as pastas de relatórios existentes e apaga os arquivos de VÍDEO (.mp4) com mais de 2 dias
+            find reports/ -type f -name "*.mp4" -mtime +2 -exec rm -f {} \;
+            
+            # Se houver alterações, commita a faxina de volta para o servidor
+            if [ -n "$(git status --porcelain)" ]; then
+              echo "🧹 Faxina concluída! Removendo arquivos expirados do servidor."
+              git add .
+              git commit -m "ci: limpeza automática de relatórios (>14d) e vídeos (>2d)"
+              git push origin gh-pages
+            else
+              echo "✅ Todos os arquivos estão dentro da janela de retenção configurada."
+            fi
+          fi
+
       - name: Enviar E-mail de SUCESSO ✅
         if: steps.cypress.outcome == 'success'
         uses: dawidd6/action-send-mail@v3
