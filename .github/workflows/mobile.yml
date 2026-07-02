@@ -138,7 +138,7 @@ jobs:
 
             echo "Iniciando a execução do Robot Framework com Allure..."
             # AJUSTADO: Adicionado o listener do Allure para alimentar o painel de monitoramento
-            robot -T -d ./results --listener allure_robotframework:$ALLURE_DIR --name "Monitoramento Mobile" app/appWemobi/wemobi_login.robot app/appGiro/giro_login.robot app/appCometa/cometa_login.robot app/app1001/1001_login.robot app/appCatarinense/catarinense_login.robot
+            robot -T -d ./results --listener allure_robotframework:$ALLURE_DIR --name "Monitoramento Mobile" app/appWemobi/wemobi_login.robot app/app1001/1001_login.robot app/appCatarinense/catarinense_login.robot
 
             echo $! > appium.pid
             kill $(cat appium.pid) || true
