@@ -282,7 +282,7 @@ jobs:
                   <div class="card"><span class="n gray">${{ steps.metrics.outputs.skipped }}</span><div class="l">⏭ Skipped</div></div>
                   <div class="card"><span class="n blue">${{ steps.metrics.outputs.total }}</span><div class="l">🔢 Total</div></div>
                 </div>
-                <a class="btn btn-blue" href="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/run-${{ github.run_number }}">🔍 Relatório Allure (GitHub Pages)</a>
+                <a class="btn btn-gray" href="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/run-${{ github.run_number }}">🔍 Relatório Allure (GitHub Pages)</a>
                 <a class="btn btn-gray" href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}">⚙️ Ver Execução no GitHub Actions</a>
                 <a class="btn btn-gray" href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts">📦 Download Artefatos (90 dias)</a>
               </div>
@@ -355,7 +355,7 @@ jobs:
                     <div class="card"><span class="n blue">${{ steps.metrics.outputs.total }}</span><div class="l">🔢 Total</div></div>
                   </div>
                   
-                  <a class="btn btn-blue" href="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/run-${{ github.run_number }}">🔍 Analisar Evidências no Allure</a>
+                  <a class="btn btn-gray" href="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/run-${{ github.run_number }}">🔍 Analisar Evidências no Allure</a>
                   <a class="btn btn-gray" href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}">⚙️ Ver Log Completo no GitHub Actions</a>
                   <a class="btn btn-gray" href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts">📦 Baixar Prints e Vídeos (Artefatos)</a>
                 </div>
