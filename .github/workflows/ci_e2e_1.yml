@@ -81,6 +81,43 @@ jobs:
           enable_jekyll: false
           commit_message: "ci: deploy report run ${{ github.run_number }}"
 
+      # - name: Limpar Relatórios e Vídeos Antigos (>15 dias)
+      #   if: always()
+      #   run: |
+      #     git config --global user.name "github-actions[bot]"
+      #     git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      #     # Clona a branch de páginas para fazer a manutenção do espaço
+      #     git clone --branch gh-pages https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git repo-pages
+
+      #     # Se o teste PASSOU, elimina os vídeos gerados localmente nesta run para não subir lixo
+      #     if [ "${{ steps.cypress.outcome }}" = "success" ]; then
+      #       echo "✅ Teste passou com sucesso. Eliminando mídias locais para poupar espaço..."
+      #       rm -rf cypress/videos/* || true
+      #     fi
+
+      #     cd repo-pages
+
+      #     if [ -d "reports" ]; then
+      #       echo "🔍 Iniciando manutenção programada de armazenamento..."
+
+      #       # 🛑 REMOVE APENAS OS VÍDEOS (.mp4) COM MAIS DE 15 DIAS DE EXISTÊNCIA
+      #       find reports/ -type f -name "*.mp4" -mtime +15 -exec rm -f {} \;
+      #       echo "✅ Vídeos com mais de 15 dias removidos do servidor Pages."
+
+      #       # 🗓️ MANTÉM APENAS OS ÚLTIMOS 15 DIAS DE RELATÓRIOS/SCREENSHOTS (Últimas 800 runs)
+      #       cd reports
+      #       ls -d */ 2>/dev/null | sort -n | head -n -800 | xargs rm -rf 2>/dev/null || true
+      #       cd ..
+
+      #       # Se houver alterações na faxina (arquivos velhos deletados), commita de volta para o Git
+      #       if [ -n "$(git status --porcelain)" ]; then
+      #         git add .
+      #         git commit -m "ci: faxina preventiva (limpeza de relatórios e vídeos >15d)"
+      #         git push origin gh-pages
+      #       fi
+      #     fi
+
       - name: Enviar E-mail de SUCESSO ✅
         if: steps.cypress.outcome == 'success'
         uses: dawidd6/action-send-mail@v3
