@@ -77,52 +77,41 @@ jobs:
           destination_dir: reports/${{ github.run_number }}/01_e2e
           keep_files: true
           force_orphan: false
-          # 👇 Não espera o Pages terminar de publicar
           enable_jekyll: false
           commit_message: "ci: deploy report run ${{ github.run_number }}"
 
-      # 🧹 PASSO ATUALIZADO: Mantém o histórico de 14 dias, mas restringe vídeos a 2 dias apenas para falhas
-      # 🧹 PASSO CORRIGIDO: Limpeza confiável baseada no histórico do repositório
-      - name: Limpar Relatórios Antigos (>14 dias) e Vídeos (>2 dias)
+      # 🧹 PASSO DE LIMPEZA CONFIGURADO SEGUNDO AS SUAS REGRAS
+      - name: Limpar Relatórios Antigos (>14 dias) e Deletar Todos os Vídeos
         if: always()
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          # Clona apenas o último commit para economizar banda, mas traz a branch gh-pages
+          # Clona a branch de páginas para fazer a manutenção do espaço
           git clone --branch gh-pages https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git repo-pages
           cd repo-pages
 
           if [ -d "reports" ]; then
-            echo "🔍 Iniciando varredura e higienização estrutural..."
+            echo "🔍 Iniciando manutenção programada de armazenamento..."
             
-            # 1. Mantém apenas as últimas 800 pastas de runs (aproximadamente 2 semanas de execuções)
-            # Ordena numericamente as pastas e apaga as mais antigas excedentes
+            # 1. 🛑 APAGA TODOS OS VÍDEOS (.mp4) de qualquer execução existente no Pages
+            find reports/ -type f -name "*.mp4" -exec rm -f {} \;
+            echo "✅ Todos os vídeos foram removidos do servidor Pages."
+
+            # 2. 🗓️ MANTÉM APENAS OS ÚLTIMOS 14 DIAS DE RELATÓRIOS/SCREENSHOTS (Últimas 800 runs)
             cd reports
             ls -d */ 2>/dev/null | sort -n | head -n -800 | xargs rm -rf 2>/dev/null || true
             cd ..
+            echo "✅ Relatórios com mais de 2 semanas de uso limpos."
 
-            # 2. Localiza arquivos .mp4 antigos usando o log do Git para saber a idade real
-            # Se preferir simplificar e apagar TODOS os vídeos das execuções anteriores, deixando vídeo APENAS na run atual:
-            # find reports/ -type f -name "*.mp4" ! -path "reports/${{ github.run_number }}/*" -exec rm -f {} \;
-            
-            # Método alternativo seguro para mídias: apaga vídeos de subpastas de runs muito anteriores à atual
-            LIMITE_RUN=$(( ${{ github.run_number }} - 100 )) # Apaga vídeos de 100 runs atrás (~2 dias)
-            for pasta in reports/*; do
-              RUN_PASTA=$(basename "$pasta")
-              if [ "$RUN_PASTA" -lt "$LIMITE_RUN" ] 2>/dev/null; then
-                find "$pasta" -type f -name "*.mp4" -exec rm -f {} \;
-              fi
-            done
-
-            # Se houver alterações, commita de volta para o servidor
+            # Se houver alterações na faxina, commita as remoções de volta para o Git
             if [ -n "$(git status --porcelain)" ]; then
-              echo "🧹 Faxina concluída com sucesso!"
+              echo "🧹 Enviando atualizações de espaço para o servidor..."
               git add .
-              git commit -m "ci: limpeza de histórico antigo (retenção móvel ativa)"
+              git commit -m "ci: faxina automática (vídeos removidos / relatórios >14d limpos)"
               git push origin gh-pages
             else
-              echo "✅ Nenhum arquivo violou as regras de retenção hoje."
+              echo "✅ Nenhuma violação de espaço encontrada hoje."
             fi
           fi
 
