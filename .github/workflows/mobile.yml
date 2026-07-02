@@ -299,11 +299,68 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "🚨 [TESTE MOBILE] Falha detectada no fluxo do mobile"
           to: anderson.ssantos@jcatlm.com.br
-          cc: alfredo.junior@jcatlm.com.br
+          # cc: alfredo.junior@jcatlm.com.br
           from: "GitHub Actions CI"
-          body: |
-            Atenção! O teste automatizado mobile do Clube Giro FALHOU ou quebrou durante a última execução.
-            🔍 Analise o erro imediatamente através do link do relatório online:
-            https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/report.html
-            Passos detalhados e prints integrados:
-            https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/log.html
+          html_body: |
+            <!DOCTYPE html>
+            <html lang="pt-BR">
+            <head>
+              <meta charset="UTF-8">
+              <style>
+                body{font-family:Arial,sans-serif;background:#f4f4f4;padding:20px}
+                .wrap{max-width:620px;margin:auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+                .hdr{padding:28px 32px;text-align:center}
+                .hdr.ok{background:#1a7f37}.hdr.fail{background:#cf222e}
+                .hdr h1{color:#fff;margin:0;font-size:24px}
+                .hdr p{color:rgba(255,255,255,.8);margin:6px 0 0;font-size:13px}
+                .body{padding:28px 32px}
+                .alert-box{background-color:#fff9c4;border:1px solid #fbc02d;padding:16px;border-radius:6px;margin-bottom:24px;font-size:14px;color:#24292f}
+                .alert-box h3{margin:0 0 8px 0;color:#d32f2f;font-size:16px;display:flex;align-items:center;gap:6px}
+                .alert-box ul{margin:8px 0 0 0;padding-left:20px;color:#57606a}
+                .alert-box li{margin-bottom:6px}
+                .cards{display:flex;gap:10px;margin-bottom:24px}
+                .card{flex:1;text-align:center;padding:16px 6px;border-radius:6px;background:#f6f8fa;border:1px solid #e1e4e8}
+                .card .n{font-size:28px;font-weight:800;display:block}
+                .card .l{font-size:11px;color:#57606a;margin-top:4px}
+                .green{color:#1a7f37}.red{color:#cf222e}.gray{color:#57606a}.blue{color:#0969da}
+                a.btn{display:block;text-align:center;padding:13px;border-radius:6px;text-decoration:none;font-weight:700;font-size:14px;margin-bottom:10px}
+                .btn-blue{background:#0969da;color:#fff}
+                .btn-gray{background:#f6f8fa;color:#24292f;border:1px solid #d0d7de}
+                .footer{background:#f6f8fa;border-top:1px solid #e1e4e8;padding:14px 32px;text-align:center;font-size:11px;color:#8c959f}
+              </style>
+            </head>
+            <body>
+              <div class="wrap">
+                <div class="hdr fail">
+                  <h1>🚨 ${{ steps.metrics.outputs.status }}</h1>
+                  <p>Run #${{ github.run_number }} · ${{ steps.metrics.outputs.datetime }}</p>
+                </div>
+                
+                <div class="body">
+                  <div class="alert-box">
+                    <h3>⚠️ Falha Detectada no Monitoramento</h3>
+                    O teste automatizado mobile ou web encontrou um erro crítico durante a execução. 
+                    <strong>Possíveis causas:</strong>
+                    <ul>
+                      <li>Mudança ou quebra de seletores no layout (IDs, XPaths).</li>
+                      <li>Instabilidade ou lentidão na API/Back-end (Timeout).</li>
+                      <li>Ausência de variáveis de ambiente obrigatórias no CI.</li>
+                    </ul>
+                  </div>
+
+                  <div class="cards">
+                    <div class="card"><span class="n green">${{ steps.metrics.outputs.passed }}</span><div class="l">✅ Passed</div></div>
+                    <div class="card"><span class="n red">${{ steps.metrics.outputs.failed }}</span><div class="l">❌ Failed</div></div>
+                    <div class="card"><span class="n gray">${{ steps.metrics.outputs.skipped }}</span><div class="l">⏭ Skipped</div></div>
+                    <div class="card"><span class="n blue">${{ steps.metrics.outputs.total }}</span><div class="l">🔢 Total</div></div>
+                  </div>
+                  
+                  <a class="btn btn-blue" href="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/run-${{ github.run_number }}">🔍 Analisar Evidências no Allure</a>
+                  <a class="btn btn-gray" href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}">⚙️ Ver Log Completo no GitHub Actions</a>
+                  <a class="btn btn-gray" href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts">📦 Baixar Prints e Vídeos (Artefatos)</a>
+                </div>
+                
+                <div class="footer">Gerado automaticamente · Não responda este e-mail</div>
+              </div>
+            </body>
+            </html>
