@@ -11,7 +11,10 @@ Library     ../libraries/GmailHelper.py
 Deve realizar a busca de passagens com sucesso
     Start session
     # Login
-    Sleep    3s
+    
+    # Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Viagens"]    timeout=60s
+    Sleep    10s
+    Tratar Banner De Login Se Aparecer
     Log To Console    \nTela de Busca exibida com sucesso!
     Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Viagens"]    timeout=60s
 

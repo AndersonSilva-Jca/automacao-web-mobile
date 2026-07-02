@@ -42,7 +42,7 @@ Start session
     ...    appium:appPackage=com.everymind.clubegiro
     ...    appium:appActivity=.MainActivity
     ...    appWaitDuration=60000
-    ...    appium:noReset=${True}
+    # ...    appium:noReset=${True}
     ...    appium:autoGrantPermissions=${True}
     ...    appium:ensureWebviewsHavePages=${True}
     ...    appium:clearDeviceLogs=${True}
@@ -182,6 +182,20 @@ Tratar Banner De Cookie Se Aparecer
         Click Element    xpath=//android.widget.Button[@resource-id="adopt-accept-all-button"]
     ELSE
         Log To Console    \n[INFO] Banner de cookie não apareceu. Seguindo o fluxo...
+    END
+
+Tratar Banner De Login Se Aparecer
+    # 1. Verifica se o elemento aparece na tela em até 5 segundos
+    # O Robot guarda True (se achou) ou False (se não achou) na variável
+    ${cookie_visivel}=    Run Keyword And Return Status
+    ...    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Compre agora!"]    timeout=30s
+
+    # 2. Se a resposta for True, ele entra no bloco e clica para aceitar
+    IF    ${cookie_visivel}
+        Log To Console    \n[INFO] Banner de Login detectado. Aceitando...
+        Click Element    xpath=//android.widget.Button[@content-desc="Fechar"]
+    ELSE
+        Log To Console    \n[INFO] Banner de Login não apareceu. Seguindo o fluxo...
     END
 Close session
     Close Application

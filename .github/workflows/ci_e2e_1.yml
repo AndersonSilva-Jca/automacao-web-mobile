@@ -211,3 +211,13 @@ jobs:
             <hr style="border: 0; border-top: 1px solid #eee; margin: 25px 0;">
             <p style="font-size: 12px; color: #999; margin: 0;">Este é um alerta automático gerado pelo sistema de Qualidade de Software (QA).</p>
             </div>
+
+      - name: Enviar Alerta no WhatsApp Privado
+        if: steps.cypress.outcome == 'failure'
+        run: |
+          # 🔗 Link montado dinamicamente usando variáveis oficiais do GitHub do seu projeto
+          LINK_RELATORIO="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/${{ github.run_number }}/01_e2e/index.html"
+
+          TEXTO="🚨 *ALERTA DE MONITORAMENTO CRÍTICO* 🚨%0A%0AOs testes E2E do Cypress falharam no ambiente de Operação.%0A%0A*📊 INFORMAÇÕES DA EXECUÇÃO:*%0A• *ID da Run:* #${{ github.run_number }}%0A• *Data:* ${{ env.DATA_ALERTA }}%0A• *Hora:* ${{ env.HORA_ALERTA }} (Brasília)%0A• *Ferramenta:* Cypress Web%0A%0A*🖥️ LINK DO RELATÓRIO HTML:*%0A$LINK_RELATORIO"
+
+          curl -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ANDERSON }}&text=$TEXTO&apikey=${{ secrets.WA_API_KEY_ANDERSON }}"
