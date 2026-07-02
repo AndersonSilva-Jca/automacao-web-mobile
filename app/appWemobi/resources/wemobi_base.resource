@@ -97,33 +97,33 @@ Fechar modal do login
 
     Tap With Positions    1000ms    ${952, 186}
 
-Iniciar Gravacao Do Video
-    [Documentation]    Inicia a gravação da tela usando AppiumLibrary de forma segura
-    # O "Run Keyword And Ignore Error" garante que se o emulador não suportar a gravação, o teste CONTINUA rodando
-    Run Keyword And Ignore Error    Start Recording Screen
+# Iniciar Gravacao Do Video
+#     [Documentation]    Inicia a gravação da tela usando AppiumLibrary de forma segura
+#     # O "Run Keyword And Ignore Error" garante que se o emulador não suportar a gravação, o teste CONTINUA rodando
+#     Run Keyword And Ignore Error    Start Recording Screen
 
-Finalizar E Salvar Video
-    [Documentation]    Para a gravação e gera o arquivo video-execucao.mp4
-    Run Keyword And Ignore Error    Stop Recording Screen    filename=video-execucao
+# Finalizar E Salvar Video
+#     [Documentation]    Para a gravação e gera o arquivo video-execucao.mp4
+#     Run Keyword And Ignore Error    Stop Recording Screen    filename=video-execucao
 
-Encerrar Sessao E Gravar Video
-    [Documentation]    Garante capturas de evidência e fecha o app
-    # Captura o print screen se o teste falhar (Isso gera a imagem no Allure!)
-    Run Keyword If Test Failed    Capture Page Screenshot
-    Finalizar E Salvar Video
-    Close session
-
-
-Start Recording Screen
-    [Arguments]    ${arg1}=${EMPTY}
-    # Start recording screen via AppiumLibrary if available; allow being called without args
-    Run Keyword And Ignore Error    Start Screen Recording
+# Encerrar Sessao E Gravar Video
+#     [Documentation]    Garante capturas de evidência e fecha o app
+#     # Captura o print screen se o teste falhar (Isso gera a imagem no Allure!)
+#     Run Keyword If Test Failed    Capture Page Screenshot
+#     Finalizar E Salvar Video
+#     Close session
 
 
-Stop Recording Screen
-    [Arguments]    ${arg1}=${EMPTY}    ${filename}=${EMPTY}
-    # Stop recording screen and save file if supported
-    ${res}=    Run Keyword And Ignore Error    Stop Screen Recording
-    Run Keyword If    '${res[0]}' == 'PASS' and '${filename}' != ''    ${NONE}=    Set Variable    ${res}
-    ...    ELSE    Log To Console    \n[INFO] Stop Screen Recording not supported or failed: ${res}
+# Start Recording Screen
+#     [Arguments]    ${arg1}=${EMPTY}
+#     # Start recording screen via AppiumLibrary if available; allow being called without args
+#     Run Keyword And Ignore Error    Start Screen Recording
+
+
+# Stop Recording Screen
+#     [Arguments]    ${arg1}=${EMPTY}    ${filename}=${EMPTY}
+#     # Stop recording screen and save file if supported
+#     ${res}=    Run Keyword And Ignore Error    Stop Screen Recording
+#     Run Keyword If    '${res[0]}' == 'PASS' and '${filename}' != ''    ${NONE}=    Set Variable    ${res}
+#     ...    ELSE    Log To Console    \n[INFO] Stop Screen Recording not supported or failed: ${res}
 

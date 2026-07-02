@@ -9,7 +9,7 @@ Library             ../libraries/GmailHelper.py
 
 *** Test Cases ***
 Deve realizar o login com sucesso
-    # [Setup]       Iniciar Gravacao Do Video
+    
     Start session
     Login
         Click Element
