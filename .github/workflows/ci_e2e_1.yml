@@ -29,8 +29,8 @@ jobs:
         id: cypress
         continue-on-error: true
         with:
-          # command: npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/**/*.cy.js' --config video=true
-          command: npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/01_ODH.cy.js' --config video=true
+          command: npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/**/*.cy.js' --config video=true
+          # command: npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/01_ODH.cy.js' --config video=true
 
         env:
           LOGIN: ${{ secrets.LOGIN }}
@@ -80,8 +80,7 @@ jobs:
           enable_jekyll: false
           commit_message: "ci: deploy report run ${{ github.run_number }}"
 
-      # 🧹 PASSO DE LIMPEZA CONFIGURADO SEGUNDO AS SUAS REGRAS
-      - name: Limpar Relatórios Antigos (>14 dias) e Deletar Todos os Vídeos
+      - name: Limpar Relatórios e Vídeos Antigos (>15 dias)
         if: always()
         run: |
           git config --global user.name "github-actions[bot]"
@@ -89,29 +88,32 @@ jobs:
 
           # Clona a branch de páginas para fazer a manutenção do espaço
           git clone --branch gh-pages https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git repo-pages
+
+          # Se o teste PASSOU, elimina os vídeos gerados localmente nesta run para não subir lixo
+          if [ "${{ steps.cypress.outcome }}" = "success" ]; then
+            echo "✅ Teste passou com sucesso. Eliminando mídias locais para poupar espaço..."
+            rm -rf cypress/videos/* || true
+          fi
+
           cd repo-pages
 
           if [ -d "reports" ]; then
             echo "🔍 Iniciando manutenção programada de armazenamento..."
             
-            # 1. 🛑 APAGA TODOS OS VÍDEOS (.mp4) de qualquer execução existente no Pages
-            find reports/ -type f -name "*.mp4" -exec rm -f {} \;
-            echo "✅ Todos os vídeos foram removidos do servidor Pages."
+            # 🛑 REMOVE APENAS OS VÍDEOS (.mp4) COM MAIS DE 15 DIAS DE EXISTÊNCIA
+            find reports/ -type f -name "*.mp4" -mtime +15 -exec rm -f {} \;
+            echo "✅ Vídeos com mais de 15 dias removidos do servidor Pages."
 
-            # 2. 🗓️ MANTÉM APENAS OS ÚLTIMOS 14 DIAS DE RELATÓRIOS/SCREENSHOTS (Últimas 800 runs)
+            # 🗓️ MANTÉM APENAS OS ÚLTIMOS 15 DIAS DE RELATÓRIOS/SCREENSHOTS (Últimas 800 runs)
             cd reports
             ls -d */ 2>/dev/null | sort -n | head -n -800 | xargs rm -rf 2>/dev/null || true
             cd ..
-            echo "✅ Relatórios com mais de 2 semanas de uso limpos."
 
-            # Se houver alterações na faxina, commita as remoções de volta para o Git
+            # Se houver alterações na faxina (arquivos velhos deletados), commita de volta para o Git
             if [ -n "$(git status --porcelain)" ]; then
-              echo "🧹 Enviando atualizações de espaço para o servidor..."
               git add .
-              git commit -m "ci: faxina automática (vídeos removidos / relatórios >14d limpos)"
+              git commit -m "ci: faxina preventiva (limpeza de relatórios e vídeos >15d)"
               git push origin gh-pages
-            else
-              echo "✅ Nenhuma violação de espaço encontrada hoje."
             fi
           fi
 
