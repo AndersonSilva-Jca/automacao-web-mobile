@@ -29,8 +29,8 @@ jobs:
         id: cypress
         continue-on-error: true
         with:
-          # command: npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/**/*.cy.js' --config video=true
-          command: npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/01_ODH.cy.js' --config video=true
+          command: npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/**/*.cy.js' --config video=true
+          # command: npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/01_ODH.cy.js' --config video=true
 
         env:
           LOGIN: ${{ secrets.LOGIN }}
@@ -290,9 +290,9 @@ jobs:
           echo "📱 Disparando alerta para Anderson..."
           curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ANDERSON }}&text=${TEXTO_CODIFICADO}&apikey=7972786"
 
-          # # 7. Dispara o curl para o WhatsApp do Alfredo (Substitua a apikey fixa se ele tiver uma própria)
-          # echo "📱 Disparando alerta para Alfredo..."
-          # curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ALFREDO }}&text=${TEXTO_CODIFICADO}&apikey=8475079"
+          # 7. Dispara o curl para o WhatsApp do Alfredo (Substitua a apikey fixa se ele tiver uma própria)
+          echo "📱 Disparando alerta para Alfredo..."
+          curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ALFREDO }}&text=${TEXTO_CODIFICADO}&apikey=8475079"
 
           # 🚨 FIX: Força o GitHub Actions a marcar o Job como FALHA (esteira vermelha)
           echo "❌ O teste do Cypress falhou. Forçando status de erro na esteira."
