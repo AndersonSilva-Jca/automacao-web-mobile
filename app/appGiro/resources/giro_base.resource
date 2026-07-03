@@ -55,14 +55,14 @@ Start session
     ...    appium:adbExecTimeout=${60000}
     ...    appium:newCommandTimeout=${300}
     ...    appium:connectHardwareKeyboard=${True}
-    ...    noReset=false
-    ...    fullReset=false
+    # ...    noReset=false
+    # ...    fullReset=false
 
-    ...    appium:settings[enforceXPath1]=${True}
-    ...    appium:settings[waitForIdleTimeout]=${500}
+    # ...    appium:settings[enforceXPath1]=${True}
+    # ...    appium:settings[waitForIdleTimeout]=${500}
     
-    # 3. Dá um tempo estático para a tela de carregamento sumir antes do primeiro comando de busca
-    Sleep    10s
+    # # 3. Dá um tempo estático para a tela de carregamento sumir antes do primeiro comando de busca
+    # Sleep    10s
 
 Encerrar Sessao E Gravar Video
     [Documentation]    Garante que tira uma foto se falhar e fecha as sessões em segurança.

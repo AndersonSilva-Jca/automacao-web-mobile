@@ -6,9 +6,9 @@ Library           ../appGiro/resources/GeradorDataIda.py
 Library           ../appGiro/resources/GeradorDataVolta.py
 Library           ../libraries/GmailHelper.py
 Library           String
-Library           ImapLibrary2
+# Library           ImapLibrary2
 
-Test Setup        Start session
+# Test Setup        Start session
 # Test Teardown     Encerrar Sessao E Gravar Video
 
 *** Test Cases ***
