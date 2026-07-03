@@ -125,16 +125,16 @@ jobs:
             echo "=== Emulator pronto e bootado automaticamente pela Action ==="
             adb devices
 
-            echo "Instalando o aplicativo wemobi..."
-            adb install-multiple ./app/apks/wemobi/*.apk
             echo "Instalando o aplicativo Clube Giro..."
             adb install-multiple ./app/apks/clube_giro/*.apk
-            echo "Instalando o aplicativo cometa..."
-            adb install-multiple ./app/apks/cometa/*.apk
-            echo "Instalando o aplicativo 1001..."
-            adb install-multiple ./app/apks/1001/*.apk
-            echo "Instalando o aplicativo catarinense..."
-            adb install-multiple ./app/apks/catarinense/*.apk
+            # echo "Instalando o aplicativo wemobi..."
+            # adb install-multiple ./app/apks/wemobi/*.apk
+            # echo "Instalando o aplicativo cometa..."
+            # adb install-multiple ./app/apks/cometa/*.apk
+            # echo "Instalando o aplicativo 1001..."
+            # adb install-multiple ./app/apks/1001/*.apk
+            # echo "Instalando o aplicativo catarinense..."
+            # adb install-multiple ./app/apks/catarinense/*.apk
 
             echo "Garantindo que as animações do sistema estão desligadas..."
             adb shell settings put global window_animation_scale 0
