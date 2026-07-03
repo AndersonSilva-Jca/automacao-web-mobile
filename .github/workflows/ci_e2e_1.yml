@@ -193,7 +193,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "🚨[ALERTA WEB] ODH/ODP/Giro/Wemobi/UTP - Monit. Cont"
           to: anderson.ssantos@jcatlm.com.br
-          # cc: alfredo.junior@jcatlm.com.br,fabiano.britto@externo-jcatlm.com.br
+          cc: alfredo.junior@jcatlm.com.br,fabiano.britto@externo-jcatlm.com.br
           from: "Monitoramento Contínuo "
           # Alterado para html_body para suportar formatação profissional
           html_body: |

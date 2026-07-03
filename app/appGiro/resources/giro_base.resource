@@ -75,8 +75,6 @@ Login
     Sleep    7s
     Wait Until Element Is Visible    id=android:id/content    timeout=40s
     Log To Console    \nCarregando tela inicial!
-    Wait Until Element Is Visible    xpath=(//android.widget.TextView[@text="Temporada"])[1]    timeout=60s
-    Log To Console    \nTela inicial carregada com sucesso!
     Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Entrar"]    timeout=60s
      Log To Console    \nFazendo o Login...
     Click Element                    xpath=//android.view.ViewGroup[@content-desc="Entrar"]
