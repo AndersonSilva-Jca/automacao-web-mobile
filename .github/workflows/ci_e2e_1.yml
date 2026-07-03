@@ -48,7 +48,13 @@ jobs:
           WA_PHONE_ANDERSON: ${{ secrets.WA_PHONE_ANDERSON }}
           WA_PHONE_ALFREDO: ${{ secrets.WA_PHONE_ALFREDO }}
           WA_API_KEY_ANDERSON: ${{ secrets.WA_API_KEY_ANDERSON }}
+
           # CYPRESS_INTERNAL_NPM_REGISTRY_DISABLE_SSL_VERIFICATION: "1" # Força o bypass no Cypress
+      - name: Limpar videos do Workspace para liberar espaço
+        if: steps.cypress.outcome == 'success'
+        run: |
+          rm -rf .cypress/videos/
+
       - name: Salvar Evidências em Caso de Falha (Vídeos e Screenshots)
         if: steps.cypress.outcome == 'failure'
         uses: actions/upload-artifact@v4

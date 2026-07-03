@@ -157,6 +157,11 @@ jobs:
         #   LOGIN: ${{ secrets.APP_LOGIN }}
         #   PASSWORD: ${{ secrets.APP_PASSWORD }}
 
+      - name: Limpar APKs do Workspace para liberar espaço
+        if: always()
+        run: |
+          rm -rf ./app/apks/
+
       # ── Geração de relatório ─────────────────────────────────────────────
       - name: Gera relatório Allure
         if: always()
@@ -183,7 +188,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: allure-report
           destination_dir: reports/run-${{ github.run_number }}
-          keep_files: true
+          keep_files: false # Mude para false, suba o código e rode uma vez. Depois volte para true se quiser.
           commit_message: "report: run #${{ github.run_number }}"
 
       - name: Stop Appium
