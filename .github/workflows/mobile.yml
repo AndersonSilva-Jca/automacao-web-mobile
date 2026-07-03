@@ -358,7 +358,7 @@ jobs:
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "🚨[ALERTA] [MOBILE] Giro/Wemobi/UTP - Monit. Cont"
+          subject: "🚨[ALERTA MOBILE] Giro/Wemobi/UTP - Monit. Cont"
           to: anderson.ssantos@jcatlm.com.br
           # cc: alfredo.junior@jcatlm.com.br
           from: "GitHub Actions CI"
@@ -430,15 +430,15 @@ jobs:
         if: failure()
         run: |
 
-          TEXTO_BRUTO="🚨 *ALERTA DE MONITORAMENTO CRÍTICO WEB*
+          TEXTO_BRUTO="🚨 TESTE *[ALERTA MOBILE] Giro/Wemobi/UTP*
 
-          Os testes E2E do Cypress falharam no ambiente de Operação.
+          Os testes E2E do Robot Framework falharam no ambiente de Operação.
 
           *📊 INFORMAÇÕES DA EXECUÇÃO:*
           • *ID da Run:* #${{ github.run_number }}
           • *Data:* ${{ env.DATA_ALERTA }}
           • *Hora:* ${{ env.HORA_ALERTA }} (Brasília)
-          • *Ferramenta:* Cypress Web
+          • *Ferramenta:* Robot Framework
 
           *🖥️ LINK DO RELATÓRIO HTML COMPLETO:*
           $LINK_RELATORIO"
@@ -450,4 +450,4 @@ jobs:
           echo "📱 Disparando alerta para Anderson..."
           curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ANDERSON }}&text=${TEXTO_CODIFICADO}&apikey=7972786"
           # echo "📱 Disparando alerta para Alfredo..."
-          # curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ALFREDO }}&text=${TEXTO_CODIFICADO}&apikey=8475079"
+          curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ALFREDO }}&text=${TEXTO_CODIFICADO}&apikey=8475079"
