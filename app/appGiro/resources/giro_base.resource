@@ -4,7 +4,7 @@ Documentation     Suite de testes — automação mobile com tratamento condicio
 
 Library           OperatingSystem
 Library           String
-Library           AppiumLibrary
+Library           AppiumLibrary    run_on_failure=Capture Page Screenshot
 Library           ../../libraries/GmailHelper.py
 
 
@@ -55,31 +55,31 @@ Start session
     ...    appium:adbExecTimeout=${60000}
     ...    appium:newCommandTimeout=${300}
     ...    appium:connectHardwareKeyboard=${True}
-    # ...    noReset=false
-    # ...    fullReset=false
+    ...    noReset=${False}
+    ...    fullReset=${False}
 
-    # ...    appium:settings[enforceXPath1]=${True}
-    # ...    appium:settings[waitForIdleTimeout]=${500}
+    ...    appium:settings[enforceXPath1]=${True}
+    ...    appium:settings[waitForIdleTimeout]=${500}
     
     # 3. Dá um tempo estático para a tela de carregamento sumir antes do primeiro comando de busca
-    # Sleep    10s
+    Sleep    10s
 
-# Encerrar Sessao E Gravar Video
-#     [Documentation]    Garante que tira uma foto se falhar e fecha as sessões em segurança.
-#     # 1. Se o teste falhou, força a captura de ecrã imediatamente enquanto a sessão está viva
-#     Run Keyword If Test Failed    Run Keyword And Ignore Error    Capture Page Screenshot
+Encerrar Sessao E Gravar Video
+    [Documentation]    Garante que tira uma foto se falhar e fecha as sessões em segurança.
+    # 1. Se o teste falhou, força a captura de ecrã imediatamente enquanto a sessão está viva
+    Run Keyword If Test Failed    Run Keyword And Ignore Error    Capture Page Screenshot
     
-#     # 2. Para a gravação de vídeo ignorando erros caso o recurso não tenha iniciado
-#     Run Keyword And Ignore Error    Stop Screen Recording
+    # 2. Para a gravação de vídeo ignorando erros caso o recurso não tenha iniciado
+    Run Keyword And Ignore Error    Stop Screen Recording
     
-#     # 3. Fecha a aplicação em segurança
-#     Run Keyword And Ignore Error    Close Application
+    # 3. Fecha a aplicação em segurança
+    Run Keyword And Ignore Error    Close Application
 # ─────────────────────────────────────────────────────────────────────────────
 Login
-    # [Documentation]
-    # ...    Preenche credenciais e clica ACESSAR.
-    # ...    ► Antes de clicar: fotografa o ID do último e-mail (âncora).
-    # ...    ► Após clicar: verifica 2FA usando apenas e-mails com ID > âncora.
+    [Documentation]
+    ...    Preenche credenciais e clica ACESSAR.
+    ...    ► Antes de clicar: fotografa o ID do último e-mail (âncora).
+    ...    ► Após clicar: verifica 2FA usando apenas e-mails com ID > âncora.
     # Sleep    7s
     Wait Until Element Is Visible    id=android:id/content    timeout=40s
     Log To Console    \nCarregando tela inicial!
@@ -88,18 +88,18 @@ Login
 
     # Se estiver visível, segue o fluxo normal
     Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Entrar"]    timeout=300s
-     Log To Console    \nvisualizou o botão de Login...
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Entrar"]
 
-     Log To Console    \nclicando no botão de Login...
+     Log To Console    \nFazendo o Login...
     # Click Element                    xpath=//android.view.ViewGroup[@content-desc="Entrar"]
 
     Wait Until Element Is Visible
     ...    xpath=//android.widget.EditText[@resource-id="email-input-login"]    timeout=60s
-     Log To Console    \nentrando na tela de Login...
+     Log To Console    \nFazendo o Login 2...
     Input Text
     ...    xpath=//android.widget.EditText[@resource-id="email-input-login"]    ${LOGIN2}
     Log To Console    \nDigitando email...
+
     Input Password
     ...    xpath=//android.widget.EditText[@resource-id="password-input-login"]    ${SENHA2}
     Log To Console    \nDigitando senha...

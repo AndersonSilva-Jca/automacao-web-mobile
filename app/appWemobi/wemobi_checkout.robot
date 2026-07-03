@@ -21,14 +21,15 @@ Deve realizar a busca de passagens com sucesso
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Origem"]    timeout=45s
 
     Input Text    android=new UiSelector().className("android.widget.EditText")    São Paulo - Todos (SP)
+    Log To Console    \nDigitando origem...
 
-    Wait Until Element Is Visible
-    ...    xpath=//android.widget.TextView[@text="São Paulo - Todos (SP)"]
-    ...    timeout=30s
+    # Wait Until Element Is Visible
+    # ...    xpath=//android.widget.TextView[@text="São Paulo - Todos (SP)"]
+    # ...    timeout=30s
 
     Click Element    xpath=//android.widget.TextView[@text="São Paulo - Todos (SP)"]
 
-    Click Element    xpath=//android.widget.TextView[@text="São Paulo - Todos (SP)"]
+    # Click Element    xpath=//android.widget.TextView[@text="São Paulo - Todos (SP)"]
 
     Tap With Positions    1s    ${274, 418}
 
@@ -36,10 +37,10 @@ Deve realizar a busca de passagens com sucesso
  
 
     Input Text    android=new UiSelector().className("android.widget.EditText")    Rio de Janeiro - Todos (RJ)
+    Log To Console    \nDigitando destino...
 
-    Wait Until Element Is Visible
-    ...    accessibility_id=Rio de Janeiro - Todos (RJ), Localidade de Grupo
-    ...    timeout=15s
+
+:
 
     Click Element    accessibility_id=Rio de Janeiro - Todos (RJ), Localidade de Grupo
 
@@ -127,5 +128,4 @@ Deve realizar a busca de passagens com sucesso
 
     Log To Console    \nBusca de passagens realizada com sucesso!
 
-    Close session
 
