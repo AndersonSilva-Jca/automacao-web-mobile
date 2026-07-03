@@ -42,7 +42,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install allure-robotframework robotframework-appiumlibrary allure-python-commons robotframework-imaplibrary
+          pip install allure-robotframework robotframework-appiumlibrary allure-python-commons robotframework-imaplibrary2
 
       - name: Install Allure CLI
         run: |
@@ -109,6 +109,9 @@ jobs:
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REMETENTE_APP: ${{ secrets.REMETENTE_APP }}
+          WA_PHONE_ALFREDO: ${{ secrets.WA_PHONE_ALFREDO }}
+          WA_PHONE_ANDERSON: ${{ secrets.WA_PHONE_ANDERSON }}
+
         with:
           # Alterado para API 30 para ganho massivo de performance.
           # Se precisar REALMENTE da 34, mude de volta, mas o KVM acima já vai ajudar.
