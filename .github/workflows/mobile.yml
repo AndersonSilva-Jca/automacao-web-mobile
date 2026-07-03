@@ -146,7 +146,7 @@ jobs:
 
             echo "Iniciando a execução do Robot Framework com Allure..."
             # AJUSTADO: Adicionado o listener do Allure para alimentar o painel de monitoramento
-            robot -T -d ./results --listener allure_robotframework:$ALLURE_DIR --name "Monitoramento Mobile" app/appWemobi/wemobi_login.robot app/app1001/1001_login.robot app/appCatarinense/catarinense_login.robot
+            robot -T -d ./results --listener allure_robotframework:$ALLURE_DIR --name "Monitoramento Mobile" app/appWemobi/wemobi_login.robot app/app1001/1001_login.robot app/appCatarinense/catarinense_login.robot app/appGiro/giro_login.robot app/appCometa/cometa_login.robot
 
             echo $! > appium.pid
             kill $(cat appium.pid) || true
@@ -165,6 +165,13 @@ jobs:
             echo "<html><body><h2>Sem dados de teste — emulador ou Appium falhou.</h2></body></html>" \
               > allure-report/index.html
           fi
+
+      - name: Obter Data e Hora Atual (Brasília)
+        if: failure()
+        run: |
+          # Define o fuso horário para São Paulo e formata os dados
+          echo "DATA_ALERTA=$(TZ='America/Sao_Paulo' date +'%d/%m/%Y')" >> $GITHUB_ENV
+          echo "HORA_ALERTA=$(TZ='America/Sao_Paulo' date +'%H:%M:%S')" >> $GITHUB_ENV
 
       - name: Deploy Allure no GitHub Pages
         if: always()
@@ -418,3 +425,29 @@ jobs:
               </div>
             </body>
             </html>
+
+      - name: Enviar Alerta no WhatsApp Privado Anderson
+        if: failure()
+        run: |
+
+          TEXTO_BRUTO="🚨 *ALERTA DE MONITORAMENTO CRÍTICO WEB*
+
+          Os testes E2E do Cypress falharam no ambiente de Operação.
+
+          *📊 INFORMAÇÕES DA EXECUÇÃO:*
+          • *ID da Run:* #${{ github.run_number }}
+          • *Data:* ${{ env.DATA_ALERTA }}
+          • *Hora:* ${{ env.HORA_ALERTA }} (Brasília)
+          • *Ferramenta:* Cypress Web
+
+          *🖥️ LINK DO RELATÓRIO HTML COMPLETO:*
+          $LINK_RELATORIO"
+
+          # 5. Faz o URL Encode usando Python para evitar quebras no curl
+          TEXTO_CODIFICADO=$(python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))" "$TEXTO_BRUTO")
+
+          # 6. Dispara o curl para o seu WhatsApp (Anderson)
+          echo "📱 Disparando alerta para Anderson..."
+          curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ANDERSON }}&text=${TEXTO_CODIFICADO}&apikey=7972786"
+          # echo "📱 Disparando alerta para Alfredo..."
+          # curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ALFREDO }}&text=${TEXTO_CODIFICADO}&apikey=8475079"
