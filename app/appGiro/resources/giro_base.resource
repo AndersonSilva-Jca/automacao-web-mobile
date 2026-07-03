@@ -76,11 +76,11 @@ Encerrar Sessao E Gravar Video
     Run Keyword And Ignore Error    Close Application
 # ─────────────────────────────────────────────────────────────────────────────
 Login
-    [Documentation]
-    ...    Preenche credenciais e clica ACESSAR.
-    ...    ► Antes de clicar: fotografa o ID do último e-mail (âncora).
-    ...    ► Após clicar: verifica 2FA usando apenas e-mails com ID > âncora.
-    # Sleep    7s
+    # [Documentation]
+    # ...    Preenche credenciais e clica ACESSAR.
+    # ...    ► Antes de clicar: fotografa o ID do último e-mail (âncora).
+    # ...    ► Após clicar: verifica 2FA usando apenas e-mails com ID > âncora.
+    Sleep    7s
     Wait Until Element Is Visible    id=android:id/content    timeout=40s
     Log To Console    \nCarregando tela inicial!
     Wait Until Element Is Visible    xpath=/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout    timeout=60s

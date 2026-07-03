@@ -9,11 +9,11 @@ Library           String
 Library           ImapLibrary2
 
 Test Setup        Start session
-Test Teardown     Encerrar Sessao E Gravar Video
+# Test Teardown     Encerrar Sessao E Gravar Video
 
 *** Test Cases ***
 Deve Realizar O Login Com Sucesso Tratando 2FA Se Solicitado
-    [Tags]    smoke    login
+    # [Tags]    smoke    login
     Login
     Sleep    10s
     Tratar Banner De Login Se Aparecer
