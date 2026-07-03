@@ -83,11 +83,11 @@ Login
     # Sleep    7s
     Wait Until Element Is Visible    id=android:id/content    timeout=40s
     Log To Console    \nCarregando tela inicial!
-    wait Until Element Is Visible    xpath=/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout    timeout=60s
+    Wait Until Element Is Visible    xpath=/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout    timeout=60s
         Log To Console    \ncarregando tela inicial..
 
     # Se estiver visível, segue o fluxo normal
-    wait    xpath=//android.view.ViewGroup[@content-desc="Entrar"]    timeout=60s
+    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Entrar"]    timeout=300s
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Entrar"]
 
     #  Log To Console    \nFazendo o Login...
