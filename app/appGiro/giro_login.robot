@@ -1,15 +1,15 @@
+Robot Framework
 *** Settings ***
 Documentation     Suíte de testes focada no cenário de login da aplicação Clube Giro.
-Library           AppiumLibrary
+Resource          ../appGiro/resources/giro_base.resource
 Library           ../appGiro/resources/GeradorDataIda.py
 Library           ../appGiro/resources/GeradorDataVolta.py
 Library           ../libraries/GmailHelper.py
 Library           String
 Library           ImapLibrary2
-Resource          ../appGiro/resources/giro_base.resource
-Test Teardown     Encerrar Sessao Do Teste
 
 Test Setup        Start session
+Test Teardown     Encerrar Sessao E Gravar Video
 
 *** Test Cases ***
 Deve Realizar O Login Com Sucesso Tratando 2FA Se Solicitado
@@ -29,4 +29,3 @@ Deve Realizar O Login Com Sucesso Tratando 2FA Se Solicitado
     Click Element    xpath=//android.widget.Button[@resource-id="android:id/button1"]
     Log To Console    \nSaindo do App Giro.
     Wait Until Element Is Visible    accessibility_id=Entrar    timeout=60s
-    Close session

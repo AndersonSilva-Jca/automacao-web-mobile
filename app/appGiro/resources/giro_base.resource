@@ -1,8 +1,10 @@
+Robot Framework
 *** Settings ***
 Documentation     Suite de testes — automação mobile com tratamento condicional de 2FA por e-mail.
-Library           AppiumLibrary    run_on_failure=Capture Page Screenshot
+
 Library           OperatingSystem
 Library           String
+Library           AppiumLibrary    run_on_failure=Capture Page Screenshot
 Library           ../../libraries/GmailHelper.py
 
 
@@ -54,13 +56,15 @@ Start session
     ...    appium:newCommandTimeout=${300}
     ...    appium:connectHardwareKeyboard=${True}
 
-Register Keyword To Run On Failure    Capture Page Screenshot
-Encerrar Sessao Do Teste
-    [Documentation]    Tira print se houver falha e encerra o app sem quebrar o fluxo
-    # Se o teste falhou e a sessão ainda estiver viva, garante um print manual de segurança
+Encerrar Sessao E Gravar Video
+    [Documentation]    Garante que tira uma foto se falhar e fecha as sessões em segurança.
+    # 1. Se o teste falhou, força a captura de ecrã imediatamente enquanto a sessão está viva
     Run Keyword If Test Failed    Run Keyword And Ignore Error    Capture Page Screenshot
     
-    # Fecha o aplicativo ignorando erros caso o emulador ou app já tenham crashado
+    # 2. Para a gravação de vídeo ignorando erros caso o recurso não tenha iniciado
+    Run Keyword And Ignore Error    Stop Screen Recording
+    
+    # 3. Fecha a aplicação em segurança
     Run Keyword And Ignore Error    Close Application
 # ─────────────────────────────────────────────────────────────────────────────
 Login
@@ -69,7 +73,7 @@ Login
     ...    ► Antes de clicar: fotografa o ID do último e-mail (âncora).
     ...    ► Após clicar: verifica 2FA usando apenas e-mails com ID > âncora.
     Sleep    7s
-    Wait Until Element Is Visible    xpath=//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[1]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[2]/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/com.horcrux.svg.SvgView[2]    timeout=60s
+    Wait Until Element Is Visible    id=android:id/content    timeout=40s
     Log To Console    \nCarregando tela inicial!
     Wait Until Element Is Visible    xpath=(//android.widget.TextView[@text="Temporada"])[1]    timeout=60s
     Log To Console    \nTela inicial carregada com sucesso!
