@@ -57,7 +57,8 @@ jobs:
           path: |
             cypress/videos/
             cypress/screenshots/
-          retention-days: 7
+            cypress/reports
+          retention-days: 5
 
       - name: Obter Data e Hora Atual (Brasília)
         if: steps.cypress.outcome == 'failure'

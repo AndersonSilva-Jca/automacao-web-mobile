@@ -302,7 +302,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "✅[MOBILE] Giro/Wemobi/UTP - Monit. Cont."
           to: anderson.ssantos@jcatlm.com.br
-          cc: alfredo.junior@jcatlm.com.br
+          # cc: alfredo.junior@jcatlm.com.br,fabiano.britto@externo-jcatlm.com.br
           from: "GitHub Actions CI"
           html_body: |
             <!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
