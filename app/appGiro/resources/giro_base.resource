@@ -4,7 +4,7 @@ Documentation     Suite de testes — automação mobile com tratamento condicio
 
 Library           OperatingSystem
 Library           String
-Library           AppiumLibrary    run_on_failure=Capture Page Screenshot
+Library           AppiumLibrary
 Library           ../../libraries/GmailHelper.py
 
 
@@ -61,26 +61,26 @@ Start session
     # ...    appium:settings[enforceXPath1]=${True}
     # ...    appium:settings[waitForIdleTimeout]=${500}
     
-    # # 3. Dá um tempo estático para a tela de carregamento sumir antes do primeiro comando de busca
+    # 3. Dá um tempo estático para a tela de carregamento sumir antes do primeiro comando de busca
     # Sleep    10s
 
-Encerrar Sessao E Gravar Video
-    [Documentation]    Garante que tira uma foto se falhar e fecha as sessões em segurança.
-    # 1. Se o teste falhou, força a captura de ecrã imediatamente enquanto a sessão está viva
-    Run Keyword If Test Failed    Run Keyword And Ignore Error    Capture Page Screenshot
+# Encerrar Sessao E Gravar Video
+#     [Documentation]    Garante que tira uma foto se falhar e fecha as sessões em segurança.
+#     # 1. Se o teste falhou, força a captura de ecrã imediatamente enquanto a sessão está viva
+#     Run Keyword If Test Failed    Run Keyword And Ignore Error    Capture Page Screenshot
     
-    # 2. Para a gravação de vídeo ignorando erros caso o recurso não tenha iniciado
-    Run Keyword And Ignore Error    Stop Screen Recording
+#     # 2. Para a gravação de vídeo ignorando erros caso o recurso não tenha iniciado
+#     Run Keyword And Ignore Error    Stop Screen Recording
     
-    # 3. Fecha a aplicação em segurança
-    Run Keyword And Ignore Error    Close Application
+#     # 3. Fecha a aplicação em segurança
+#     Run Keyword And Ignore Error    Close Application
 # ─────────────────────────────────────────────────────────────────────────────
 Login
     # [Documentation]
     # ...    Preenche credenciais e clica ACESSAR.
     # ...    ► Antes de clicar: fotografa o ID do último e-mail (âncora).
     # ...    ► Após clicar: verifica 2FA usando apenas e-mails com ID > âncora.
-    Sleep    7s
+    # Sleep    7s
     Wait Until Element Is Visible    id=android:id/content    timeout=40s
     Log To Console    \nCarregando tela inicial!
     Wait Until Element Is Visible    xpath=/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout    timeout=60s
