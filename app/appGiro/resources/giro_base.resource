@@ -60,6 +60,10 @@ Login
     ...    ► Antes de clicar: fotografa o ID do último e-mail (âncora).
     ...    ► Após clicar: verifica 2FA usando apenas e-mails com ID > âncora.
     Sleep    7s
+    Wait Until Element Is Visible    xpath=//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[1]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[2]/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/com.horcrux.svg.SvgView[2]    timeout=60s
+    Log To Console    \nCarregando tela inicial!
+    Wait Until Element Is Visible    xpath=(//android.widget.TextView[@text="Temporada"])[1]    timeout=60s
+    Log To Console    \nTela inicial carregada com sucesso!
     Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Entrar"]    timeout=60s
      Log To Console    \nFazendo o Login...
     Click Element                    xpath=//android.view.ViewGroup[@content-desc="Entrar"]
