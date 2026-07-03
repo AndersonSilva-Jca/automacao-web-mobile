@@ -300,7 +300,7 @@ jobs:
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "✅[TESTE MOBILE] Giro/Wemobi/UTP - Monit. Cont."
+          subject: "✅[MOBILE] Giro/Wemobi/UTP - Monit. Cont."
           to: anderson.ssantos@jcatlm.com.br
           cc: alfredo.junior@jcatlm.com.br
           from: "GitHub Actions CI"
@@ -351,7 +351,7 @@ jobs:
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "🚨[TESTE MOBILE] Giro/Wemobi/UTP - Monit. Cont"
+          subject: "🚨[ALERTA] [MOBILE] Giro/Wemobi/UTP - Monit. Cont"
           to: anderson.ssantos@jcatlm.com.br
           # cc: alfredo.junior@jcatlm.com.br
           from: "GitHub Actions CI"
