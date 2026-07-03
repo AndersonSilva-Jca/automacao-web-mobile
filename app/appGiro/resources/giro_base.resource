@@ -88,17 +88,21 @@ Login
 
     # Se estiver visível, segue o fluxo normal
     Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Entrar"]    timeout=300s
+     Log To Console    \nvisualizou o botão de Login...
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Entrar"]
 
-    #  Log To Console    \nFazendo o Login...
+     Log To Console    \nclicando no botão de Login...
     # Click Element                    xpath=//android.view.ViewGroup[@content-desc="Entrar"]
 
     Wait Until Element Is Visible
     ...    xpath=//android.widget.EditText[@resource-id="email-input-login"]    timeout=60s
+     Log To Console    \nentrando na tela de Login...
     Input Text
     ...    xpath=//android.widget.EditText[@resource-id="email-input-login"]    ${LOGIN2}
+    Log To Console    \nDigitando email...
     Input Password
     ...    xpath=//android.widget.EditText[@resource-id="password-input-login"]    ${SENHA2}
+    Log To Console    \nDigitando senha...
 
     # ── Fotografa âncora ANTES de clicar ACESSAR ─────────────────────────────
     # ${id_ancora}=    Obter Id Ultimo Email Do Remetente
