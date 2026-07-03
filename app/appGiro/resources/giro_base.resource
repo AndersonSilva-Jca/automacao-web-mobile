@@ -58,7 +58,7 @@ Start session
     ...    noReset=false
     ...    fullReset=false
 
-    ...    appium:settings[enforceXPath1]=true
+    ...    appium:settings[enforceXPath1]=${True}
     ...    appium:settings[waitForIdleTimeout]=${500}
     
     # 3. Dá um tempo estático para a tela de carregamento sumir antes do primeiro comando de busca
