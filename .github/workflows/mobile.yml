@@ -188,7 +188,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: allure-report
           destination_dir: reports/run-${{ github.run_number }}
-          keep_files: false # Mude para false, suba o código e rode uma vez. Depois volte para true se quiser.
+          keep_files: true # Mude para false, suba o código e rode uma vez. Depois volte para true se quiser.
           commit_message: "report: run #${{ github.run_number }}"
 
       - name: Stop Appium
