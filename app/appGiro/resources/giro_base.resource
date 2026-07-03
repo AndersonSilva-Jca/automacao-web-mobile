@@ -60,9 +60,9 @@ Login
     ...    ► Antes de clicar: fotografa o ID do último e-mail (âncora).
     ...    ► Após clicar: verifica 2FA usando apenas e-mails com ID > âncora.
     Sleep    7s
-    Wait Until Element Is Visible    accessibility_id=Entrar    timeout=240s
+    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Entrar"]    timeout=60s
      Log To Console    \nFazendo o Login...
-    Click Element                    accessibility_id=Entrar
+    Click Element                    xpath=//android.view.ViewGroup[@content-desc="Entrar"]
 
     Wait Until Element Is Visible
     ...    xpath=//android.widget.EditText[@resource-id="email-input-login"]    timeout=60s
