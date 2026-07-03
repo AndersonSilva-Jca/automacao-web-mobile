@@ -58,14 +58,8 @@ Start session
     ...    noReset=false
     ...    fullReset=false
 
-    # ── CONFIGURAÇÕES DE BLINDAGEM CONTRA TRAVAMENTOS DE LOADING ──
-    # 1. Altera a forma de busca do XPath para não travar a UI Thread
-    # 1. Altera a forma de busca do XPath para não travar a UI Thread
-    # 1. Altera a forma de busca do XPath para não travar a UI Thread
-    Execute Script    mobile: updateSettings    enforceXPath1=true
-        
-    # 2. Reduz o tempo de espera do gerenciador de acessibilidade
-    Execute Script    mobile: updateSettings    waitForIdleTimeout=${500}
+    ...    appium:settings[enforceXPath1]=true
+    ...    appium:settings[waitForIdleTimeout]=${500}
     
     # 3. Dá um tempo estático para a tela de carregamento sumir antes do primeiro comando de busca
     Sleep    10s
