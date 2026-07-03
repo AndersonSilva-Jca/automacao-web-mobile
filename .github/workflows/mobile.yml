@@ -125,16 +125,16 @@ jobs:
             echo "=== Emulator pronto e bootado automaticamente pela Action ==="
             adb devices
 
-            echo "Instalando o aplicativo Clube Giro..."
-            adb install-multiple ./app/apks/clube_giro/*.apk
-            # echo "Instalando o aplicativo wemobi..."
-            # adb install-multiple ./app/apks/wemobi/*.apk
-            # echo "Instalando o aplicativo cometa..."
-            # adb install-multiple ./app/apks/cometa/*.apk
-            # echo "Instalando o aplicativo 1001..."
-            # adb install-multiple ./app/apks/1001/*.apk
-            # echo "Instalando o aplicativo catarinense..."
-            # adb install-multiple ./app/apks/catarinense/*.apk
+            # echo "Instalando o aplicativo Clube Giro..."
+            # adb install-multiple ./app/apks/clube_giro/*.apk
+            echo "Instalando o aplicativo wemobi..."
+            adb install-multiple ./app/apks/wemobi/*.apk
+            echo "Instalando o aplicativo cometa..."
+            adb install-multiple ./app/apks/cometa/*.apk
+            echo "Instalando o aplicativo 1001..."
+            adb install-multiple ./app/apks/1001/*.apk
+            echo "Instalando o aplicativo catarinense..."
+            adb install-multiple ./app/apks/catarinense/*.apk
 
             echo "Garantindo que as animações do sistema estão desligadas..."
             adb shell settings put global window_animation_scale 0
@@ -363,7 +363,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "🚨[ALERTA MOBILE] Giro/Wemobi/UTP - Monit. Cont"
           to: anderson.ssantos@jcatlm.com.br
-          # cc: alfredo.junior@jcatlm.com.br
+          # cc: alfredo.junior@jcatlm.com.br,fabiano.britto@externo-jcatlm.com.br
           from: "GitHub Actions CI"
           html_body: |
             <!DOCTYPE html>
@@ -435,7 +435,7 @@ jobs:
           # 1. Constrói a URL do relatório dinamicamente
           LINK_RELATORIO="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/run-${{ github.run_number }}"
 
-          TEXTO_BRUTO="🚨 TESTE *[ALERTA MOBILE] Giro/Wemobi/UTP*
+          TEXTO_BRUTO="🚨*[ALERTA MOBILE] Giro/Wemobi/UTP*
 
           Os testes E2E do Robot Framework falharam no ambiente de Operação.
 
@@ -454,5 +454,5 @@ jobs:
           # 6. Dispara o curl para o seu WhatsApp (Anderson)
           echo "📱 Disparando alerta para Anderson..."
           curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ANDERSON }}&text=${TEXTO_CODIFICADO}&apikey=7972786"
-          # echo "📱 Disparando alerta para Alfredo..."
-          # curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ALFREDO }}&text=${TEXTO_CODIFICADO}&apikey=8475079"
+          echo "📱 Disparando alerta para Alfredo..."
+          curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ALFREDO }}&text=${TEXTO_CODIFICADO}&apikey=8475079"
