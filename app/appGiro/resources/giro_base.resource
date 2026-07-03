@@ -55,6 +55,20 @@ Start session
     ...    appium:adbExecTimeout=${60000}
     ...    appium:newCommandTimeout=${300}
     ...    appium:connectHardwareKeyboard=${True}
+    ...    noReset=false
+    ...    fullReset=false
+
+    # ── CONFIGURAÇÕES DE BLINDAGEM CONTRA TRAVAMENTOS DE LOADING ──
+    # 1. Altera a forma de busca do XPath para não travar a UI Thread
+    # 1. Altera a forma de busca do XPath para não travar a UI Thread
+    # 1. Altera a forma de busca do XPath para não travar a UI Thread
+    Execute Script    mobile: updateSettings    enforceXPath1=true
+        
+    # 2. Reduz o tempo de espera do gerenciador de acessibilidade
+    Execute Script    mobile: updateSettings    waitForIdleTimeout=${500}
+    
+    # 3. Dá um tempo estático para a tela de carregamento sumir antes do primeiro comando de busca
+    Sleep    10s
 
 Encerrar Sessao E Gravar Video
     [Documentation]    Garante que tira uma foto se falhar e fecha as sessões em segurança.
@@ -73,6 +87,7 @@ Login
     ...    ► Antes de clicar: fotografa o ID do último e-mail (âncora).
     ...    ► Após clicar: verifica 2FA usando apenas e-mails com ID > âncora.
     Sleep    7s
+    wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Início"]    timeout=60s
 
 # Tenta verificar se o botão está na tela por 15 segundos
     ${botao_visivel}=    Run Keyword And Return Status    
