@@ -73,11 +73,27 @@ Login
     ...    ► Antes de clicar: fotografa o ID do último e-mail (âncora).
     ...    ► Após clicar: verifica 2FA usando apenas e-mails com ID > âncora.
     Sleep    7s
-    Wait Until Element Is Visible    id=android:id/content    timeout=40s
-    Log To Console    \nCarregando tela inicial!
-    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Entrar"]    timeout=60s
-     Log To Console    \nFazendo o Login...
-    Click Element                    xpath=//android.view.ViewGroup[@content-desc="Entrar"]
+
+# Tenta verificar se o botão está na tela por 15 segundos
+    ${botao_visivel}=    Run Keyword And Return Status    
+    ...    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Entrar"]    timeout=60s
+
+    # Se NÃO estiver visível, tiramos o raio-x da tela
+    IF    not ${botao_visivel}
+        Log To Console    \n[ALERTA] Botão Entrar não encontrado! Mapeando a tela...
+        Log Source        # <-- Este comando despeja o XML da tela inteira no seu log.html
+        Capture Page Screenshot   # <-- Força um print extra aqui por segurança
+        Fail    O botão Entrar não apareceu. Verifique o Log Source no relatório para ver o XML da tela.
+    END
+
+    # Se estiver visível, segue o fluxo normal
+    Click Element    xpath=//android.view.ViewGroup[@content-desc="Entrar"]
+
+    # Wait Until Element Is Visible    id=android:id/content    timeout=40s
+    # Log To Console    \nCarregando tela inicial!
+    # Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Entrar"]    timeout=60s
+    #  Log To Console    \nFazendo o Login...
+    # Click Element                    xpath=//android.view.ViewGroup[@content-desc="Entrar"]
 
     Wait Until Element Is Visible
     ...    xpath=//android.widget.EditText[@resource-id="email-input-login"]    timeout=60s
