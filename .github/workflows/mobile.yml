@@ -42,7 +42,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install allure-robotframework robotframework-appiumlibrary allure-python-commons robotframework-imaplibrary2
+          pip install allure-robotframework robotframework-appiumlibrary allure-python-commons robotframework-imaplibrary
 
       - name: Install Allure CLI
         run: |

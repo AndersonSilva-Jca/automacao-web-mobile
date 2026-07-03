@@ -1,9 +1,10 @@
 *** Settings ***
 Documentation     Suite de testes — automação mobile com tratamento condicional de 2FA por e-mail.
-Library           AppiumLibrary
+Library           AppiumLibrary    run_on_failure=Capture Page Screenshot
 Library           OperatingSystem
 Library           String
 Library           ../../libraries/GmailHelper.py
+
 
 *** Variables ***
 ${LOGIN2}               ${EMPTY}
@@ -53,6 +54,14 @@ Start session
     ...    appium:newCommandTimeout=${300}
     ...    appium:connectHardwareKeyboard=${True}
 
+Register Keyword To Run On Failure    Capture Page Screenshot
+Encerrar Sessao Do Teste
+    [Documentation]    Tira print se houver falha e encerra o app sem quebrar o fluxo
+    # Se o teste falhou e a sessão ainda estiver viva, garante um print manual de segurança
+    Run Keyword If Test Failed    Run Keyword And Ignore Error    Capture Page Screenshot
+    
+    # Fecha o aplicativo ignorando erros caso o emulador ou app já tenham crashado
+    Run Keyword And Ignore Error    Close Application
 # ─────────────────────────────────────────────────────────────────────────────
 Login
     [Documentation]
