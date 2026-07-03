@@ -84,18 +84,6 @@ Login
     wait Until Element Is Visible    xpath=/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout    timeout=60s
         Log To Console    \ncarregando tela inicial..
 
-# Tenta verificar se o botão está na tela por 15 segundos
-    ${botao_visivel}=    Run Keyword And Return Status    
-    ...    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Entrar"]    timeout=60s
-
-    # Se NÃO estiver visível, tiramos o raio-x da tela
-    IF    not ${botao_visivel}
-        Log To Console    \n[ALERTA] Botão Entrar não encontrado! Mapeando a tela...
-        Log Source        # <-- Este comando despeja o XML da tela inteira no seu log.html
-        Capture Page Screenshot   # <-- Força um print extra aqui por segurança
-        Fail    O botão Entrar não apareceu. Verifique o Log Source no relatório para ver o XML da tela.
-    END
-
     # Se estiver visível, segue o fluxo normal
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Entrar"]
 
