@@ -80,8 +80,9 @@ Login
     ...    Preenche credenciais e clica ACESSAR.
     ...    ► Antes de clicar: fotografa o ID do último e-mail (âncora).
     ...    ► Após clicar: verifica 2FA usando apenas e-mails com ID > âncora.
-    Sleep    7s
-    wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Início"]    timeout=60s
+    # Sleep    7s
+    wait Until Element Is Visible    xpath=/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout    timeout=60s
+        Log To Console    \ncarregando tela inicial..
 
 # Tenta verificar se o botão está na tela por 15 segundos
     ${botao_visivel}=    Run Keyword And Return Status    

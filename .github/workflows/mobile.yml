@@ -456,4 +456,4 @@ jobs:
           echo "📱 Disparando alerta para Anderson..."
           curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ANDERSON }}&text=${TEXTO_CODIFICADO}&apikey=7972786"
           # echo "📱 Disparando alerta para Alfredo..."
-          curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ALFREDO }}&text=${TEXTO_CODIFICADO}&apikey=8475079"
+          # curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ALFREDO }}&text=${TEXTO_CODIFICADO}&apikey=8475079"
