@@ -1,3 +1,467 @@
+# name: Mobile - Giro/Wemobi/UTP
+
+# on:
+#   schedule:
+#     # Roda nos minutos 0 and 40 das horas pares (0, 2, 4, 6...)
+#     - cron: "0 0-22/2 * * *"
+#     # Roda no minuto 20 das horas ímpares (1, 3, 5, 7...)
+#     - cron: "0 1-23/2 * * *"
+#   # - cron: "30 1-23/2 * * *"
+#   # - cron: "00 * * * *"
+#   # - cron: "40 * * * *"
+#   workflow_dispatch:
+
+# env:
+#   RESULTS_DIR: results
+#   ALLURE_DIR: allure-results
+
+# jobs:
+#   mobile-tests:
+#     runs-on: ubuntu-latest
+
+#     permissions:
+#       contents: write
+
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v4
+
+#       - name: Setup Python
+#         uses: actions/setup-python@v5
+#         with:
+#           python-version: "3.11"
+
+#       - name: Cache pip
+#         uses: actions/cache@v4
+#         with:
+#           path: ~/.cache/pip
+#           key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+#           restore-keys: ${{ runner.os }}-pip-
+
+#       - name: Install Python dependencies
+#         run: |
+#           python -m pip install --upgrade pip
+#           pip install -r requirements.txt
+#           pip install allure-robotframework robotframework-appiumlibrary allure-python-commons robotframework-imaplibrary2
+
+#       - name: Install Allure CLI
+#         run: |
+#           wget -qO allure.tgz \
+#             https://github.com/allure-framework/allure2/releases/download/2.27.0/allure-2.27.0.tgz
+#           sudo tar -xzf allure.tgz -C /opt
+#           sudo ln -s /opt/allure-2.27.0/bin/allure /usr/local/bin/allure
+#           allure --version
+
+#       - name: Setup Node 20
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: 20
+
+#       - name: Cache Appium drivers
+#         uses: actions/cache@v4
+#         with:
+#           path: ~/.appium
+#           key: ${{ runner.os }}-appium-uiautomator2-v2
+
+#       - name: Install Appium + uiautomator2
+#         run: |
+#           npm install -g appium
+#           appium driver install uiautomator2 || true
+
+#       # ── Appium em step separado (run: aceita for-loop normalmente) ───────
+#       # ── Configurar KVM para aceleração de hardware ───────────────────────
+#       - name: Enable KVM group permissions
+#         run: |
+#           sudo chmod 666 /dev/kvm
+
+#       # ── Appium em step separado ──────────────────────────────────────────
+#       - name: Start Appium
+#         shell: bash
+#         run: |
+#           appium \
+#             --allow-insecure chromedriver_autodownload \
+#             --relaxed-security \
+#             --log appium.log \
+#             > appium.log 2>&1 &
+
+#           echo $! > appium.pid
+
+#           timeout 90 bash -c '
+#             until curl -s http://127.0.0.1:4723/status | grep -q "\"ready\":true"
+#             do
+#               sleep 2
+#             done
+#           '
+#           curl http://127.0.0.1:4723/status
+
+#       # ── Emulator + testes otimizados ─────────────────────────────────────
+#       - name: Run Tests with Android Emulator
+#         id: run_tests
+#         uses: reactivecircus/android-emulator-runner@v2
+#         env:
+#           LOGIN: ${{ secrets.LOGIN }}
+#           SENHA: ${{ secrets.SENHA }}
+#           LOGIN2: ${{ secrets.LOGIN2 }}
+#           SENHA2: ${{ secrets.SENHA2 }}
+#           GMAIL_USER: ${{ secrets.GMAIL_USER }}
+#           GMAIL_APP_PASS: ${{ secrets.GMAIL_APP_PASS }}
+#           MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+#           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#           REMETENTE_APP: ${{ secrets.REMETENTE_APP }}
+#           WA_PHONE_ALFREDO: ${{ secrets.WA_PHONE_ALFREDO }}
+#           WA_PHONE_ANDERSON: ${{ secrets.WA_PHONE_ANDERSON }}
+
+#         with:
+#           # Alterado para API 30 para ganho massivo de performance.
+#           # Se precisar REALMENTE da 34, mude de volta, mas o KVM acima já vai ajudar.
+#           api-level: 30
+#           arch: x86_64
+#           profile: pixel_7
+#           disable-animations: true
+#           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
+
+#           script: |
+#             echo "=== Emulator pronto e bootado automaticamente pela Action ==="
+#             adb devices
+
+#             # echo "Instalando o aplicativo Clube Giro..."
+#             # adb install-multiple ./app/apks/clube_giro/*.apk
+#             echo "Instalando o aplicativo wemobi..."
+#             adb install-multiple ./app/apks/wemobi/*.apk
+#             echo "Instalando o aplicativo cometa..."
+#             adb install-multiple ./app/apks/cometa/*.apk
+#             echo "Instalando o aplicativo 1001..."
+#             adb install-multiple ./app/apks/1001/*.apk
+#             echo "Instalando o aplicativo catarinense..."
+#             adb install-multiple ./app/apks/catarinense/*.apk
+
+#             echo "Garantindo que as animações do sistema estão desligadas..."
+#             adb shell settings put global window_animation_scale 0
+#             adb shell settings put global transition_animation_scale 0
+#             adb shell settings put global animator_duration_scale 0
+
+#             echo "Criando pastas de resultados..."
+#             mkdir -p $RESULTS_DIR $ALLURE_DIR
+
+#             echo "Verificando status do Appium..."
+#             curl http://localhost:4723/status
+
+#             echo "Iniciando a execução do Robot Framework com Allure..."
+#             # AJUSTADO: Adicionado o listener do Allure para alimentar o painel de monitoramento
+#             robot -T -d ./results --listener allure_robotframework:$ALLURE_DIR --name "Monitoramento Mobile" app/appWemobi/wemobi_login.robot app/app1001/1001_login.robot app/appCatarinense/catarinense_login.robot app/appCometa/cometa_login.robot
+
+#             echo $! > appium.pid
+#             kill $(cat appium.pid) || true
+#         # env:
+#         #   LOGIN: ${{ secrets.APP_LOGIN }}
+#         #   PASSWORD: ${{ secrets.APP_PASSWORD }}
+
+#       - name: Limpar APKs do Workspace para liberar espaço
+#         if: always()
+#         run: |
+#           rm -rf ./app/apks/
+
+#       # ── Geração de relatório ─────────────────────────────────────────────
+#       - name: Gera relatório Allure
+#         if: always()
+#         run: |
+#           if [ -d "$ALLURE_DIR" ] && [ "$(ls -A $ALLURE_DIR 2>/dev/null)" ]; then
+#             allure generate $ALLURE_DIR --clean -o allure-report
+#           else
+#             mkdir -p allure-report
+#             echo "<html><body><h2>Sem dados de teste — emulador ou Appium falhou.</h2></body></html>" \
+#               > allure-report/index.html
+#           fi
+
+#       - name: Obter Data e Hora Atual (Brasília)
+#         if: failure()
+#         run: |
+#           # Define o fuso horário para São Paulo e formata os dados
+#           echo "DATA_ALERTA=$(TZ='America/Sao_Paulo' date +'%d/%m/%Y')" >> $GITHUB_ENV
+#           echo "HORA_ALERTA=$(TZ='America/Sao_Paulo' date +'%H:%M:%S')" >> $GITHUB_ENV
+
+#       - name: Deploy Allure no GitHub Pages
+#         if: always()
+#         uses: peaceiris/actions-gh-pages@v4
+#         with:
+#           github_token: ${{ secrets.GITHUB_TOKEN }}
+#           publish_dir: allure-report
+#           destination_dir: reports/run-${{ github.run_number }}
+#           keep_files: true # Mude para false, suba o código e rode uma vez. Depois volte para true se quiser.
+#           commit_message: "report: run #${{ github.run_number }}"
+
+#       - name: Stop Appium
+#         if: always()
+#         run: kill $APPIUM_PID 2>/dev/null || true
+
+#       # ── Artefatos ────────────────────────────────────────────────────────
+#       - name: Upload Allure Report
+#         if: always()
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: allure-report-run-${{ github.run_number }}
+#           path: allure-report
+#           retention-days: 90
+
+#       - name: Upload Robot Results
+#         if: always()
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: robot-results-run-${{ github.run_number }}
+#           path: ${{ env.RESULTS_DIR }}
+#           retention-days: 90
+
+#       - name: Upload Appium Log
+#         if: always()
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: appium-log-run-${{ github.run_number }}
+#           path: appium.log
+#           retention-days: 30
+
+#       - name: Extrair métricas
+#         if: always()
+#         id: metrics
+#         shell: python
+#         run: |
+#           import os
+#           import re
+#           import xml.etree.ElementTree as ET
+#           from datetime import datetime
+#           import zoneinfo
+
+#           results_dir = os.environ.get("RESULTS_DIR", "results")
+#           passed, failed, skipped = 0, 0, 0
+#           error_details = "Nenhuma falha crítica registrada no arquivo de resultados."
+
+#           # Localiza o arquivo output.xml do Robot
+#           output_file = None
+#           if os.path.exists(results_dir):
+#               for f in os.listdir(results_dir):
+#                   if f.startswith("output") and f.endswith(".xml"):
+#                       output_file = os.path.join(results_dir, f)
+#                       break
+
+#           if output_file and os.path.getsize(output_file) > 0:
+#               try:
+#                   tree = ET.parse(output_file)
+#                   root = tree.getroot()
+
+#                   # Captura totais do bloco <total>
+#                   stat_elem = root.find(".//total/stat")
+#                   if stat_elem is not None:
+#                       passed = int(stat_elem.get("pass", 0))
+#                       failed = int(stat_elem.get("fail", 0))
+#                       skipped = int(stat_elem.get("skip", 0))
+
+#                   # Captura detalhes dos testes falhados
+#                   if failed > 0:
+#                       errors_list = []
+#                       for test in root.findall(".//test"):
+#                           status = test.find("status")
+#                           if status is not None and status.get("status") == "FAIL":
+#                               test_name = test.get("name", "Unknown Test")
+#                               err_msg = status.text if status.text else "Sem mensagem de erro detalhada."
+#                               # Sanitiza strings para o GitHub Output e HTML
+#                               err_msg = err_msg.replace("\n", " ").replace("\r", "").strip()
+#                               errors_list.append(f"<li><strong>{test_name}:</strong> {err_msg}</li>")
+#                       if errors_list:
+#                           error_details = "".join(errors_list)
+#               except Exception as e:
+#                   error_details = f"<li>Erro ao ler arquivo XML de resultados: {str(e)}</li>"
+#                   failed = 1
+
+#           total = passed + failed + skipped
+
+#           # Define o status geral
+#           status_str = "PASSOU ✅" if failed == 0 and total > 0 else "FALHOU ❌"
+#           status_raw = "success" if failed == 0 and total > 0 else "failure"
+
+#           sp_tz = zoneinfo.ZoneInfo("America/Sao_Paulo")
+#           now_str = datetime.now(sp_tz).strftime("%d/%m/%Y às %H:%M")
+
+#           # Escreve as saídas no arquivo de Outputs do GitHub
+#           with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as f:
+#               f.write(f"passed={passed}\n")
+#               f.write(f"failed={failed}\n")
+#               f.write(f"skipped={skipped}\n")
+#               f.write(f"total={total}\n")
+#               f.write(f"status={status_str}\n")
+#               f.write(f"status_raw={status_raw}\n")
+#               f.write(f"datetime={now_str}\n")
+#               f.write(f"errors={error_details}\n")
+
+#       # ── Geração do GitHub Step Summary ───────────────────────────────────
+#       - name: GitHub Summary
+#         if: always()
+#         run: |
+#           PAGES_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/run-${{ github.run_number }}"
+#           echo "## ${{ steps.metrics.outputs.status }} — Run #${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+#           echo "| | Qtd |" >> $GITHUB_STEP_SUMMARY
+#           echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+#           echo "| ✅ Passed  | ${{ steps.metrics.outputs.passed }}  |" >> $GITHUB_STEP_SUMMARY
+#           echo "| ❌ Failed  | ${{ steps.metrics.outputs.failed }}  |" >> $GITHUB_STEP_SUMMARY
+#           echo "| ⏭️ Skipped | ${{ steps.metrics.outputs.skipped }} |" >> $GITHUB_STEP_SUMMARY
+#           echo "| 🔢 Total   | ${{ steps.metrics.outputs.total }}   |" >> $GITHUB_STEP_SUMMARY
+#           echo "" >> $GITHUB_STEP_SUMMARY
+#           echo "🔗 [Allure Report]($PAGES_URL)" >> $GITHUB_STEP_SUMMARY
+
+#       - name: Enviar E-mail de Sucesso
+#         if: success() # Só roda se todos os testes passarem
+#         uses: dawidd6/action-send-mail@v4
+#         with:
+#           server_address: smtp.gmail.com
+#           server_port: 465
+#           username: ${{ secrets.MAIL_USERNAME }}
+#           password: ${{ secrets.MAIL_PASSWORD }}
+#           subject: "✅[MOBILE] Giro/Wemobi/UTP - Monit. Cont."
+#           to: anderson.ssantos@jcatlm.com.br
+#           cc: alfredo.junior@jcatlm.com.br,fabiano.britto@externo-jcatlm.com.br
+#           from: "Monitoramento Contínuo"
+#           html_body: |
+#             <!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
+#             <style>
+#               body{font-family:Arial,sans-serif;background:#f4f4f4;padding:20px}
+#               .wrap{max-width:620px;margin:auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+#               .hdr{padding:28px 32px;text-align:center}
+#               .hdr.ok{background:#1a7f37}.hdr.fail{background:#cf222e}
+#               .hdr h1{color:#fff;margin:0;font-size:24px}
+#               .hdr p{color:rgba(255,255,255,.8);margin:6px 0 0;font-size:13px}
+#               .body{padding:28px 32px}
+#               .cards{display:flex;gap:10px;margin-bottom:24px}
+#               .card{flex:1;text-align:center;padding:16px 6px;border-radius:6px;background:#f6f8fa;border:1px solid #e1e4e8}
+#               .card .n{font-size:28px;font-weight:800;display:block}
+#               .card .l{font-size:11px;color:#57606a;margin-top:4px}
+#               .green{color:#1a7f37}.red{color:#cf222e}.gray{color:#57606a}.blue{color:#0969da}
+#               a.btn{display:block;text-align:center;padding:13px;border-radius:6px;text-decoration:none;font-weight:700;font-size:14px;margin-bottom:10px}
+#               .btn-blue{background:#0969da;color:#fff}
+#               .btn-gray{background:#f6f8fa;color:#24292f;border:1px solid #d0d7de}
+#               .footer{background:#f6f8fa;border-top:1px solid #e1e4e8;padding:14px 32px;text-align:center;font-size:11px;color:#8c959f}
+#             </style></head><body>
+#             <div class="wrap">
+#               <div class="hdr ${{ steps.metrics.outputs.status_raw == 'success' && 'ok' || 'fail' }}">
+#                 <h1>${{ steps.metrics.outputs.status }}</h1>
+#                 <p>Run #${{ github.run_number }} · ${{ steps.metrics.outputs.datetime }}</p>
+#               </div>
+#               <div class="body">
+#                 <div class="cards">
+#                   <div class="card"><span class="n green">${{ steps.metrics.outputs.passed }}</span><div class="l">✅ Passed</div></div>
+#                   <div class="card"><span class="n red">${{ steps.metrics.outputs.failed }}</span><div class="l">❌ Failed</div></div>
+#                   <div class="card"><span class="n gray">${{ steps.metrics.outputs.skipped }}</span><div class="l">⏭ Skipped</div></div>
+#                   <div class="card"><span class="n blue">${{ steps.metrics.outputs.total }}</span><div class="l">🔢 Total</div></div>
+#                 </div>
+#                 <a class="btn btn-gray" href="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/run-${{ github.run_number }}">🔍 Relatório Allure (GitHub Pages)</a>
+#                 <a class="btn btn-gray" href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}">⚙️ Ver Execução no GitHub Actions</a>
+#                 <a class="btn btn-gray" href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts">📦 Download Artefatos (90 dias)</a>
+#               </div>
+#               <div class="footer">Gerado automaticamente · Não responda este e-mail</div>
+#             </div></body></html>
+
+#       - name: Enviar E-mail de Falha
+#         if: failure() # Só roda se o Robot Framework acusar alguma falha de tela ou elemento
+#         uses: dawidd6/action-send-mail@v4
+#         with:
+#           server_address: smtp.gmail.com
+#           server_port: 465
+#           username: ${{ secrets.MAIL_USERNAME }}
+#           password: ${{ secrets.MAIL_PASSWORD }}
+#           subject: "🚨[ALERTA MOBILE] Giro/Wemobi/UTP - Monit. Cont"
+#           to: anderson.ssantos@jcatlm.com.br
+#           cc: alfredo.junior@jcatlm.com.br,fabiano.britto@externo-jcatlm.com.br
+#           from: "Monitoramento Contínuo"
+#           html_body: |
+#             <!DOCTYPE html>
+#             <html lang="pt-BR">
+#             <head>
+#               <meta charset="UTF-8">
+#               <style>
+#                 body{font-family:Arial,sans-serif;background:#f4f4f4;padding:20px}
+#                 .wrap{max-width:620px;margin:auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+#                 .hdr{padding:28px 32px;text-align:center}
+#                 .hdr.ok{background:#1a7f37}.hdr.fail{background:#cf222e}
+#                 .hdr h1{color:#fff;margin:0;font-size:24px}
+#                 .hdr p{color:rgba(255,255,255,.8);margin:6px 0 0;font-size:13px}
+#                 .body{padding:28px 32px}
+#                 .alert-box{background-color:#fff9c4;border:1px solid #fbc02d;padding:16px;border-radius:6px;margin-bottom:24px;font-size:14px;color:#24292f}
+#                 .alert-box h3{margin:0 0 8px 0;color:#d32f2f;font-size:16px;display:flex;align-items:center;gap:6px}
+#                 .alert-box ul{margin:8px 0 0 0;padding-left:20px;color:#57606a}
+#                 .alert-box li{margin-bottom:6px}
+#                 .cards{display:flex;gap:10px;margin-bottom:24px}
+#                 .card{flex:1;text-align:center;padding:16px 6px;border-radius:6px;background:#f6f8fa;border:1px solid #e1e4e8}
+#                 .card .n{font-size:28px;font-weight:800;display:block}
+#                 .card .l{font-size:11px;color:#57606a;margin-top:4px}
+#                 .green{color:#1a7f37}.red{color:#cf222e}.gray{color:#57606a}.blue{color:#0969da}
+#                 a.btn{display:block;text-align:center;padding:13px;border-radius:6px;text-decoration:none;font-weight:700;font-size:14px;margin-bottom:10px}
+#                 .btn-blue{background:#0969da;color:#fff}
+#                 .btn-gray{background:#f6f8fa;color:#24292f;border:1px solid #d0d7de}
+#                 .footer{background:#f6f8fa;border-top:1px solid #e1e4e8;padding:14px 32px;text-align:center;font-size:11px;color:#8c959f}
+#               </style>
+#             </head>
+#             <body>
+#               <div class="wrap">
+#                 <div class="hdr fail">
+#                   <h1>🚨 ${{ steps.metrics.outputs.status }}</h1>
+#                   <p>Run #${{ github.run_number }} · ${{ steps.metrics.outputs.datetime }}</p>
+#                 </div>
+
+#                 <div class="body">
+#                   <div class="alert-box">
+#                     <h3>⚠️ Falha Detectada no Monitoramento</h3>
+#                     O teste automatizado mobile ou web encontrou um erro crítico durante a execução.
+#                     <strong>Possíveis causas:</strong>
+#                     <ul>
+#                       <li>Mudança ou quebra de seletores no layout (IDs, XPaths).</li>
+#                       <li>Instabilidade ou lentidão na API/Back-end (Timeout).</li>
+#                       <li>Ausência de variáveis de ambiente obrigatórias no CI.</li>
+#                     </ul>
+#                   </div>
+
+#                   <div class="cards">
+#                     <div class="card"><span class="n green">${{ steps.metrics.outputs.passed }}</span><div class="l">✅ Passed</div></div>
+#                     <div class="card"><span class="n red">${{ steps.metrics.outputs.failed }}</span><div class="l">❌ Failed</div></div>
+#                     <div class="card"><span class="n gray">${{ steps.metrics.outputs.skipped }}</span><div class="l">⏭ Skipped</div></div>
+#                     <div class="card"><span class="n blue">${{ steps.metrics.outputs.total }}</span><div class="l">🔢 Total</div></div>
+#                   </div>
+
+#                   <a class="btn btn-gray" href="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/run-${{ github.run_number }}">🔍 Analisar Evidências no Allure</a>
+#                   <a class="btn btn-gray" href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}">⚙️ Ver Log Completo no GitHub Actions</a>
+#                   <a class="btn btn-gray" href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts">📦 Baixar Prints e Vídeos (Artefatos)</a>
+#                 </div>
+
+#                 <div class="footer">Gerado automaticamente · Não responda este e-mail</div>
+#               </div>
+#             </body>
+#             </html>
+
+#       - name: Enviar Alerta no WhatsApp Privado Anderson
+#         if: failure()
+#         run: |
+#           # 1. Constrói a URL do relatório dinamicamente
+#           LINK_RELATORIO="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/run-${{ github.run_number }}"
+
+#           TEXTO_BRUTO="🚨*[ALERTA MOBILE] Giro/Wemobi/UTP*
+
+#           Os testes E2E do Robot Framework falharam no ambiente de Operação.
+
+#           *📊 INFORMAÇÕES DA EXECUÇÃO:*
+#           • *ID da Run:* #${{ github.run_number }}
+#           • *Data:* ${{ env.DATA_ALERTA }}
+#           • *Hora:* ${{ env.HORA_ALERTA }} (Brasília)
+#           • *Ferramenta:* Robot Framework
+
+#           *🖥️ LINK DO RELATÓRIO HTML COMPLETO:*
+#           $LINK_RELATORIO"
+
+#           # 5. Faz o URL Encode usando Python para evitar quebras no curl
+#           TEXTO_CODIFICADO=$(python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))" "$TEXTO_BRUTO")
+
+#           # 6. Dispara o curl para o seu WhatsApp (Anderson)
+#           echo "📱 Disparando alerta para Anderson..."
+#           curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ANDERSON }}&text=${TEXTO_CODIFICADO}&apikey=7972786"
+#           echo "📱 Disparando alerta para Alfredo..."
+#           curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ALFREDO }}&text=${TEXTO_CODIFICADO}&apikey=8475079"
+
 name: Mobile - Giro/Wemobi/UTP
 
 on:
@@ -10,6 +474,14 @@ on:
   # - cron: "00 * * * *"
   # - cron: "40 * * * *"
   workflow_dispatch:
+
+# Evita que este workflow rode em paralelo com outro que também faça deploy
+# na branch gh-pages (ex: ci_e2e_1.yml). Como os crons são iguais/próximos,
+# os dois disparavam ao mesmo tempo e um push sobrescrevia o outro no meio
+# do processo, derrubando o deploy do Allure quase sempre.
+concurrency:
+  group: gh-pages-deploy
+  cancel-in-progress: false
 
 env:
   RESULTS_DIR: results
@@ -161,6 +633,15 @@ jobs:
         if: always()
         run: |
           rm -rf ./app/apks/
+
+      - name: Remover vídeos de execuções bem-sucedidas
+        # Só roda quando TODOS os testes passaram, para não subir vídeo
+        # desnecessário no Allure/GitHub Pages. Se algum teste falhar, os
+        # vídeos/screenshots daquela falha continuam intactos como evidência.
+        if: steps.run_tests.outcome == 'success'
+        run: |
+          find $ALLURE_DIR -type f \( -name "*.mp4" -o -name "*.webm" \) -delete 2>/dev/null || true
+          find $RESULTS_DIR -type f \( -name "*.mp4" -o -name "*.webm" \) -delete 2>/dev/null || true
 
       # ── Geração de relatório ─────────────────────────────────────────────
       - name: Gera relatório Allure
