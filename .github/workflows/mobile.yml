@@ -204,7 +204,10 @@ jobs:
 
       - name: Stop Appium
         if: always()
-        run: kill $APPIUM_PID 2>/dev/null || true
+        run: |
+          if [ -f appium.pid ]; then
+            kill "$(cat appium.pid)" 2>/dev/null || true
+          fi
 
       # ── Artefatos ────────────────────────────────────────────────────────
       - name: Upload Allure Report

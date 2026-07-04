@@ -94,42 +94,32 @@ jobs:
           enable_jekyll: false
           commit_message: "ci: deploy report run ${{ github.run_number }}"
 
-      # - name: Limpar Relatórios e Vídeos Antigos (>15 dias)
-      #   if: always()
-      #   run: |
-      #     git config --global user.name "github-actions[bot]"
-      #     git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Limpar Relatórios e Vídeos Antigos do GitHub Pages
+        if: always()
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      #     # Clona a branch de páginas para fazer a manutenção do espaço
-      #     git clone --branch gh-pages https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git repo-pages
+          # Clona só a branch de páginas (sem histórico) para não baixar o peso todo
+          git clone --depth 1 --branch gh-pages https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git repo-pages
+          cd repo-pages
 
-      #     # Se o teste PASSOU, elimina os vídeos gerados localmente nesta run para não subir lixo
-      #     if [ "${{ steps.cypress.outcome }}" = "success" ]; then
-      #       echo "✅ Teste passou com sucesso. Eliminando mídias locais para poupar espaço..."
-      #       rm -rf cypress/videos/* || true
-      #     fi
+          if [ -d "reports" ]; then
+            echo "🔍 Mantendo apenas as últimas 100 execuções em reports/ ..."
+            cd reports
+            # Mantém só os 80 diretórios de run mais recentes (ordenação numérica pelo run_number)
+            ls -d */ 2>/dev/null | sed 's#/##' | sort -n | head -n -80 | xargs -r -I{} rm -rf {}
+            cd ..
 
-      #     cd repo-pages
-
-      #     if [ -d "reports" ]; then
-      #       echo "🔍 Iniciando manutenção programada de armazenamento..."
-
-      #       # 🛑 REMOVE APENAS OS VÍDEOS (.mp4) COM MAIS DE 15 DIAS DE EXISTÊNCIA
-      #       find reports/ -type f -name "*.mp4" -mtime +15 -exec rm -f {} \;
-      #       echo "✅ Vídeos com mais de 15 dias removidos do servidor Pages."
-
-      #       # 🗓️ MANTÉM APENAS OS ÚLTIMOS 15 DIAS DE RELATÓRIOS/SCREENSHOTS (Últimas 800 runs)
-      #       cd reports
-      #       ls -d */ 2>/dev/null | sort -n | head -n -800 | xargs rm -rf 2>/dev/null || true
-      #       cd ..
-
-      #       # Se houver alterações na faxina (arquivos velhos deletados), commita de volta para o Git
-      #       if [ -n "$(git status --porcelain)" ]; then
-      #         git add .
-      #         git commit -m "ci: faxina preventiva (limpeza de relatórios e vídeos >15d)"
-      #         git push origin gh-pages
-      #       fi
-      #     fi
+            if [ -n "$(git status --porcelain)" ]; then
+              git add -A
+              git commit -m "ci: faxina automática (mantendo últimas 100 execuções)"
+              git push origin gh-pages
+              echo "✅ Faxina concluída e publicada."
+            else
+              echo "ℹ️ Nada para limpar desta vez."
+            fi
+          fi
 
       - name: Enviar E-mail de SUCESSO ✅
         if: steps.cypress.outcome == 'success'
