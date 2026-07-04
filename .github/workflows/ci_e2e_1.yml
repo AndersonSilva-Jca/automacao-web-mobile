@@ -108,7 +108,7 @@ jobs:
             echo "🔍 Mantendo apenas as últimas 100 execuções em reports/ ..."
             cd reports
             # Mantém só os 80 diretórios de run mais recentes (ordenação numérica pelo run_number)
-            ls -d */ 2>/dev/null | sed 's#/##' | sort -n | head -n -80 | xargs -r -I{} rm -rf {}
+            ls -d */ 2>/dev/null | sed 's#/##' | sort -n | head -n -70 | xargs -r -I{} rm -rf {}
             cd ..
 
             if [ -n "$(git status --porcelain)" ]; then
