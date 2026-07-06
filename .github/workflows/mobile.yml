@@ -192,15 +192,50 @@ jobs:
           echo "DATA_ALERTA=$(TZ='America/Sao_Paulo' date +'%d/%m/%Y')" >> $GITHUB_ENV
           echo "HORA_ALERTA=$(TZ='America/Sao_Paulo' date +'%H:%M:%S')" >> $GITHUB_ENV
 
-      - name: Deploy Allure no GitHub Pages
+      - name: Limpar Relatórios e Vídeos Antigos (>5 dias)
         if: always()
-        uses: peaceiris/actions-gh-pages@v4
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Clona a branch de páginas para fazer a manutenção do espaço
+          git clone --branch gh-pages https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git repo-pages
+
+          # Se o teste MOBILE PASSOU, elimina os vídeos/prints locais para poupar espaço
+          if [ "${{ steps.execute-tests.outcome }}" = "success" ]; then
+            echo "✅ Teste mobile passou. Eliminando mídias locais desta run..."
+            rm -rf results/*.png results/*.mp4 || true
+          fi
+
+          cd repo-pages
+
+          if [ -d "reports" ]; then
+            echo "🔍 Analisando histórico de relatórios Mobile dos últimos 5 dias..."
+            
+            # 🛑 REGRA DOS 5 DIAS: Remove pastas mobile antigas criadas há mais de 5 dias
+            find reports/ -maxdepth 1 -mindepth 1 -type d -name "mobile-run-*" -mtime +5 -exec rm -rf {} \;
+            echo "✅ Relatórios mobile antigos (>5 dias) foram deletados."
+
+            # Sincroniza a limpeza com o servidor do GitHub
+            if [ -n "$(git status --porcelain)" ]; then
+              git add .
+              git commit -m "ci: faxina programada automática Mobile (>5 dias)"
+              git push origin gh-pages
+            fi
+          fi
+
+      # 🚀 2️⃣ DEPLOY DO RELATÓRIO DO MOBILE PARA O GITHUB PAGES
+      - name: Deploy do Relatório para GitHub Pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: allure-report
-          destination_dir: reports/run-${{ github.run_number }}
-          keep_files: true # Mude para false, suba o código e rode uma vez. Depois volte para true se quiser.
-          commit_message: "report: run #${{ github.run_number }}"
+          publish_dir: ./results # Pasta onde o Robot Framework gera as mídias/HTML
+          destination_dir: reports/mobile-run-${{ github.run_number }}
+          keep_files: true
+          force_orphan: false
+          enable_jekyll: false
+          commit_message: "ci: deploy report mobile run ${{ github.run_number }}"
 
       - name: Stop Appium
         if: always()
@@ -451,8 +486,20 @@ jobs:
       - name: Enviar Alerta no WhatsApp Privado Anderson
         if: failure()
         run: |
+
+          # 1. Localiza o primeiro screenshot de falha gerado pelo Robot Framework (.png)
+          SCREENSHOT_FILE=$(find results -type f -name "*.png" | head -n 1)
+
+          # 2. Se a imagem existir, faz o upload temporário instantâneo para visualização imediata no WhatsApp
+          LINK_IMAGEM_DIRETA="Sem imagem disponível"
+          if [ -f "$SCREENSHOT_FILE" ]; then
+            LINK_IMAGEM_DIRETA=$(curl -s -F "file=@$SCREENSHOT_FILE" https://file.io | python3 -c "import sys, json; data=json.load(sys.stdin); print(data.get('link', 'Erro ao subir imagem'))")
+          fi
+
+          # 3. Monta o link do relatório oficial do Robot no Pages
+          LINK_RELATORIO="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/mobile-run-${{ github.run_number }}/report.html"
           # 1. Constrói a URL do relatório dinamicamente
-          LINK_RELATORIO="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/run-${{ github.run_number }}"
+          # LINK_RELATORIO="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/run-${{ github.run_number }}"
 
           TEXTO_BRUTO="🚨*[ALERTA MOBILE] Giro/Wemobi/UTP*
 
