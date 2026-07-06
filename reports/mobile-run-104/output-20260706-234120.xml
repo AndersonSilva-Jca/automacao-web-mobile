@@ -1,0 +1,882 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.4.2 (Python 3.11.15 on linux)" generated="2026-07-06T23:41:20.342456" rpa="false" schemaversion="5">
+<suite id="s1" name="Monitoramento Mobile">
+<suite id="s1-s1" name="Wemobi Login" source="/home/runner/work/automacao-web-mobile/automacao-web-mobile/app/appWemobi/wemobi_login.robot">
+<test id="s1-s1-t1" name="Deve realizar o login com sucesso" line="11">
+<kw name="Start session" owner="wemobi_base">
+<kw name="Carregar Variaveis De Ambiente" owner="wemobi_base">
+<kw name="Evaluate" owner="BuiltIn">
+<arg>__import__('dotenv').load_dotenv(dotenv_path='app/.env')</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2026-07-06T23:41:20.613110" elapsed="0.003144"/>
+</kw>
+<kw name="Get Environment Variable" owner="OperatingSystem">
+<msg time="2026-07-06T23:41:20.616703" level="INFO">${env_login} = anderson.ssantos@jcatlm.com.br</msg>
+<var>${env_login}</var>
+<arg>LOGIN</arg>
+<doc>Returns the value of an environment variable with the given name.</doc>
+<status status="PASS" start="2026-07-06T23:41:20.616509" elapsed="0.000227"/>
+</kw>
+<kw name="Get Environment Variable" owner="OperatingSystem">
+<msg time="2026-07-06T23:41:20.617265" level="INFO">${env_senha} = AndJca26</msg>
+<var>${env_senha}</var>
+<arg>SENHA</arg>
+<doc>Returns the value of an environment variable with the given name.</doc>
+<status status="PASS" start="2026-07-06T23:41:20.617085" elapsed="0.000211"/>
+</kw>
+<kw name="Get Environment Variable" owner="OperatingSystem">
+<msg time="2026-07-06T23:41:20.617757" level="INFO">${env_mail_username} = anderson.ssantos@jcatlm.com.br</msg>
+<var>${env_mail_username}</var>
+<arg>MAIL_USERNAME</arg>
+<doc>Returns the value of an environment variable with the given name.</doc>
+<status status="PASS" start="2026-07-06T23:41:20.617588" elapsed="0.000198"/>
+</kw>
+<kw name="Set Global Variable" owner="BuiltIn">
+<msg time="2026-07-06T23:41:20.618462" level="INFO">${LOGIN} = anderson.ssantos@jcatlm.com.br</msg>
+<arg>${LOGIN}</arg>
+<arg>${env_login}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="PASS" start="2026-07-06T23:41:20.618096" elapsed="0.000413"/>
+</kw>
+<kw name="Set Global Variable" owner="BuiltIn">
+<msg time="2026-07-06T23:41:20.619199" level="INFO">${SENHA} = AndJca26</msg>
+<arg>${SENHA}</arg>
+<arg>${env_senha}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="PASS" start="2026-07-06T23:41:20.618812" elapsed="0.000432"/>
+</kw>
+<kw name="Set Global Variable" owner="BuiltIn">
+<msg time="2026-07-06T23:41:20.619853" level="INFO">${MAIL_USERNAME} = anderson.ssantos@jcatlm.com.br</msg>
+<arg>${MAIL_USERNAME}</arg>
+<arg>${env_mail_username}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="PASS" start="2026-07-06T23:41:20.619520" elapsed="0.000376"/>
+</kw>
+<doc>Carrega o arquivo .env e cria as variáveis globais para o teste.</doc>
+<status status="PASS" start="2026-07-06T23:41:20.612452" elapsed="0.007709"/>
+</kw>
+<kw name="Open Application" owner="AppiumLibrary">
+<arg>http://127.0.0.1:4723</arg>
+<arg>platformName=Android</arg>
+<arg>appium:deviceName=emulator-5554</arg>
+<arg>appium:automationName=UiAutomator2</arg>
+<arg>appium:appPackage=me.wemobi.wemobiapp</arg>
+<arg>appium:appActivity=.MainActivity</arg>
+<arg>appWaitDuration=50000</arg>
+<arg>appium:autoGrantPermissions=${True}</arg>
+<arg>appium:ensureWebviewsHavePages=${True}</arg>
+<arg>appium:clearDeviceLogs=${True}</arg>
+<arg>appium:nativeWebScreenshot=${True}</arg>
+<arg>appium:uiautomator2ServerLaunchTimeout=${90000}</arg>
+<arg>appium:uiautomator2ServerInstallTimeout=${60000}</arg>
+<arg>appium:adbExecTimeout=${60000}</arg>
+<arg>appium:newCommandTimeout=${300}</arg>
+<arg>appium:connectHardwareKeyboard=${True}</arg>
+<arg>appium:socketConnectionTimeout=${90000}</arg>
+<doc>Opens a new application to the given Appium server.
+Capabilities of appium server, Android and iOS,
+Please check https://appium.io/docs/en/2.19/guides/caps/
+| *Option*            | *Man.* | *Description*     |
+| remote_url          | Yes    | Appium server url |
+| alias               | No     | alias             |</doc>
+<status status="PASS" start="2026-07-06T23:41:20.620353" elapsed="4.796239"/>
+</kw>
+<status status="PASS" start="2026-07-06T23:41:20.611558" elapsed="4.809674"/>
+</kw>
+<kw name="Login" owner="wemobi_base">
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-06T23:41:32.422794" level="INFO">Slept 7 seconds.</msg>
+<arg>7s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-06T23:41:25.422180" elapsed="7.000741"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2026-07-06T23:41:34.013929" level="INFO">xpath criteria: //android.widget.EditText[@resource-id="user"]
+xpath criteria: //android.widget.EditText[@resource-id="user"]</msg>
+<arg>xpath=//android.widget.EditText[@resource-id="user"]</arg>
+<arg>timeout=240s</arg>
+<doc>Waits until the element specified by the ``locator`` is visible.</doc>
+<status status="PASS" start="2026-07-06T23:41:32.423431" elapsed="1.590661"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>\nFazendo o Login...</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-07-06T23:41:34.014629" elapsed="0.000678"/>
+</kw>
+<kw name="Input Text" owner="AppiumLibrary">
+<msg time="2026-07-06T23:41:34.016653" level="INFO">Typing text 'anderson.ssantos@jcatlm.com.br' into text field 'xpath=//android.widget.EditText[@resource-id="user"]'</msg>
+<msg time="2026-07-06T23:41:34.465798" level="INFO">xpath criteria: //android.widget.EditText[@resource-id="user"]</msg>
+<arg>xpath=//android.widget.EditText[@resource-id="user"]</arg>
+<arg>${LOGIN}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-07-06T23:41:34.015579" elapsed="0.450343"/>
+</kw>
+<kw name="Input Password" owner="AppiumLibrary">
+<msg time="2026-07-06T23:41:34.468342" level="INFO">Typing password into text field 'xpath=//android.widget.EditText[@resource-id="password"]'</msg>
+<msg time="2026-07-06T23:41:35.382133" level="INFO">xpath criteria: //android.widget.EditText[@resource-id="password"]</msg>
+<arg>xpath=//android.widget.EditText[@resource-id="password"]</arg>
+<arg>${SENHA}</arg>
+<doc>Types the given password into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-07-06T23:41:34.466616" elapsed="0.915612"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2026-07-06T23:41:36.252655" level="INFO">xpath criteria: //android.view.ViewGroup[@content-desc="Entrar"]/android.view.View</msg>
+<arg>xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View</arg>
+<arg>timeout=60s</arg>
+<doc>Waits until the element specified by the ``locator`` is visible.</doc>
+<status status="PASS" start="2026-07-06T23:41:35.382850" elapsed="0.869907"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2026-07-06T23:41:36.254154" level="INFO">Clicking element 'xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View'.</msg>
+<msg time="2026-07-06T23:41:36.382668" level="INFO">xpath criteria: //android.view.ViewGroup[@content-desc="Entrar"]/android.view.View</msg>
+<arg>xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View</arg>
+<doc>Clicks the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-07-06T23:41:36.253237" elapsed="0.129555"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-06T23:41:41.384055" level="INFO">Slept 5 seconds.</msg>
+<arg>5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-06T23:41:36.383460" elapsed="5.000724"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2026-07-06T23:41:41.477075" level="INFO">xpath criteria: //android.view.ViewGroup[@content-desc="Buscar"]/android.view.View</msg>
+<arg>xpath=//android.view.ViewGroup[@content-desc="Buscar"]/android.view.View</arg>
+<arg>timeout=90s</arg>
+<doc>Waits until the element specified by the ``locator`` is visible.</doc>
+<status status="PASS" start="2026-07-06T23:41:41.384730" elapsed="0.092448"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>\nTela de Busca exibida com sucesso!</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-07-06T23:41:41.477683" elapsed="0.000377"/>
+</kw>
+<status status="PASS" start="2026-07-06T23:41:25.421719" elapsed="16.056520"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2026-07-06T23:41:41.479420" level="INFO">Clicking element 'android=new UiSelector().className("android.widget.ImageView").instance(1)'.</msg>
+<arg>android=new UiSelector().className("android.widget.ImageView").instance(1)</arg>
+<doc>Clicks the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-07-06T23:41:41.478486" elapsed="0.097732"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2026-07-06T23:41:43.417860" level="INFO">xpath criteria: //android.widget.TextView[@resource-id="name"]
+xpath criteria: //android.widget.TextView[@resource-id="name"]</msg>
+<arg>xpath=//android.widget.TextView[@resource-id="name"]</arg>
+<doc>Waits until the element specified by the ``locator`` is visible.</doc>
+<status status="PASS" start="2026-07-06T23:41:41.576861" elapsed="1.841400"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>\nLogin realizado com sucesso!</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-07-06T23:41:43.419030" elapsed="0.000552"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2026-07-06T23:41:43.772331" level="INFO">xpath criteria: //android.widget.TextView[@resource-id="name"]</msg>
+<arg>xpath=//android.widget.TextView[@resource-id="name"]</arg>
+<doc>Waits until the element specified by the ``locator`` is visible.</doc>
+<status status="PASS" start="2026-07-06T23:41:43.419897" elapsed="0.352569"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>\nOlá, Anderson Silva</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-07-06T23:41:43.773219" elapsed="0.000790"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2026-07-06T23:41:43.877858" level="INFO">xpath criteria: //android.widget.TextView[@text="Sair"]</msg>
+<arg>xpath=//android.widget.TextView[@text="Sair"]</arg>
+<arg>timeout=30s</arg>
+<doc>Waits until the element specified by the ``locator`` is visible.</doc>
+<status status="PASS" start="2026-07-06T23:41:43.774289" elapsed="0.103706"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>\nClicando em Sair...</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-07-06T23:41:43.878474" elapsed="0.000351"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2026-07-06T23:41:43.879947" level="INFO">Clicking element 'xpath=//android.widget.TextView[@text="Sair"]'.</msg>
+<msg time="2026-07-06T23:41:44.019457" level="INFO">xpath criteria: //android.widget.TextView[@text="Sair"]</msg>
+<arg>xpath=//android.widget.TextView[@text="Sair"]</arg>
+<doc>Clicks the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-07-06T23:41:43.879101" elapsed="0.140466"/>
+</kw>
+<status status="PASS" start="2026-07-06T23:41:20.610826" elapsed="23.409316"/>
+</test>
+<status status="PASS" start="2026-07-06T23:41:20.399509" elapsed="23.624045"/>
+</suite>
+<suite id="s1-s2" name="1001 Login" source="/home/runner/work/automacao-web-mobile/automacao-web-mobile/app/app1001/1001_login.robot">
+<test id="s1-s2-t1" name="Deve realizar o login com sucesso" line="10">
+<kw name="Start session" owner="base">
+<kw name="Carregar Variaveis De Ambiente" owner="base">
+<kw name="Evaluate" owner="BuiltIn">
+<arg>__import__('dotenv').load_dotenv(dotenv_path='app/.env')</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2026-07-06T23:41:44.035283" elapsed="0.000367"/>
+</kw>
+<kw name="Get Environment Variable" owner="OperatingSystem">
+<msg time="2026-07-06T23:41:44.036047" level="INFO">${env_login} = anderson.ssantos@jcatlm.com.br</msg>
+<var>${env_login}</var>
+<arg>LOGIN</arg>
+<doc>Returns the value of an environment variable with the given name.</doc>
+<status status="PASS" start="2026-07-06T23:41:44.035843" elapsed="0.000234"/>
+</kw>
+<kw name="Get Environment Variable" owner="OperatingSystem">
+<msg time="2026-07-06T23:41:44.036631" level="INFO">${env_senha} = AndJca26</msg>
+<var>${env_senha}</var>
+<arg>SENHA</arg>
+<doc>Returns the value of an environment variable with the given name.</doc>
+<status status="PASS" start="2026-07-06T23:41:44.036424" elapsed="0.000235"/>
+</kw>
+<kw name="Get Environment Variable" owner="OperatingSystem">
+<msg time="2026-07-06T23:41:44.037103" level="INFO">${env_gmail_pass} = xhhq qfkh lhei coyr</msg>
+<var>${env_gmail_pass}</var>
+<arg>GMAIL_APP_PASS</arg>
+<doc>Returns the value of an environment variable with the given name.</doc>
+<status status="PASS" start="2026-07-06T23:41:44.036924" elapsed="0.000206"/>
+</kw>
+<kw name="Get Environment Variable" owner="OperatingSystem">
+<msg time="2026-07-06T23:41:44.037535" level="INFO">${env_gmail_user} = andynho1987@gmail.com</msg>
+<var>${env_gmail_user}</var>
+<arg>GMAIL_USER</arg>
+<doc>Returns the value of an environment variable with the given name.</doc>
+<status status="PASS" start="2026-07-06T23:41:44.037385" elapsed="0.000176"/>
+</kw>
+<kw name="Set Global Variable" owner="BuiltIn">
+<msg time="2026-07-06T23:41:44.038423" level="INFO">${LOGIN} = anderson.ssantos@jcatlm.com.br</msg>
+<arg>${LOGIN}</arg>
+<arg>${env_login}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="PASS" start="2026-07-06T23:41:44.037874" elapsed="0.000623"/>
+</kw>
+<kw name="Set Global Variable" owner="BuiltIn">
+<msg time="2026-07-06T23:41:44.039384" level="INFO">${SENHA} = AndJca26</msg>
+<arg>${SENHA}</arg>
+<arg>${env_senha}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="PASS" start="2026-07-06T23:41:44.038906" elapsed="0.000553"/>
+</kw>
+<kw name="Set Global Variable" owner="BuiltIn">
+<msg time="2026-07-06T23:41:44.040150" level="INFO">${GMAIL_USER} = andynho1987@gmail.com</msg>
+<arg>${GMAIL_USER}</arg>
+<arg>${env_gmail_user}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="PASS" start="2026-07-06T23:41:44.039788" elapsed="0.000404"/>
+</kw>
+<kw name="Set Global Variable" owner="BuiltIn">
+<msg time="2026-07-06T23:41:44.040771" level="INFO">${GMAIL_APP_PASS} = xhhq qfkh lhei coyr</msg>
+<arg>${GMAIL_APP_PASS}</arg>
+<arg>${env_gmail_pass}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="PASS" start="2026-07-06T23:41:44.040453" elapsed="0.000357"/>
+</kw>
+<doc>Carrega o arquivo .env e cria as variáveis globais para o teste.</doc>
+<status status="PASS" start="2026-07-06T23:41:44.035064" elapsed="0.006002"/>
+</kw>
+<kw name="Open Application" owner="AppiumLibrary">
+<arg>http://127.0.0.1:4723</arg>
+<arg>platformName=Android</arg>
+<arg>appium:deviceName=emulator-5554</arg>
+<arg>appium:automationName=UiAutomator2</arg>
+<arg>appium:appPackage=br.com.autoviacao1001.autoviacao1001app</arg>
+<arg>appium:appActivity=.MainActivity</arg>
+<arg>appWaitDuration=60000</arg>
+<arg>appium:autoGrantPermissions=${True}</arg>
+<arg>appium:ensureWebviewsHavePages=${True}</arg>
+<arg>appium:clearDeviceLogs=${True}</arg>
+<arg>appium:nativeWebScreenshot=${True}</arg>
+<arg>appium:uiautomator2ServerLaunchTimeout=${120000}</arg>
+<arg>appium:uiautomator2ServerInstallTimeout=${60000}</arg>
+<arg>appium:adbExecTimeout=${60000}</arg>
+<arg>appium:newCommandTimeout=${300}</arg>
+<arg>appium:connectHardwareKeyboard=${True}</arg>
+<arg>appium:socketConnectionTimeout=${90000}</arg>
+<arg>appium:androidInstallTimeout= ${120000}</arg>
+<doc>Opens a new application to the given Appium server.
+Capabilities of appium server, Android and iOS,
+Please check https://appium.io/docs/en/2.19/guides/caps/
+| *Option*            | *Man.* | *Description*     |
+| remote_url          | Yes    | Appium server url |
+| alias               | No     | alias             |</doc>
+<status status="PASS" start="2026-07-06T23:41:44.041232" elapsed="4.328478"/>
+</kw>
+<status status="PASS" start="2026-07-06T23:41:44.034731" elapsed="4.335384"/>
+</kw>
+<kw name="Login" owner="base">
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-06T23:41:53.371338" level="INFO">Slept 5 seconds.</msg>
+<arg>5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-06T23:41:48.370827" elapsed="5.000661"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2026-07-06T23:41:53.571744" level="INFO">xpath criteria: //android.widget.TextView[@text="Digite seu CPF ou E-mail"]</msg>
+<arg>xpath=//android.widget.TextView[@text="Digite seu CPF ou E-mail"]</arg>
+<arg>timeout=60s</arg>
+<doc>Waits until the element specified by the ``locator`` is visible.</doc>
+<status status="PASS" start="2026-07-06T23:41:53.372074" elapsed="0.199784"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2026-07-06T23:41:53.573233" level="INFO">Clicking element 'xpath=//android.widget.EditText[@resource-id="user"]'.</msg>
+<msg time="2026-07-06T23:41:53.701065" level="INFO">xpath criteria: //android.widget.EditText[@resource-id="user"]</msg>
+<arg>xpath=//android.widget.EditText[@resource-id="user"]</arg>
+<doc>Clicks the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-07-06T23:41:53.572327" elapsed="0.128862"/>
+</kw>
+<kw name="Input Text" owner="AppiumLibrary">
+<msg time="2026-07-06T23:41:53.706132" level="INFO">Typing text 'anderson.ssantos@jcatlm.com.br' into text field 'xpath=//android.widget.EditText[@resource-id="user"]'</msg>
+<msg time="2026-07-06T23:41:55.478535" level="INFO">xpath criteria: //android.widget.EditText[@resource-id="user"]</msg>
+<arg>xpath=//android.widget.EditText[@resource-id="user"]</arg>
+<arg>${LOGIN}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-07-06T23:41:53.701796" elapsed="1.776863"/>
+</kw>
+<kw name="Input Password" owner="AppiumLibrary">
+<msg time="2026-07-06T23:41:55.480108" level="INFO">Typing password into text field 'xpath=//android.widget.EditText[@resource-id="password"]'</msg>
+<msg time="2026-07-06T23:41:56.549742" level="INFO">xpath criteria: //android.widget.EditText[@resource-id="password"]</msg>
+<arg>xpath=//android.widget.EditText[@resource-id="password"]</arg>
+<arg>${SENHA}</arg>
+<doc>Types the given password into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-07-06T23:41:55.479152" elapsed="1.070725"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2026-07-06T23:41:56.551529" level="INFO">Clicking element 'xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View'.</msg>
+<msg time="2026-07-06T23:41:57.534073" level="INFO">xpath criteria: //android.view.ViewGroup[@content-desc="Entrar"]/android.view.View</msg>
+<arg>xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View</arg>
+<doc>Clicks the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-07-06T23:41:56.550428" elapsed="0.983766"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-06T23:42:02.537708" level="INFO">Slept 5 seconds.</msg>
+<arg>5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-06T23:41:57.534787" elapsed="5.003074"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>\nTela de Busca exibida com sucesso!</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-07-06T23:42:02.538477" elapsed="0.000425"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<arg>android=new UiSelector().className("android.view.ViewGroup").instance(13)</arg>
+<doc>Waits until the element specified by the ``locator`` is visible.</doc>
+<status status="PASS" start="2026-07-06T23:42:02.539171" elapsed="0.056773"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2026-07-06T23:42:02.597679" level="INFO">Clicking element 'android=new UiSelector().className("android.view.ViewGroup").instance(13)'.</msg>
+<arg>android=new UiSelector().className("android.view.ViewGroup").instance(13)</arg>
+<doc>Clicks the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-07-06T23:42:02.596368" elapsed="0.113457"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2026-07-06T23:42:04.717711" level="INFO">xpath criteria: //android.widget.TextView[@resource-id="name"]</msg>
+<arg>xpath=//android.widget.TextView[@resource-id="name"]</arg>
+<doc>Waits until the element specified by the ``locator`` is visible.</doc>
+<status status="PASS" start="2026-07-06T23:42:02.710519" elapsed="2.007332"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>\nLogin realizado com sucesso!</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-07-06T23:42:04.718576" elapsed="0.000557"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>\nOlá, Anderson Silva</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-07-06T23:42:04.720038" elapsed="0.000760"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2026-07-06T23:42:04.855419" level="INFO">xpath criteria: //android.widget.TextView[@text="Sair"]</msg>
+<arg>xpath=//android.widget.TextView[@text="Sair"]</arg>
+<arg>timeout=15s</arg>
+<doc>Waits until the element specified by the ``locator`` is visible.</doc>
+<status status="PASS" start="2026-07-06T23:42:04.721129" elapsed="0.134419"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2026-07-06T23:42:04.857031" level="INFO">Clicking element 'xpath=//android.widget.TextView[@text="Sair"]'.</msg>
+<msg time="2026-07-06T23:42:04.999885" level="INFO">xpath criteria: //android.widget.TextView[@text="Sair"]</msg>
+<arg>xpath=//android.widget.TextView[@text="Sair"]</arg>
+<doc>Clicks the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-07-06T23:42:04.856106" elapsed="0.143950"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2026-07-06T23:42:06.793332" level="INFO">xpath criteria: //android.widget.TextView[@text="Digite seu CPF ou E-mail"]
+xpath criteria: //android.widget.TextView[@text="Digite seu CPF ou E-mail"]</msg>
+<arg>xpath=//android.widget.TextView[@text="Digite seu CPF ou E-mail"]</arg>
+<arg>timeout=60s</arg>
+<doc>Waits until the element specified by the ``locator`` is visible.</doc>
+<status status="PASS" start="2026-07-06T23:42:05.000609" elapsed="1.792843"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>\nUsuário deslogado com sucesso!</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-07-06T23:42:06.793952" elapsed="0.000401"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-06T23:42:09.795004" level="INFO">Slept 3 seconds.</msg>
+<arg>3s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-06T23:42:06.794606" elapsed="3.000561"/>
+</kw>
+<status status="PASS" start="2026-07-06T23:41:48.370502" elapsed="21.425091"/>
+</kw>
+<status status="PASS" start="2026-07-06T23:41:44.034250" elapsed="25.761529"/>
+</test>
+<status status="PASS" start="2026-07-06T23:41:44.025877" elapsed="25.771903"/>
+</suite>
+<suite id="s1-s3" name="Catarinense Login" source="/home/runner/work/automacao-web-mobile/automacao-web-mobile/app/appCatarinense/catarinense_login.robot">
+<test id="s1-s3-t1" name="Deve realizar o login com sucesso" line="10">
+<kw name="Start session" owner="base">
+<kw name="Carregar Variaveis De Ambiente" owner="base">
+<kw name="Evaluate" owner="BuiltIn">
+<arg>__import__('dotenv').load_dotenv(dotenv_path='app/.env')</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2026-07-06T23:42:09.805943" elapsed="0.000409"/>
+</kw>
+<kw name="Get Environment Variable" owner="OperatingSystem">
+<msg time="2026-07-06T23:42:09.806698" level="INFO">${env_login} = anderson.ssantos@jcatlm.com.br</msg>
+<var>${env_login}</var>
+<arg>LOGIN</arg>
+<doc>Returns the value of an environment variable with the given name.</doc>
+<status status="PASS" start="2026-07-06T23:42:09.806535" elapsed="0.000190"/>
+</kw>
+<kw name="Get Environment Variable" owner="OperatingSystem">
+<msg time="2026-07-06T23:42:09.807204" level="INFO">${env_senha} = AndJca26</msg>
+<var>${env_senha}</var>
+<arg>SENHA</arg>
+<doc>Returns the value of an environment variable with the given name.</doc>
+<status status="PASS" start="2026-07-06T23:42:09.807049" elapsed="0.000182"/>
+</kw>
+<kw name="Get Environment Variable" owner="OperatingSystem">
+<msg time="2026-07-06T23:42:09.807630" level="INFO">${env_gmail_pass} = xhhq qfkh lhei coyr</msg>
+<var>${env_gmail_pass}</var>
+<arg>GMAIL_APP_PASS</arg>
+<doc>Returns the value of an environment variable with the given name.</doc>
+<status status="PASS" start="2026-07-06T23:42:09.807485" elapsed="0.000169"/>
+</kw>
+<kw name="Get Environment Variable" owner="OperatingSystem">
+<msg time="2026-07-06T23:42:09.808067" level="INFO">${env_gmail_user} = andynho1987@gmail.com</msg>
+<var>${env_gmail_user}</var>
+<arg>GMAIL_USER</arg>
+<doc>Returns the value of an environment variable with the given name.</doc>
+<status status="PASS" start="2026-07-06T23:42:09.807898" elapsed="0.000195"/>
+</kw>
+<kw name="Set Global Variable" owner="BuiltIn">
+<msg time="2026-07-06T23:42:09.808673" level="INFO">${LOGIN} = anderson.ssantos@jcatlm.com.br</msg>
+<arg>${LOGIN}</arg>
+<arg>${env_login}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="PASS" start="2026-07-06T23:42:09.808351" elapsed="0.000363"/>
+</kw>
+<kw name="Set Global Variable" owner="BuiltIn">
+<msg time="2026-07-06T23:42:09.809300" level="INFO">${SENHA} = AndJca26</msg>
+<arg>${SENHA}</arg>
+<arg>${env_senha}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="PASS" start="2026-07-06T23:42:09.808994" elapsed="0.000345"/>
+</kw>
+<kw name="Set Global Variable" owner="BuiltIn">
+<msg time="2026-07-06T23:42:09.809892" level="INFO">${GMAIL_USER} = andynho1987@gmail.com</msg>
+<arg>${GMAIL_USER}</arg>
+<arg>${env_gmail_user}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="PASS" start="2026-07-06T23:42:09.809591" elapsed="0.000339"/>
+</kw>
+<kw name="Set Global Variable" owner="BuiltIn">
+<msg time="2026-07-06T23:42:09.810526" level="INFO">${GMAIL_APP_PASS} = xhhq qfkh lhei coyr</msg>
+<arg>${GMAIL_APP_PASS}</arg>
+<arg>${env_gmail_pass}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="PASS" start="2026-07-06T23:42:09.810223" elapsed="0.000340"/>
+</kw>
+<doc>Carrega o arquivo .env e cria as variáveis globais para o teste.</doc>
+<status status="PASS" start="2026-07-06T23:42:09.805571" elapsed="0.005210"/>
+</kw>
+<kw name="Open Application" owner="AppiumLibrary">
+<arg>http://127.0.0.1:4723</arg>
+<arg>platformName=Android</arg>
+<arg>appium:deviceName=emulator-5554</arg>
+<arg>appium:automationName=UiAutomator2</arg>
+<arg>appium:appPackage=br.com.catarinense.catarinenseapp</arg>
+<arg>appium:appActivity=.MainActivity</arg>
+<arg>appWaitDuration=60000</arg>
+<arg>appium:autoGrantPermissions=${True}</arg>
+<arg>appium:ensureWebviewsHavePages=${True}</arg>
+<arg>appium:clearDeviceLogs=${True}</arg>
+<arg>appium:nativeWebScreenshot=${True}</arg>
+<arg>appium:uiautomator2ServerLaunchTimeout=${120000}</arg>
+<arg>appium:uiautomator2ServerInstallTimeout=${60000}</arg>
+<arg>appium:adbExecTimeout=${60000}</arg>
+<arg>appium:newCommandTimeout=${300}</arg>
+<arg>appium:connectHardwareKeyboard=${True}</arg>
+<arg>appium:socketConnectionTimeout=${90000}</arg>
+<arg>appium:androidInstallTimeout= ${120000}</arg>
+<doc>Opens a new application to the given Appium server.
+Capabilities of appium server, Android and iOS,
+Please check https://appium.io/docs/en/2.19/guides/caps/
+| *Option*            | *Man.* | *Description*     |
+| remote_url          | Yes    | Appium server url |
+| alias               | No     | alias             |</doc>
+<status status="PASS" start="2026-07-06T23:42:09.810942" elapsed="2.930673"/>
+</kw>
+<status status="PASS" start="2026-07-06T23:42:09.805284" elapsed="2.936656"/>
+</kw>
+<kw name="Login" owner="base">
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-06T23:42:17.744285" level="INFO">Slept 5 seconds.</msg>
+<arg>5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-06T23:42:12.743716" elapsed="5.000718"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2026-07-06T23:42:17.936562" level="INFO">xpath criteria: //android.widget.TextView[@text="Acesse sua conta"]</msg>
+<arg>xpath=//android.widget.TextView[@text="Acesse sua conta"]</arg>
+<arg>timeout=60s</arg>
+<doc>Waits until the element specified by the ``locator`` is visible.</doc>
+<status status="PASS" start="2026-07-06T23:42:17.745021" elapsed="0.191657"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>\n Assert Acesse sua conta</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-07-06T23:42:17.937165" elapsed="0.000335"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2026-07-06T23:42:17.938679" level="INFO">Clicking element 'xpath=//android.widget.EditText[@resource-id="user"]'.</msg>
+<msg time="2026-07-06T23:42:18.916456" level="INFO">xpath criteria: //android.widget.EditText[@resource-id="user"]</msg>
+<arg>xpath=//android.widget.EditText[@resource-id="user"]</arg>
+<doc>Clicks the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-07-06T23:42:17.937688" elapsed="0.978900"/>
+</kw>
+<kw name="Input Text" owner="AppiumLibrary">
+<msg time="2026-07-06T23:42:18.918066" level="INFO">Typing text 'anderson.ssantos@jcatlm.com.br' into text field 'xpath=//android.widget.EditText[@resource-id="user"]'</msg>
+<msg time="2026-07-06T23:42:18.975112" level="INFO">xpath criteria: //android.widget.EditText[@resource-id="user"]</msg>
+<arg>xpath=//android.widget.EditText[@resource-id="user"]</arg>
+<arg>${LOGIN}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-07-06T23:42:18.917121" elapsed="0.058082"/>
+</kw>
+<kw name="Input Password" owner="AppiumLibrary">
+<msg time="2026-07-06T23:42:18.976595" level="INFO">Typing password into text field 'xpath=//android.widget.EditText[@resource-id="password"]'</msg>
+<msg time="2026-07-06T23:42:20.028686" level="INFO">xpath criteria: //android.widget.EditText[@resource-id="password"]</msg>
+<arg>xpath=//android.widget.EditText[@resource-id="password"]</arg>
+<arg>${SENHA}</arg>
+<doc>Types the given password into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-07-06T23:42:18.975649" elapsed="1.053132"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2026-07-06T23:42:20.030179" level="INFO">Clicking element 'xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View'.</msg>
+<msg time="2026-07-06T23:42:21.016545" level="INFO">xpath criteria: //android.view.ViewGroup[@content-desc="Entrar"]/android.view.View</msg>
+<arg>xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View</arg>
+<doc>Clicks the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-07-06T23:42:20.029278" elapsed="0.987391"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2026-07-06T23:42:24.101770" level="INFO">xpath criteria: //android.widget.TextView[@text="Buscar"]
+xpath criteria: //android.widget.TextView[@text="Buscar"]
+xpath criteria: //android.widget.TextView[@text="Buscar"]
+xpath criteria: //android.widget.TextView[@text="Buscar"]
+xpath criteria: //android.widget.TextView[@text="Buscar"]</msg>
+<arg>xpath=//android.widget.TextView[@text="Buscar"]</arg>
+<arg>timeout=60s</arg>
+<doc>Waits until the element specified by the ``locator`` is visible.</doc>
+<status status="PASS" start="2026-07-06T23:42:21.017310" elapsed="3.084555"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>\n Logado</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-07-06T23:42:24.102487" elapsed="0.000545"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2026-07-06T23:42:24.104950" level="INFO">Clicking element 'android=new UiSelector().className("android.widget.ImageView").instance(0)'.</msg>
+<arg>android=new UiSelector().className("android.widget.ImageView").instance(0)</arg>
+<doc>Clicks the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-07-06T23:42:24.103380" elapsed="0.093668"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2026-07-06T23:42:25.747768" level="INFO">xpath criteria: //android.widget.TextView[@resource-id="name"]</msg>
+<arg>xpath=//android.widget.TextView[@resource-id="name"]</arg>
+<arg>timeout=60s</arg>
+<doc>Waits until the element specified by the ``locator`` is visible.</doc>
+<status status="PASS" start="2026-07-06T23:42:24.197659" elapsed="1.550211"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>\n Olá Usuário.</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-07-06T23:42:25.748375" elapsed="0.000351"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>\n Usuário logado com sucesso.</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-07-06T23:42:25.748994" elapsed="0.000323"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2026-07-06T23:42:25.831437" level="INFO">xpath criteria: //android.view.ViewGroup[@content-desc="Sair"]</msg>
+<arg>xpath=//android.view.ViewGroup[@content-desc="Sair"]</arg>
+<arg>timeout=15s</arg>
+<doc>Waits until the element specified by the ``locator`` is visible.</doc>
+<status status="PASS" start="2026-07-06T23:42:25.749590" elapsed="0.081978"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2026-07-06T23:42:25.833339" level="INFO">Clicking element 'xpath=//android.view.ViewGroup[@content-desc="Sair"]'.</msg>
+<msg time="2026-07-06T23:42:26.413627" level="INFO">xpath criteria: //android.view.ViewGroup[@content-desc="Sair"]</msg>
+<arg>xpath=//android.view.ViewGroup[@content-desc="Sair"]</arg>
+<doc>Clicks the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-07-06T23:42:25.832215" elapsed="0.581511"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2026-07-06T23:42:28.283358" level="INFO">xpath criteria: //android.widget.TextView[@text="Acesse sua conta"]
+xpath criteria: //android.widget.TextView[@text="Acesse sua conta"]</msg>
+<arg>xpath=//android.widget.TextView[@text="Acesse sua conta"]</arg>
+<arg>timeout=60s</arg>
+<doc>Waits until the element specified by the ``locator`` is visible.</doc>
+<status status="PASS" start="2026-07-06T23:42:26.415467" elapsed="1.868003"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>\n Usuário deslogado com sucesso.</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-07-06T23:42:28.283919" elapsed="0.000355"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-06T23:42:33.285031" level="INFO">Slept 5 seconds.</msg>
+<arg>5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-06T23:42:28.284541" elapsed="5.000631"/>
+</kw>
+<status status="PASS" start="2026-07-06T23:42:12.743391" elapsed="20.542271"/>
+</kw>
+<status status="PASS" start="2026-07-06T23:42:09.804703" elapsed="23.481180"/>
+</test>
+<status status="PASS" start="2026-07-06T23:42:09.799644" elapsed="23.488236"/>
+</suite>
+<suite id="s1-s4" name="Cometa Login" source="/home/runner/work/automacao-web-mobile/automacao-web-mobile/app/appCometa/cometa_login.robot">
+<test id="s1-s4-t1" name="Deve realizar o login com sucesso" line="10">
+<kw name="Start session" owner="base">
+<kw name="Carregar Variaveis De Ambiente" owner="base">
+<kw name="Evaluate" owner="BuiltIn">
+<arg>__import__('dotenv').load_dotenv(dotenv_path='app/.env')</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2026-07-06T23:42:33.295771" elapsed="0.000390"/>
+</kw>
+<kw name="Get Environment Variable" owner="OperatingSystem">
+<msg time="2026-07-06T23:42:33.296494" level="INFO">${env_login} = anderson.ssantos@jcatlm.com.br</msg>
+<var>${env_login}</var>
+<arg>LOGIN</arg>
+<doc>Returns the value of an environment variable with the given name.</doc>
+<status status="PASS" start="2026-07-06T23:42:33.296339" elapsed="0.000181"/>
+</kw>
+<kw name="Get Environment Variable" owner="OperatingSystem">
+<msg time="2026-07-06T23:42:33.296930" level="INFO">${env_senha} = AndJca26</msg>
+<var>${env_senha}</var>
+<arg>SENHA</arg>
+<doc>Returns the value of an environment variable with the given name.</doc>
+<status status="PASS" start="2026-07-06T23:42:33.296784" elapsed="0.000170"/>
+</kw>
+<kw name="Get Environment Variable" owner="OperatingSystem">
+<msg time="2026-07-06T23:42:33.297502" level="INFO">${env_gmail_pass} = xhhq qfkh lhei coyr</msg>
+<var>${env_gmail_pass}</var>
+<arg>GMAIL_APP_PASS</arg>
+<doc>Returns the value of an environment variable with the given name.</doc>
+<status status="PASS" start="2026-07-06T23:42:33.297231" elapsed="0.000297"/>
+</kw>
+<kw name="Get Environment Variable" owner="OperatingSystem">
+<msg time="2026-07-06T23:42:33.297923" level="INFO">${env_gmail_user} = andynho1987@gmail.com</msg>
+<var>${env_gmail_user}</var>
+<arg>GMAIL_USER</arg>
+<doc>Returns the value of an environment variable with the given name.</doc>
+<status status="PASS" start="2026-07-06T23:42:33.297780" elapsed="0.000168"/>
+</kw>
+<kw name="Set Global Variable" owner="BuiltIn">
+<msg time="2026-07-06T23:42:33.298613" level="INFO">${LOGIN} = anderson.ssantos@jcatlm.com.br</msg>
+<arg>${LOGIN}</arg>
+<arg>${env_login}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="PASS" start="2026-07-06T23:42:33.298294" elapsed="0.000358"/>
+</kw>
+<kw name="Set Global Variable" owner="BuiltIn">
+<msg time="2026-07-06T23:42:33.299234" level="INFO">${SENHA} = AndJca26</msg>
+<arg>${SENHA}</arg>
+<arg>${env_senha}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="PASS" start="2026-07-06T23:42:33.298907" elapsed="0.000366"/>
+</kw>
+<kw name="Set Global Variable" owner="BuiltIn">
+<msg time="2026-07-06T23:42:33.299835" level="INFO">${GMAIL_USER} = andynho1987@gmail.com</msg>
+<arg>${GMAIL_USER}</arg>
+<arg>${env_gmail_user}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="PASS" start="2026-07-06T23:42:33.299527" elapsed="0.000346"/>
+</kw>
+<kw name="Set Global Variable" owner="BuiltIn">
+<msg time="2026-07-06T23:42:33.300455" level="INFO">${GMAIL_APP_PASS} = xhhq qfkh lhei coyr</msg>
+<arg>${GMAIL_APP_PASS}</arg>
+<arg>${env_gmail_pass}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="PASS" start="2026-07-06T23:42:33.300149" elapsed="0.000344"/>
+</kw>
+<doc>Carrega o arquivo .env e cria as variáveis globais para o teste.</doc>
+<status status="PASS" start="2026-07-06T23:42:33.295566" elapsed="0.005153"/>
+</kw>
+<kw name="Open Application" owner="AppiumLibrary">
+<arg>http://127.0.0.1:4723</arg>
+<arg>platformName=Android</arg>
+<arg>appium:deviceName=emulator-5554</arg>
+<arg>appium:automationName=UiAutomator2</arg>
+<arg>appium:appPackage=br.com.viacaocometa.cometaapp</arg>
+<arg>appium:appActivity=.MainActivity</arg>
+<arg>appWaitDuration=60000</arg>
+<arg>appium:autoGrantPermissions=${True}</arg>
+<arg>appium:ensureWebviewsHavePages=${True}</arg>
+<arg>appium:clearDeviceLogs=${True}</arg>
+<arg>appium:nativeWebScreenshot=${True}</arg>
+<arg>appium:uiautomator2ServerLaunchTimeout=${120000}</arg>
+<arg>appium:uiautomator2ServerInstallTimeout=${60000}</arg>
+<arg>appium:adbExecTimeout=${60000}</arg>
+<arg>appium:newCommandTimeout=${300}</arg>
+<arg>appium:connectHardwareKeyboard=${True}</arg>
+<arg>appium:socketConnectionTimeout=${90000}</arg>
+<arg>appium:androidInstallTimeout= ${120000}</arg>
+<doc>Opens a new application to the given Appium server.
+Capabilities of appium server, Android and iOS,
+Please check https://appium.io/docs/en/2.19/guides/caps/
+| *Option*            | *Man.* | *Description*     |
+| remote_url          | Yes    | Appium server url |
+| alias               | No     | alias             |</doc>
+<status status="PASS" start="2026-07-06T23:42:33.300877" elapsed="2.971965"/>
+</kw>
+<status status="PASS" start="2026-07-06T23:42:33.295299" elapsed="2.977919"/>
+</kw>
+<kw name="Login" owner="base">
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-06T23:42:39.274435" level="INFO">Slept 3 seconds.</msg>
+<arg>3s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-06T23:42:36.273892" elapsed="3.000692"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2026-07-06T23:42:39.506547" level="INFO">xpath criteria: //android.widget.TextView[@text="Acesse sua conta"]</msg>
+<arg>xpath=//android.widget.TextView[@text="Acesse sua conta"]</arg>
+<arg>timeout=60s</arg>
+<doc>Waits until the element specified by the ``locator`` is visible.</doc>
+<status status="PASS" start="2026-07-06T23:42:39.275205" elapsed="0.231445"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>\n Assert Acesse sua conta</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-07-06T23:42:39.507151" elapsed="0.000328"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2026-07-06T23:42:39.508780" level="INFO">Clicking element 'xpath=//android.widget.EditText[@resource-id="user"]'.</msg>
+<msg time="2026-07-06T23:42:40.376073" level="INFO">xpath criteria: //android.widget.EditText[@resource-id="user"]</msg>
+<arg>xpath=//android.widget.EditText[@resource-id="user"]</arg>
+<doc>Clicks the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-07-06T23:42:39.507700" elapsed="0.868469"/>
+</kw>
+<kw name="Input Text" owner="AppiumLibrary">
+<msg time="2026-07-06T23:42:40.377644" level="INFO">Typing text 'anderson.ssantos@jcatlm.com.br' into text field 'xpath=//android.widget.EditText[@resource-id="user"]'</msg>
+<msg time="2026-07-06T23:42:40.460504" level="INFO">xpath criteria: //android.widget.EditText[@resource-id="user"]</msg>
+<arg>xpath=//android.widget.EditText[@resource-id="user"]</arg>
+<arg>${LOGIN}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-07-06T23:42:40.376633" elapsed="0.083983"/>
+</kw>
+<kw name="Input Password" owner="AppiumLibrary">
+<msg time="2026-07-06T23:42:40.462504" level="INFO">Typing password into text field 'xpath=//android.widget.EditText[@resource-id="password"]'</msg>
+<msg time="2026-07-06T23:42:41.508503" level="INFO">xpath criteria: //android.widget.EditText[@resource-id="password"]</msg>
+<arg>xpath=//android.widget.EditText[@resource-id="password"]</arg>
+<arg>${SENHA}</arg>
+<doc>Types the given password into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2026-07-06T23:42:40.461212" elapsed="1.047417"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2026-07-06T23:42:41.510309" level="INFO">Clicking element 'xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View'.</msg>
+<msg time="2026-07-06T23:42:42.477470" level="INFO">xpath criteria: //android.view.ViewGroup[@content-desc="Entrar"]/android.view.View</msg>
+<arg>xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View</arg>
+<doc>Clicks the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-07-06T23:42:41.509234" elapsed="0.968361"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2026-07-06T23:42:45.521124" level="INFO">xpath criteria: //android.widget.TextView[@text="Buscar"]
+xpath criteria: //android.widget.TextView[@text="Buscar"]
+xpath criteria: //android.widget.TextView[@text="Buscar"]
+xpath criteria: //android.widget.TextView[@text="Buscar"]
+xpath criteria: //android.widget.TextView[@text="Buscar"]</msg>
+<arg>xpath=//android.widget.TextView[@text="Buscar"]</arg>
+<arg>timeout=60s</arg>
+<doc>Waits until the element specified by the ``locator`` is visible.</doc>
+<status status="PASS" start="2026-07-06T23:42:42.478256" elapsed="3.042995"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>\n Logado</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-07-06T23:42:45.521721" elapsed="0.000378"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2026-07-06T23:42:45.523237" level="INFO">Clicking element 'android=new UiSelector().className("android.widget.ImageView").instance(0)'.</msg>
+<arg>android=new UiSelector().className("android.widget.ImageView").instance(0)</arg>
+<doc>Clicks the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-07-06T23:42:45.522329" elapsed="0.087938"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2026-07-06T23:42:47.798796" level="INFO">xpath criteria: //android.widget.TextView[@resource-id="name"]
+xpath criteria: //android.widget.TextView[@resource-id="name"]</msg>
+<arg>xpath=//android.widget.TextView[@resource-id="name"]</arg>
+<arg>timeout=60s</arg>
+<doc>Waits until the element specified by the ``locator`` is visible.</doc>
+<status status="PASS" start="2026-07-06T23:42:45.610886" elapsed="2.188041"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>\n Usuário logado com sucesso.</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-07-06T23:42:47.799428" elapsed="0.000343"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2026-07-06T23:42:47.877329" level="INFO">xpath criteria: //android.view.ViewGroup[@content-desc="Sair"]</msg>
+<arg>xpath=//android.view.ViewGroup[@content-desc="Sair"]</arg>
+<arg>timeout=15s</arg>
+<doc>Waits until the element specified by the ``locator`` is visible.</doc>
+<status status="PASS" start="2026-07-06T23:42:47.800052" elapsed="0.077390"/>
+</kw>
+<kw name="Click Element" owner="AppiumLibrary">
+<msg time="2026-07-06T23:42:47.879504" level="INFO">Clicking element 'xpath=//android.view.ViewGroup[@content-desc="Sair"]'.</msg>
+<msg time="2026-07-06T23:42:48.033639" level="INFO">xpath criteria: //android.view.ViewGroup[@content-desc="Sair"]</msg>
+<arg>xpath=//android.view.ViewGroup[@content-desc="Sair"]</arg>
+<doc>Clicks the element identified by ``locator``.</doc>
+<status status="PASS" start="2026-07-06T23:42:47.878050" elapsed="0.155729"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
+<msg time="2026-07-06T23:42:49.968658" level="INFO">xpath criteria: //android.widget.TextView[@text="Acesse sua conta"]
+xpath criteria: //android.widget.TextView[@text="Acesse sua conta"]</msg>
+<arg>xpath=//android.widget.TextView[@text="Acesse sua conta"]</arg>
+<arg>timeout=60s</arg>
+<doc>Waits until the element specified by the ``locator`` is visible.</doc>
+<status status="PASS" start="2026-07-06T23:42:48.034518" elapsed="1.934235"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>\n Usuário deslogado com sucesso.</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2026-07-06T23:42:49.969247" elapsed="0.000326"/>
+</kw>
+<status status="PASS" start="2026-07-06T23:42:36.273578" elapsed="13.696165"/>
+</kw>
+<status status="PASS" start="2026-07-06T23:42:33.294802" elapsed="16.675213"/>
+</test>
+<status status="PASS" start="2026-07-06T23:42:33.289798" elapsed="16.682279"/>
+</suite>
+<status status="PASS" start="2026-07-06T23:41:20.378511" elapsed="89.595476"/>
+</suite>
+<statistics>
+<total>
+<stat pass="4" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="Monitoramento Mobile" id="s1" pass="4" fail="0" skip="0">Monitoramento Mobile</stat>
+<stat name="Wemobi Login" id="s1-s1" pass="1" fail="0" skip="0">Monitoramento Mobile.Wemobi Login</stat>
+<stat name="1001 Login" id="s1-s2" pass="1" fail="0" skip="0">Monitoramento Mobile.1001 Login</stat>
+<stat name="Catarinense Login" id="s1-s3" pass="1" fail="0" skip="0">Monitoramento Mobile.Catarinense Login</stat>
+<stat name="Cometa Login" id="s1-s4" pass="1" fail="0" skip="0">Monitoramento Mobile.Cometa Login</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
