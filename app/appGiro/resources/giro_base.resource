@@ -64,22 +64,12 @@ Start session
     # 3. Dá um tempo estático para a tela de carregamento sumir antes do primeiro comando de busca
     Sleep    10s
 
-Encerrar Sessao E Gravar Video
-    [Documentation]    Garante que tira uma foto se falhar e fecha as sessões em segurança.
-    # 1. Se o teste falhou, força a captura de ecrã imediatamente enquanto a sessão está viva
-    Run Keyword If Test Failed    Run Keyword And Ignore Error    Capture Page Screenshot
-    
-    # 2. Para a gravação de vídeo ignorando erros caso o recurso não tenha iniciado
-    Run Keyword And Ignore Error    Stop Screen Recording
-    
-    # 3. Fecha a aplicação em segurança
-    Run Keyword And Ignore Error    Close Application
 # ─────────────────────────────────────────────────────────────────────────────
 Login
-    [Documentation]
-    ...    Preenche credenciais e clica ACESSAR.
-    ...    ► Antes de clicar: fotografa o ID do último e-mail (âncora).
-    ...    ► Após clicar: verifica 2FA usando apenas e-mails com ID > âncora.
+    # [Documentation]
+    # ...    Preenche credenciais e clica ACESSAR.
+    # ...    ► Antes de clicar: fotografa o ID do último e-mail (âncora).
+    # ...    ► Após clicar: verifica 2FA usando apenas e-mails com ID > âncora.
     # Sleep    7s
     Wait Until Element Is Visible    id=android:id/content    timeout=40s
     Log To Console    \nCarregando tela inicial!
@@ -232,3 +222,14 @@ Tratar Banner De Login Se Aparecer
     END
 Close session
     Close Application
+
+Encerrar Sessao E Gravar Video
+    [Documentation]    Garante que tira uma foto se falhar e fecha as sessões em segurança.
+    # 1. Se o teste falhou, força a captura de ecrã imediatamente enquanto a sessão está viva
+    Run Keyword If Test Failed    Run Keyword And Ignore Error    Capture Page Screenshot
+    
+    # 2. Para a gravação de vídeo ignorando erros caso o recurso não tenha iniciado
+    Run Keyword And Ignore Error    Stop Screen Recording
+    
+    # 3. Fecha a aplicação em segurança
+    Run Keyword And Ignore Error    Close Application
