@@ -793,7 +793,7 @@ jobs:
 
           Os testes E2E do Cypress falharam no ambiente de Operação.
 
-          *📊 INFORMAÇÕES DA EXECUÇÃO:*
+          *📊 INFORMAÇÕES DAS EXECUÇÕES:*
           • *ID da Run:* #${{ github.run_number }}
           • *Data:* ${{ env.DATA_ALERTA }}
           • *Hora:* ${{ env.HORA_ALERTA }} (Brasília)
