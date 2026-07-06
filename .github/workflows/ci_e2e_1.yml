@@ -783,7 +783,7 @@ jobs:
             <p style="font-size: 12px; color: #999; margin: 0;">Este é um alerta automático gerado pelo sistema de Qualidade de Software (QA).</p>
             </div>
 
-      - name: Enviar Alerta no WhatsApp Privado Anderson
+      - name: Enviar Alerta no WhatsApp Privado
         if: steps.cypress.outcome == 'failure'
         run: |
           # 1. Constrói a URL do relatório dinamicamente
