@@ -786,6 +786,16 @@ jobs:
       - name: Enviar Alerta no WhatsApp Privado
         if: steps.cypress.outcome == 'failure'
         run: |
+
+          # 1. Localiza o primeiro screenshot de falha gerado pelo Cypress localmente
+          SCREENSHOT_FILE=$(find cypress/screenshots -type f -name "*.png" | head -n 1)
+
+          # 2. Se a imagem existir, faz o upload temporário instantâneo para termos visualização imediata
+          LINK_IMAGEM_DIRETA="Sem imagem disponível"
+          if [ -f "$SCREENSHOT_FILE" ]; then
+            LINK_IMAGEM_DIRETA=$(curl -s -F "file=@$SCREENSHOT_FILE" https://file.io | python3 -c "import sys, json; data=json.load(sys.stdin); print(data.get('link', 'Erro ao subir imagem'))")
+          fi
+
           # 1. Constrói a URL do relatório dinamicamente
           LINK_RELATORIO="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/${{ github.run_number }}/01_e2e/index.html"
 
