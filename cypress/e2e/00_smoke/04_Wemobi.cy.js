@@ -36,8 +36,8 @@ describe("Wemobi", () => {
     cy.get("#reservation-seat-0").click();
     cy.fecharModalUpgradePoltrona({ timeout: 90000 });
     cy.get(".payment-type-container > .col-12 > .active").should("be.visible");
-    cy.get('[data-js="subtotal-seats-container"] > .title-value > .title > .cmp-text > p').should("contain", "Subtotal dos assentos").log("Subtotal dos assentos");
-    cy.get('[data-js="convenience-fee-pix-container"] > .title-value > .title > .cmp-text > p').should("contain", "Taxa de serviço").log("Taxa de serviço");
-    cy.get(".title > .cmp-text > p > b").should("contain", "Valor total").log("Valor total das passagens");
+    cy.get(loc.ASSERT_SUBTOTAL).should("contain", "Subtotal dos assentos").log("Subtotal dos assentos");
+    cy.get(loc.WEMOBI_ASSERT_TAXASERVICO).should("contain", "Taxa de serviço").log("Taxa de serviço");
+    cy.get(loc.ASSERT_VALORTOTAL).should("contain", "Valor total").log("Valor total das passagens");
   });
 });

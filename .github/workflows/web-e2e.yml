@@ -47,9 +47,17 @@ jobs:
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
           HOTMAIL_MAIL: ${{ secrets.HOTMAIL_MAIL }}
           HOTMAIL_APP_PASS: ${{ secrets.HOTMAIL_APP_PASS }}
+          WA_PHONE_ANDERSON: ${{ secrets.WA_PHONE_ANDERSON }}
           NODE_TLS_REJECT_UNAUTHORIZED: "0"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # CYPRESS_INTERNAL_NPM_REGISTRY_DISABLE_SSL_VERIFICATION: "1" # Força o bypass no Cypress
+
+      - name: Obter Data e Hora Atual (Brasília)
+        if: failure()
+        run: |
+          # Define o fuso horário para São Paulo e formata os dados
+          echo "DATA_ALERTA=$(TZ='America/Sao_Paulo' date +'%d/%m/%Y')" >> $GITHUB_ENV
+          echo "HORA_ALERTA=$(TZ='America/Sao_Paulo' date +'%H:%M:%S')" >> $GITHUB_ENV
 
       - name: Debug - listar arquivos
         run: ls -R cypress/reports || true
@@ -150,7 +158,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "🚨[ALERTA SITES] ODH/ODP/Giro/Wemobi/UTP - Monit. Cont"
           to: anderson.ssantos@jcatlm.com.br
-          cc: alfredo.junior@jcatlm.com.br,fabiano.britto@externo-jcatlm.com.br
+          cc: fabiano.britto@externo-jcatlm.com.br
           from: "Monitoramento Contínuo"
           # Alterado para html_body para suportar formatação profissional
           html_body: |
@@ -233,5 +241,5 @@ jobs:
           # 6. Dispara o curl para o seu WhatsApp (Anderson)
           echo "📱 Disparando alerta para Anderson..."
           curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ANDERSON }}&text=${TEXTO_CODIFICADO}&apikey=7972786"
-          echo "📱 Disparando alerta para Alfredo..."
-          curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ALFREDO }}&text=${TEXTO_CODIFICADO}&apikey=8475079"
+          # echo "📱 Disparando alerta para Alfredo..."
+          # curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ALFREDO }}&text=${TEXTO_CODIFICADO}&apikey=8475079"

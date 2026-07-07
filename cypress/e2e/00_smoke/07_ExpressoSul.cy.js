@@ -38,9 +38,9 @@ describe("Expresso Sul", () => {
     cy.contains("Escolha o seu assento", { timeout: 90000 }).should("be.visible");
     cy.selecionarAssentoAleatorio({ timeout: 90000 });
     cy.get(loc.BOTAO_AVANCAR).should("be.visible").click();
-    cy.get('[data-js="subtotal-seats-container"] > .title-value > .title > .cmp-text > p').should("contain", "Subtotal dos assentos").log("Subtotal dos assentos");
-    cy.get(".title-tooltip > .title").should("contain", "Taxa de serviço").log("Taxa de serviço");
-    cy.get(".title > .cmp-text > p > b").should("contain", "Valor total").log("Valor total das passagens");
+    cy.get(loc.ASSERT_SUBTOTAL).should("contain", "Subtotal dos assentos").log("Subtotal dos assentos");
+    cy.get(loc.ASSERT_TAXASERVICO).should("contain", "Taxa de serviço").log("Taxa de serviço");
+    cy.get(loc.ASSERT_VALORTOTAL).should("contain", "Valor total").log("Valor total das passagens");
     // cy.get(loc.LOADER).should('not.be.visible')
     // cy.url({ timeout: 90000 }).should('include', '/pagamento')
     // Não finalizar a compra para evitar transações reais
