@@ -12,13 +12,14 @@ cypress/e2e/00_utp
 mobile/logs/__pycache__/*.pyc
 mobile/appGiro/resources/__pycache__
 mobile/appWemobi/resources/__pycache__
-# .github/workflows/ci_e2e_2.yml
+.github/workflows/ci_e2e_2.yml
+.github/workflows/mobile-e2e-test.yml
 .github/workflows/ci_e2e_3.yml
 .github/workflows/ci_e2e_4.yml
 .github/workflows/ci_e2e_5.yml
 .github/workflows/ci_teste.yml
 .github/workflows/ci_links_cards.yml
-.github/workflows/regressao.yml
+.github/workflows/web-e2e-regressao.yml
 .github/workflows/ci_teste_mobile.yml
 public
 gerar_token.js
