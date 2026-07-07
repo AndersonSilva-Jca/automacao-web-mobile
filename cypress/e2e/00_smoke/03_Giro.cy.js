@@ -26,7 +26,7 @@ describe("Clube Giro", () => {
       cy.visit(giro);
       cy.get(loc.GIRO_BOTAO_LOGIN).should("be.visible").click();
       cy.get(".login-title > p").should("contain", "Acesse o Giro");
-      cy.get(loc.USUARIO).should("be.visible").type("andynho1987@gmail.com", { delay: 100 });
+      cy.get(loc.USUARIO).should("be.visible").type("andynho1987@gmail.com", { delay: 50 });
       cy.get(loc.SENHA).should("be.visible").type(env.senha, { log: false }, { delay: 100 });
       cy.get(loc.GIRO_BOTAO_ENTRAR).click({ force: true });
       cy.wait(4000);
@@ -59,5 +59,8 @@ describe("Clube Giro", () => {
     cy.get(loc.BOTAO_AVANCAR).should("be.visible").and("not.be.disabled").click();
     cy.selecionarAssentoAleatorio({ timeout: 90000 });
     cy.get(loc.BOTAO_AVANCAR).should("be.visible").click();
+    cy.get('[data-js="subtotal-seats-container"] > .title-value > .title > .cmp-text > p').should("contain", "Subtotal dos assentos").log("Subtotal dos assentos");
+    cy.get(".title-tooltip > .title > .cmp-text > p").should("contain", "Taxa de serviço").log("Taxa de serviço");
+    cy.get(":nth-child(6) > .title > .cmp-text > p > b").should("contain", "Valor total").log("Valor total das passagens");
   });
 });

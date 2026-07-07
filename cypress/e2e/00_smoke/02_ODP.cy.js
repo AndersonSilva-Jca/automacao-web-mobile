@@ -35,5 +35,8 @@ describe("Outlet de Passagens", () => {
     cy.get(loc.CHECK_PASSAGEIRO, { timeout: 90000 }).click({ force: true });
     cy.get(".btn-footer").should("be.visible").and("not.be.disabled").click();
     cy.get(".payment-type-container > .col-12 > .active").should("be.visible");
+    cy.get('[data-js="subtotal-seats-container"] > .title-value > .title > .cmp-text > p').should("contain", "Subtotal dos assentos").log("Subtotal dos assentos");
+    cy.get(".title-tooltip > .title").should("contain", "Taxa de serviço").log("Taxa de serviço");
+    cy.get(":nth-child(5) > .title > .cmp-text > p > b").should("contain", "Valor Outlet").log("Valor total das passagens Outlet");
   });
 });

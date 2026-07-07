@@ -9,7 +9,7 @@ Library     ../libraries/GmailHelper.py
 *** Test Cases ***
 Deve realizar a busca de passagens com sucesso
     Start session
-    # Login
+    Login
     
     # Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Viagens"]    timeout=60s
     Sleep    10s

@@ -24,8 +24,9 @@ describe("Wemobi", () => {
     });
     cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Rodoviária Tietê (SP)", { delay: 100 });
     cy.xpath('//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]').click({ force: true });
-    cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("Rio De Janeiro - Rodoviária Novo Rio (RJ)", { delay: 100 });
-    cy.xpath('//*[@id="Rio-De-Janeiro---Rodoviária-Novo-Rio-(RJ)"]/p[1]').click({ force: true });
+
+    cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("Rio De Janeiro - Todos (RJ)", { delay: 100 });
+    cy.xpath('//*[@id="Rio-de-Janeiro---Todos-(RJ)"]/p[1]').click({ force: true });
     cy.get(loc.BUSCAS.DATA_IDA).click();
     cy.selecionarDataIda(5);
     cy.get(loc.BUSCAS.BOTAO_BUSCAR, { timeout: 90000 }).should("be.visible").click();
@@ -34,7 +35,9 @@ describe("Wemobi", () => {
     cy.get("#passenger-identification-proceed").should("be.visible").and("not.be.disabled").click();
     cy.get("#reservation-seat-0").click();
     cy.fecharModalUpgradePoltrona({ timeout: 90000 });
-
     cy.get(".payment-type-container > .col-12 > .active").should("be.visible");
+    cy.get('[data-js="subtotal-seats-container"] > .title-value > .title > .cmp-text > p').should("contain", "Subtotal dos assentos").log("Subtotal dos assentos");
+    cy.get('[data-js="convenience-fee-pix-container"] > .title-value > .title > .cmp-text > p').should("contain", "Taxa de serviço").log("Taxa de serviço");
+    cy.get(".title > .cmp-text > p > b").should("contain", "Valor total").log("Valor total das passagens");
   });
 });
