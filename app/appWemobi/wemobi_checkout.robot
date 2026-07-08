@@ -47,7 +47,7 @@ Deve realizar a busca de passagens com sucesso
 
 :
 
-    Click Element    accessibility_id=Rio de Janeiro - Todos (RJ), Localidade de Grupo
+    Click Element    android=new UiSelector().text("Rio de Janeiro - Todos (RJ)")
 
     # Click Element    accessibility_id=Rio de Janeiro - Todos (RJ), Localidade de Grupo
 
