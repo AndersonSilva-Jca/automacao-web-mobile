@@ -1,0 +1,3 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"failed","Wed Jul 08 14:37:44 UTC 2026","Wed Jul 08 14:38:13 UTC 2026","28734","","Monitoramento Mobile","","","","Deve realizar a busca de passagens com sucesso",""
+"failed","Wed Jul 08 14:38:13 UTC 2026","Wed Jul 08 14:38:13 UTC 2026","846","","Monitoramento Mobile","","","",":",""
