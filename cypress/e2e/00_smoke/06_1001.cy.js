@@ -22,10 +22,10 @@ describe("Auto Viação 1001", () => {
       cy.get(loc.BOTAO_LOGIN).click({ force: true });
       cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
     });
-    cy.get(loc.BUSCAS.DESTINO_IDA).click().type(loc.SP_TODOS, { delay: 100 }).should("exist").invoke("show");
-    cy.contains(loc.SP_TODOS).click({ force: true });
-    cy.get(loc.BUSCAS.DESTINO_VOLTA).click().clear().type(loc.RJ_TODOS, { delay: 100 }).should("exist").invoke("show");
-    cy.contains(loc.RJ_TODOS).click({ force: true });
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().type(loc.SP_TIETE, { delay: 100 }).should("exist").invoke("show");
+    cy.xpath(loc.XPATH_SP_TIETE).click({ force: true });
+    cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type(loc.RJ_TODOS, { delay: 100 }).should("exist").invoke("show");
+    cy.xpath(loc.XPATH_RJ_TODOS).click({ force: true });
     cy.get(loc.BUSCAS.DATA_IDA).click();
     cy.get(loc.LOADER).should("not.exist");
     cy.selecionarDataIda(2);
@@ -39,7 +39,7 @@ describe("Auto Viação 1001", () => {
     cy.selecionarAssentoAleatorio({ timeout: 90000 });
     cy.get(loc.BOTAO_AVANCAR).should("be.visible").click();
     cy.get(loc.ASSERT_SUBTOTAL).should("contain", "Subtotal dos assentos").log("Subtotal dos assentos");
-    cy.get(loc.ASSERT_TAXASERVICO).should("contain", "Taxa de serviço").log("Taxa de serviço");
+    cy.get(loc.ASSERT_TAXASERVICO).should("contain", "Taxa de Serviço").log("Taxa de serviço");
     cy.get(loc.ASSERT_VALORTOTAL).should("contain", "Valor total").log("Valor total das passagens");
     // cy.get('[alt="loader"]').should('not.be.visible')
     // cy.url({ timeout: 90000 }).should('include', '/pagamento')

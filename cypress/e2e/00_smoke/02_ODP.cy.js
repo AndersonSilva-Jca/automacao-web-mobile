@@ -25,9 +25,9 @@ describe("Outlet de Passagens", () => {
 
     cy.wait(12000);
     cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Rodoviária Tietê (SP)", { delay: 100 });
-    cy.xpath(loc.SP_TIETE).click({ force: true });
+    cy.xpath(loc.ODP_XPATH_SP_TIETE).click({ force: true });
     cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("Rio De Janeiro - Todos (RJ)", { delay: 100 });
-    cy.xpath(loc.RJ_TODOS).click({ force: true });
+    cy.xpath(loc.ODP_XPATH_RJ_TODOS).click({ force: true });
     cy.get(loc.BUSCAS.DATA_IDA).click();
     cy.selecionarDataIda(5);
     cy.get(loc.BUSCAS.BOTAO_BUSCAR, { timeout: 90000 }).should("be.visible").click();

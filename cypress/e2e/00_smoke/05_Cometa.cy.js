@@ -22,10 +22,10 @@ describe("Viação Cometa", () => {
       cy.get(loc.BOTAO_LOGIN).click({ force: true });
       cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
     });
-    cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo (Rod. Tietê) (SP)", { delay: 100 }).should("exist").invoke("show");
-    cy.contains(" São Paulo (Rod. Tietê) (SP) ").click({ force: true });
-    cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("Rio de Janeiro (Novo Rio) (RJ)", { delay: 100 }).should("exist").invoke("show");
-    cy.xpath('//*[@id="Rio-de-Janeiro-(Novo-Rio)-(RJ)"]/p[1]').click({ force: true });
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().type(loc.SP_TIETE, { delay: 100 }).should("exist").invoke("show");
+    cy.xpath(loc.XPATH_SP_TIETE).click({ force: true });
+    cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type(loc.RJ_TODOS, { delay: 100 }).should("exist").invoke("show");
+    cy.xpath(loc.XPATH_RJ_TODOS).click({ force: true });
     cy.get(loc.BUSCAS.DATA_IDA).click();
     cy.selecionarDataIda(4);
     cy.get(loc.BUSCAS.BOTAO_BUSCAR, { timeout: 90000 }).should("be.visible").click();

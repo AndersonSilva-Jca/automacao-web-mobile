@@ -1,7 +1,14 @@
 const loc = {
   SP_TODOS: "São Paulo (Todos) (SP)",
-  SP_TIETE: '//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]',
-  RJ_TODOS: '//*[@id="Rio-De-Janeiro---Todos-(RJ)"]/p[1]',
+  SP_TIETE: "São Paulo (Rod. Tietê) (SP)",
+  ODP_SP_TIETE: "São Paulo - Rodoviária Tietê (SP)",
+  RJ_TODOS: "Rio de Janeiro (Todos) (RJ)",
+  XPATH_SP_TIETE: '//*[@id="São-Paulo-(Rod.-Tietê)-(SP)"]/p[1]',
+  ODP_XPATH_SP_TIETE: '//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]',
+  XPATH_RJ_TODOS: '//*[@id="Rio-de-Janeiro-(Todos)-(RJ)"]/p[1]',
+
+  ODP_XPATH_RJ_TODOS: '//*[@id="Rio-De-Janeiro---Todos-(RJ)"]/p[1]',
+  XPATH_SP_TODOS: '//*[@id="São-Paulo---Todos-(SP)"]/p[1]',
   HEADER_BOTAO_LOGIN: "#header-login-button",
   WEMOBI_BOTAO_LOGIN: "#button-header-login",
   USUARIO: "#input-login",

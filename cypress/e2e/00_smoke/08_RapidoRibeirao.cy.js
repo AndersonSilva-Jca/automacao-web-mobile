@@ -22,10 +22,10 @@ describe("Rapidão Ribeirão", () => {
       cy.get(loc.BOTAO_LOGIN).click({ force: true });
       cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
     });
-    cy.get(loc.BUSCAS.DESTINO_IDA).click().type(loc.SP_TODOS, { delay: 100 }).should("exist").invoke("show");
-    cy.contains(loc.SP_TODOS).click({ force: true });
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().type(loc.SP_TIETE, { delay: 100 }).should("exist").invoke("show");
+    cy.xpath(loc.XPATH_SP_TIETE).click({ force: true });
     cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type(loc.RJ_TODOS, { delay: 100 }).should("exist").invoke("show");
-    cy.contains(loc.RJ_TODOS).click({ force: true });
+    cy.xpath(loc.XPATH_RJ_TODOS).click({ force: true });
     cy.get(loc.BUSCAS.DATA_IDA).click();
     cy.get(loc.LOADER).should("not.exist");
     cy.selecionarDataIda(2);
