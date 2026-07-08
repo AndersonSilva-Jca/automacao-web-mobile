@@ -9,40 +9,39 @@ Library             ../libraries/GmailHelper.py
 *** Test Cases ***
 Deve realizar a busca de passagens com sucesso
     Start session
-    Login
+        Sleep    7s
+    Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="user"]    timeout=240s
+    Log To Console    \nFazendo o Login...
+    Input Text    xpath=//android.widget.EditText[@resource-id="user"]    ${LOGIN}
+    Input Password    xpath=//android.widget.EditText[@resource-id="password"]    ${SENHA}
+    Wait Until Element Is Visible
+    ...    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
+    ...    timeout=60s
+    Click Element    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
+    Sleep    5s
+    Wait Until Element Is Visible
+    ...    xpath=//android.view.ViewGroup[@content-desc="Buscar"]/android.view.View    timeout=90s
+    Log To Console    \nTela de Busca exibida com sucesso!
     Sleep    5s
     Click Element    xpath=//android.widget.EditText[@resource-id="origin"]
     log To Console    \nClicando no campo de origem...
 
-    # wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Origem"]    timeout=60s
-    # log To Console    \nCampo de origem exibido com sucesso!
-
-    # Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="locationSearch"]    timeout=120s
-
-    Click Element    xpath=//android.widget.EditText[@resource-id="locationSearch"]
-    log To Console    \nClicando no campo de origem...
 
     Tap With Positions    1s    ${274, 418}
 
-    # Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Origem"]    timeout=45s
+
 
     Input Text    android=new UiSelector().className("android.widget.EditText")    São Paulo - Todos (SP)
     Log To Console    \nDigitando origem...
 
-    Wait Until Element Is Visible
-    ...    xpath=//android.widget.TextView[@text="São Paulo - Todos (SP)"]
-    ...    timeout=60s
 
     Click Element    xpath=//android.widget.TextView[@text="São Paulo - Todos (SP)"]
 
-    # Click Element    xpath=//android.widget.TextView[@text="São Paulo - Todos (SP)"]
+
 
     Tap With Positions    1s    ${274, 418}
 
-    click Element    xpath=//android.widget.EditText[@resource-id="locationSearch"]
-    log To Console    \nClicando no campo de destino...
-
-    # Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Destino"]    timeout=45s
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Destino"]    timeout=45s
  
 
     Input Text    android=new UiSelector().className("android.widget.EditText")    Rio de Janeiro - Todos (RJ)
@@ -51,9 +50,7 @@ Deve realizar a busca de passagens com sucesso
 
 :
 
-    Click Element    xpath=//android.widget.TextView[@text="Rio de Janeiro - Todos (RJ)"]
-
-    # Click Element    accessibility_id=Rio de Janeiro - Todos (RJ), Localidade de Grupo
+    Click Element    accessibility_id=Rio de Janeiro - Todos (RJ), Localidade de Grupo
 
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Data"]    timeout=60s
 
@@ -129,8 +126,6 @@ Deve realizar a busca de passagens com sucesso
 
   Click Element    xpath=//android.widget.TextView[@text="Assento aleatório"]
 
-
-  #  Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Anderson Silva dos Santos"]    timeout=60s
    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Próximo passo"]    timeout=60s
   Click Element    xpath=//android.widget.TextView[@text="Próximo passo"]
   Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Você possui cupom de desconto?"]    timeout=60s
