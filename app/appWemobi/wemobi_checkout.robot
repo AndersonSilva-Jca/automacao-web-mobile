@@ -12,13 +12,18 @@ Deve realizar a busca de passagens com sucesso
     Login
     Sleep    5s
     Click Element    xpath=//android.widget.EditText[@resource-id="origin"]
+    log To Console    \nClicando no campo de origem...
 
-    Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="locationSearch"]    timeout=120s
-    Click Element    xpath=//android.widget.EditText[@resource-id="locationSearch"]
+    # wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Origem"]    timeout=60s
+    # log To Console    \nCampo de origem exibido com sucesso!
+
+    # Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="locationSearch"]    timeout=120s
+
+    # Click Element    xpath=//android.widget.EditText[@resource-id="locationSearch"]
 
     Tap With Positions    1s    ${274, 418}
 
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Origem"]    timeout=45s
+    # Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Origem"]    timeout=45s
 
     Input Text    android=new UiSelector().className("android.widget.EditText")    São Paulo - Todos (SP)
     Log To Console    \nDigitando origem...
