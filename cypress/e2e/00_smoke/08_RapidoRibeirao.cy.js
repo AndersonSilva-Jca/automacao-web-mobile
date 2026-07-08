@@ -5,7 +5,7 @@ require("cypress-xpath");
 import loc from "../../support/locators.js";
 const rapidoRibeirao = "https://www.rapidoribeiraopreto.com.br/";
 
-describe("Rapidão Ribeirão", () => {
+describe("Rapido Ribeirão", () => {
   beforeEach(() => {
     cy.clearCookies();
     cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
@@ -13,7 +13,7 @@ describe("Rapidão Ribeirão", () => {
     Cypress.on("uncaught:exception", () => false);
   });
 
-  it("Rapidão Ribeirão - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
+  it("Rapido Ribeirão - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
     cy.env(["login", "senha"]).then((env) => {
       cy.visit(rapidoRibeirao);
       cy.get(loc.HEADER_BOTAO_LOGIN).click();

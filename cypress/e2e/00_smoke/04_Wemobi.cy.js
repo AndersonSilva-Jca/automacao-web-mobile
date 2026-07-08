@@ -33,9 +33,9 @@ describe("Wemobi", () => {
     cy.selecionarPassagemAleatoria1({ timeout: 90000 });
     cy.get(loc.CHECK_PASSAGEIRO, { timeout: 90000 }).click({ force: true });
     cy.get("#passenger-identification-proceed").should("be.visible").and("not.be.disabled").click();
-    cy.get("#reservation-seat-0").click();
-    cy.fecharModalUpgradePoltrona({ timeout: 90000 });
-    cy.get(".payment-type-container > .col-12 > .active").should("be.visible");
+    // cy.get("#reservation-seat-0").click().log("Selecionando assento");
+    cy.fecharModalUpgradePoltrona({ timeout: 90000 }).log("Fechando modal de upgrade de poltrona");
+    cy.get(".payment-type-container > .col-12 > .active").should("be.visible").log("Aba de pagamentos visível");
     cy.get(loc.ASSERT_SUBTOTAL).should("contain", "Subtotal dos assentos").log("Subtotal dos assentos");
     cy.get(loc.WEMOBI_ASSERT_TAXASERVICO).should("contain", "Taxa de serviço").log("Taxa de serviço");
     cy.get(loc.ASSERT_VALORTOTAL).should("contain", "Valor total").log("Valor total das passagens");

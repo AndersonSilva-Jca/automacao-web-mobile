@@ -672,6 +672,46 @@ Cypress.Commands.add("fecharModalOutlet", () => {
   });
 });
 
+Cypress.Commands.add("fecharModalGiro", () => {
+  cy.wait(3000);
+  cy.get(loc.MENSAGEM_LOGADO).should("contain", "ANDERSON");
+  cy.get("body").then(($body) => {
+    if ($body.find(".QSIWebResponsiveDialog-Layout1-SI_a5XuRtOQsuZ5iTA_content").length > 0 && $body.find(".QSIWebResponsiveDialog-Layout1-SI_a5XuRtOQsuZ5iTA_content").is(":visible")) {
+      cy.log("⚠️ Modal detectado — fechando...");
+      cy.get(".QSIWebResponsiveDialog-Layout1-SI_a5XuRtOQsuZ5iTA_close-btn").click({ force: true });
+      cy.get(".QSIWebResponsiveDialog-Layout1-SI_a5XuRtOQsuZ5iTA_content").should("not.exist");
+    } else {
+      cy.log("✅ Sem modal na tela");
+    }
+    cy.get(loc.MENSAGEM_LOGADO).should("contain", "ANDERSON");
+    cy.get(loc.BUSCAS.DESTINO_IDA).click();
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Todos (SP)", { delay: 100 });
+    cy.contains("São Paulo - Todos (SP)").click({ force: true });
+    cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("Rio De Janeiro - Todos (RJ)", { delay: 100 });
+    cy.contains(" Rio De Janeiro - Todos (RJ) ").click({ force: true });
+    cy.get(loc.BUSCAS.DATA_IDA).click();
+    cy.log("✅ Sem modal, indo para a tela de passagens");
+  });
+});
+
+Cypress.Commands.add("fecharModalUpgradePoltrona", () => {
+  cy.wait(3000);
+  cy.get("#reservation-seat-0").click().log("Selecionando assento");
+  cy.get("body").then(($body) => {
+    if ($body.find("#modal-upsel").length > 0 && $body.find("#modal-upsel").is(":visible")) {
+      cy.log("⚠️ Modal de upgrade detectado — fechando...");
+      cy.get("#close-modal-upsel").click({ force: true });
+      cy.get("#modal-upsel").should("not.exist");
+    } else {
+      cy.log("✅ Sem modal de upgrade");
+    }
+    //  cy.get("#reservation-seat-0").click().log("Selecionando assento");
+    cy.get('[data-value="random-seat"]').click();
+    cy.get("#seat-reservation-v2-button-proceed").should("be.visible").and("not.be.disabled").click();
+    cy.log("✅ Sem modal de upgrade, indo para a tela checkout");
+  });
+});
+
 Cypress.Commands.add("selecionarCidadeSugerida", (cidade) => {
   // Aguarda lista de sugestões aparecer
 
@@ -684,22 +724,6 @@ Cypress.Commands.add("selecionarCidadeSugerida", (cidade) => {
 // Uso
 // cy.selecionarCidadeSugerida("São Paulo - Rodoviária Tietê (SP)");
 // cy.selecionarCidadeSugerida("Curitiba - Terminal Rodoviário (PR)");
-
-Cypress.Commands.add("fecharModalUpgradePoltrona", () => {
-  cy.wait(3000);
-  cy.get("body").then(($body) => {
-    if ($body.find("#modal-upsel").length > 0 && $body.find("#modal-upsel").is(":visible")) {
-      cy.log("⚠️ Modal de upgrade detectado — fechando...");
-      cy.get("#close-modal-upsel").click({ force: true });
-      cy.get("#modal-upsel").should("not.exist");
-    } else {
-      cy.log("✅ Sem modal de upgrade");
-    }
-    cy.get('[data-value="random-seat"]').click();
-    cy.get("#seat-reservation-v2-button-proceed").should("be.visible").and("not.be.disabled").click();
-    cy.log("✅ Sem modal de upgrade, indo para a tela checkout");
-  });
-});
 
 Cypress.Commands.add("selecionarPeriodoEstadia", (diasDeEstadia = 3) => {
   // 1. Busca apenas os botões de dia que estão habilitados para clique
