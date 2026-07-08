@@ -3,7 +3,7 @@
 require("cypress-xpath");
 // 06/06/2026 - incio com github actions
 import loc from "../../support/locators.js";
-const viacao1001 = "https://www.autoviacao1001.com.br";
+const viacao1001 = "https://www.autoviacao1001.com.br/?utm_source=synthetic_test&utm_medium=internal&utm_campaign=operacao";
 
 describe("Auto Viação 1001", () => {
   beforeEach(() => {

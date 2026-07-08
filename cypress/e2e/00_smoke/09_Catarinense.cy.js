@@ -3,7 +3,7 @@
 require("cypress-xpath");
 // 06/06/2026 - incio com github actions
 import loc from "../../support/locators.js";
-const catarinense = "https://www.catarinense.com.br/";
+const catarinense = "https://www.catarinense.com.br/?utm_source=synthetic_test&utm_medium=internal&utm_campaign=operacao";
 
 describe("Catarinense", () => {
   beforeEach(() => {

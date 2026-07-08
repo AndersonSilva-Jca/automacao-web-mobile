@@ -280,13 +280,6 @@ Cypress.Commands.add("selecionarPassagemAleatoria1", () => {
         .should("exist")
         .and("not.be.disabled")
         .click({ force: true });
-      // cy.wrap($btnCompra)
-      //   .scrollIntoView({ offset: { top: -150 } })
-      //   .should('be.visible')
-      //   .should('exist')
-      //   .invoke('show')
-      //   .and('not.be.disabled')
-      //   .click({ force: true });
 
       // --- LÓGICA DO MODAL "FIQUE ATENTO" ---
       // Aumentamos para 3s para garantir que o erro de 'servicesList' não ocorra

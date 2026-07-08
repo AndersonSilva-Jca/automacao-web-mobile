@@ -3,7 +3,7 @@
 require("cypress-xpath");
 // 06/06/2026 - incio com github actions
 import loc from "../../support/locators.js";
-const odp = "https://www.outletdepassagens.com.br";
+const odp = "https://www.outletdepassagens.com.br/?utm_source=synthetic_test&utm_medium=internal&utm_campaign=operacao";
 
 describe("Outlet de Passagens", () => {
   beforeEach(() => {

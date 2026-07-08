@@ -3,7 +3,7 @@
 require("cypress-xpath");
 // 06/06/2026 - incio com github actions
 import loc from "../../support/locators.js";
-const odt = "https://www.outletdehoteis.com.br";
+const odt = "https://www.outletdehoteis.com.br/?utm_source=synthetic_test&utm_medium=internal&utm_campaign=operacao";
 
 describe("Outlet de Hotéis", () => {
   beforeEach(() => {

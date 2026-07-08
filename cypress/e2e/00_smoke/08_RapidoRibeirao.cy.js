@@ -3,7 +3,7 @@
 require("cypress-xpath");
 // 06/06/2026 - incio com github actions
 import loc from "../../support/locators.js";
-const rapidoRibeirao = "https://www.rapidoribeiraopreto.com.br/";
+const rapidoRibeirao = "https://www.rapidoribeiraopreto.com.br/?utm_source=synthetic_test&utm_medium=internal&utm_campaign=operacao";
 
 describe("Rapido Ribeirão", () => {
   beforeEach(() => {
