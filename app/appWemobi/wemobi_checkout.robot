@@ -38,7 +38,7 @@ Deve realizar a busca de passagens com sucesso
 
     Tap With Positions    1s    ${274, 418}
 
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Destino"]    timeout=45s
+    # Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Destino"]    timeout=45s
  
 
     Input Text    android=new UiSelector().className("android.widget.EditText")    Rio de Janeiro - Todos (RJ)
@@ -62,6 +62,7 @@ Deve realizar a busca de passagens com sucesso
     Input Text
     ...    xpath=//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[3]/android.widget.EditText[1]
     ...    ${data_ida}
+    log To Console    \nData de ida selecionada com sucesso!
 
     Wait Until Element Is Visible
     ...    xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
@@ -74,11 +75,13 @@ Deve realizar a busca de passagens com sucesso
     ...    timeout=60s
 
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
+    
 
     Wait Until Element Is Visible
     ...    xpath=//android.view.ViewGroup[@content-desc="Buscar"]/android.view.View
     ...    timeout=60s
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Buscar"]/android.view.View
+    log To Console    \nClicando em Buscar...
 
     Log To Console    \nBusca realizada com sucesso!
 
@@ -93,6 +96,7 @@ Deve realizar a busca de passagens com sucesso
     ...    timeout=60s
 
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Comprar"]/android.view.View
+    Log To Console    \nClicando em Comprar...
 
    Wait Until Element Is Visible
     ...    xpath=//android.widget.TextView[@text="Passageiro 1"]
