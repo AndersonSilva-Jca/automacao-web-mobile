@@ -9,7 +9,7 @@ Library             ../libraries/GmailHelper.py
 *** Test Cases ***
 Deve realizar a busca de passagens com sucesso
     Start session
-        Sleep    7s
+
     Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="user"]    timeout=240s
     Log To Console    \nFazendo o Login...
     Input Text    xpath=//android.widget.EditText[@resource-id="user"]    ${LOGIN}
@@ -18,28 +18,26 @@ Deve realizar a busca de passagens com sucesso
     ...    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
     ...    timeout=60s
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
-    Sleep    5s
+
     Wait Until Element Is Visible
     ...    xpath=//android.view.ViewGroup[@content-desc="Buscar"]/android.view.View    timeout=90s
     Log To Console    \nTela de Busca exibida com sucesso!
-    Sleep    5s
-    Click Element    xpath=//android.widget.EditText[@resource-id="origin"]
+      Wait Until Element Is Visible    id=origin    timeout=60s
+    Click Element    id=origin
     log To Console    \nClicando no campo de origem...
+    Wait Until Element Is Visible    id=locationSearch    timeout=60s
+    Click Element    id=locationSearch
+    Log To Console    \nClicando em origem...
 
 
-    Tap With Positions    1s    ${274, 418}
 
 
-
-    Input Text    android=new UiSelector().className("android.widget.EditText")    São Paulo - Todos (SP)
+    Input Text    android=new UiSelector().className("android.widget.EditText")    Sao Paulo - Todos (SP)
     Log To Console    \nDigitando origem...
 
 
-    Click Element    xpath=//android.widget.TextView[@text="São Paulo - Todos (SP)"]
+    Click Element    id=São Paulo - Todos (SP), Localidade de Grupo
 
-
-
-    Tap With Positions    1s    ${274, 418}
 
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Destino"]    timeout=45s
  
@@ -50,7 +48,7 @@ Deve realizar a busca de passagens com sucesso
 
 :
 
-    Click Element    accessibility_id=Rio de Janeiro - Todos (RJ), Localidade de Grupo
+    Click Element    id=Rio de Janeiro - Todos (RJ), Localidade de Grupo
 
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Data"]    timeout=60s
 
