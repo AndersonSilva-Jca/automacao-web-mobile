@@ -4,7 +4,7 @@ Documentation     Suite de testes — automação mobile com tratamento condicio
 
 Library           OperatingSystem
 Library           String
-Library           AppiumLibrary    run_on_failure=Capture Page Screenshot
+Library           AppiumLibrary   
 Library           ../../libraries/GmailHelper.py
 
 
@@ -55,21 +55,21 @@ Start session
     ...    appium:adbExecTimeout=${60000}
     ...    appium:newCommandTimeout=${300}
     ...    appium:connectHardwareKeyboard=${True}
-    ...    noReset=${False}
-    ...    fullReset=${False}
+    # ...    noReset=${False}
+    # ...    fullReset=${False}
 
-    ...    appium:settings[enforceXPath1]=${True}
-    ...    appium:settings[waitForIdleTimeout]=${500}
+    # ...    appium:settings[enforceXPath1]=${True}
+    # ...    appium:settings[waitForIdleTimeout]=${500}
     
     # 3. Dá um tempo estático para a tela de carregamento sumir antes do primeiro comando de busca
-    Sleep    10s
+    # Sleep    10s
 
 # ─────────────────────────────────────────────────────────────────────────────
 Login
-    # [Documentation]
-    # ...    Preenche credenciais e clica ACESSAR.
-    # ...    ► Antes de clicar: fotografa o ID do último e-mail (âncora).
-    # ...    ► Ap
+    [Documentation]
+    ...    Preenche credenciais e clica ACESSAR.
+    ...    ► Antes de clicar: fotografa o ID do último e-mail (âncora).
+    ...    ► Ap
     # ós clicar: verifica 2FA usando apenas e-mails com ID > âncora.
     # Sleep    7s
     Wait Until Element Is Visible    id=android:id/content    timeout=40s
