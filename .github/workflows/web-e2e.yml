@@ -53,7 +53,7 @@ jobs:
           # CYPRESS_INTERNAL_NPM_REGISTRY_DISABLE_SSL_VERIFICATION: "1" # Força o bypass no Cypress
 
       - name: Obter Data e Hora Atual (Brasília)
-        if: failure()
+        if: always()
         run: |
           # Define o fuso horário para São Paulo e formata os dados
           echo "DATA_ALERTA=$(TZ='America/Sao_Paulo' date +'%d/%m/%Y')" >> $GITHUB_ENV
@@ -120,7 +120,7 @@ jobs:
                <hr>
 
                <div style="background-color: #ebfff6; border-left: 4px solid #84e4a1; padding: 15px; margin: 20px 0;">
-               <h4 style="margin: 0 0 12px 0; color: #0db94f; font-size: 15px; font-family: Arial, sans-serif;">📊 Relatórios e Evidências Disponíveis:</h4>
+               <h4 style="margin: 0 0 12px 0; color: #0db94f; font-size: 15px; font-family: Arial, sans-serif;">📊 Relatórios e Evidências Disponíveis: Run #${{ github.run_number }} . ${{ env.DATA_ALERTA }} às ${{ env.HORA_ALERTA }}
                <p style="margin: 0; line-height: 1.6; font-family: Arial, sans-serif;">
                🔹 <a href="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/${{ github.run_number }}/01_e2e/index.html" style="color: #1565c0; font-weight: bold; text-decoration: none; font-size: 14px;">Clique aqui para Acessar o Relatório dos Testes</a><br>
                <span style="display: inline-block; margin-top: 8px;">🔹 <a href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" style="color: #000000; text-decoration: none; font-size: 13px;">Analisar Logs Técnicos da Pipeline (GitHub Actions)</a></span>
