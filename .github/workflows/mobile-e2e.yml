@@ -335,7 +335,7 @@ jobs:
           total = passed + failed + skipped
 
           # Define o status geral
-          status_str = "PASSOU ✅" if failed == 0 and total > 0 else "FALHOU ❌"
+          status_str = "Monitoramento Finalizado com Sucesso" if failed == 0 and total > 0 else "FALHOU ❌"
           status_raw = "success" if failed == 0 and total > 0 else "failure"
 
           sp_tz = zoneinfo.ZoneInfo("America/Sao_Paulo")
@@ -405,7 +405,6 @@ jobs:
           echo "|---|---|" >> $GITHUB_STEP_SUMMARY
           echo "| ✅ Passed  | ${{ steps.metrics.outputs.passed }}  |" >> $GITHUB_STEP_SUMMARY
           echo "| ❌ Failed  | ${{ steps.metrics.outputs.failed }}  |" >> $GITHUB_STEP_SUMMARY
-          echo "| ⏭️ Skipped | ${{ steps.metrics.outputs.skipped }} |" >> $GITHUB_STEP_SUMMARY
           echo "| 🔢 Total   | ${{ steps.metrics.outputs.total }}   |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "🔗 [Allure Report]($PAGES_URL)" >> $GITHUB_STEP_SUMMARY
@@ -451,7 +450,6 @@ jobs:
                 <div class="cards">
                   <div class="card"><span class="n green">${{ steps.metrics.outputs.passed }}</span><div class="l">✅ Passed</div></div>
                   <div class="card"><span class="n red">${{ steps.metrics.outputs.failed }}</span><div class="l">❌ Failed</div></div>
-                  <div class="card"><span class="n gray">${{ steps.metrics.outputs.skipped }}</span><div class="l">⏭ Skipped</div></div>
                   <div class="card"><span class="n blue">${{ steps.metrics.outputs.total }}</span><div class="l">🔢 Total</div></div>
                 </div>
                 <a class="btn btn-gray" href="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/mobile-run-${{ github.run_number }}">🔍 Relatório Allure (GitHub Pages)</a>
@@ -523,7 +521,6 @@ jobs:
                   <div class="cards">
                     <div class="card"><span class="n green">${{ steps.metrics.outputs.passed }}</span><div class="l">✅ Passed</div></div>
                     <div class="card"><span class="n red">${{ steps.metrics.outputs.failed }}</span><div class="l">❌ Failed</div></div>
-                    <div class="card"><span class="n gray">${{ steps.metrics.outputs.skipped }}</span><div class="l">⏭ Skipped</div></div>
                     <div class="card"><span class="n blue">${{ steps.metrics.outputs.total }}</span><div class="l">🔢 Total</div></div>
                   </div>
 
