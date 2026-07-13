@@ -9,7 +9,7 @@ Library     ../libraries/GmailHelper.py
 *** Test Cases ***
 Deve realizar a busca de passagens com sucesso
     Start session
-    # Login
+    Login
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Buscar"]    timeout=60s
     Log To Console    \n Elemento "Buscar" visível
     Click Element    xpath=//android.widget.EditText[@resource-id="origin"]
@@ -55,8 +55,21 @@ Deve realizar a busca de passagens com sucesso
 
     Tratar Banner De Horario Se Aparecer
 
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Adicione um passageiro salvo"]
+
     Click Element    xpath=//android.widget.TextView[@text="Adicione um passageiro salvo"]
+
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Quem é o passageiro?"]
 
     Click Element    xpath=//android.view.ViewGroup[@content-desc="A, Anderson Silva dos Santos, (Eu), Use seus dados de cadastro"]
 
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Avançar"]
+
     Click Element    xpath=//android.widget.TextView[@text="Avançar"]
+
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Passageiro 1"]
+
+    Click Element    //android.view.ViewGroup[@content-desc="Passageiro 1, Anderson Silva dos Santos, Selecione o assento"]
+
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Mapa de assentos"]    timeout=60s
+
