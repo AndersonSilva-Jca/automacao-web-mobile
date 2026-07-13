@@ -9,16 +9,54 @@ Library     ../libraries/GmailHelper.py
 *** Test Cases ***
 Deve realizar a busca de passagens com sucesso
     Start session
-    Login
-    Sleep    3s
+    # Login
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Buscar"]    timeout=60s
     Log To Console    \n Elemento "Buscar" visível
     Click Element    xpath=//android.widget.EditText[@resource-id="origin"]
-    Input Text    xpath=//android.widget.EditText[@resource-id="origin"]    Sao Paulo
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Origem"]
+    Input Text    android=new UiSelector().resourceId("locationSearch")    Sao Paulo (Rod. Tietê)
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="São Paulo (Rod. Tietê) (SP)"]
     Click Element    xpath=//android.widget.TextView[@text="São Paulo (Rod. Tietê) (SP)"]
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Destino"]
-    Input Text    xpath=//android.widget.TextView[@text="Digite para buscar"]    Rio de Janeiro (Novo Rio) (RJ)
+    Input Text    android=new UiSelector().resourceId("locationSearch")    Rio de Janeiro (Novo Rio) (RJ)
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Rio de Janeiro (Novo Rio) (RJ)"]
     Click Element    xpath=//android.widget.TextView[@text="Rio de Janeiro (Novo Rio) (RJ)"]
+
+     ${data_ida}=    obter_dia_aleatorio_ida
+    Log To Console    \nData gerada: ${data_ida}
+
+    Click Element   android=new UiSelector().className("android.widget.EditText").instance(0)
+    Input Text
+    ...    android=new UiSelector().className("android.widget.EditText").instance(0)
+    ...    ${data_ida}
+    log To Console    \nData de ida selecionada com sucesso!
+
+    Wait Until Element Is Visible
+    ...    xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
+    ...    timeout=60s
+
+    Click Element    xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
  
+    Wait Until Element Is Visible
+    ...    xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
+    ...    timeout=60s
+
+    Click Element    xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
+
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Buscar"]    timeout=60s
+
+    Click Element    xpath=//android.widget.TextView[@text="Buscar"]
+
+    Wait Until Element Is Visible    android=new UiSelector().className("android.view.ViewGroup").instance(47)    timeout=60s
+
+    Swipe    start_x=503    start_y=2040    end_x=522    end_y=28    duration=1s
+
+    Click Element    xpath=//android.view.View
+
+    Tratar Banner De Horario Se Aparecer
+
+    Click Element    xpath=//android.widget.TextView[@text="Adicione um passageiro salvo"]
+
+    Click Element    xpath=//android.view.ViewGroup[@content-desc="A, Anderson Silva dos Santos, (Eu), Use seus dados de cadastro"]
+
+    Click Element    xpath=//android.widget.TextView[@text="Avançar"]

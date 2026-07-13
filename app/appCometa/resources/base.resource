@@ -81,3 +81,17 @@ Fechar modal do login
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Garanta AGORA até 55% OFF"]    timeout=120s
 
     Tap With Positions    1000ms    ${952, 186}
+
+Tratar Banner De Horario Se Aparecer
+    # 1. Verifica se o elemento aparece na tela em até 5 segundos
+    # O Robot guarda True (se achou) ou False (se não achou) na variável
+    ${horario_visivel}=    Run Keyword And Return Status
+    ...    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="modal"]/android.view.ViewGroup/android.view.ViewGroup[3]    timeout=30s
+
+    # 2. Se a resposta for True, ele entra no bloco e clica para aceitar
+    IF    ${horario_visivel}
+        Log To Console    \n[INFO] Banner de horario de viagem detectado. Aceitando...
+        Click Element    xpath=//android.widget.TextView[@text="Ok, entendi!"]
+    ELSE
+        Log To Console    \n[INFO] Banner de Horário de viagem não apareceu. Seguindo o fluxo...
+    END

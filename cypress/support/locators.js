@@ -24,6 +24,7 @@ const loc = {
   GIRO_ASSERT_VALORTOTAL: ":nth-child(6) > .title > .cmp-text > p > b",
   ASSERT_VALORTOTAL: ".title > .cmp-text > p > b",
   WEMOBI_BOTAO_ENTRAR: "#button-login-confirm",
+  WEMOBI_AVANCAR_PASSAGEIRO: "#passenger-identification-proceed",
   GIRO_BOTAO_LOGIN: '[data-js="header-login-button"]',
   GIRO_BOTAO_ENTRAR: ".row > .btn-giro",
   ACESSE_GIRO: ".login-title > p",
