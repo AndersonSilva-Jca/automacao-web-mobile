@@ -25,21 +25,21 @@ describe("Clube Giro", () => {
     cy.env(["login2", "senha"]).then((env) => {
       cy.visit(giro);
       cy.get(loc.GIRO_BOTAO_LOGIN).should("be.visible").click();
-      cy.get(".login-title > p").should("contain", "Acesse o Giro");
+      cy.get(loc.ACESSE_GIRO).should("contain", "Acesse o Giro");
       cy.get(loc.USUARIO).should("be.visible").type("andynho1987@gmail.com", { delay: 50 });
       cy.get(loc.SENHA).should("be.visible").type(env.senha, { log: false }, { delay: 100 });
       cy.get(loc.GIRO_BOTAO_ENTRAR).click({ force: true });
       cy.wait(4000);
     });
     cy.get("body").then(($body) => {
-      const temModal2FA = $body.find('input[data-js="modal-input-password-twofa"]:visible').length > 0;
+      const temModal2FA = $body.find(loc.GIRO_INPUT_VISIBLE).length > 0;
       if (temModal2FA) {
         cy.log("🔐 Modal 2FA detectado e visível – buscando código no e-mail...");
         cy.wait(5000);
         cy.task("buscarCodigo2FAGmail").then((codigo2FA) => {
           expect(codigo2FA).to.not.be.null;
-          cy.get('input[data-js="modal-input-password-twofa"]').focus().clear({ force: true }).type(codigo2FA, { force: true, delay: 80 }); // force ignora visibility
-          cy.get('button[data-js="modal-button-twofa"]').should("not.be.disabled").click();
+          cy.get(loc.GIRO_INPUT_2FA).focus().clear({ force: true }).type(codigo2FA, { force: true, delay: 80 }); // force ignora visibility
+          cy.get(loc.GIRO_BOTAO_MODAL_2FA).should("not.be.disabled").click();
         });
       } else {
         cy.log("✅ Login direto – Modal 2FA está oculto (display: none). Pulando etapa.");

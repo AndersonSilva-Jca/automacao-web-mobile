@@ -26,7 +26,10 @@ const loc = {
   WEMOBI_BOTAO_ENTRAR: "#button-login-confirm",
   GIRO_BOTAO_LOGIN: '[data-js="header-login-button"]',
   GIRO_BOTAO_ENTRAR: ".row > .btn-giro",
-
+  ACESSE_GIRO: ".login-title > p",
+  GIRO_INPUT_2FA: 'input[data-js="modal-input-password-twofa"]',
+  GIRO_BOTAO_MODAL_2FA: 'button[data-js="modal-button-twofa"]',
+  GIRO_INPUT_VISIBLE: 'input[data-js="modal-input-password-twofa"]:visible',
   LOADER: '[alt="loader"]',
 
   LINK_INFO_VIAGEM: ".header-nav-container > :nth-child(1) > :nth-child(1) > .focusable",

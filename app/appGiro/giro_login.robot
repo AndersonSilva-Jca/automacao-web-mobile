@@ -4,15 +4,17 @@ Documentation     Suíte de testes focada no cenário de login da aplicação Cl
 Resource          ../appGiro/resources/giro_base.resource
 Library           ../appGiro/resources/GeradorDataIda.py
 Library           ../appGiro/resources/GeradorDataVolta.py
-Library           ../libraries/GmailHelper.py
-Library           String
-# Library           ImapLibrary2
+# Library           ../libraries/GmailHelper.py
+# Library           String
+Library           ImapLibrary2
+Library             AppiumLibrary
 
 # Test Setup        Start session
 # Test Teardown     Encerrar Sessao E Gravar Video
 
 *** Test Cases ***
 Deve Realizar O Login Com Sucesso Tratando 2FA Se Solicitado
+    Start session
     [Tags]    smoke    login
     Login
     

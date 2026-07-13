@@ -1,11 +1,11 @@
 name: Mobile E2E - Giro/Wemobi/UTP
 
 on:
-  # schedule:
-  # Roda nos minutos 0 and 40 das horas pares (0, 2, 4, 6...)
-  # - cron: "30 0-22/2 * * *"
-  # Roda no minuto 20 das horas ímpares (1, 3, 5, 7...)
-  # - cron: "30 1-23/2 * * *"
+  schedule:
+    # Roda nos minutos 0 and 40 das horas pares (0, 2, 4, 6...)
+    - cron: "30 0-22/2 * * *"
+    # Roda no minuto 20 das horas ímpares (1, 3, 5, 7...)
+    - cron: "30 1-23/2 * * *"
   # - cron: "30 1-23/2 * * *"
   # - cron: "00 * * * *"
   # - cron: "40 * * * *"
@@ -129,16 +129,16 @@ jobs:
             echo "=== Emulator pronto e bootado automaticamente pela Action ==="
             adb devices
 
-            # echo "Instalando o aplicativo Clube Giro..."
-            # adb install-multiple ./app/apks/clube_giro/*.apk
-            echo "Instalando o aplicativo wemobi..."
-            adb install-multiple ./app/apks/wemobi/*.apk
-            echo "Instalando o aplicativo cometa..."
-            adb install-multiple ./app/apks/cometa/*.apk
-            echo "Instalando o aplicativo 1001..."
-            adb install-multiple ./app/apks/1001/*.apk
-            echo "Instalando o aplicativo catarinense..."
-            adb install-multiple ./app/apks/catarinense/*.apk
+            echo "Instalando o aplicativo Clube Giro..."
+            adb install-multiple ./app/apks/clube_giro/*.apk
+            # echo "Instalando o aplicativo wemobi..."
+            # adb install-multiple ./app/apks/wemobi/*.apk
+            # echo "Instalando o aplicativo cometa..."
+            # adb install-multiple ./app/apks/cometa/*.apk
+            # echo "Instalando o aplicativo 1001..."
+            # adb install-multiple ./app/apks/1001/*.apk
+            # echo "Instalando o aplicativo catarinense..."
+            # adb install-multiple ./app/apks/catarinense/*.apk
 
             echo "Garantindo que as animações do sistema estão desligadas..."
             adb shell settings put global window_animation_scale 0
@@ -153,7 +153,8 @@ jobs:
 
             echo "Iniciando a execução do Robot Framework com Allure..."
             # AJUSTADO: Adicionado o listener do Allure para alimentar o painel de monitoramento
-            robot -T -d ./results --listener allure_robotframework:$ALLURE_DIR --name "Monitoramento Mobile" app/appWemobi/wemobi_login.robot app/app1001/1001_login.robot app/appCatarinense/catarinense_login.robot app/appCometa/cometa_login.robot
+            robot -T -d ./results --listener allure_robotframework:$ALLURE_DIR --name "Monitoramento Mobile" app/appGiro/giro_login.robot
+            # app/appWemobi/wemobi_login.robot app/app1001/1001_login.robot app/appCatarinense/catarinense_login.robot app/appCometa/cometa_login.robot
 
             echo $! > appium.pid
             kill $(cat appium.pid) || true
@@ -335,7 +336,7 @@ jobs:
           total = passed + failed + skipped
 
           # Define o status geral
-          status_str = "PASSOU ✅" if failed == 0 and total > 0 else "FALHOU ❌"
+          status_str = "Monitoramento Finalizado com Sucesso" if failed == 0 and total > 0 else "FALHOU ❌"
           status_raw = "success" if failed == 0 and total > 0 else "failure"
 
           sp_tz = zoneinfo.ZoneInfo("America/Sao_Paulo")
@@ -405,7 +406,6 @@ jobs:
           echo "|---|---|" >> $GITHUB_STEP_SUMMARY
           echo "| ✅ Passed  | ${{ steps.metrics.outputs.passed }}  |" >> $GITHUB_STEP_SUMMARY
           echo "| ❌ Failed  | ${{ steps.metrics.outputs.failed }}  |" >> $GITHUB_STEP_SUMMARY
-          echo "| ⏭️ Skipped | ${{ steps.metrics.outputs.skipped }} |" >> $GITHUB_STEP_SUMMARY
           echo "| 🔢 Total   | ${{ steps.metrics.outputs.total }}   |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "🔗 [Allure Report]($PAGES_URL)" >> $GITHUB_STEP_SUMMARY
@@ -420,7 +420,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "✅[MOBILE] Giro/Wemobi/UTP - Monit. Cont."
           to: anderson.ssantos@jcatlm.com.br
-          # cc: fabiano.britto@externo-jcatlm.com.br
+          cc: fabiano.britto@externo-jcatlm.com.br
           from: "Monitoramento Contínuo"
           html_body: |
             <!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
@@ -451,7 +451,6 @@ jobs:
                 <div class="cards">
                   <div class="card"><span class="n green">${{ steps.metrics.outputs.passed }}</span><div class="l">✅ Passed</div></div>
                   <div class="card"><span class="n red">${{ steps.metrics.outputs.failed }}</span><div class="l">❌ Failed</div></div>
-                  <div class="card"><span class="n gray">${{ steps.metrics.outputs.skipped }}</span><div class="l">⏭ Skipped</div></div>
                   <div class="card"><span class="n blue">${{ steps.metrics.outputs.total }}</span><div class="l">🔢 Total</div></div>
                 </div>
                 <a class="btn btn-gray" href="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/mobile-run-${{ github.run_number }}">🔍 Relatório Allure (GitHub Pages)</a>
@@ -523,7 +522,6 @@ jobs:
                   <div class="cards">
                     <div class="card"><span class="n green">${{ steps.metrics.outputs.passed }}</span><div class="l">✅ Passed</div></div>
                     <div class="card"><span class="n red">${{ steps.metrics.outputs.failed }}</span><div class="l">❌ Failed</div></div>
-                    <div class="card"><span class="n gray">${{ steps.metrics.outputs.skipped }}</span><div class="l">⏭ Skipped</div></div>
                     <div class="card"><span class="n blue">${{ steps.metrics.outputs.total }}</span><div class="l">🔢 Total</div></div>
                   </div>
 
@@ -555,7 +553,7 @@ jobs:
           # 3. Monta o link do relatório oficial (Allure) no Pages
           LINK_RELATORIO="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/mobile-run-${{ github.run_number }}"
 
-          TEXTO_BRUTO="🚨*TESTE [ALERTA MOBILE] Giro/Wemobi/UTP*
+          TEXTO_BRUTO="🚨*[ALERTA MOBILE] Giro/Wemobi/UTP*
 
           Os testes E2E do Robot Framework falharam no ambiente de Operação.
 

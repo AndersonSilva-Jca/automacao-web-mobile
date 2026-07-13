@@ -4,9 +4,8 @@ Documentation     Suite de testes — automação mobile com tratamento condicio
 
 Library           OperatingSystem
 Library           String
-Library           AppiumLibrary   
+Library           AppiumLibrary
 Library           ../../libraries/GmailHelper.py
-
 
 *** Variables ***
 ${LOGIN2}               ${EMPTY}
@@ -44,25 +43,18 @@ Start session
     ...    appium:automationName=UiAutomator2
     ...    appium:appPackage=com.everymind.clubegiro
     ...    appium:appActivity=.MainActivity
-    ...    appWaitDuration=60000
+    ...    appWaitDuration=50000
     # ...    appium:noReset=${True}
     ...    appium:autoGrantPermissions=${True}
     ...    appium:ensureWebviewsHavePages=${True}
     ...    appium:clearDeviceLogs=${True}
     ...    appium:nativeWebScreenshot=${True}
-    ...    appium:uiautomator2ServerLaunchTimeout=${120000}
+    ...    appium:uiautomator2ServerLaunchTimeout=${90000}
     ...    appium:uiautomator2ServerInstallTimeout=${60000}
     ...    appium:adbExecTimeout=${60000}
     ...    appium:newCommandTimeout=${300}
     ...    appium:connectHardwareKeyboard=${True}
-    # ...    noReset=${False}
-    # ...    fullReset=${False}
-
-    # ...    appium:settings[enforceXPath1]=${True}
-    # ...    appium:settings[waitForIdleTimeout]=${500}
-    
-    # 3. Dá um tempo estático para a tela de carregamento sumir antes do primeiro comando de busca
-    # Sleep    10s
+    ...    appium:socketConnectionTimeout=${90000}
 
 # ─────────────────────────────────────────────────────────────────────────────
 Login
