@@ -1,4 +1,4 @@
-name: Web E2E - ODH/ODP/Giro/Wemobi/UTP
+name: TESTE Web E2E - ODH/ODP/Giro/Wemobi/UTP
 on:
   # push:
   #   branches:
