@@ -1,6 +1,7 @@
 *** Settings ***
 Library     AppiumLibrary
 Library     OperatingSystem
+Library    Collections
 # Library    AppiumLibrary    screenshot_root_directory=${CURDIR}
 
 
@@ -95,3 +96,35 @@ Tratar Banner De Horario Se Aparecer
     ELSE
         Log To Console    \n[INFO] Banner de Horário de viagem não apareceu. Seguindo o fluxo...
     END
+
+Selecionar Assento Livre Aleatoriamente
+    # 1. XPath para capturar todos os TextViews que representam assentos livres (números de 2 dígitos)
+    # Filtramos para pegar textos que não sejam "X", "Livre", "Ocupado", "Selecionado" ou o nome do passageiro
+    ${locator_todos_livres}    Set Variable    xpath=//android.widget.TextView[@text!="X" and @text!="Livre" and @text!="Ocupado" and @text!="Selecionado" and string-length(@text) = 2]
+
+    # Aguarda a tela carregar os assentos
+    Wait Until Element Is Visible    ${locator_todos_livres}    timeout=15s
+
+    # 2. Captura todos os elementos que combinam com o XPath acima
+    ${elementos}    Get Webelements    ${locator_todos_livres}
+
+    # Criamos uma lista vazia para guardar apenas os números dos assentos livres
+    ${lista_assentos_livres}    Create List
+
+    # Loop para ler o texto de cada elemento encontrado e adicionar na nossa lista
+    FOR    ${elemento}    IN    @{elementos}
+    ${texto}    Get Text    ${elemento}
+    Append To List    ${lista_assentos_livres}    ${texto}
+    END
+
+    # Exibe no log todos os assentos que estavam disponíveis para o clique
+    Log To Console    \nAssentos livres encontrados na tela: ${lista_assentos_livres}
+
+    # 3. Sorteia um assento aleatório da lista usando Python (random.choice)
+    ${assento_sorteado}    Evaluate    random.choice(${lista_assentos_livres})    modules=random
+
+    # 4. Clica no assento que foi sorteado
+    Click Element    xpath=//android.widget.TextView[@text="${assento_sorteado}"]
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Continuar "]    timeout=30s
+    Log To Console    👉 Assento sorteado para o teste: ${assento_sorteado}
+    

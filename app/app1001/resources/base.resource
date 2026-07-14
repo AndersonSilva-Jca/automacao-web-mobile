@@ -1,6 +1,7 @@
 *** Settings ***
 Library     AppiumLibrary
 Library     OperatingSystem
+Library    Collections
 # Library    AppiumLibrary    screenshot_root_directory=${CURDIR}
 
 
@@ -52,7 +53,6 @@ Start session
     ...    appium:androidInstallTimeout= ${120000}
 
 Login
-    Sleep    5s
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Digite seu CPF ou E-mail"]    timeout=60s
     Click Element    xpath=//android.widget.EditText[@resource-id="user"]
     Input Text    xpath=//android.widget.EditText[@resource-id="user"]    ${LOGIN}
@@ -60,17 +60,7 @@ Login
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
     Sleep    5s
     Log To Console    \nTela de Busca exibida com sucesso!
-    Wait Until Element Is Visible    android=new UiSelector().className("android.view.ViewGroup").instance(13)
-    Click Element
-    ...    android=new UiSelector().className("android.view.ViewGroup").instance(13)
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="name"]
-    Log To Console    \nLogin realizado com sucesso!
-    Log To Console    \nOlá, Anderson Silva
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Sair"]    timeout=15s
-    Click Element    xpath=//android.widget.TextView[@text="Sair"]
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Digite seu CPF ou E-mail"]    timeout=60s
-    Log To Console    \nUsuário deslogado com sucesso!
-    Sleep    3s
+   
 Close session
     Close Application
 
@@ -91,3 +81,50 @@ Fechar modal do login
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Garanta AGORA até 55% OFF"]    timeout=120s
 
     Tap With Positions    1000ms    ${952, 186}
+
+
+Tratar Banner De Horario Se Aparecer
+    # 1. Verifica se o elemento aparece na tela em até 5 segundos
+    # O Robot guarda True (se achou) ou False (se não achou) na variável
+    ${horario_visivel}=    Run Keyword And Return Status
+    ...    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="modal"]/android.view.ViewGroup/android.view.ViewGroup[3]    timeout=30s
+
+    # 2. Se a resposta for True, ele entra no bloco e clica para aceitar
+    IF    ${horario_visivel}
+        Log To Console    \n[INFO] Banner de horario de viagem detectado. Aceitando...
+        Click Element    xpath=//android.widget.TextView[@text="Ok, entendi!"]
+    ELSE
+        Log To Console    \n[INFO] Banner de Horário de viagem não apareceu. Seguindo o fluxo...
+    END
+
+Selecionar Assento Livre Aleatoriamente
+    # 1. XPath para capturar todos os TextViews que representam assentos livres (números de 2 dígitos)
+    # Filtramos para pegar textos que não sejam "X", "Livre", "Ocupado", "Selecionado" ou o nome do passageiro
+    ${locator_todos_livres}    Set Variable    xpath=//android.widget.TextView[@text!="X" and @text!="Livre" and @text!="Ocupado" and @text!="Selecionado" and string-length(@text) = 2]
+
+    # Aguarda a tela carregar os assentos
+    Wait Until Element Is Visible    ${locator_todos_livres}    timeout=15s
+
+    # 2. Captura todos os elementos que combinam com o XPath acima
+    ${elementos}    Get Webelements    ${locator_todos_livres}
+
+    # Criamos uma lista vazia para guardar apenas os números dos assentos livres
+    ${lista_assentos_livres}    Create List
+
+    # Loop para ler o texto de cada elemento encontrado e adicionar na nossa lista
+    FOR    ${elemento}    IN    @{elementos}
+    ${texto}    Get Text    ${elemento}
+    Append To List    ${lista_assentos_livres}    ${texto}
+    END
+
+    # Exibe no log todos os assentos que estavam disponíveis para o clique
+    Log To Console    \nAssentos livres encontrados na tela: ${lista_assentos_livres}
+
+    # 3. Sorteia um assento aleatório da lista usando Python (random.choice)
+    ${assento_sorteado}    Evaluate    random.choice(${lista_assentos_livres})    modules=random
+
+    # 4. Clica no assento que foi sorteado
+    Click Element    xpath=//android.widget.TextView[@text="${assento_sorteado}"]
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Continuar "]    timeout=30s
+    Log To Console    👉 Assento sorteado para o teste: ${assento_sorteado}
+    
