@@ -37,6 +37,8 @@ module.exports = defineConfig({
     mailPassword: process.env.MAIL_PASSWORD,
     gmailAppPass: process.env.GMAIL_APP_PASS,
     gmailMail: process.env.GMAIL_MAIL,
+    bs_username: process.env.BS_USERNAME,
+    bs_access_key: process.env.BS_ACCESS_KEY,
   },
   e2e: {
     retries: {

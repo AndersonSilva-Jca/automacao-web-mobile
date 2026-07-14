@@ -8,6 +8,11 @@ Library           AppiumLibrary
 Library           ../../libraries/GmailHelper.py
 
 *** Variables ***
+
+${BS_USERNAME}       ${EMPTY}
+${BS_ACCESS_KEY}     ${EMPTY}
+${REMOTE_URL}        https://${BS_USERNAME}:${BS_ACCESS_KEY}@hub-cloud.browserstack.com/wd/hub
+
 ${LOGIN2}               ${EMPTY}
 ${SENHA2}               ${EMPTY}
 ${GMAIL_USER}           ${EMPTY}
@@ -23,11 +28,17 @@ ${XPATH_CODIGO_INVALIDO}    xpath=//android.widget.TextView[@text="Código invá
 # ─────────────────────────────────────────────────────────────────────────────
 Carregar Variaveis De Ambiente
     Evaluate    __import__('dotenv').load_dotenv(dotenv_path='app/.env')
+
+    ${env_bs_username}       Get Environment Variable    BS_USERNAME
+    ${env_bs_access_key}     Get Environment Variable    BS_ACCESS_KEY
     ${env_login2}=           Get Environment Variable    LOGIN2
     ${env_senha2}=           Get Environment Variable    SENHA2
     ${env_gmail_pass}=       Get Environment Variable    GMAIL_APP_PASS
     ${env_gmail_user}=       Get Environment Variable    GMAIL_USER
     ${env_remetente_app}=    Get Environment Variable    REMETENTE_APP
+    
+    Set Global Variable    ${BS_USERNAME}       ${env_bs_username} 
+    Set Global Variable    ${BS_ACCESS_KEY}     ${env_bs_access_key}
     Set Global Variable    ${LOGIN2}            ${env_login2}
     Set Global Variable    ${SENHA2}            ${env_senha2}
     Set Global Variable    ${GMAIL_USER}        ${env_gmail_user}

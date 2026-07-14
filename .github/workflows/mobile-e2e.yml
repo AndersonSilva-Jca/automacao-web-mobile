@@ -262,7 +262,7 @@ jobs:
         with:
           name: allure-report-run-${{ github.run_number }}
           path: allure-report
-          retention-days: 90
+          retention-days: 7
 
       - name: Upload Robot Results
         if: always()
@@ -270,7 +270,7 @@ jobs:
         with:
           name: robot-results-run-${{ github.run_number }}
           path: ${{ env.RESULTS_DIR }}
-          retention-days: 90
+          retention-days: 7
 
       - name: Upload Appium Log
         if: always()
@@ -278,7 +278,7 @@ jobs:
         with:
           name: appium-log-run-${{ github.run_number }}
           path: appium.log
-          retention-days: 30
+          retention-days: 7
 
       - name: Extrair métricas
         if: always()

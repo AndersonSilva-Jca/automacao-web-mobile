@@ -29,3 +29,6 @@ executar_testes_mobile.bat
 appium_log.txt
 allure-results
 gh-pages-limpeza
+log
+browserstack.json
+npm_install_debug.log
