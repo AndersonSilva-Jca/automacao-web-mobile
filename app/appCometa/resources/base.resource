@@ -54,7 +54,6 @@ Start session
     ...    appium:androidInstallTimeout= ${120000}
 
 Login
-    Sleep    3s
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Acesse sua conta"]    timeout=60s
     Log To Console    \n Assert Acesse sua conta
     Click Element    xpath=//android.widget.EditText[@resource-id="user"]

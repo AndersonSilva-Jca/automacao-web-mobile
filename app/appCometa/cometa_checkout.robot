@@ -7,7 +7,7 @@ Library     ../libraries/GmailHelper.py
 
 
 *** Test Cases ***
-Deve realizar a busca de passagens com sucesso
+Deve realizar o fluxo até o checkout de pagamento
     Start session
     Login
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Buscar"]    timeout=60s
