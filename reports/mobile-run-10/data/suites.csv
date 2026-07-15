@@ -1,0 +1,4 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"passed","Wed Jul 15 13:19:22 UTC 2026","Wed Jul 15 13:20:47 UTC 2026","84559","","Monitoramento Mobile","Cometa Checkout","","","Deve realizar a busca de passagens com sucesso",""
+"passed","Wed Jul 15 13:20:47 UTC 2026","Wed Jul 15 13:21:46 UTC 2026","59307","","Monitoramento Mobile","1001 Checkout","","","Deve realizar a busca de passagens com sucesso",""
+"passed","Wed Jul 15 13:21:46 UTC 2026","Wed Jul 15 13:22:43 UTC 2026","56415","","Monitoramento Mobile","Catarinense Checkout","","","Deve realizar a busca de passagens com sucesso",""
