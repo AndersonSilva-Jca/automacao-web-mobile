@@ -38,7 +38,7 @@ import random
 
 def obter_dia_aleatorio_ida():
     hoje = datetime.date.today()
-    dias_futuros = random.randint(1, 2)
+    dias_futuros = random.randint(2, 5)
     data_futura = hoje + datetime.timedelta(days=dias_futuros)
 
     data_formatada = data_futura.strftime("%d/%m/%Y")  # → "02/06/2026"

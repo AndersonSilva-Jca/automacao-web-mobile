@@ -19,7 +19,7 @@ Deve realizar a busca de passagens com sucesso
     Click Element    xpath=//android.widget.TextView[@text="São Paulo (Rod. Tietê) (SP)"]
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Destino"]    timeout=60s
     Input Text    android=new UiSelector().resourceId("locationSearch")    Rio de Janeiro (Novo Rio) (RJ)
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Rio de Janeiro (Novo Rio) (RJ)"]
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Rio de Janeiro (Novo Rio) (RJ)"]    timeout=60s
     Click Element    xpath=//android.widget.TextView[@text="Rio de Janeiro (Novo Rio) (RJ)"]
 
      ${data_ida}=    obter_dia_aleatorio_ida

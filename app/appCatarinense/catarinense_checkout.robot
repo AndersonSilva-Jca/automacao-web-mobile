@@ -1,8 +1,8 @@
 *** Settings ***
 Library     AppiumLibrary
-Library    ../appCometa/resources/GeradorDataIda.py
-Library    ../appCometa/resources/GeradorDataVolta.py
-Resource    ../appCometa/resources/base.resource
+Library    ../appCatarinense/resources/GeradorDataIda.py
+Library    ../appCatarinense/resources/GeradorDataVolta.py
+Resource    ../appCatarinense/resources/base.resource
 Library     ../libraries/GmailHelper.py
 
 
