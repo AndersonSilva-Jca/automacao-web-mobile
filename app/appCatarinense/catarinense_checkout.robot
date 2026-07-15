@@ -13,7 +13,7 @@ Deve realizar a busca de passagens com sucesso
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Buscar"]    timeout=60s
     Log To Console    \n Elemento "Buscar" visível
     Click Element    xpath=//android.widget.EditText[@resource-id="origin"]
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Origem"]    timeout=60s
+    Wait Until Element Is Visible    android=new UiSelector().resourceId("locationSearch")    timeout=60s
     Input Text    android=new UiSelector().resourceId("locationSearch")    Sao Paulo (Rod. Tietê)
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="São Paulo (Rod. Tietê) (SP)"]    timeout=60s
     Click Element    xpath=//android.widget.TextView[@text="São Paulo (Rod. Tietê) (SP)"]
