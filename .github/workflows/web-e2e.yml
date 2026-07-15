@@ -95,7 +95,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "✅[SITES] ODH/ODP/Giro/Wemobi/UTP - Monit. Cont."
           to: anderson.ssantos@jcatlm.com.br
-          cc: fabiano.britto@externo-jcatlm.com.br
+          cc: fabiano.britto@externo-jcatlm.com.br,ariane.izac@jcatlm.com.br
           from: "Monitoramento Contínuo"
           # Alterado para html_body para suportar formatação profissional
           html_body: |
