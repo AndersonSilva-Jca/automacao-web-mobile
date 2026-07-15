@@ -58,7 +58,6 @@ Login
     Input Text    xpath=//android.widget.EditText[@resource-id="user"]    ${LOGIN}
     Input Password    xpath=//android.widget.EditText[@resource-id="password"]    ${SENHA}
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
-    Sleep    5s
     Log To Console    \nTela de Busca exibida com sucesso!
    
 Close session
