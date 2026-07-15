@@ -1,0 +1,3 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"failed","Wed Jul 15 12:06:45 UTC 2026","Wed Jul 15 12:08:17 UTC 2026","91656","","Monitoramento Mobile","Cometa Checkout","","","Deve realizar a busca de passagens com sucesso",""
+"failed","Wed Jul 15 12:08:17 UTC 2026","Wed Jul 15 12:08:40 UTC 2026","22710","","Monitoramento Mobile","1001 Checkout","","","Deve realizar a busca de passagens com sucesso",""
