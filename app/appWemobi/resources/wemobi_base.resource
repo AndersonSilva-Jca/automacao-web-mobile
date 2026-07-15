@@ -51,7 +51,6 @@ Start session
 
 Login
     
-    Sleep    7s
     Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="user"]    timeout=240s
     Log To Console    \nFazendo o Login...
     Input Text    xpath=//android.widget.EditText[@resource-id="user"]    ${LOGIN}
@@ -60,7 +59,6 @@ Login
     ...    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
     ...    timeout=60s
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
-    Sleep    5s
     Wait Until Element Is Visible
     ...    xpath=//android.view.ViewGroup[@content-desc="Buscar"]/android.view.View    timeout=90s
     Log To Console    \nTela de Busca exibida com sucesso!
