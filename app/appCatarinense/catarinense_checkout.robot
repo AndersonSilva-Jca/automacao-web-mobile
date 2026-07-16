@@ -83,3 +83,5 @@ Deve realizar o fluxo até o checkout de pagamento
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Digite o CUPOM"]    timeout=40s
 
     Log To Console    message=Teste finalizado com sucesso
+
+    Close session

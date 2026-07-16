@@ -120,6 +120,8 @@ Deve realizar o fluxo até o checkout de pagamento
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="PIX"]    timeout=60s
 
     Log To Console    \nBusca de passagens realizada com sucesso!
+
+    Close session
   
 
 
