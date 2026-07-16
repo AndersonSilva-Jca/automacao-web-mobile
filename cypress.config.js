@@ -8,7 +8,7 @@ require("dotenv").config({ path: path.resolve(__dirname, ".env") });
 
 module.exports = defineConfig({
   // ... resto do seu código
-  projectId: "yc5eka",
+  // projectId: "yc5eka",
   reporter: "cypress-mochawesome-reporter",
   reporterOptions: {
     reportDir: "cypress/reports/",
