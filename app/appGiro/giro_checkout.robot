@@ -4,7 +4,9 @@ Library     ../appGiro/resources/GeradorDataIda.py
 Library     ../appGiro/resources/GeradorDataVolta.py
 Resource    ../appGiro/resources/giro_base.resource
 Library     ../libraries/GmailHelper.py
-Test Teardown    Close All Applications
+Test Teardown    Run Keywords
+...    Run Keyword If Test Failed    Capturar Evidencia De Falha
+...    AND    Close All Applications
 
 *** Test Cases ***
 Deve realizar a busca de passagens com sucesso

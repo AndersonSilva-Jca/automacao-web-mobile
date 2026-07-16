@@ -4,7 +4,9 @@ Library    ../appCometa/resources/GeradorDataIda.py
 Library    ../appCometa/resources/GeradorDataVolta.py
 Resource    ../appCometa/resources/base.resource
 Library     ../libraries/GmailHelper.py
-Test Teardown    Close All Applications
+Test Teardown    Run Keywords
+...    Run Keyword If Test Failed    Capturar Evidencia De Falha
+...    AND    Close All Applications
 
 *** Test Cases ***
 Deve realizar o fluxo até o checkout de pagamento
@@ -48,7 +50,7 @@ Deve realizar o fluxo até o checkout de pagamento
     Log To Console    message=Confirmando passageiros
 
 
-    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Limpar busca"]    timeout=60s
+    Aguardar Elemento Com Retry    xpath=//android.widget.TextView[@text="Buscar"]    timeout=30s
 
     Click Element    xpath=//android.widget.TextView[@text="Buscar"]
     Log To Console    message=Buscar Passagens confirmado

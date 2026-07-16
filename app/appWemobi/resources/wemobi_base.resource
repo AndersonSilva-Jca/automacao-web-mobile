@@ -1,5 +1,5 @@
 *** Settings ***
-Library     AppiumLibrary
+Library     AppiumLibrary    screenshot_root_directory=${OUTPUT_DIR}/screenshots
 Library     OperatingSystem
 # Library    AppiumLibrary    screenshot_root_directory=${CURDIR}/../../public
 
@@ -124,4 +124,22 @@ Fechar modal do login
 #     ${res}=    Run Keyword And Ignore Error    Stop Screen Recording
 #     Run Keyword If    '${res[0]}' == 'PASS' and '${filename}' != ''    ${NONE}=    Set Variable    ${res}
 #     ...    ELSE    Log To Console    \n[INFO] Stop Screen Recording not supported or failed: ${res}
+
+Capturar Evidencia De Falha
+    [Documentation]    Garante print mesmo se o app crashar ou a sessão cair
+    ${status}    ${screenshot}=    Run Keyword And Ignore Error
+    ...    Capture Page Screenshot    ${OUTPUT_DIR}${/}screenshots${/}falha-${TEST_NAME}-{index}.png
+    Log To Console    \n[EVIDÊNCIA] ${screenshot}
+
+Aguardar Elemento Com Retry
+    [Arguments]    ${locator}    ${timeout}=30s    ${tentativas}=3
+    [Documentation]    Reexecuta o wait em vez de confiar em cache de elemento
+    FOR    ${i}    IN RANGE    ${tentativas}
+        ${ok}=    Run Keyword And Return Status
+        ...    Wait Until Element Is Visible    ${locator}    timeout=${timeout}
+        IF    ${ok}    RETURN
+        Log To Console    \n[RETRY] Tentativa ${i+1} falhou para ${locator}
+        Sleep    1s
+    END
+    Wait Until Element Is Visible    ${locator}    timeout=${timeout}
 

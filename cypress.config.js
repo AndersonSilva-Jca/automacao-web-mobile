@@ -13,7 +13,7 @@ module.exports = defineConfig({
   reporterOptions: {
     reportDir: "cypress/reports/",
     charts: true,
-    reportPageTitle: "Relatório de Testes - Viacao Cometa",
+    reportPageTitle: "Relatório de Testes em Produção - ODH/ODP/Giro/Wemobi/UTP",
     overwrite: false,
     html: true,
     json: true,

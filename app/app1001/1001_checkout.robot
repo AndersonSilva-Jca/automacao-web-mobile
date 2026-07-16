@@ -4,7 +4,10 @@ Library    ../app1001/resources/GeradorDataIda.py
 Library    ../app1001/resources/GeradorDataVolta.py
 Resource    ../app1001/resources/base.resource
 Library     ../libraries/GmailHelper.py
-Test Teardown    Close All Applications
+Test Teardown    Run Keywords
+...    Run Keyword If Test Failed    Capturar Evidencia De Falha
+...    AND    Close All Applications
+
 
 *** Test Cases ***
 Deve realizar o fluxo até o checkout de pagamento
@@ -43,7 +46,7 @@ Deve realizar o fluxo até o checkout de pagamento
 
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
 
-    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Limpar busca"]    timeout=60s
+    Aguardar Elemento Com Retry    xpath=//android.view.ViewGroup[@content-desc="Limpar busca"]    timeout=30s
 
     Log To Console    message=Buscar Passagens confirmado
     Click Element    xpath=//android.widget.TextView[@text="Buscar"]

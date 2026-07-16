@@ -1,5 +1,5 @@
 *** Settings ***
-Library     AppiumLibrary
+Library     AppiumLibrary    screenshot_root_directory=${OUTPUT_DIR}/screenshots
 Library     OperatingSystem
 Library    Collections
 # Library    AppiumLibrary    screenshot_root_directory=${CURDIR}
@@ -127,3 +127,20 @@ Selecionar Assento Livre Aleatoriamente
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Continuar "]    timeout=30s
     Log To Console    👉 Assento sorteado para o teste: ${assento_sorteado}
     
+Capturar Evidencia De Falha
+    [Documentation]    Garante print mesmo se o app crashar ou a sessão cair
+    ${status}    ${screenshot}=    Run Keyword And Ignore Error
+    ...    Capture Page Screenshot    ${OUTPUT_DIR}${/}screenshots${/}falha-${TEST_NAME}-{index}.png
+    Log To Console    \n[EVIDÊNCIA] ${screenshot}
+    
+Aguardar Elemento Com Retry
+    [Arguments]    ${locator}    ${timeout}=30s    ${tentativas}=3
+    [Documentation]    Reexecuta o wait em vez de confiar em cache de elemento
+    FOR    ${i}    IN RANGE    ${tentativas}
+        ${ok}=    Run Keyword And Return Status
+        ...    Wait Until Element Is Visible    ${locator}    timeout=${timeout}
+        IF    ${ok}    RETURN
+        Log To Console    \n[RETRY] Tentativa ${i+1} falhou para ${locator}
+        Sleep    1s
+    END
+    Wait Until Element Is Visible    ${locator}    timeout=${timeout}

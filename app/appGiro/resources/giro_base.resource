@@ -4,8 +4,9 @@ Documentation     Suite de testes — automação mobile com tratamento condicio
 
 Library           OperatingSystem
 Library           String
-Library           AppiumLibrary
+Library     AppiumLibrary    screenshot_root_directory=${OUTPUT_DIR}/screenshots
 Library           ../../libraries/GmailHelper.py
+
 
 *** Variables ***
 
@@ -237,3 +238,9 @@ Encerrar Sessao E Gravar Video
     
     # 3. Fecha a aplicação em segurança
     Run Keyword And Ignore Error    Close Application
+
+Capturar Evidencia De Falha
+    [Documentation]    Garante print mesmo se o app crashar ou a sessão cair
+    ${status}    ${screenshot}=    Run Keyword And Ignore Error
+    ...    Capture Page Screenshot    ${OUTPUT_DIR}${/}screenshots${/}falha-${TEST_NAME}-{index}.png
+    Log To Console    \n[EVIDÊNCIA] ${screenshot}
