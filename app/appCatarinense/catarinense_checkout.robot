@@ -47,6 +47,7 @@ Deve realizar o fluxo até o checkout de pagamento
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
 
     Aguardar Elemento Com Retry    xpath=//android.widget.TextView[@text="Buscar"]
+
     Log To Console    message=Buscar Passagens confirmado
 
     Click Element    xpath=//android.widget.TextView[@text="Buscar"]
@@ -59,7 +60,7 @@ Deve realizar o fluxo até o checkout de pagamento
 
     Tratar Banner De Horario Se Aparecer
 
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Adicione um passageiro salvo"]    timeout=30s
+    Aguardar Elemento Com Retry    xpath=//android.widget.TextView[@text="Adicione um passageiro salvo"]
 
     Click Element    xpath=//android.widget.TextView[@text="Adicione um passageiro salvo"]
 

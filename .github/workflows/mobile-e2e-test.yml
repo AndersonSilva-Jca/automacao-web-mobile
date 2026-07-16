@@ -129,25 +129,25 @@ jobs:
             echo "=== Emulator pronto e bootado automaticamente pela Action ==="
             adb devices
 
-            echo "Instalando o aplicativo Clube Giro..."
-            adb install-multiple ./app/apks/clube_giro/*.apk
+            # echo "Instalando o aplicativo Clube Giro..."
+            # adb install-multiple ./app/apks/clube_giro/*.apk
 
-            echo "Instalando o aplicativo wemobi..."
-            adb install-multiple ./app/apks/wemobi/*.apk
+            # echo "Instalando o aplicativo wemobi..."
+            # adb install-multiple ./app/apks/wemobi/*.apk
 
-            echo "Instalando o aplicativo cometa..."
-            adb install-multiple ./app/apks/cometa/*.apk
+            # echo "Instalando o aplicativo cometa..."
+            # adb install-multiple ./app/apks/cometa/*.apk
 
-            echo "Instalando o aplicativo 1001..."
-            adb install-multiple ./app/apks/1001/*.apk
+            # echo "Instalando o aplicativo 1001..."
+            # adb install-multiple ./app/apks/1001/*.apk
 
             echo "Instalando o aplicativo catarinense..."
             adb install-multiple ./app/apks/catarinense/*.apk
 
-            # echo "Garantindo que as animações do sistema estão desligadas..."
-            # adb shell settings put global window_animation_scale 0
-            # adb shell settings put global transition_animation_scale 0
-            # adb shell settings put global animator_duration_scale 0
+            echo "Garantindo que as animações do sistema estão desligadas..."
+            adb shell settings put global window_animation_scale 0
+            adb shell settings put global transition_animation_scale 0
+            adb shell settings put global animator_duration_scale 0
 
             echo "Criando pastas de resultados..."
             mkdir -p $RESULTS_DIR $ALLURE_DIR
@@ -157,7 +157,10 @@ jobs:
 
             echo "Iniciando a execução do Robot Framework com Allure..."
             # AJUSTADO: Adicionado o listener do Allure para alimentar o painel de monitoramento
-            robot -T -d ./results --listener allure_robotframework:$ALLURE_DIR --name "Monitoramento Mobile" app/appCometa/cometa_checkout.robot app/app1001/1001_checkout.robot app/appCatarinense/catarinense_checkout.robot app/appWemobi/wemobi_checkout.robot
+            robot -T -d ./results --listener allure_robotframework:$ALLURE_DIR --name "Monitoramento Mobile" app/appCatarinense/catarinense_checkout.robot
+            # app/appCometa/cometa_checkout.robot 
+            # app/app1001/1001_checkout.robot
+            # app/appWemobi/wemobi_checkout.robot
             # app/appGiro/giro_login.robot
             # app/appWemobi/wemobi_login.robot app/app1001/1001_login.robot app/appCatarinense/catarinense_login.robot app/appCometa/cometa_login.robot
 

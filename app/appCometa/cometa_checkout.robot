@@ -79,7 +79,7 @@ Deve realizar o fluxo até o checkout de pagamento
 
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Passageiro 1, Anderson Silva dos Santos, Selecione o assento"]
 
-    Aguardar Elemento Com Retry   xpath=//android.widget.TextView[@text="Mapa de assentos"]
+    Aguardar Elemento Com Retry    xpath=//android.widget.TextView[@text="Mapa de assentos"]
 
     Selecionar Assento Livre Aleatoriamente
 
