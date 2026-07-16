@@ -1,5 +1,5 @@
 *** Settings ***
-Library     AppiumLibrary    screenshot_root_directory=${OUTPUT_DIR}/screenshots
+Library     AppiumLibrary
 Library     OperatingSystem
 Library    Collections
 # Library    AppiumLibrary    screenshot_root_directory=${CURDIR}
@@ -132,7 +132,7 @@ Capturar Evidencia De Falha
     ${status}    ${screenshot}=    Run Keyword And Ignore Error
     ...    Capture Page Screenshot    ${OUTPUT_DIR}${/}screenshots${/}falha-${TEST_NAME}-{index}.png
     Log To Console    \n[EVIDÊNCIA] ${screenshot}
-    
+
 Aguardar Elemento Com Retry
     [Arguments]    ${locator}    ${timeout}=30s    ${tentativas}=3
     [Documentation]    Reexecuta o wait em vez de confiar em cache de elemento

@@ -79,7 +79,7 @@ Deve realizar o fluxo até o checkout de pagamento
 
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Passageiro 1, Anderson Silva dos Santos, Selecione o assento"]
 
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Mapa de assentos"]    timeout=60s
+    Aguardar Elemento Com Retry   xpath=//android.widget.TextView[@text="Mapa de assentos"]    timeout=60s
 
     Selecionar Assento Livre Aleatoriamente
 

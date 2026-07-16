@@ -1,5 +1,5 @@
 *** Settings ***
-Library     AppiumLibrary    screenshot_root_directory=${OUTPUT_DIR}/screenshots
+Library     AppiumLibrary
 Library     OperatingSystem
 Library    Collections
 # Library    AppiumLibrary    screenshot_root_directory=${CURDIR}
