@@ -73,7 +73,7 @@ Deve realizar o fluxo até o checkout de pagamento
 
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Passageiro 1"]    timeout=30s
 
-    Click Element    //android.view.ViewGroup[@content-desc="Passageiro 1, Anderson Silva dos Santos, Selecione o assento"]
+    Click Element    xpath=//android.view.ViewGroup[@content-desc="Passageiro 1, Anderson Silva dos Santos, Selecione o assento"]
 
     Aguardar Elemento Com Retry    xpath=//android.widget.TextView[@text="Mapa de assentos"]    timeout=60s
 
