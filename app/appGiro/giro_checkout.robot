@@ -4,7 +4,7 @@ Library     ../appGiro/resources/GeradorDataIda.py
 Library     ../appGiro/resources/GeradorDataVolta.py
 Resource    ../appGiro/resources/giro_base.resource
 Library     ../libraries/GmailHelper.py
-
+Test Teardown    Close All Applications
 
 *** Test Cases ***
 Deve realizar a busca de passagens com sucesso
@@ -12,7 +12,6 @@ Deve realizar a busca de passagens com sucesso
     Login
     
     # Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Viagens"]    timeout=60s
-    Sleep    10s
     Tratar Banner De Login Se Aparecer
     Log To Console    \nTela de Busca exibida com sucesso!
     Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Viagens"]    timeout=60s

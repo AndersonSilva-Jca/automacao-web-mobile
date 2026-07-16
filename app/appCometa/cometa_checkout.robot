@@ -4,7 +4,7 @@ Library    ../appCometa/resources/GeradorDataIda.py
 Library    ../appCometa/resources/GeradorDataVolta.py
 Resource    ../appCometa/resources/base.resource
 Library     ../libraries/GmailHelper.py
-
+Test Teardown    Close All Applications
 
 *** Test Cases ***
 Deve realizar o fluxo até o checkout de pagamento

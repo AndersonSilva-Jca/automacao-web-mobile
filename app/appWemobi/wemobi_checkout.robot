@@ -4,6 +4,7 @@ Library             ../appWemobi/resources/GeradorDataIda.py
 Library             ../appWemobi/resources/GeradorDataVolta.py
 Resource            ../appWemobi/resources/wemobi_base.resource
 Library             ../libraries/GmailHelper.py
+Test Teardown    Close All Applications
 
 
 *** Test Cases ***
@@ -119,6 +120,6 @@ Deve realizar o fluxo até o checkout de pagamento
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="PIX"]    timeout=60s
 
     Log To Console    \nBusca de passagens realizada com sucesso!
-  Close session
+  
 
 

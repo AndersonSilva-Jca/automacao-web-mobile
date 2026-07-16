@@ -4,7 +4,7 @@ Library    ../appCatarinense/resources/GeradorDataIda.py
 Library    ../appCatarinense/resources/GeradorDataVolta.py
 Resource    ../appCatarinense/resources/base.resource
 Library     ../libraries/GmailHelper.py
-
+Test Teardown    Close All Applications
 
 *** Test Cases ***
 Deve realizar o fluxo até o checkout de pagamento

@@ -4,7 +4,7 @@ Library    ../app1001/resources/GeradorDataIda.py
 Library    ../app1001/resources/GeradorDataVolta.py
 Resource    ../app1001/resources/base.resource
 Library     ../libraries/GmailHelper.py
-
+Test Teardown    Close All Applications
 
 *** Test Cases ***
 Deve realizar o login com sucesso
