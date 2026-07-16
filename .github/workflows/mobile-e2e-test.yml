@@ -167,6 +167,13 @@ jobs:
         #   LOGIN: ${{ secrets.APP_LOGIN }}
         #   PASSWORD: ${{ secrets.APP_PASSWORD }}
 
+      - name: Upload do Relatório HTML
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: relatorio-de-testes # Nome do arquivo ZIP que você vai baixar
+          path: /home/runner/work/automacao-web-mobile/automacao-web-mobile/results/report-*.html
+
       - name: Limpar APKs do Workspace para liberar espaço
         if: always()
         run: |
