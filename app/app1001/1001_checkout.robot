@@ -39,14 +39,17 @@ Deve realizar o fluxo até o checkout de pagamento
     ...    timeout=60s
 
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
+    Log To Console    message=Data confirmada
  
     Wait Until Element Is Visible
     ...    xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
     ...    timeout=60s
 
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
+    Log To Console    message=passageiros confirmado
 
-    Aguardar Elemento Com Retry    xpath=//android.widget.TextView[@text="Buscar"]    timeout=30s
+
+    Aguardar Elemento Com Retry    xpath=//android.widget.TextView[@text="Buscar"]
 
     Log To Console    message=Buscar Passagens confirmado
     Click Element    xpath=//android.widget.TextView[@text="Buscar"]

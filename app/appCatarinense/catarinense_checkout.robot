@@ -46,7 +46,7 @@ Deve realizar o fluxo até o checkout de pagamento
 
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
 
-    Aguardar Elemento Com Retry    xpath=//android.widget.TextView[@text="Buscar"]    timeout=60s
+    Aguardar Elemento Com Retry    xpath=//android.widget.TextView[@text="Buscar"]
     Log To Console    message=Buscar Passagens confirmado
 
     Click Element    xpath=//android.widget.TextView[@text="Buscar"]
@@ -75,7 +75,7 @@ Deve realizar o fluxo até o checkout de pagamento
 
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Passageiro 1, Anderson Silva dos Santos, Selecione o assento"]
 
-    Aguardar Elemento Com Retry    xpath=//android.widget.TextView[@text="Mapa de assentos"]    timeout=60s
+    Aguardar Elemento Com Retry    xpath=//android.widget.TextView[@text="Mapa de assentos"]
 
     Selecionar Assento Livre Aleatoriamente
 
