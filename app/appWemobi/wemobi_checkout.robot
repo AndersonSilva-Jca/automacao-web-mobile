@@ -29,6 +29,7 @@ Deve realizar o fluxo até o checkout de pagamento
     Click Element    xpath=//android.widget.EditText[@resource-id="origin"]
     Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="headerNavContainer"]   timeout=60s
     log To Console    \nClicando no campo de origem...
+    Sleep    500ms
     Aguardar Elemento Com Retry    xpath=//android.widget.EditText[@resource-id="locationSearch"]
     Click Element    xpath=//android.widget.EditText[@resource-id="locationSearch"]
     Log To Console    \nClicando em origem...
