@@ -1,0 +1,109 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 1,
+    "passes": 1,
+    "pending": 0,
+    "failures": 0,
+    "start": "2026-07-16T22:07:28.950Z",
+    "end": "2026-07-16T22:07:55.590Z",
+    "duration": 26640,
+    "testsRegistered": 1,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "6a2dbd1c-289d-4296-b299-82ec83469ccd",
+      "title": "",
+      "fullFile": "cypress/e2e/00_smoke/01_ODH.cy.js",
+      "file": "cypress/e2e/00_smoke/01_ODH.cy.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "bcff885c-5280-4936-976b-bb47f204eb1f",
+          "title": "Outlet de Hotéis",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "Outlet de Hotéis - Busca de destinos, Hotéis em promoção hoje, Promoção em hotéis por destino",
+              "fullTitle": "Outlet de Hotéis Outlet de Hotéis - Busca de destinos, Hotéis em promoção hoje, Promoção em hotéis por destino",
+              "timedOut": null,
+              "duration": 24333,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(odt);\ncy.contains(\"Minhas viagens\").should(\"be.visible\");\ncy.contains(\"Carrinho\").should(\"be.visible\");\ncy.wait(2000);\nconst cidades = [\"Rio de Janeiro (e arredores)\", \"São Paulo (e arredores)\", \"Belo Horizonte (e arredores)\", \"Curitiba (e arredores)\", \"Salvador (e arredores)\"];\nconst indiceAleatorio = Math.floor(Math.random() * cidades.length);\nconst cidadeSorteada = cidades[indiceAleatorio];\ncy.get(\".h-full > .flex > .min-w-0 > .w-full\").click().type(cidadeSorteada, {\n  delay: 25\n});\ncy.get(`[cmdk-item][data-value=\"${cidadeSorteada}\"]`).first().click({\n  force: true\n});\ncy.log(`🏙️ Destino sorteado e selecionado para o teste: ${cidadeSorteada}`);\ncy.get(\".text-sm > .text-muted-foreground\").click();\ncy.selecionarPeriodoEstadia(3);\ncy.get(\".p-2 > .whitespace-nowrap\").click();\ncy.get(\".absolute\").should(\"be.visible\");\ncy.contains(/(resultados de hospedagens|Nenhum hotel encontrado)/i).should(\"be.visible\");\ncy.get(\".cursor-pointer > .h-8\").click();\n// Hotéis em promoção hoje\ncy.contains(\"Hotéis em promoção hoje\").should(\"be.visible\");\ncy.get(\":nth-child(1) > .group > .p-4 > .justify-between > .inline-flex\").click();\ncy.contains(\"Sobre o hotel\").should(\"be.visible\");\ncy.get(\".cursor-pointer > .h-8\").click();\ncy.get(\":nth-child(2) > .group > .p-4 > .justify-between > .inline-flex\").click();\ncy.contains(\"Sobre o hotel\").should(\"be.visible\");\ncy.get(\".cursor-pointer > .h-8\").click();\ncy.get(\":nth-child(3) > .group > .p-4 > .justify-between > .inline-flex\").click();\ncy.contains(\"Sobre o hotel\").should(\"be.visible\");\ncy.get(\".cursor-pointer > .h-8\").click();\n// Promoção em hotéis por destino\n// cy.contains(\"Promoção em hotéis por destino\").should(\"be.visible\");\n// cy.get('img[alt=\"Fernando de Noronha\"]').click();\n// cy.contains(/(resultados de hospedagens|Nenhum hotel encontrado)/i).should(\"be.visible\");\n// cy.get(\".cursor-pointer > .h-8\").click();\n// cy.get('img[alt=\"Jericoacoara\"]').click();\n// cy.contains(/(resultados de hospedagens|Nenhum hotel encontrado)/i).should(\"be.visible\");\n// cy.get(\".cursor-pointer > .h-8\").click();\n// cy.get('img[alt=\"Porto de Galinhas\"]').click();\n// cy.contains(/(resultados de hospedagens|Nenhum hotel encontrado)/i).should(\"be.visible\");\n// cy.get(\".cursor-pointer > .h-8\").click();",
+              "err": {},
+              "uuid": "20b62548-acfc-4207-8ce1-d2c2e8e897a9",
+              "parentUUID": "bcff885c-5280-4936-976b-bb47f204eb1f",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "20b62548-acfc-4207-8ce1-d2c2e8e897a9"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 24333,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.2.0"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.4"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/reports/.jsons",
+        "charts": true,
+        "reportPageTitle": "Relatório de Testes em Produção - ODH/ODP/Giro/Wemobi/UTP",
+        "overwrite": false,
+        "html": false,
+        "json": true,
+        "embeddedScreenshots": true,
+        "inlineAssets": true
+      },
+      "version": "6.3.2"
+    }
+  }
+}

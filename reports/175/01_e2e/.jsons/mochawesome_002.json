@@ -1,0 +1,109 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 1,
+    "passes": 1,
+    "pending": 0,
+    "failures": 0,
+    "start": "2026-07-16T22:09:34.159Z",
+    "end": "2026-07-16T22:11:16.872Z",
+    "duration": 102713,
+    "testsRegistered": 1,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "8caeb7ef-b40d-414e-8ffb-141447a6b0bd",
+      "title": "",
+      "fullFile": "cypress/e2e/00_smoke/03_Giro.cy.js",
+      "file": "cypress/e2e/00_smoke/03_Giro.cy.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "6d97af00-433a-4cc2-9ff4-e7f03752398b",
+          "title": "Clube Giro",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "Giro - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos",
+              "fullTitle": "Clube Giro Giro - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos",
+              "timedOut": null,
+              "duration": 100289,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.env([\"login2\", \"senha\"]).then(env => {\n  cy.visit(giro);\n  cy.get(_locators.default.GIRO_BOTAO_LOGIN).should(\"be.visible\").click();\n  cy.get(_locators.default.ACESSE_GIRO).should(\"contain\", \"Acesse o Giro\");\n  cy.get(_locators.default.USUARIO).should(\"be.visible\").type(\"andynho1987@gmail.com\", {\n    delay: 50\n  });\n  cy.get(_locators.default.SENHA).should(\"be.visible\").type(env.senha, {\n    log: false\n  }, {\n    delay: 100\n  });\n  cy.get(_locators.default.GIRO_BOTAO_ENTRAR).click({\n    force: true\n  });\n  cy.wait(4000);\n});\ncy.get(\"body\").then($body => {\n  const temModal2FA = $body.find(_locators.default.GIRO_INPUT_VISIBLE).length > 0;\n  if (temModal2FA) {\n    cy.log(\"🔐 Modal 2FA detectado e visível – buscando código no e-mail...\");\n    cy.wait(5000);\n    cy.task(\"buscarCodigo2FAGmail\").then(codigo2FA => {\n      expect(codigo2FA).to.not.be.null;\n      cy.get(_locators.default.GIRO_INPUT_2FA).focus().clear({\n        force: true\n      }).type(codigo2FA, {\n        force: true,\n        delay: 80\n      }); // force ignora visibility\n      cy.get(_locators.default.GIRO_BOTAO_MODAL_2FA).should(\"not.be.disabled\").click();\n    });\n  } else {\n    cy.log(\"✅ Login direto – Modal 2FA está oculto (display: none). Pulando etapa.\");\n  }\n});\ncy.fecharModalGiro();\n// cy.get(loc.MENSAGEM_LOGADO).should(\"contain\", \"ANDERSON\");\n// cy.get(loc.BUSCAS.DESTINO_IDA).click().type(\"Rio De Janeiro - Todos (RJ)\", { delay: 100 });\n// cy.contains(\" Rio De Janeiro - Todos (RJ) \").click({ force: true });\n// cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type(\"São Paulo - Todos (SP)\", { delay: 100 });\n// cy.contains(\"São Paulo - Todos (SP)\").click({ force: true });\n// cy.get(loc.BUSCAS.DATA_IDA).click();\ncy.get(_locators.default.LOADER).should(\"not.exist\");\ncy.selecionarDataIda(5);\ncy.get(_locators.default.BUSCAS.BOTAO_BUSCAR, {\n  timeout: 90000\n}).should(\"be.visible\").click();\ncy.selecionarPassagemAleatoria1({\n  timeout: 90000\n});\ncy.get(_locators.default.CHECK_PASSAGEIRO, {\n  timeout: 90000\n}).click({\n  force: true\n});\ncy.get(_locators.default.BOTAO_AVANCAR).should(\"be.visible\").and(\"not.be.disabled\").click();\ncy.selecionarAssentoAleatorio({\n  timeout: 90000\n});\ncy.get(_locators.default.BOTAO_AVANCAR).should(\"be.visible\").click();\ncy.get(_locators.default.ASSERT_SUBTOTAL).should(\"contain\", \"Subtotal dos assentos\").log(\"Subtotal dos assentos\");\ncy.get(_locators.default.ASSERT_TAXASERVICO).should(\"contain\", \"Taxa de serviço\").log(\"Taxa de serviço\");\ncy.get(_locators.default.GIRO_ASSERT_VALORTOTAL).should(\"contain\", \"Valor total\").log(\"Valor total das passagens\");",
+              "err": {},
+              "uuid": "6f8d3449-0ff7-4574-ae7c-d44bda53ee27",
+              "parentUUID": "6d97af00-433a-4cc2-9ff4-e7f03752398b",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "6f8d3449-0ff7-4574-ae7c-d44bda53ee27"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 100289,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.2.0"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.4"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/reports/.jsons",
+        "charts": true,
+        "reportPageTitle": "Relatório de Testes em Produção - ODH/ODP/Giro/Wemobi/UTP",
+        "overwrite": false,
+        "html": false,
+        "json": true,
+        "embeddedScreenshots": true,
+        "inlineAssets": true
+      },
+      "version": "6.3.2"
+    }
+  }
+}

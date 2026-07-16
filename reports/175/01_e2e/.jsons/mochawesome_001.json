@@ -1,0 +1,109 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 1,
+    "passes": 1,
+    "pending": 0,
+    "failures": 0,
+    "start": "2026-07-16T22:07:57.237Z",
+    "end": "2026-07-16T22:09:32.502Z",
+    "duration": 95265,
+    "testsRegistered": 1,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "b135f20a-4a09-435a-9cb9-b5b2a5476d7a",
+      "title": "",
+      "fullFile": "cypress/e2e/00_smoke/02_ODP.cy.js",
+      "file": "cypress/e2e/00_smoke/02_ODP.cy.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "c2f23e80-7740-40ac-b024-eed342cd3931",
+          "title": "Outlet de Passagens",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "Outlet de passagens - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos",
+              "fullTitle": "Outlet de Passagens Outlet de passagens - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos",
+              "timedOut": null,
+              "duration": 92987,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.env([\"login\", \"senha\"]).then(env => {\n  cy.visit(odp);\n  cy.get(_locators.default.ODP_BOTAO_LOGIN).click();\n  cy.get(_locators.default.USUARIO).type(env.login);\n  cy.get(_locators.default.SENHA).type(env.senha, {\n    log: false\n  });\n  cy.get(_locators.default.ODP_BOTAO_LOGAR).click();\n  cy.get(_locators.default.MENSAGEM_LOGADO).should(\"contain\", \"Olá\");\n});\ncy.wait(12000);\ncy.get(_locators.default.BUSCAS.DESTINO_IDA).click().type(\"São Paulo - Rodoviária Tietê (SP)\", {\n  delay: 100\n});\ncy.xpath(_locators.default.ODP_XPATH_SP_TIETE).click({\n  force: true\n});\ncy.get(_locators.default.BUSCAS.DESTINO_VOLTA).click().type(\"Rio De Janeiro - Todos (RJ)\", {\n  delay: 100\n});\ncy.xpath(_locators.default.ODP_XPATH_RJ_TODOS).click({\n  force: true\n});\ncy.get(_locators.default.BUSCAS.DATA_IDA).click();\ncy.selecionarDataIda(5);\ncy.get(_locators.default.BUSCAS.BOTAO_BUSCAR, {\n  timeout: 90000\n}).should(\"be.visible\").click();\ncy.selecionarPassagemAleatoria1({\n  timeout: 90000\n});\ncy.get(_locators.default.CHECK_PASSAGEIRO, {\n  timeout: 90000\n}).click({\n  force: true\n});\ncy.get(_locators.default.ODP_BOTAO_AVANCAR).should(\"be.visible\").and(\"not.be.disabled\").click();\ncy.get(_locators.default.ODP_ABA_PAGAMENTOS).should(\"be.visible\").log(\"Aba de pagamentos visível\");\ncy.get(_locators.default.ASSERT_SUBTOTAL).should(\"contain\", \"Subtotal dos assentos\").log(\"Subtotal dos assentos\");\ncy.get(_locators.default.ASSERT_TAXASERVICO).should(\"contain\", \"Taxa de serviço\").log(\"Taxa de serviço\");\ncy.get(_locators.default.ODP_ASSERT_VALORTOTAL).should(\"contain\", \"Valor Outlet\").log(\"Valor total das passagens Outlet\");",
+              "err": {},
+              "uuid": "d8f288cf-fc5e-4ae0-9432-e4d0a9c5794e",
+              "parentUUID": "c2f23e80-7740-40ac-b024-eed342cd3931",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "d8f288cf-fc5e-4ae0-9432-e4d0a9c5794e"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 92987,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.2.0"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.4"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/reports/.jsons",
+        "charts": true,
+        "reportPageTitle": "Relatório de Testes em Produção - ODH/ODP/Giro/Wemobi/UTP",
+        "overwrite": false,
+        "html": false,
+        "json": true,
+        "embeddedScreenshots": true,
+        "inlineAssets": true
+      },
+      "version": "6.3.2"
+    }
+  }
+}
