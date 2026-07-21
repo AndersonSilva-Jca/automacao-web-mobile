@@ -16,7 +16,7 @@ const wemobi = "https://www.wemobi.me";
 describe("Validar todos os Links Footer", () => {
   beforeEach(() => {
     cy.clearCookies();
-    cy.visit(cometa);
+    cy.visit(catarinense);
   });
   it("Deve validar Links Footer - Instagram", () => {
     cy.get('.social-networks-list > :nth-child(1) > [href="https://www.instagram.com/viacaocometa.oficial/?hl=pt-br"]').click();

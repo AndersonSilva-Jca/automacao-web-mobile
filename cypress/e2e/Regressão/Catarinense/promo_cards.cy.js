@@ -19,7 +19,7 @@ describe("Validar cards de promoção", () => {
   beforeEach(() => {
     cy.clearCookies();
     cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
-    cy.visit("/");
+    cy.visit(catarinense);
   });
 
   it("Deve validar o link do 1º card de promoção e redirecionar para a página de login", () => {

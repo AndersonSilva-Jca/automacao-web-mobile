@@ -168,7 +168,7 @@ describe("Validar link informações de viagens", () => {
     cy.url().should("include", "/pontos-de-venda");
   });
 
-  it.only("Deve redirecionar para o site Clube Giro com sucesso", () => {
+  it("Deve redirecionar para o site Clube Giro com sucesso", () => {
     cy.get(":nth-child(1) > :nth-child(7) > .focusable").click();
     cy.url().should("include", "/clubegiro");
     cy.get(".about-card-button").should("be.visible");

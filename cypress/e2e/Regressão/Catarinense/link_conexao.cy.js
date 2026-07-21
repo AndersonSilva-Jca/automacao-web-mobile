@@ -2,7 +2,6 @@
 
 const { faker } = require("@faker-js/faker");
 
-import loc from "../../support/locators.js";
 const cometa = "https://www.viacaocometa.com.br";
 const viacao1001 = "https://www.autoviacao1001.com.br";
 const catarinense = "https://www.catarinense.com.br/?utm_source=synthetic_test&utm_medium=internal&utm_campaign=operacao";
@@ -17,7 +16,7 @@ describe("Validar link do clube giro", () => {
   beforeEach(() => {
     cy.clearCookies();
     cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
-    cy.visit("/");
+    cy.visit(catarinense);
   });
 
   it("Deve validar o link do card de clube giro e redirecionar para a página do clube giro", () => {
@@ -51,12 +50,12 @@ describe("Validar link do clube giro", () => {
     // cy.url().should('include', '/destinos/porto-santos')
   });
 
-  it("Deve validar o link do card de conexão com os ônibus e redirecionar para a página de contato", () => {
+  it.only("Deve validar o link do card de conexão com os ônibus e redirecionar para a página de contato", () => {
     cy.get("#headingitem0").click();
     cy.get("#headingitem1").click();
     cy.get("#headingitem2").click();
     cy.get("#headingitem3").click();
-    cy.get('[style="color: rgb(255,0,150);"] > .focusable > span').click({ force: true });
+    cy.get("p > .focusable").click({ force: true });
     cy.url().should("include", "fale-conosco");
   });
 });

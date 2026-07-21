@@ -9,7 +9,7 @@ describe("Validar link do clube giro", () => {
   beforeEach(() => {
     cy.clearCookies();
     cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
-    cy.visit("/");
+    cy.visit(viacao1001);
   });
 
   it("Deve validar o link do card de clube giro e redirecionar para a página do clube giro", () => {
@@ -48,7 +48,7 @@ describe("Validar link do clube giro", () => {
     cy.get("#headingitem1").click();
     cy.get("#headingitem2").click();
     cy.get("#headingitem3").click();
-    cy.get('[style="color: rgb(255,0,150);"] > .focusable > span').click({ force: true });
+    cy.get("p > .focusable").click({ force: true });
     cy.url().should("include", "fale-conosco");
   });
 });
