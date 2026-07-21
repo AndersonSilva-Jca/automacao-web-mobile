@@ -40,7 +40,7 @@ Start session
     ...    appium:appPackage=br.com.viacaocometa.cometaapp
     ...    appium:appActivity=.MainActivity
     ...    appWaitDuration=60000
-    ...    appium:noReset=${True}
+    # ...    appium:noReset=${True}
     ...    appium:autoGrantPermissions=${True}
     ...    appium:ensureWebviewsHavePages=${True}
     ...    appium:clearDeviceLogs=${True}
@@ -144,3 +144,4 @@ Aguardar Elemento Com Retry
         Sleep    1s
     END
     Wait Until Element Is Visible    ${locator}    timeout=${timeout}
+    Click Element    ${locator}

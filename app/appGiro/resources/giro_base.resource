@@ -4,7 +4,7 @@ Documentation     Suite de testes — automação mobile com tratamento condicio
 
 Library           OperatingSystem
 Library           String
-Library     AppiumLibrary    screenshot_root_directory=${OUTPUT_DIR}/screenshots
+Library     AppiumLibrary
 Library           ../../libraries/GmailHelper.py
 
 

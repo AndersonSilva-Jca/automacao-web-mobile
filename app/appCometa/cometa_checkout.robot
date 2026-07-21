@@ -10,14 +10,14 @@ Test Teardown    Run Keywords
 
 *** Test Cases ***
 Deve realizar o fluxo até o checkout de pagamento
-   Start session
+    Start session
     Login
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Buscar"]    timeout=60s
     Log To Console    \n Elemento "Buscar" visível
     Click Element    xpath=//android.widget.EditText[@resource-id="origin"]
     Wait Until Element Is Visible    android=new UiSelector().resourceId("locationSearch")    timeout=60s
     Input Text    android=new UiSelector().resourceId("locationSearch")    Sao Paulo (Rod. Tietê)
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="São Paulo (Rod. Tietê) (SP)"]
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="São Paulo (Rod. Tietê) (SP)"]    timeout=60s
     Click Element    xpath=//android.widget.TextView[@text="São Paulo (Rod. Tietê) (SP)"]
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Destino"]    timeout=60s
     Input Text    android=new UiSelector().resourceId("locationSearch")    Rio de Janeiro (Novo Rio) (RJ)
@@ -34,16 +34,17 @@ Deve realizar o fluxo até o checkout de pagamento
     log To Console    \nData de ida selecionada com sucesso!
 
     Wait Until Element Is Visible
-    ...    xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
+    ...    xpath=//android.widget.TextView[@text="Data"]
     ...    timeout=60s
 
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
+    Click Element    xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
     Log To Console    message=Data confirmada
  
-    Wait Until Element Is Visible
-    ...    xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
-    ...    timeout=60s
-
+    # Wait Until Element Is Visible
+    # ...    xpath=//android.widget.TextView[@text="Passageiro"]
+    # ...    timeout=60s
+     Log To Console    message=confirmando passageiros
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
     Log To Console    message=passageiros confirmado
 
@@ -52,6 +53,7 @@ Deve realizar o fluxo até o checkout de pagamento
 
     Log To Console    message=Buscar Passagens confirmado
     Click Element    xpath=//android.widget.TextView[@text="Buscar"]
+    # Click Element    xpath=//android.widget.TextView[@text="Buscar"]
 
     Wait Until Element Is Visible    android=new UiSelector().className("android.view.ViewGroup").instance(47)    timeout=60s
 
@@ -85,11 +87,11 @@ Deve realizar o fluxo até o checkout de pagamento
 
     Click Element    xpath=//android.widget.TextView[@text="Continuar "]
 
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Digite o CUPOM"]    timeout=40s
+    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Aplicar"]/android.view.View   timeout=40s
 
     Log To Console    message=Teste finalizado com sucesso
 
-    Close session
+    # Close session
 
     # Start session
     # Login

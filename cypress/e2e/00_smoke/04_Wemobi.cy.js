@@ -32,10 +32,13 @@ describe("Wemobi", () => {
     cy.get(loc.BUSCAS.BOTAO_BUSCAR, { timeout: 90000 }).should("be.visible").click();
     cy.selecionarPassagemAleatoria1({ timeout: 90000 });
     cy.get(loc.CHECK_PASSAGEIRO, { timeout: 90000 }).click({ force: true });
-    cy.get(loc.WEMOBI_AVANCAR_PASSAGEIRO).should("be.visible").and("not.be.disabled").click();
-    // cy.get("#reservation-seat-0").click().log("Selecionando assento");
-    cy.fecharModalUpgradePoltrona({ timeout: 90000 }).log("Fechando modal de upgrade de poltrona");
-    cy.get(".payment-type-container > .col-12 > .active").should("be.visible").log("Aba de pagamentos visível");
+    cy.fecharModalUpgradePoltrona();
+    // cy.get(loc.WEMOBI_AVANCAR_PASSAGEIRO).should("be.visible").and("not.be.disabled").click();
+    cy.get(loc.WEMOBI_BOTAO_RESERVAR_ASSENTO).click().log("Selecionando assento");
+    cy.get(loc.WEMOBI_BOTAO_ESCOLHER_ASSENTO).click();
+    cy.selecionarAssentoAleatorioWemobi();
+    // cy.fecharModalUpgradePoltrona({ timeout: 90000 }).log("Fechando modal de upgrade de poltrona");
+    cy.get(loc.WEMOBI_ABA_PAGAMENTOS).should("be.visible").log("Aba de pagamentos visível");
     cy.get(loc.ASSERT_SUBTOTAL).should("contain", "Subtotal dos assentos").log("Subtotal dos assentos");
     cy.get(loc.WEMOBI_ASSERT_TAXASERVICO).should("contain", "Taxa de serviço").log("Taxa de serviço");
     cy.get(loc.ASSERT_VALORTOTAL).should("contain", "Valor total").log("Valor total das passagens");

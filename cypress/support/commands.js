@@ -39,24 +39,37 @@ Cypress.Commands.add("selecionarCidadeAleatoria", (campo) => {
     });
 });
 
-Cypress.Commands.add("selecionarAssentoAleatorio", () => {
+Cypress.Commands.add("selecionarAssentoAleatorioWemobi", () => {
   // 1. Buscamos a lista de IDs disponíveis
-  cy.get('button.outer-seat[id^="seat-"]:not(:has(.occupied-seat))', { timeout: 90000 })
+  cy.get('button.outer-seat[id^="seat-"]:not(:has(.occuped))', { timeout: 90000 })
     .should("be.visible")
     .then(($seats) => {
-      // Extraímos apenas a string do ID
       const ids = $seats.map((i, el) => el.id).get();
       const randomId = ids[Math.floor(Math.random() * ids.length)];
 
-      // Criamos um apelido (alias) para o ID sorteado para usar fora do .then()
       cy.wrap(randomId).as("idSorteado");
     });
-  // 2. AÇÃO ISOLADA (Fora do .then anterior)
-  // Isso garante que o Cypress recupere o elemento do DOM zero no momento do clique
   cy.get("@idSorteado").then((id) => {
     cy.get(`#${id}`).scrollIntoView().should("be.visible").click({ force: true });
   });
-  // 3. VALIDAÇÃO FINAL
+  cy.get("#seat-reservation-v2-button-proceed").should("be.visible").log("Assento selecionado");
+  // VALIDAÇÃO FINAL
+  cy.get("#seat-reservation-v2-button-proceed", { timeout: 90000 }).should("be.visible").and("not.be.disabled").click();
+});
+
+Cypress.Commands.add("selecionarAssentoAleatorio", () => {
+  cy.get('button.outer-seat[id^="seat-"]:not(:has(.occupied-seat))', { timeout: 90000 })
+    .should("be.visible")
+    .then(($seats) => {
+      const ids = $seats.map((i, el) => el.id).get();
+      const randomId = ids[Math.floor(Math.random() * ids.length)];
+
+      cy.wrap(randomId).as("idSorteado");
+    });
+  cy.get("@idSorteado").then((id) => {
+    cy.get(`#${id}`).scrollIntoView().should("be.visible").click({ force: true });
+  });
+
   cy.get("#btn-proceed", { timeout: 90000 }).should("be.visible").and("not.be.disabled");
 });
 
@@ -253,7 +266,7 @@ Cypress.Commands.add("selecionarPassagemAleatoria1", () => {
     .then(($ofertas) => {
       // Filtramos (removendo CAMA)
       const ofertasValidas = $ofertas.filter((i, el) => {
-        const textoClasse = Cypress.$(el).find('[data-js^="classtype_"]').text().toUpperCase();
+        const textoClasse = Cypress.$(el).find('[data-js^="classtype"]').text().toUpperCase();
         const temBotaoAtivo = Cypress.$(el).find('button[data-js="buy-ticket"]:not([disabled])').length > 0;
         return !textoClasse.includes("CAMA") && temBotaoAtivo;
       });
@@ -830,18 +843,19 @@ Cypress.Commands.add("fecharModalGiro", () => {
 
 Cypress.Commands.add("fecharModalUpgradePoltrona", () => {
   cy.wait(3000);
-  cy.get("#reservation-seat-0").click().log("Selecionando assento");
+  cy.get(loc.WEMOBI_AVANCAR_PASSAGEIRO).should("be.visible").and("not.be.disabled").click();
   cy.get("body").then(($body) => {
-    if ($body.find("#modal-upsell-buy-ticket-button").length > 0 && $body.find("#modal-upsell-buy-ticket-button").is(":visible")) {
+    if ($body.find(".col-lg-8 > .label-offer > .cmp-text > :nth-child(2)").length > 0 && $body.find(".col-lg-8 > .label-offer > .cmp-text > :nth-child(2)").is(":visible")) {
       cy.log("⚠️ Modal de upgrade detectado — fechando...");
       cy.get("#modal-upsell-buy-ticket-button").click({ force: true });
       cy.get("#modal-upsel").should("not.exist");
     } else {
       cy.log("✅ Sem modal de upgrade");
     }
+    cy.get(loc.WEMOBI_AVANCAR_PASSAGEIRO).should("be.visible").and("not.be.disabled").click();
     //  cy.get("#reservation-seat-0").click().log("Selecionando assento");
-    cy.get('[data-value="random-seat"]').click();
-    cy.get("#seat-reservation-v2-button-proceed").should("be.visible").and("not.be.disabled").click();
+    // cy.get('[data-value="random-seat"]').click();
+    // cy.get("#seat-reservation-v2-button-proceed").should("be.visible").and("not.be.disabled").click();
     cy.log("✅ Sem modal de upgrade, indo para a tela checkout");
   });
 });
