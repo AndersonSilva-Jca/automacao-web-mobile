@@ -71,19 +71,8 @@ jobs:
           destination_dir: reports/${{ github.run_number }}/01_e2e
           keep_files: true
           force_orphan: false
-          # 👇 Não espera o Pages terminar de publicar
           enable_jekyll: false
           commit_message: "ci: deploy report run ${{ github.run_number }}"
-
-      # - name: Deploy do Relatório para GitHub Pages
-      #   if: always()
-      #   uses: peaceiris/actions-gh-pages@v3
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     publish_dir: ./cypress/reports
-      #     destination_dir: reports/${{ github.run_number }}/01_e2e
-      #     keep_files: true
-      #     force_orphan: false
 
       - name: Enviar E-mail de SUCESSO ✅
         if: steps.cypress.outcome == 'success'
@@ -97,7 +86,6 @@ jobs:
           to: anderson.ssantos@jcatlm.com.br
           # cc: fabiano.britto@externo-jcatlm.com.br,ariane.izac@jcatlm.com.br
           from: "Monitoramento Contínuo"
-          # Alterado para html_body para suportar formatação profissional
           html_body: |
             <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6; max-width: 850px; margin: 0 auto; padding: 10px 0;">
              <h2 style="color: #2e7d32; border-bottom: 2px solid #2e7d32; padding-bottom: 12px; margin-top: 0;">Ciclo de Monitoramento Finalizado com Sucesso</h2>
@@ -241,5 +229,3 @@ jobs:
           # 6. Dispara o curl para o seu WhatsApp (Anderson)
           echo "📱 Disparando alerta para Anderson..."
           curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ANDERSON }}&text=${TEXTO_CODIFICADO}&apikey=7972786"
-          # echo "📱 Disparando alerta para Alfredo..."
-          # curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ALFREDO }}&text=${TEXTO_CODIFICADO}&apikey=8475079"

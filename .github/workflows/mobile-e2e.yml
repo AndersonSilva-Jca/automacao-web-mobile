@@ -72,13 +72,10 @@ jobs:
           npm install -g appium
           appium driver install uiautomator2 || true
 
-      # ── Appium em step separado (run: aceita for-loop normalmente) ───────
-      # ── Configurar KVM para aceleração de hardware ───────────────────────
       - name: Enable KVM group permissions
         run: |
           sudo chmod 666 /dev/kvm
 
-      # ── Appium em step separado ──────────────────────────────────────────
       - name: Start Appium
         shell: bash
         run: |
@@ -98,7 +95,6 @@ jobs:
           '
           curl http://127.0.0.1:4723/status
 
-      # ── Emulator + testes otimizados ─────────────────────────────────────
       - name: Run Tests with Android Emulator
         id: run_tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -117,8 +113,6 @@ jobs:
           WA_PHONE_ANDERSON: ${{ secrets.WA_PHONE_ANDERSON }}
 
         with:
-          # Alterado para API 30 para ganho massivo de performance.
-          # Se precisar REALMENTE da 34, mude de volta, mas o KVM acima já vai ajudar.
           api-level: 30
           arch: x86_64
           profile: pixel_7
@@ -173,7 +167,6 @@ jobs:
           find $ALLURE_DIR -type f \( -name "*.mp4" -o -name "*.webm" \) -delete 2>/dev/null || true
           find $RESULTS_DIR -type f \( -name "*.mp4" -o -name "*.webm" \) -delete 2>/dev/null || true
 
-      # ── Geração de relatório ─────────────────────────────────────────────
       - name: Gera relatório Allure
         if: always()
         run: |
@@ -255,7 +248,6 @@ jobs:
             kill "$(cat appium.pid)" 2>/dev/null || true
           fi
 
-      # ── Artefatos ────────────────────────────────────────────────────────
       - name: Upload Allure Report
         if: always()
         uses: actions/upload-artifact@v4
