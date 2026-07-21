@@ -2,7 +2,8 @@
 Library     AppiumLibrary
 Library     OperatingSystem
 Library    Collections
-
+Library    ../appCometa/resources/GeradorDataIda.py
+Library    ../appCometa/resources/GeradorDataVolta.py
 # Library    AppiumLibrary    screenshot_root_directory=${CURDIR}
 
 
@@ -41,7 +42,7 @@ Start session
     ...    appium:appPackage=br.com.viacaocometa.cometaapp
     ...    appium:appActivity=.MainActivity
     ...    appWaitDuration=60000
-    # ...    appium:noReset=${True}
+    ...    appium:noReset=${True}
     ...    appium:autoGrantPermissions=${True}
     ...    appium:ensureWebviewsHavePages=${True}
     ...    appium:clearDeviceLogs=${True}
