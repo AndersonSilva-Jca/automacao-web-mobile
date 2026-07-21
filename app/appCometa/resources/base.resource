@@ -2,9 +2,6 @@
 Library     AppiumLibrary
 Library     OperatingSystem
 Library    Collections
-Library    ../appCometa/resources/GeradorDataIda.py
-Library    ../appCometa/resources/GeradorDataVolta.py
-# Library    AppiumLibrary    screenshot_root_directory=${CURDIR}
 
 
 *** Variables ***
