@@ -1,5 +1,0 @@
-"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
-"failed","Thu Jul 16 20:45:07 UTC 2026","Thu Jul 16 20:47:35 UTC 2026","147475","","Monitoramento Mobile","Wemobi Checkout","","","Deve realizar o fluxo até o checkout de pagamento",""
-"failed","Thu Jul 16 20:43:30 UTC 2026","Thu Jul 16 20:45:07 UTC 2026","96819","","Monitoramento Mobile","Catarinense Checkout","","","Deve realizar o fluxo até o checkout de pagamento",""
-"failed","Thu Jul 16 20:38:26 UTC 2026","Thu Jul 16 20:40:58 UTC 2026","151820","","Monitoramento Mobile","Cometa Checkout","","","Deve realizar o fluxo até o checkout de pagamento",""
-"failed","Thu Jul 16 20:40:58 UTC 2026","Thu Jul 16 20:43:30 UTC 2026","151965","","Monitoramento Mobile","1001 Checkout","","","Deve realizar o fluxo até o checkout de pagamento",""
