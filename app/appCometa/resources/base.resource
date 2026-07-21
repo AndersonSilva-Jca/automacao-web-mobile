@@ -222,3 +222,8 @@ Aguardar Elemento Com Retry
 
 Close session
     Close Application
+
+
+obter_dia_aleatorio_ida
+    # TODO: implement keyword "obter_dia_aleatorio_ida".
+    Fail    Not Implemented
