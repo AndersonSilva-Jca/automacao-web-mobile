@@ -527,38 +527,38 @@ jobs:
             </body>
             </html>
 
-      - name: Enviar Alerta no WhatsApp Privado Anderson
-        if: failure()
-        run: |
+      # - name: Enviar Alerta no WhatsApp Privado Anderson
+      #   if: failure()
+      #   run: |
 
-          # 1. Localiza o primeiro screenshot de falha gerado pelo Robot Framework (.png)
-          SCREENSHOT_FILE=$(find results -type f -name "*.png" | head -n 1)
+      #     # 1. Localiza o primeiro screenshot de falha gerado pelo Robot Framework (.png)
+      #     SCREENSHOT_FILE=$(find results -type f -name "*.png" | head -n 1)
 
-          # 2. Se a imagem existir, faz o upload temporário instantâneo para visualização imediata no WhatsApp
-          LINK_IMAGEM_DIRETA="Sem imagem disponível"
-          if [ -f "$SCREENSHOT_FILE" ]; then
-            LINK_IMAGEM_DIRETA=$(curl -s -F "file=@$SCREENSHOT_FILE" https://file.io | python3 -c "import sys, json; data=json.load(sys.stdin); print(data.get('link', 'Erro ao subir imagem'))")
-          fi
+      #     # 2. Se a imagem existir, faz o upload temporário instantâneo para visualização imediata no WhatsApp
+      #     LINK_IMAGEM_DIRETA="Sem imagem disponível"
+      #     if [ -f "$SCREENSHOT_FILE" ]; then
+      #       LINK_IMAGEM_DIRETA=$(curl -s -F "file=@$SCREENSHOT_FILE" https://file.io | python3 -c "import sys, json; data=json.load(sys.stdin); print(data.get('link', 'Erro ao subir imagem'))")
+      #     fi
 
-          # 3. Monta o link do relatório oficial (Allure) no Pages
-          LINK_RELATORIO="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/mobile-run-${{ github.run_number }}"
+      #     # 3. Monta o link do relatório oficial (Allure) no Pages
+      #     LINK_RELATORIO="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/mobile-run-${{ github.run_number }}"
 
-          TEXTO_BRUTO="🚨*[ALERTA MOBILE] Giro/Wemobi/UTP*
+      #     TEXTO_BRUTO="🚨*[ALERTA MOBILE] Giro/Wemobi/UTP*
 
-          Os testes E2E do Robot Framework falharam no ambiente de Operação.
+      #     Os testes E2E do Robot Framework falharam no ambiente de Operação.
 
-          *📊 INFORMAÇÕES DA EXECUÇÃO:*
-          • *ID da Run:* #${{ github.run_number }}
-          • *Data:* ${{ env.DATA_ALERTA }}
-          • *Hora:* ${{ env.HORA_ALERTA }} (Brasília)
-          • *Ferramenta:* Robot Framework
+      #     *📊 INFORMAÇÕES DA EXECUÇÃO:*
+      #     • *ID da Run:* #${{ github.run_number }}
+      #     • *Data:* ${{ env.DATA_ALERTA }}
+      #     • *Hora:* ${{ env.HORA_ALERTA }} (Brasília)
+      #     • *Ferramenta:* Robot Framework
 
-          *🖥️ LINK DO RELATÓRIO HTML COMPLETO:*
-          $LINK_RELATORIO"
+      #     *🖥️ LINK DO RELATÓRIO HTML COMPLETO:*
+      #     $LINK_RELATORIO"
 
-          # 5. Faz o URL Encode usando Python para evitar quebras no curl
-          TEXTO_CODIFICADO=$(python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))" "$TEXTO_BRUTO")
+      #     # 5. Faz o URL Encode usando Python para evitar quebras no curl
+      #     TEXTO_CODIFICADO=$(python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))" "$TEXTO_BRUTO")
 
-          # 6. Dispara o curl para o seu WhatsApp (Anderson)
-          echo "📱 Disparando alerta para Anderson..."
-          curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ANDERSON }}&text=${TEXTO_CODIFICADO}&apikey=7972786"
+      #     # 6. Dispara o curl para o seu WhatsApp (Anderson)
+      #     echo "📱 Disparando alerta para Anderson..."
+      #     curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ANDERSON }}&text=${TEXTO_CODIFICADO}&apikey=7972786"
