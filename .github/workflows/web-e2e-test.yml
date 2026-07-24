@@ -1,4 +1,4 @@
-name: TESTE Web E2E - ODH/ODP/Giro/Wemobi/UTP
+name: BS TESTE Web E2E - ODH/ODP/Giro/Wemobi/UTP (BrowserStack)
 on:
   # push:
   #   branches:
@@ -28,15 +28,29 @@ jobs:
       - name: Checkout do Código
         uses: actions/checkout@v4
 
-      - name: Cypress Run - Testes E2E ODH/ODP/Giro/Wemobi/UTP
-        uses: cypress-io/github-action@v7
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar dependências do projeto
+        run: npm ci
+
+      - name: Instalar BrowserStack Cypress CLI
+        run: npm install -g browserstack-cypress-cli
+
+      - name: Cypress Run no BrowserStack - Testes E2E ODH/ODP/Giro/Wemobi/UTP
         id: cypress
         continue-on-error: true
-        with:
-          command: npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/**/*.cy.js'
-          # --spec "cypress/e2e/{05_link_conexao,06_cards_duvidas_frequentes}/**/*"
-
+        run: |
+          browserstack-cypress run \
+            --sync \
+            --config-file browserstack.json \
+            --build-name "Web E2E ODH/ODP/Giro/Wemobi/UTP - Run ${{ github.run_number }}" \
+            --env LOGIN=$LOGIN,SENHA=$SENHA,LOGIN1=$LOGIN1,SENHA1=$SENHA1,LOGIN2=$LOGIN2,SENHA2=$SENHA2,MAIL_USERNAME=$MAIL_USERNAME,MAIL_PASSWORD=$MAIL_PASSWORD,HOTMAIL_MAIL=$HOTMAIL_MAIL,HOTMAIL_APP_PASS=$HOTMAIL_APP_PASS
         env:
+          BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+          BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
           LOGIN: ${{ secrets.LOGIN }}
           SENHA: ${{ secrets.SENHA }}
           LOGIN1: ${{ secrets.LOGIN1 }}
@@ -50,12 +64,14 @@ jobs:
           WA_PHONE_ANDERSON: ${{ secrets.WA_PHONE_ANDERSON }}
           NODE_TLS_REJECT_UNAUTHORIZED: "0"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # CYPRESS_INTERNAL_NPM_REGISTRY_DISABLE_SSL_VERIFICATION: "1" # Força o bypass no Cypress
+
+      - name: Falhar o job se o BrowserStack reportou falha
+        if: steps.cypress.outcome == 'failure'
+        run: exit 1
 
       - name: Obter Data e Hora Atual (Brasília)
         if: failure()
         run: |
-          # Define o fuso horário para São Paulo e formata os dados
           echo "DATA_ALERTA=$(TZ='America/Sao_Paulo' date +'%d/%m/%Y')" >> $GITHUB_ENV
           echo "HORA_ALERTA=$(TZ='America/Sao_Paulo' date +'%H:%M:%S')" >> $GITHUB_ENV
 
@@ -71,19 +87,8 @@ jobs:
           destination_dir: reports/${{ github.run_number }}/01_e2e
           keep_files: true
           force_orphan: false
-          # 👇 Não espera o Pages terminar de publicar
           enable_jekyll: false
           commit_message: "ci: deploy report run ${{ github.run_number }}"
-
-      # - name: Deploy do Relatório para GitHub Pages
-      #   if: always()
-      #   uses: peaceiris/actions-gh-pages@v3
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     publish_dir: ./cypress/reports
-      #     destination_dir: reports/${{ github.run_number }}/01_e2e
-      #     keep_files: true
-      #     force_orphan: false
 
       - name: Enviar E-mail de SUCESSO ✅
         if: steps.cypress.outcome == 'success'
@@ -93,19 +98,16 @@ jobs:
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "✅[SITES] ODH/ODP/Giro/Wemobi/UTP - Monit. Cont."
+          subject: "✅[SITES] ODH/ODP/Giro/Wemobi/UTP - Monit. Cont. (BrowserStack)"
           to: anderson.ssantos@jcatlm.com.br
-          # cc: fabiano.britto@externo-jcatlm.com.br
           from: "Monitoramento Contínuo"
-          # Alterado para html_body para suportar formatação profissional
           html_body: |
             <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6; max-width: 850px; margin: 0 auto; padding: 10px 0;">
              <h2 style="color: #2e7d32; border-bottom: 2px solid #2e7d32; padding-bottom: 12px; margin-top: 0;">✅ Ciclo de Monitoramento Finalizado com Sucesso</h2>
 
-             <p>O ciclo de testes automatizados de monitoramento contínuo foi executado nas plataformas operacionais e <strong>todas as validações críticas passaram com sucesso</strong>.</p>
+             <p>O ciclo de testes automatizados de monitoramento contínuo foi executado no BrowserStack Automate e <strong>todas as validações críticas passaram com sucesso</strong>.</p>
 
-                           <div style="border: 1px solid #00ffa2; margin: 25px 0; border-radius: 6px; overflow: hidden; background-color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-
+             <div style="border: 1px solid #00ffa2; margin: 25px 0; border-radius: 6px; overflow: hidden; background-color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
              <div style="background-color: #f8fafc; padding: 14px 20px; border-bottom: 1px solid #e2e8f0;">
                <table style="width: 100%; border-collapse: collapse; border: 0;">
                  <tr>
@@ -113,16 +115,16 @@ jobs:
                      <img src="https://www.cypress.io/_astro/cypress-logo.D87396b0.svg" alt="Cypress Logo" style="width: 80px; height: 32px; display: block; border: 0;" />
                    </td>
                    <td style="padding: 0; vertical-align: middle; padding-left: 10px;">
-                     <span style="color: #1b1e2e; font-family: Arial, sans-serif; font-size: 13px; font-weight: bold; letter-spacing: 0.5px; text-transform: uppercase;">AUTOMATION REPORT ODPTECH</span>
+                     <span style="color: #1b1e2e; font-family: Arial, sans-serif; font-size: 13px; font-weight: bold; letter-spacing: 0.5px; text-transform: uppercase;">AUTOMATION REPORT ODPTECH · BrowserStack</span>
                    </td>
                  </tr>
                </table>
                <hr>
-
                <div style="background-color: #ebfff6; border-left: 4px solid #84e4a1; padding: 15px; margin: 20px 0;">
                <h4 style="margin: 0 0 12px 0; color: #0db94f; font-size: 15px; font-family: Arial, sans-serif;">📊 Relatórios e Evidências Disponíveis:</h4>
                <p style="margin: 0; line-height: 1.6; font-family: Arial, sans-serif;">
                🔹 <a href="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/${{ github.run_number }}/01_e2e/index.html" style="color: #1565c0; font-weight: bold; text-decoration: none; font-size: 14px;">Clique aqui para Acessar o Relatório dos Testes</a><br>
+               <span style="display: inline-block; margin-top: 8px;">🔹 <a href="https://automate.browserstack.com/dashboard" style="color: #000000; text-decoration: none; font-size: 13px;">Ver Sessões no Painel do BrowserStack Automate</a></span><br>
                <span style="display: inline-block; margin-top: 8px;">🔹 <a href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" style="color: #000000; text-decoration: none; font-size: 13px;">Analisar Logs Técnicos da Pipeline (GitHub Actions)</a></span>
                </p>
                </div>
@@ -135,7 +137,7 @@ jobs:
                </tr>
                <tr>
                <td style="padding: 12px; border: 1px solid #00ffa2; font-weight: bold;">Escopo Validado:</td>
-               <td style="padding: 12px; border: 1px solid #00ffa2;"><strong>[00] Smoke Tests - Críticos - Checkout</strong> (Busca de Destinos, Datas, Passagens e Seleção de Assentos).</td>
+               <td style="padding: 12px; border: 1px solid #00ffa2;"><strong>[00] Smoke Tests - Críticos - Checkout</strong> (Busca de Destinos, Datas, Passagens e Seleção de Assentos), executados em navegadores reais via BrowserStack.</td>
                </tr>
                <tr style="background-color: #f8f9fa;">
                <td style="padding: 12px; border: 1px solid #00ffa2; font-weight: bold;">Não Implementado:</td>
@@ -156,17 +158,15 @@ jobs:
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "🚨[ALERTA SITES] ODH/ODP/Giro/Wemobi/UTP - Monit. Cont"
+          subject: "🚨[ALERTA SITES] ODH/ODP/Giro/Wemobi/UTP - Monit. Cont (BrowserStack)"
           to: anderson.ssantos@jcatlm.com.br
-          # cc: fabiano.britto@externo-jcatlm.com.br
           from: "Monitoramento Contínuo"
-          # Alterado para html_body para suportar formatação profissional
           html_body: |
             <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6; max-width: 850px; margin: 0 auto; padding: 10px 0;">
             <h2 style="color: #c62828; border-bottom: 2px solid #c62828; padding-bottom: 12px; margin-top: 0;">🚨 Alerta: ODH/ODP/Giro/Wemobi/UTP</h2>
             <h4 style="color: #000000; text-align: center; border-bottom: 2px solid #c62828; padding-bottom: 12px; margin-top: 0;">Run #${{ github.run_number }} . ${{ env.DATA_ALERTA }} às ${{ env.HORA_ALERTA }}</h4>
 
-            <p>Identificamos uma quebra no fluxo operacional durante a execução dos testes automatizados. O problema requer uma investigação para avaliar o impacto nos sites produtivos.</p>
+            <p>Identificamos uma quebra no fluxo operacional durante a execução dos testes automatizados no BrowserStack. O problema requer uma investigação para avaliar o impacto nos sites produtivos.</p>
 
             <div style="border: 1px solid #ff0000; margin: 25px 0; border-radius: 6px; overflow: hidden; background-color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
             <div style="background-color: #f8fafc; padding: 14px 20px; border-bottom: 1px solid #e2e8f0;">
@@ -176,7 +176,7 @@ jobs:
                     <img src="https://www.cypress.io/_astro/cypress-logo.D87396b0.svg" alt="Cypress Logo" style="width: 80px; height: 32px; display: block; border: 0;" />
                   </td>
                   <td style="padding: 0; vertical-align: middle; padding-left: 10px;">
-                    <span style="color: #1b1e2e; font-family: Arial, sans-serif; font-size: 13px; font-weight: bold; letter-spacing: 0.5px; text-transform: uppercase;">AUTOMATION REPORT ODPTECH</span>
+                    <span style="color: #1b1e2e; font-family: Arial, sans-serif; font-size: 13px; font-weight: bold; letter-spacing: 0.5px; text-transform: uppercase;">AUTOMATION REPORT ODPTECH · BrowserStack</span>
                   </td>
                 </tr>
               </table>
@@ -185,6 +185,7 @@ jobs:
               <h4 style="margin: 0 0 12px 0; color: #b71c1c;">📊 Ações Imediatas:</h4>
               <p style="margin: 0; line-height: 1.6; font-family: Arial, sans-serif;">
                 ⚠️ <strong><a href="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/${{ github.run_number }}/01_e2e/index.html" style="color: #b71c1c; font-weight: bold; text-decoration: underline;">Clique aqui para abrir o Relatório de Evidências dos Testes</a></strong><br>
+                <span style="display: inline-block; margin-top: 8px;">🛠️ <a href="https://automate.browserstack.com/dashboard" style="color: #000000; text-decoration: none; font-size: 13px;">Ver Sessões (vídeo/logs) no Painel do BrowserStack</a></span><br>
                 <span style="display: inline-block; margin-top: 8px;">🛠️ <a href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" style="color: #000000; text-decoration: none; font-size: 13px;">Analisar Logs Técnicos da Pipeline (Logs do GitHub Actions)</a></span>
               </p>
             </div>
@@ -202,13 +203,13 @@ jobs:
             <span style="color: #555;"><br>• Mudanças de layout, alteração de seletores (IDs, Classes, Placeholders) ou alteração na árvore do DOM que impedem a interação do robô.</span>
             </li>
             <li style="margin-bottom: 12px;">
-            <strong>3. Instabilidades no Back-end / APIs:</strong>
-            <span style="color: #555;"><br>• Lentidão excessiva (Timeout) no retorno das requisições, indisponibilidade na API de busca de trechos/datas ou falha no serviço de autenticação (Login).</span>
+            <strong>3. Instabilidades no Back-end / APIs ou no BrowserStack:</strong>
+            <span style="color: #555;"><br>• Lentidão excessiva (Timeout) no retorno das requisições, indisponibilidade na API de busca de trechos/datas, falha no serviço de autenticação (Login) ou instabilidade na fila de sessões do BrowserStack.</span>
               </li>
               </ul>
 
             <p style="font-size: 14px; background-color: #fff9c4; padding: 12px; border: 1px solid #fbc02d; margin-top: 20px;">
-            💡 <strong>Nota do QA:</strong> O relatório HTML acima contém os screenshots e o vídeo exato do momento do erro para acelerar o processo de correção pela equipe de desenvolvimento.
+            💡 <strong>Nota do QA:</strong> O painel do BrowserStack Automate contém o vídeo completo da sessão e os logs de rede/console do momento do erro para acelerar o processo de correção pela equipe de desenvolvimento.
             </p>
             </div>
 
@@ -219,27 +220,22 @@ jobs:
       - name: Enviar Alerta no WhatsApp Privado
         if: steps.cypress.outcome == 'failure'
         run: |
-          # 1. Constrói a URL do relatório dinamicamente
           LINK_RELATORIO="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/${{ github.run_number }}/01_e2e/index.html"
 
           TEXTO_BRUTO="🚨 *TESTE [ALERTA SITES] ODH/ODP/Giro/Wemobi/UTP*
 
-          Os testes E2E do Cypress falharam no ambiente de Operação.
+          Os testes E2E do Cypress falharam no BrowserStack Automate.
 
           *📊 INFORMAÇÕES DA EXECUÇÃO:*
           • *ID da Run:* #${{ github.run_number }}
           • *Data:* ${{ env.DATA_ALERTA }}
           • *Hora:* ${{ env.HORA_ALERTA }} (Brasília)
-          • *Ferramenta:* Cypress Web
+          • *Ferramenta:* Cypress Web (BrowserStack Automate)
 
           *🖥️ LINK DO RELATÓRIO HTML COMPLETO:*
           $LINK_RELATORIO"
 
-          # 5. Faz o URL Encode usando Python para evitar quebras no curl
           TEXTO_CODIFICADO=$(python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))" "$TEXTO_BRUTO")
 
-          # 6. Dispara o curl para o seu WhatsApp (Anderson)
           echo "📱 Disparando alerta para Anderson..."
           curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ANDERSON }}&text=${TEXTO_CODIFICADO}&apikey=7972786"
-          # echo "📱 Disparando alerta para Alfredo..."
-          # curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ALFREDO }}&text=${TEXTO_CODIFICADO}&apikey=8475079"

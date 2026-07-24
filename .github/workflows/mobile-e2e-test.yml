@@ -113,7 +113,6 @@ jobs:
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REMETENTE_APP: ${{ secrets.REMETENTE_APP }}
-          WA_PHONE_ALFREDO: ${{ secrets.WA_PHONE_ALFREDO }}
           WA_PHONE_ANDERSON: ${{ secrets.WA_PHONE_ANDERSON }}
 
         with:
@@ -162,7 +161,7 @@ jobs:
             # app/appCometa/cometa_checkout.robot 
             # app/app1001/1001_checkout.robot
             # app/appWemobi/wemobi_checkout.robot
-            # app/appGiro/giro_login.robot
+            # app/appGiro/giro_checkout.robot
 
             echo $! > appium.pid
             kill $(cat appium.pid) || true

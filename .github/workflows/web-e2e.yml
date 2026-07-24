@@ -33,7 +33,7 @@ jobs:
         id: cypress
         continue-on-error: true
         with:
-          command: npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/**/*.cy.js'
+          command: npx cypress run --browser chrome --spec 'cypress/e2e/00_smoke/**/*.cy.js'
           # --spec "cypress/e2e/{05_link_conexao,06_cards_duvidas_frequentes}/**/*"
 
         env:

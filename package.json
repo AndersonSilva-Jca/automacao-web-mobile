@@ -13,7 +13,8 @@
   "devDependencies": {
     "@cypress/xpath": "^2.0.3",
     "@faker-js/faker": "^10.3.0",
-    "cypress": "^15.18.0",
+    "browserstack-cypress-cli": "^1.24.1",
+    "cypress": "^15.19.0",
     "cypress-if": "^1.13.2",
     "cypress-mochawesome-reporter": "^4.0.2",
     "cypress-multi-reporters": "^2.0.5",
