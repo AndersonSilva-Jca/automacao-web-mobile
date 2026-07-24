@@ -2,7 +2,7 @@
 /// <reference types="@cypress/xpath" />
 require("cypress-xpath");
 // 06/06/2026 - incio com github actions
-import loc from "../../support/locators.js";
+import loc from "../support/locators.js";
 const cometa = "https://www.viacaocometa.com.br";
 const viacao1001 = "https://www.autoviacao1001.com.br";
 const catarinense = "https://www.catarinense.com.br/";
