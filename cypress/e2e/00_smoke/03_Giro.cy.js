@@ -28,7 +28,7 @@ describe("Clube Giro", () => {
       cy.get(loc.ACESSE_GIRO).should("contain", "Acesse o Giro");
       cy.get(loc.USUARIO).should("be.visible").type("andynho1987@gmail.com", { delay: 50 });
       cy.get(loc.SENHA).should("be.visible").type(env.senha, { log: false }, { delay: 100 });
-      cy.get(loc.GIRO_BOTAO_ENTRAR).click({ force: true });
+      cy.get(loc.GIRO_BOTAO_ENTRAR).click();
       cy.wait(4000);
     });
     cy.get("body").then(($body) => {
