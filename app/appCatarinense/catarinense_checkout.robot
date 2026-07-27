@@ -46,11 +46,15 @@ Deve realizar o fluxo até o checkout de pagamento
 
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
 
-    Aguardar Elemento Com Retry    xpath=//android.widget.TextView[@text="Buscar"]
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Buscar"]
+
+
+    Tap    x=539    y=1785    duration=2s
+    
 
     Log To Console    message=Buscar Passagens confirmado
 
-    Click Element    xpath=//android.widget.TextView[@text="Buscar"]
+    # Click Element    xpath=//android.widget.TextView[@text="Buscar"]
 
     Wait Until Element Is Visible    android=new UiSelector().className("android.view.ViewGroup").instance(47)    timeout=60s
 

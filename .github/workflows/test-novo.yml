@@ -144,10 +144,10 @@ jobs:
             echo "Instalando o aplicativo catarinense..."
             adb install-multiple ./app/apks/catarinense/*.apk
 
-            # echo "Garantindo que as animações do sistema estão desligadas..."
-            # adb shell settings put global window_animation_scale 0
-            # adb shell settings put global transition_animation_scale 0
-            # adb shell settings put global animator_duration_scale 0
+            echo "Garantindo que as animações do sistema estão desligadas..."
+            adb shell settings put global window_animation_scale 0
+            adb shell settings put global transition_animation_scale 0
+            adb shell settings put global animator_duration_scale 0
 
             echo "Criando pastas de resultados..."
             mkdir -p $RESULTS_DIR $ALLURE_DIR

@@ -51,7 +51,6 @@ Deve realizar o fluxo até o checkout de pagamento
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
     Log To Console    message=passageiros confirmado
 
-
     Aguardar Elemento Com Retry    xpath=//android.widget.TextView[@text="Buscar"]
 
     Log To Console    message=Buscar Passagens confirmado
