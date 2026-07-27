@@ -45,8 +45,8 @@ jobs:
           SENHA2: ${{ secrets.SENHA2 }}
           MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
-          HOTMAIL_MAIL: ${{ secrets.HOTMAIL_MAIL }}
-          HOTMAIL_APP_PASS: ${{ secrets.HOTMAIL_APP_PASS }}
+          GMAIL_MAIL: ${{ secrets.HOTMAIL_MAIL }}
+          GMAIL_APP_PASS: ${{ secrets.HOTMAIL_APP_PASS }}
           WA_PHONE_ANDERSON: ${{ secrets.WA_PHONE_ANDERSON }}
           NODE_TLS_REJECT_UNAUTHORIZED: "0"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
