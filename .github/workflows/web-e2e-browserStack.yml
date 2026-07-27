@@ -1,4 +1,4 @@
-name: BS TESTE Web E2E - ODH/ODP/Giro/Wemobi/UTP (BrowserStack)
+name: BS TESTE Web (BrowserStack)
 on:
   # push:
   #   branches:
