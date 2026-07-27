@@ -49,7 +49,7 @@ Deve realizar o fluxo até o checkout de pagamento
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Buscar"]
 
 
-    Tap    x=539    y=1785    duration=2s
+        Swipe    start_x=514    start_y=942    end_x=258    end_y=324    duration=1s
     
 
     Log To Console    message=Buscar Passagens confirmado
