@@ -4,9 +4,10 @@ Library    ../app1001/resources/GeradorDataIda.py
 Library    ../app1001/resources/GeradorDataVolta.py
 Resource    ../app1001/resources/base.resource
 Library     ../libraries/GmailHelper.py
-Test Teardown    Run Keywords
-...    Run Keyword If Test Failed    Capturar Evidencia De Falha
-...    AND    Close All Applications
+# Test Teardown    Run Keywords
+# ...    Run Keyword If Test Failed   
+#  Capturar Evidencia De Falha
+# ...    AND    Close All Applications
 
 
 *** Test Cases ***
@@ -24,6 +25,8 @@ Deve realizar o fluxo até o checkout de pagamento
     Input Text    android=new UiSelector().resourceId("locationSearch")    Rio de Janeiro (Novo Rio) (RJ)
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Rio de Janeiro (Novo Rio) (RJ)"]    timeout=60s
     Click Element    xpath=//android.widget.TextView[@text="Rio de Janeiro (Novo Rio) (RJ)"]
+
+    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="calendarComponentContainer"]    timeout=30
 
      ${data_ida}=    obter_dia_aleatorio_ida
     Log To Console    \nData gerada: ${data_ida}
@@ -54,9 +57,9 @@ Deve realizar o fluxo até o checkout de pagamento
     Log To Console    message=Buscar Passagens confirmado
     Click Element    xpath=//android.widget.TextView[@text="Buscar"]
 
-    Wait Until Element Is Visible    android=new UiSelector().className("android.view.ViewGroup").instance(47)    timeout=60s
+    Wait Until Element Is Visible    android=new UiSelector().className("android.view.ViewGroup").instance(47)    timeout=90s
 
-    Swipe    start_x=503    start_y=2040    end_x=522    end_y=28    duration=1s
+    Swipe    start_x=489    start_y=1791    end_x=500    end_y=919    duration=1s
 
     Click Element    xpath=//android.view.View
 

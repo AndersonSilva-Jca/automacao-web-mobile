@@ -39,11 +39,12 @@ Start session
     ...    appium:appPackage=br.com.catarinense.catarinenseapp
     ...    appium:appActivity=.MainActivity
     ...    appWaitDuration=60000
-    # ...    appium:noReset=${True}
+    ...    appium:noReset=${False}
     ...    appium:autoGrantPermissions=${True}
     ...    appium:ensureWebviewsHavePages=${True}
     ...    appium:clearDeviceLogs=${True}
     ...    appium:nativeWebScreenshot=${True}
+    ...    appium:uiautomator2ServerServerInstallTimeout=${60000}
     ...    appium:uiautomator2ServerLaunchTimeout=${120000}
     ...    appium:uiautomator2ServerInstallTimeout=${60000}
     ...    appium:adbExecTimeout=${60000}

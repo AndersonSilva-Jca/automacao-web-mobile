@@ -39,11 +39,12 @@ Start session
     ...    appium:appPackage=br.com.viacaocometa.cometaapp
     ...    appium:appActivity=.MainActivity
     ...    appWaitDuration=60000
-    ...    appium:noReset=${True}
+    ...    appium:noReset=${False}
     ...    appium:autoGrantPermissions=${True}
     ...    appium:ensureWebviewsHavePages=${True}
     ...    appium:clearDeviceLogs=${True}
     ...    appium:nativeWebScreenshot=${True}
+    ...    appium:uiautomator2ServerServerInstallTimeout=${60000}
     ...    appium:uiautomator2ServerLaunchTimeout=${120000}
     ...    appium:uiautomator2ServerInstallTimeout=${60000}
     ...    appium:adbExecTimeout=${60000}
@@ -63,7 +64,7 @@ Login
     ${cookie_visivel}=    Run Keyword And Return Status
     ...    Wait Until Element Is Visible
     ...    xpath=//android.app.AlertDialog[@resource-id="cookie-banner"]
-    ...    timeout=30s
+    ...    timeout=15s
     IF    ${cookie_visivel}
         Log To Console    \n[INFO] Banner de cookie detectado. Aceitando...
         Click Element    xpath=//android.widget.Button[@resource-id="adopt-accept-all-button"]
@@ -82,6 +83,8 @@ Checkout
     Input Text    android=new UiSelector().resourceId("locationSearch")    Rio de Janeiro (Novo Rio) (RJ)
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Rio de Janeiro (Novo Rio) (RJ)"]    timeout=60s
     Click Element    xpath=//android.widget.TextView[@text="Rio de Janeiro (Novo Rio) (RJ)"]
+
+    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="calendarComponentContainer"]    timeout=30
 
      ${data_ida}=    obter_dia_aleatorio_ida
     Log To Console    \nData gerada: ${data_ida}
@@ -201,11 +204,11 @@ Selecionar Assento Livre Aleatoriamente
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Continuar "]    timeout=30s
     Log To Console    👉 Assento sorteado para o teste: ${assento_sorteado}
     
-Capturar Evidencia De Falha
-    [Documentation]    Garante print mesmo se o app crashar ou a sessão cair
-    ${status}    ${screenshot}=    Run Keyword And Ignore Error
-    ...    Capture Page Screenshot    ${OUTPUT_DIR}${/}screenshots${/}falha-${TEST_NAME}-{index}.png
-    Log To Console    \n[EVIDÊNCIA] ${screenshot}
+# Capturar Evidencia De Falha
+#     [Documentation]    Garante print mesmo se o app crashar ou a sessão cair
+#     ${status}    ${screenshot}=    Run Keyword And Ignore Error
+#     ...    Capture Page Screenshot    ${OUTPUT_DIR}${/}screenshots${/}falha-${TEST_NAME}-{index}.png
+#     Log To Console    \n[EVIDÊNCIA] ${screenshot}
 
 Aguardar Elemento Com Retry
     [Arguments]    ${locator}    ${timeout}=30s    ${tentativas}=3
@@ -215,7 +218,7 @@ Aguardar Elemento Com Retry
         ...    Wait Until Element Is Visible    ${locator}    timeout=${timeout}
         IF    ${ok}    RETURN
         Log To Console    \n[RETRY] Tentativa ${i+1} falhou para ${locator}
-        Sleep    1s
+        Sleep    2s
     END
     Wait Until Element Is Visible    ${locator}    timeout=${timeout}
     Click Element    ${locator}
@@ -223,7 +226,3 @@ Aguardar Elemento Com Retry
 Close session
     Close Application
 
-
-obter_dia_aleatorio_ida
-    # TODO: implement keyword "obter_dia_aleatorio_ida".
-    Fail    Not Implemented
