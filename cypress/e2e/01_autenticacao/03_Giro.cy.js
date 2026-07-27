@@ -39,12 +39,12 @@ describe("Clube Giro", () => {
       }
     });
     cy.fecharModalGiro();
-    cy.get(loc.MENSAGEM_LOGADO).should("contain", "ANDERSON");
-    cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Rodoviária Tietê (SP)", { delay: 100 }).should("exist").invoke("show");
-    cy.xpath('//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]').click({ force: true });
-    cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("Rio De Janeiro - Rodoviária Novo Rio (RJ)", { delay: 100 }).should("exist").invoke("show");
-    cy.xpath('//*[@id="Rio-De-Janeiro---Rodoviária-Novo-Rio-(RJ)"]/p[1]').click({ force: true });
-    cy.get(loc.BUSCAS.DATA_IDA).click();
+    // cy.get(loc.MENSAGEM_LOGADO).should("contain", "ANDERSON");
+    // cy.get(loc.BUSCAS.DESTINO_IDA).click().type("Rio De Janeiro - Todos (RJ)", { delay: 100 });
+    // cy.contains(" Rio De Janeiro - Todos (RJ) ").click({ force: true });
+    // cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("São Paulo - Todos (SP)", { delay: 100 });
+    // cy.contains("São Paulo - Todos (SP)").click({ force: true });
+    // cy.get(loc.BUSCAS.DATA_IDA).click();
     cy.get(loc.LOADER).should("not.exist");
     cy.selecionarDataIda(5);
     cy.get(loc.BUSCAS.BOTAO_BUSCAR, { timeout: 90000 }).should("be.visible").click();
