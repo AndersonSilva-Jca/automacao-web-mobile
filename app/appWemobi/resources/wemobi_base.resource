@@ -1,7 +1,6 @@
 *** Settings ***
 Library     AppiumLibrary
 Library     OperatingSystem
-# Library    AppiumLibrary    screenshot_root_directory=${CURDIR}/../../public
 
 
 *** Variables ***
@@ -17,18 +16,15 @@ Carregar Variaveis De Ambiente
     [Documentation]    Carrega o arquivo .env e cria as variáveis globais para o teste.
     Evaluate    __import__('dotenv').load_dotenv(dotenv_path='app/.env')
 
-    # 1. Coleta os dados do sistema operacional (.env local ou CI)
     ${env_login}=    Get Environment Variable    LOGIN
     ${env_senha}=    Get Environment Variable    SENHA
     ${env_mail_username}=    Get Environment Variable    MAIL_USERNAME
 
-    # 2. Injeta os valores como GLOBAL
     Set Global Variable    ${LOGIN}    ${env_login}
     Set Global Variable    ${SENHA}    ${env_senha}
     Set Global Variable    ${MAIL_USERNAME}    ${env_mail_username}
 
 Start session
-    # 🌟 O SEGREDO ESTÁ AQUI: Chamando a Keyword para alimentar as variáveis ANTES de abrir o Appium
     Carregar Variaveis De Ambiente
     Open Application    http://127.0.0.1:4723
     ...    platformName=Android
@@ -42,6 +38,7 @@ Start session
     ...    appium:ensureWebviewsHavePages=${True}
     ...    appium:clearDeviceLogs=${True}
     ...    appium:nativeWebScreenshot=${True}
+    ...    appium:uiautomator2ServerServerInstallTimeout=${60000}
     ...    appium:uiautomator2ServerLaunchTimeout=${90000}
     ...    appium:uiautomator2ServerInstallTimeout=${60000}
     ...    appium:adbExecTimeout=${60000}

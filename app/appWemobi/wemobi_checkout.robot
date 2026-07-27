@@ -4,23 +4,23 @@ Library             ../appWemobi/resources/GeradorDataIda.py
 Library             ../appWemobi/resources/GeradorDataVolta.py
 Resource            ../appWemobi/resources/wemobi_base.resource
 Library             ../libraries/GmailHelper.py
-Test Teardown    Run Keywords
-...    Run Keyword If Test Failed    Capturar Evidencia De Falha
-...    AND    Close All Applications
+# Test Teardown    Run Keywords
+# ...    Run Keyword If Test Failed    Capturar Evidencia De Falha
+# ...    AND    Close All Applications
 
 
 *** Test Cases ***
 Deve realizar o fluxo até o checkout de pagamento
     Start session
     Login
-    Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="user"]    timeout=240s
-    Log To Console    \nFazendo o Login...
-    Input Text    xpath=//android.widget.EditText[@resource-id="user"]    ${LOGIN}
-    Input Password    xpath=//android.widget.EditText[@resource-id="password"]    ${SENHA}
-    Wait Until Element Is Visible
-    ...    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
-    ...    timeout=60s
-    Click Element    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
+    # Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="user"]    timeout=240s
+    # Log To Console    \nFazendo o Login...
+    # Input Text    xpath=//android.widget.EditText[@resource-id="user"]    ${LOGIN}
+    # Input Password    xpath=//android.widget.EditText[@resource-id="password"]    ${SENHA}
+    # Wait Until Element Is Visible
+    # ...    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
+    # ...    timeout=60s
+    # Click Element    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
 
     Wait Until Element Is Visible
     ...    xpath=//android.view.ViewGroup[@content-desc="Buscar"]/android.view.View    timeout=90s
