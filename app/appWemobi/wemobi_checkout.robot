@@ -12,27 +12,27 @@ Test Teardown    Run Keywords
 *** Test Cases ***
 Deve realizar o fluxo até o checkout de pagamento
     Start session
-    # Login
-    # Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="user"]    timeout=240s
-    # Log To Console    \nFazendo o Login...
-    # Input Text    xpath=//android.widget.EditText[@resource-id="user"]    ${LOGIN}
-    # Input Password    xpath=//android.widget.EditText[@resource-id="password"]    ${SENHA}
-    # Wait Until Element Is Visible
-    # ...    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
-    # ...    timeout=60s
-    # Click Element    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
+    Login
+    Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="user"]    timeout=240s
+    Log To Console    \nFazendo o Login...
+    Input Text    xpath=//android.widget.EditText[@resource-id="user"]    ${LOGIN}
+    Input Password    xpath=//android.widget.EditText[@resource-id="password"]    ${SENHA}
+    Wait Until Element Is Visible
+    ...    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
+    ...    timeout=60s
+    Click Element    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
 
-    # Wait Until Element Is Visible
-    # ...    xpath=//android.view.ViewGroup[@content-desc="Buscar"]/android.view.View    timeout=90s
-    # Log To Console    \nTela de Busca exibida com sucesso!
-    # Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="origin"]    timeout=60s
-    # Click Element    xpath=//android.widget.EditText[@resource-id="origin"]
-    # Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="headerNavContainer"]   timeout=60s
-    # log To Console    \nClicando no campo de origem...
-    # Sleep    500ms
-    # Aguardar Elemento Com Retry    xpath=//android.widget.EditText[@resource-id="locationSearch"]
-    # Click Element    xpath=//android.widget.EditText[@resource-id="locationSearch"]
-    # Log To Console    \nClicando em origem...
+    Wait Until Element Is Visible
+    ...    xpath=//android.view.ViewGroup[@content-desc="Buscar"]/android.view.View    timeout=90s
+    Log To Console    \nTela de Busca exibida com sucesso!
+    Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="origin"]    timeout=60s
+    Click Element    xpath=//android.widget.EditText[@resource-id="origin"]
+    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="headerNavContainer"]   timeout=60s
+    log To Console    \nClicando no campo de origem...
+    Sleep    500ms
+    Aguardar Elemento Com Retry    xpath=//android.widget.EditText[@resource-id="locationSearch"]
+    Click Element    xpath=//android.widget.EditText[@resource-id="locationSearch"]
+    Log To Console    \nClicando em origem...
     Input Text    android=new UiSelector().className("android.widget.EditText")    Sao Paulo - Rodoviaria Tiete (SP)
     Log To Console    \nDigitando origem...
     # Wait Until Element Is Visible   xpath=//android.widget.TextView[@text="São Paulo - Rodoviária Tietê (SP)"]
