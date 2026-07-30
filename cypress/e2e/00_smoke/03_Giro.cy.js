@@ -3,7 +3,12 @@
 require("cypress-xpath");
 // 06/06/2026 - incio com github actions
 import loc from "../../support/locators.js";
-
+import LoginPage from "../../pages/LoginPage.js";
+import SearchPage from "../../pages/SearchPage.js";
+import OfferPage from "../../pages/OfferPage.js";
+import PassengerPage from "../../pages/PassengerPage.js";
+import SeatMapPage from "../../pages/SeatMapPage.js";
+import CheckoutPage from "../../pages/CheckoutPage.js";
 const giro = "https://www.clubegiro.com.br/?utm_source=synthetic_test&utm_medium=internal&utm_campaign=operacao";
 
 describe("Clube Giro", () => {
@@ -17,44 +22,21 @@ describe("Clube Giro", () => {
   it("Giro - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
     cy.env(["login2", "senha"]).then((env) => {
       cy.visit(giro);
-      cy.get(loc.GIRO_BOTAO_LOGIN).should("be.visible").click();
-      cy.get(loc.ACESSE_GIRO).should("contain", "Acesse o Giro");
-      cy.get(loc.USUARIO).should("be.visible").type("andynho1987@gmail.com", { delay: 50 });
-      cy.get(loc.SENHA).should("be.visible").type(env.senha, { log: false }, { delay: 100 });
-      cy.get(loc.GIRO_BOTAO_ENTRAR).click();
-      cy.wait(4000);
+      LoginPage.giroModalLogin();
+      LoginPage.giroAssertAcesse();
+      LoginPage.giroPreencherUsuario();
+      LoginPage.giroPreencherSenha();
+      LoginPage.giroConfirmarLogin();
     });
-    cy.get("body").then(($body) => {
-      const temModal2FA = $body.find(loc.GIRO_INPUT_VISIBLE).length > 0;
-      if (temModal2FA) {
-        cy.log("🔐 Modal 2FA detectado e visível – buscando código no e-mail...");
-        cy.wait(5000);
-        cy.task("buscarCodigo2FAGmail").then((codigo2FA) => {
-          expect(codigo2FA).to.not.be.null;
-          cy.get(loc.GIRO_INPUT_2FA).focus().clear({ force: true }).type(codigo2FA, { force: true, delay: 80 });
-          cy.get(loc.GIRO_BOTAO_MODAL_2FA).should("not.be.disabled").click();
-        });
-      } else {
-        cy.log("✅ Login direto – Modal 2FA está oculto (display: none).");
-      }
-    });
-    cy.fecharModalGiro();
-    // cy.get(loc.MENSAGEM_LOGADO).should("contain", "ANDERSON");
-    // cy.get(loc.BUSCAS.DESTINO_IDA).click().type("Rio De Janeiro - Todos (RJ)", { delay: 100 });
-    // cy.contains(" Rio De Janeiro - Todos (RJ) ").click({ force: true });
-    // cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("São Paulo - Todos (SP)", { delay: 100 });
-    // cy.contains("São Paulo - Todos (SP)").click({ force: true });
-    // cy.get(loc.BUSCAS.DATA_IDA).click();
-    cy.get(loc.LOADER).should("not.exist");
-    cy.selecionarDataIda(5);
-    cy.get(loc.BUSCAS.BOTAO_BUSCAR, { timeout: 90000 }).should("be.visible").click();
-    cy.selecionarPassagemAleatoria1({ timeout: 90000 });
-    cy.get(loc.CHECK_PASSAGEIRO, { timeout: 90000 }).click({ force: true });
-    cy.get(loc.BOTAO_AVANCAR).should("be.visible").and("not.be.disabled").click();
-    cy.selecionarAssentoAleatorio({ timeout: 90000 });
-    cy.get(loc.BOTAO_AVANCAR).should("be.visible").click();
-    cy.get(loc.ASSERT_SUBTOTAL).should("contain", "Subtotal dos assentos").log("Subtotal dos assentos");
-    cy.get(loc.ASSERT_TAXASERVICO).should("contain", "Taxa de serviço").log("Taxa de serviço");
-    cy.get(loc.GIRO_ASSERT_VALORTOTAL).should("contain", "Valor total").log("Valor total das passagens");
+    LoginPage.preencher2FA();
+    LoginPage.giroLogadoComSucesso();
+    SearchPage.giroBuscaOrigem();
+    SearchPage.giroBuscaDestino();
+    SearchPage.giroDataIda();
+    SearchPage.giroConfirmarBusca();
+    OfferPage.giroSelecionarPassagemIda();
+    PassengerPage.giroSelecionarPassageiro();
+    SeatMapPage.giroSelecionarAssento();
+    CheckoutPage.giroResumoCompra();
   });
 });

@@ -16,6 +16,11 @@ class OfferPage {
   odpSelecionarPassagemIda() {
     cy.selecionarPassagemAleatoria1({ timeout: 90000 });
   }
+
+  // CLUBE GIRO
+  giroSelecionarPassagemIda() {
+    cy.selecionarPassagemAleatoria1({ timeout: 90000 });
+  }
 }
 
 export default new OfferPage();

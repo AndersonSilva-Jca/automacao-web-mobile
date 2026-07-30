@@ -475,8 +475,8 @@ Cypress.Commands.add("fecharModalOutlet", () => {
 });
 
 Cypress.Commands.add("fecharModalGiro", () => {
-  cy.wait(3000);
-  cy.get(loc.MENSAGEM_LOGADO).should("contain", "ANDERSON");
+  cy.wait(1000);
+  // cy.get(loc.MENSAGEM_LOGADO).should("contain", "ANDERSON");
   cy.get("body").then(($body) => {
     if ($body.find(".QSIWebResponsiveDialog-Layout1-SI_a5XuRtOQsuZ5iTA_content").length > 0 && $body.find(".QSIWebResponsiveDialog-Layout1-SI_a5XuRtOQsuZ5iTA_content").is(":visible")) {
       cy.log("⚠️ Modal detectado — fechando...");
@@ -485,14 +485,14 @@ Cypress.Commands.add("fecharModalGiro", () => {
     } else {
       cy.log("✅ Sem modal na tela");
     }
-    cy.get(loc.MENSAGEM_LOGADO).should("contain", "ANDERSON");
-    cy.get(loc.BUSCAS.DESTINO_IDA).click();
-    cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Todos (SP)", { delay: 100 });
-    cy.contains("São Paulo - Todos (SP)").click({ force: true });
-    cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("Rio De Janeiro - Todos (RJ)", { delay: 100 });
-    cy.contains(" Rio De Janeiro - Todos (RJ) ").click({ force: true });
-    cy.get(loc.BUSCAS.DATA_IDA).click();
-    cy.log("✅ Sem modal, indo para a tela de passagens");
+    // cy.get(loc.MENSAGEM_LOGADO).should("contain", "ANDERSON");
+    // cy.get(loc.BUSCAS.DESTINO_IDA).click();
+    // cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Todos (SP)", { delay: 100 });
+    // cy.contains("São Paulo - Todos (SP)").click({ force: true });
+    // cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("Rio De Janeiro - Todos (RJ)", { delay: 100 });
+    // cy.contains(" Rio De Janeiro - Todos (RJ) ").click({ force: true });
+    // cy.get(loc.BUSCAS.DATA_IDA).click();
+    // cy.log("✅ Sem modal, indo para a tela de passagens");
   });
 });
 
