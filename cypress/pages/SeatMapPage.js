@@ -13,6 +13,13 @@ class SeatMapPage {
     cy.selecionarAssentoAleatorio({ timeout: 90000 });
     cy.get(loc.BOTAO_AVANCAR).should("be.visible").click();
   }
+
+  // WEMOBI
+  wemobiSelecionarAssento() {
+    cy.get(loc.WEMOBI_BOTAO_RESERVAR_ASSENTO).click().log("Selecionando assento");
+    cy.get(loc.WEMOBI_BOTAO_ESCOLHER_ASSENTO).click();
+    cy.selecionarAssentoAleatorioWemobi();
+  }
 }
 
 export default new SeatMapPage();

@@ -58,8 +58,9 @@ class SearchPage {
 
   // CLUBE GIRO
   giroBuscaOrigem() {
-    cy.get(loc.BUSCAS.DESTINO_IDA).click({ force: true });
-    cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Todos (SP)", { delay: 100 });
+    cy.get(loc.BUSCAS.DESTINO_IDA).clear().click({ force: true });
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Todos (SP)", { delay: 150 });
+    cy.get(loc.BUSCAS.DESTINO_IDA).clear().click({ force: true });
     cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Todos (SP)", { delay: 100 });
     cy.contains("São Paulo - Todos (SP)").click({ force: true });
   }
@@ -75,6 +76,23 @@ class SearchPage {
   }
   giroConfirmarBusca() {
     cy.fecharModalGiro();
+    cy.get(loc.BUSCAS.BOTAO_BUSCAR, { timeout: 90000 }).should("be.visible").click();
+  }
+
+  // WEMOBI
+  wemobiBuscaOrigem() {
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Rodoviária Tietê (SP)", { delay: 100 });
+    cy.xpath(loc.WEMOBI_XPATH_SP).click({ force: true });
+  }
+  wemobiBuscaDestino() {
+    cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("Rio De Janeiro - Todos (RJ)", { delay: 100 });
+    cy.xpath(loc.WEMOBI_XPATH_RJ).click({ force: true });
+  }
+  wemobiDataIda() {
+    cy.get(loc.BUSCAS.DATA_IDA).click();
+    cy.selecionarDataIda(5);
+  }
+  wemobiConfirmarBusca() {
     cy.get(loc.BUSCAS.BOTAO_BUSCAR, { timeout: 90000 }).should("be.visible").click();
   }
 }

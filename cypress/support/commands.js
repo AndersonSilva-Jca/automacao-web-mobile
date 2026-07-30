@@ -508,12 +508,12 @@ Cypress.Commands.add("fecharModalUpgradePoltrona", () => {
     } else {
       cy.log("✅ Sem modal de upgrade");
     }
-    cy.get(loc.CHECK_PASSAGEIRO, { timeout: 90000 }).click({ force: true });
-    cy.get(loc.WEMOBI_AVANCAR_PASSAGEIRO).should("be.visible").and("not.be.disabled").click();
+    // cy.get(loc.CHECK_PASSAGEIRO, { timeout: 90000 }).click({ force: true });
+    // cy.get(loc.WEMOBI_AVANCAR_PASSAGEIRO).should("be.visible").and("not.be.disabled").click();
     //  cy.get("#reservation-seat-0").click().log("Selecionando assento");
     // cy.get('[data-value="random-seat"]').click();
     // cy.get("#seat-reservation-v2-button-proceed").should("be.visible").and("not.be.disabled").click();
-    cy.log("✅ Sem modal de upgrade, indo para a tela checkout");
+    // cy.log("✅ Sem modal de upgrade, indo para a tela checkout");
   });
 });
 

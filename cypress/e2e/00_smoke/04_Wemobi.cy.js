@@ -1,6 +1,13 @@
 /// <reference types="cypress" />
 /// <reference types="@cypress/xpath" />
 require("cypress-xpath");
+
+import LoginPage from "../../pages/LoginPage.js";
+import SearchPage from "../../pages/SearchPage.js";
+import OfferPage from "../../pages/OfferPage.js";
+import PassengerPage from "../../pages/PassengerPage.js";
+import SeatMapPage from "../../pages/SeatMapPage.js";
+import CheckoutPage from "../../pages/CheckoutPage.js";
 // 06/06/2026 - incio com github actions
 import loc from "../../support/locators.js";
 const wemobi = "https://www.wemobi.me/?utm_source=synthetic_test&utm_medium=internal&utm_campaign=operacao";
@@ -16,26 +23,19 @@ describe("Wemobi", () => {
   it("Wemobi - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
     cy.env(["login", "senha"]).then((env) => {
       cy.visit(wemobi);
-      cy.get(loc.WEMOBI_BOTAO_LOGIN).click();
-      cy.get(loc.USUARIO).type(env.login);
-      cy.get(loc.SENHA).type(env.senha, { log: false });
-      cy.get(loc.WEMOBI_BOTAO_ENTRAR).click();
-      cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
+      LoginPage.wemobiModalLogin();
+      LoginPage.wemobiPreencherUsuario();
+      LoginPage.wemobiPreencherSenha();
+      LoginPage.wemobiConfirmarLogin();
+      LoginPage.wemobiLogadoComSucesso();
     });
-    cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Rodoviária Tietê (SP)", { delay: 100 });
-    cy.xpath(loc.WEMOBI_XPATH_SP).click({ force: true });
-    cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("Rio De Janeiro - Todos (RJ)", { delay: 100 });
-    cy.xpath(loc.WEMOBI_XPATH_RJ).click({ force: true });
-    cy.get(loc.BUSCAS.DATA_IDA).click();
-    cy.selecionarDataIda(5);
-    cy.get(loc.BUSCAS.BOTAO_BUSCAR, { timeout: 90000 }).should("be.visible").click();
-    cy.selecionarPassagemAleatoria1({ timeout: 90000 });
-    cy.fecharModalUpgradePoltrona();
-    cy.get(loc.WEMOBI_BOTAO_RESERVAR_ASSENTO).click().log("Selecionando assento");
-    cy.get(loc.WEMOBI_BOTAO_ESCOLHER_ASSENTO).click();
-    cy.selecionarAssentoAleatorioWemobi();
-    cy.get(loc.ASSERT_SUBTOTAL).should("contain", "Subtotal dos assentos").log("Subtotal dos assentos");
-    cy.get(loc.WEMOBI_ASSERT_TAXASERVICO).should("contain", "Taxa de serviço").log("Taxa de serviço");
-    cy.get(loc.ASSERT_VALORTOTAL).should("contain", "Valor total").log("Valor total das passagens");
+    SearchPage.wemobiBuscaOrigem();
+    SearchPage.wemobiBuscaDestino();
+    SearchPage.wemobiDataIda();
+    SearchPage.wemobiConfirmarBusca();
+    OfferPage.wemobiSelecionarPassagemIda();
+    PassengerPage.wemobiSelecionarPassageiro();
+    SeatMapPage.wemobiSelecionarAssento();
+    CheckoutPage.wemobiResumoCompra();
   });
 });

@@ -21,6 +21,11 @@ class OfferPage {
   giroSelecionarPassagemIda() {
     cy.selecionarPassagemAleatoria1({ timeout: 90000 });
   }
+
+  // WEMOBI
+  wemobiSelecionarPassagemIda() {
+    cy.selecionarPassagemAleatoria1({ timeout: 90000 });
+  }
 }
 
 export default new OfferPage();

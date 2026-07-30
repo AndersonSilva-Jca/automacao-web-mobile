@@ -84,5 +84,27 @@ class LoginPage {
   giroLogadoComSucesso() {
     cy.get(loc.MENSAGEM_LOGADO).should("contain", "ANDERSON");
   }
+
+  // WEMOBI
+
+  wemobiModalLogin() {
+    cy.get(loc.WEMOBI_BOTAO_LOGIN).click();
+  }
+  wemobiPreencherUsuario() {
+    cy.env(["login"]).then((env) => {
+      cy.get(loc.USUARIO).type(env.login);
+    });
+  }
+  wemobiPreencherSenha() {
+    cy.env(["senha"]).then((env) => {
+      cy.get(loc.SENHA).type(env.senha, { log: false });
+    });
+  }
+  wemobiConfirmarLogin() {
+    cy.get(loc.WEMOBI_BOTAO_ENTRAR).click();
+  }
+  wemobiLogadoComSucesso() {
+    cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
+  }
 }
 export default new LoginPage();
