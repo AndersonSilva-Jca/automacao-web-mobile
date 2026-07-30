@@ -15,33 +15,33 @@ describe("Outlet de Hotéis", () => {
 
   it("Outlet de Hotéis - Busca de destinos, Hotéis em promoção hoje, Promoção em hotéis por destino", () => {
     cy.visit(odt);
-    cy.contains("Minhas viagens").should("be.visible");
-    cy.contains("Carrinho").should("be.visible");
+    cy.contains(loc.ODH_ASSERT_MINHAS_VIAGENS).should("be.visible");
+    cy.contains(loc.ODH_ASSERT_CARRINHO).should("be.visible");
     cy.wait(2000);
     const cidades = ["Rio de Janeiro (e arredores)", "São Paulo (e arredores)", "Belo Horizonte (e arredores)", "Curitiba (e arredores)", "Salvador (e arredores)"];
     const indiceAleatorio = Math.floor(Math.random() * cidades.length);
     const cidadeSorteada = cidades[indiceAleatorio];
-    cy.get(".h-full > .flex > .min-w-0 > .w-full").click().type(cidadeSorteada, { delay: 25 });
+    cy.get(loc.ODH_INPUT_DESTINO).click().type(cidadeSorteada, { delay: 25 });
     cy.get(`[cmdk-item][data-value="${cidadeSorteada}"]`).first().click({ force: true });
     cy.log(`🏙️ Destino sorteado e selecionado para o teste: ${cidadeSorteada}`);
-    cy.get(".text-sm > .text-muted-foreground").click();
+    cy.get(loc.ODH_CHECKIN).click();
     cy.selecionarPeriodoEstadia(3);
-    cy.get(".p-2 > .whitespace-nowrap").click();
-    cy.get(".absolute").should("be.visible");
-    cy.contains(/(resultados de hospedagens|Nenhum hotel encontrado)/i).should("be.visible");
-    cy.get(".cursor-pointer > .h-8").click();
+    cy.get(loc.ODH_BOTAO_PROCURAR).click();
+    cy.get(loc.ODH_LOADER_BUSCA).should("be.visible");
+    cy.contains(loc.ODH_ASSERT_RESULT_HOSPEDAGENS).should("be.visible");
+    cy.get(loc.ODH_HOME).click();
 
     // Hotéis em promoção hoje
-    cy.contains("Hotéis em promoção hoje").should("be.visible");
-    cy.get(":nth-child(1) > .group > .p-4 > .justify-between > .inline-flex").click();
-    cy.contains("Sobre o hotel").should("be.visible");
-    cy.get(".cursor-pointer > .h-8").click();
-    cy.get(":nth-child(2) > .group > .p-4 > .justify-between > .inline-flex").click();
-    cy.contains("Sobre o hotel").should("be.visible");
-    cy.get(".cursor-pointer > .h-8").click();
-    cy.get(":nth-child(3) > .group > .p-4 > .justify-between > .inline-flex").click();
-    cy.contains("Sobre o hotel").should("be.visible");
-    cy.get(".cursor-pointer > .h-8").click();
+    cy.contains(loc.ODH_ASSERT_PROMO_HOJE).should("be.visible");
+    cy.get(loc.ODH_PROMO_HOJE_1).click();
+    cy.contains(loc.ODH_ASSERT_SOBREHOTEL).should("be.visible");
+    cy.get(loc.ODH_HOME).click();
+    cy.get(loc.ODH_PROMO_HOJE_2).click();
+    cy.contains(loc.ODH_ASSERT_SOBREHOTEL).should("be.visible");
+    cy.get(loc.ODH_HOME).click();
+    cy.get(loc.ODH_PROMO_HOJE_3).click();
+    cy.contains(loc.ODH_ASSERT_SOBREHOTEL).should("be.visible");
+    cy.get(loc.ODH_HOME).click();
 
     // Promoção em hotéis por destino
     // cy.contains("Promoção em hotéis por destino").should("be.visible");

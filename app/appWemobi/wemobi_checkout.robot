@@ -12,15 +12,15 @@ Library             ../libraries/GmailHelper.py
 *** Test Cases ***
 Deve realizar o fluxo até o checkout de pagamento
     Start session
-    Login
-    # Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="user"]    timeout=240s
-    # Log To Console    \nFazendo o Login...
-    # Input Text    xpath=//android.widget.EditText[@resource-id="user"]    ${LOGIN}
-    # Input Password    xpath=//android.widget.EditText[@resource-id="password"]    ${SENHA}
-    # Wait Until Element Is Visible
-    # ...    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
-    # ...    timeout=60s
-    # Click Element    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
+    # Login
+    Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="user"]    timeout=240s
+    Log To Console    \nFazendo o Login...
+    Input Text    xpath=//android.widget.EditText[@resource-id="user"]    ${LOGIN}
+    Input Password    xpath=//android.widget.EditText[@resource-id="password"]    ${SENHA}
+    Wait Until Element Is Visible
+    ...    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
+    ...    timeout=60s
+    Click Element    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
 
     Wait Until Element Is Visible
     ...    xpath=//android.view.ViewGroup[@content-desc="Buscar"]/android.view.View    timeout=90s
@@ -35,17 +35,19 @@ Deve realizar o fluxo até o checkout de pagamento
     Log To Console    \nClicando em origem...
     Input Text    android=new UiSelector().className("android.widget.EditText")    Sao Paulo - Rodoviaria Tiete (SP)
     Log To Console    \nDigitando origem...
-    # Wait Until Element Is Visible   xpath=//android.widget.TextView[@text="São Paulo - Rodoviária Tietê (SP)"]
-    # Click Element    xpath=//android.widget.TextView[@text="São Paulo - Rodoviária Tietê (SP)"]
+    Wait Until Element Is Visible   xpath=//android.widget.TextView[@text="São Paulo - Rodoviária Tietê (SP)"]              
+    Click Element    xpath=//android.widget.TextView[@text="São Paulo - Rodoviária Tietê (SP)"]
 
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Destino"]    timeout=45s
  
-    Input Text    android=new UiSelector().className("android.widget.EditText")    Rio de Janeiro - Novo Rio (RJ)
+    Input Text    android=new UiSelector().className("android.widget.EditText")    Rio de Janeiro - Rodoviária Novo Rio (RJ)
     Log To Console    \nDigitando destino...
+    Wait Until Element Is Visible   xpath=//android.widget.TextView[@text="Rio De Janeiro - Rodoviária Novo Rio (RJ)"]              
 
-    Click Element    xpath=//android.widget.TextView[@text="Rio de Janeiro - Novo Rio (RJ)"]
+    Click Element    android=new UiSelector().text("Rio De Janeiro - Rodoviária Novo Rio (RJ)")
 
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Data"]    timeout=60s
+
 
 
     ${data_ida}=    obter_dia_aleatorio_ida

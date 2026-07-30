@@ -4,7 +4,7 @@ Documentation     Suite de testes — automação mobile com tratamento condicio
 
 Library           OperatingSystem
 Library           String
-Library     AppiumLibrary
+Library         AppiumLibrary
 Library           ../../libraries/GmailHelper.py
 
 

@@ -31,11 +31,11 @@ describe("Clube Giro", () => {
         cy.wait(5000);
         cy.task("buscarCodigo2FAGmail").then((codigo2FA) => {
           expect(codigo2FA).to.not.be.null;
-          cy.get(loc.GIRO_INPUT_2FA).focus().clear({ force: true }).type(codigo2FA, { force: true, delay: 80 }); // force ignora visibility
+          cy.get(loc.GIRO_INPUT_2FA).focus().clear({ force: true }).type(codigo2FA, { force: true, delay: 80 });
           cy.get(loc.GIRO_BOTAO_MODAL_2FA).should("not.be.disabled").click();
         });
       } else {
-        cy.log("✅ Login direto – Modal 2FA está oculto (display: none). Pulando etapa.");
+        cy.log("✅ Login direto – Modal 2FA está oculto (display: none).");
       }
     });
     cy.fecharModalGiro();
