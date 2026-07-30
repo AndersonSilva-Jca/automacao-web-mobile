@@ -1,6 +1,11 @@
 /// <reference types="cypress" />
 /// <reference types="@cypress/xpath" />
 require("cypress-xpath");
+import LoginPage from "../../pages/LoginPage.js";
+import SearchPage from "../../pages/SearchPage.js";
+import OfferPage from "../../pages/OfferPage.js";
+import PassengerPage from "../../pages/PassengerPage.js";
+import CheckoutPage from "../../pages/CheckoutPage.js";
 // 06/06/2026 - incio com github actions
 import loc from "../../support/locators.js";
 const odp = "https://www.outletdepassagens.com.br/?utm_source=synthetic_test&utm_medium=internal&utm_campaign=operacao";
@@ -16,27 +21,18 @@ describe("Outlet de Passagens", () => {
   it("Outlet de passagens - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
     cy.env(["login", "senha"]).then((env) => {
       cy.visit(odp);
-      cy.get(loc.ODP_BOTAO_LOGIN).click();
-      cy.get(loc.USUARIO).type(env.login);
-      cy.get(loc.SENHA).type(env.senha, { log: false });
-      cy.get(loc.ODP_BOTAO_LOGAR).click();
-      cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
+      LoginPage.odpModalLogin();
+      LoginPage.odpPreencherUsuario();
+      LoginPage.odpPreencherSenha();
+      LoginPage.odpConfirmarLogin();
+      LoginPage.odpLogadoComSucesso();
     });
-
-    cy.wait(12000);
-    cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Rodoviária Tietê (SP)", { delay: 100 });
-    cy.xpath(loc.ODP_XPATH_SP_TIETE).click({ force: true });
-    cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("Rio De Janeiro - Todos (RJ)", { delay: 100 });
-    cy.xpath(loc.ODP_XPATH_RJ_TODOS).click({ force: true });
-    cy.get(loc.BUSCAS.DATA_IDA).click();
-    cy.selecionarDataIda(5);
-    cy.get(loc.BUSCAS.BOTAO_BUSCAR, { timeout: 90000 }).should("be.visible").click();
-    cy.selecionarPassagemAleatoria1({ timeout: 90000 });
-    cy.get(loc.CHECK_PASSAGEIRO, { timeout: 90000 }).click({ force: true });
-    cy.get(loc.ODP_BOTAO_AVANCAR).should("be.visible").and("not.be.disabled").click();
-    cy.get(loc.ODP_ABA_PAGAMENTOS).should("be.visible").log("Aba de pagamentos visível");
-    cy.get(loc.ASSERT_SUBTOTAL).should("contain", "Subtotal dos assentos").log("Subtotal dos assentos");
-    cy.get(loc.ASSERT_TAXASERVICO).should("contain", "Taxa de serviço").log("Taxa de serviço");
-    cy.get(loc.ODP_ASSERT_VALORTOTAL).should("contain", "Valor Outlet").log("Valor total das passagens Outlet");
+    SearchPage.odpBuscaOrigem();
+    SearchPage.odpBuscaDestino();
+    SearchPage.odpDataIda();
+    SearchPage.odpConfirmarBusca();
+    OfferPage.odpSelecionarPassagemIda();
+    PassengerPage.odpSelecionarPassageiro();
+    CheckoutPage.odpResumoDaCompra();
   });
 });

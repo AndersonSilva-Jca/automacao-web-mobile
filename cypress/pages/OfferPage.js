@@ -1,7 +1,19 @@
 import loc from "../support/locators";
 
 class OfferPage {
+  // UTP
   selecionarPassagemIda() {
+    cy.selecionarPassagemAleatoria1({ timeout: 90000 });
+  }
+
+  // OUTLET DE HOTÉIS
+  odhSelecionarHospedagem() {
+    cy.contains(loc.ODH_ASSERT_RESULT_HOSPEDAGENS).should("be.visible");
+  }
+
+  // OUTLET DE PASSAGENS
+
+  odpSelecionarPassagemIda() {
     cy.selecionarPassagemAleatoria1({ timeout: 90000 });
   }
 }

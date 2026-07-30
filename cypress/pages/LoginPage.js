@@ -21,5 +21,24 @@ class LoginPage {
   logadoComSucesso() {
     cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
   }
+  odpModalLogin() {
+    cy.get(loc.ODP_BOTAO_LOGIN).click();
+  }
+  odpPreencherUsuario() {
+    cy.env(["login"]).then((env) => {
+      cy.get(loc.USUARIO).type(env.login);
+    });
+  }
+  odpPreencherSenha() {
+    cy.env(["senha"]).then((env) => {
+      cy.get(loc.SENHA).type(env.senha, { log: false });
+    });
+  }
+  odpConfirmarLogin() {
+    cy.get(loc.ODP_BOTAO_LOGAR).click();
+  }
+  odpLogadoComSucesso() {
+    cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
+  }
 }
 export default new LoginPage();
