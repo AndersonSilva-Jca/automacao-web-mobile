@@ -21,7 +21,7 @@ describe("Wemobi", () => {
   });
 
   it("Wemobi - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
-    cy.env(["login", "senha"]).then((env) => {
+    cy.env(["login", "senha"]).then(() => {
       cy.visit(wemobi);
       LoginPage.wemobiModalLogin();
       LoginPage.wemobiPreencherUsuario();

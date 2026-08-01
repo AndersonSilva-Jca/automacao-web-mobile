@@ -21,7 +21,7 @@ describe("Rapido Ribeirão", () => {
   });
 
   it("Rapido Ribeirão - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
-    cy.env(["login", "senha"]).then((env) => {
+    cy.env(["login", "senha"]).then(() => {
       cy.visit(rapidoRibeirao);
       LoginPage.abrirModalLogin();
       LoginPage.preencherUsuario();

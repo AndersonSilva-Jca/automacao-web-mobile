@@ -19,7 +19,7 @@ describe("Outlet de Passagens", () => {
   });
 
   it("Outlet de passagens - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
-    cy.env(["login", "senha"]).then((env) => {
+    cy.env(["login", "senha"]).then(() => {
       cy.visit(odp);
       LoginPage.odpModalLogin();
       LoginPage.odpPreencherUsuario();

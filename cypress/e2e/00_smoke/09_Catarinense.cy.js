@@ -21,7 +21,7 @@ describe("Catarinense", () => {
   });
 
   it("Catarinense - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
-    cy.env(["login", "senha"]).then((env) => {
+    cy.env(["login", "senha"]).then(() => {
       cy.visit(catarinense);
       LoginPage.abrirModalLogin();
       LoginPage.preencherUsuario();
