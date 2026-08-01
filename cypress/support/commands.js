@@ -172,7 +172,6 @@ Cypress.Commands.add("selecionarPassagemAleatoria1", () => {
       //   .and('not.be.disabled')
       //   .click({ force: true });
 
-      // --- LÓGICA DO MODAL "FIQUE ATENTO" ---
       // Aumentei para 3s para garantir que o erro de 'servicesList' não ocorra
       cy.wait(3000);
 
