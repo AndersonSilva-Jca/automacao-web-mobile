@@ -1,10 +1,12 @@
+// 06/06/2026 - incio com github actions
 /// <reference types="cypress" />
 /// <reference types="@cypress/xpath" />
+
 require("cypress-xpath");
+
 import HomePage from "../../pages/HomePage";
 import OfferPage from "../../pages/OfferPage";
 import SearchPage from "../../pages/SearchPage";
-// 06/06/2026 - incio com github actions
 import loc from "../../support/locators";
 const odh = "https://www.outletdehoteis.com.br/?utm_source=synthetic_test&utm_medium=internal&utm_campaign=operacao";
 

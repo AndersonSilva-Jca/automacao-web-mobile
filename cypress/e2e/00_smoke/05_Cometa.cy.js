@@ -1,7 +1,9 @@
+// 06/06/2026 - incio com github actions
 /// <reference types="cypress" />
 /// <reference types="@cypress/xpath" />
+
 require("cypress-xpath");
-// 06/06/2026 - incio com github actions
+
 import loc from "../../support/locators";
 import LoginPage from "../../pages/LoginPage";
 import SearchPage from "../../pages/SearchPage";

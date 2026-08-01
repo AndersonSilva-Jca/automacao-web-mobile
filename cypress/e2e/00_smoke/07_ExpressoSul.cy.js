@@ -1,15 +1,16 @@
+// 06/06/2026 - incio com github actions
 /// <reference types="cypress" />
 /// <reference types="@cypress/xpath" />
-require("cypress-xpath");
-// 06/06/2026 - incio com github actions
 
+require("cypress-xpath");
+
+import loc from "../../support/locators.js";
 import LoginPage from "../../pages/LoginPage";
 import SearchPage from "../../pages/SearchPage";
 import OfferPage from "../../pages/OfferPage";
 import PassengerPage from "../../pages/PassengerPage";
 import SeatMapPage from "../../pages/SeatMapPage";
 import CheckoutPage from "../../pages/CheckoutPage";
-import loc from "../../support/locators.js";
 
 const expressoSul = "https://www.expressodosul.com.br/?utm_source=synthetic_test&utm_medium=internal&utm_campaign=operacao";
 
