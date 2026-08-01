@@ -65,6 +65,7 @@ class LoginPage {
     cy.get(loc.GIRO_BOTAO_ENTRAR).click();
   }
   preencher2FA() {
+    cy.wait(2000);
     cy.get("body").then(($body) => {
       const temModal2FA = $body.find(loc.GIRO_INPUT_VISIBLE).length > 0;
       if (temModal2FA) {
