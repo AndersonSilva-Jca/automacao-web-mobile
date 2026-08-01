@@ -171,7 +171,6 @@ Cypress.Commands.add("selecionarPassagemAleatoria1", () => {
       //   .invoke('show')
       //   .and('not.be.disabled')
       //   .click({ force: true });
-
       // Aumentei para 3s para garantir que o erro de 'servicesList' não ocorra
       cy.wait(3000);
 
