@@ -113,18 +113,11 @@ jobs:
           WA_PHONE_ANDERSON: ${{ secrets.WA_PHONE_ANDERSON }}
 
         with:
-          api-level: 29 # google_apis costuma bootar mais rápido que 30+, especialmente vs google_apis_playstore
-          # target: google_apis # evite google_apis_playstore, é bem mais pesado
+          api-level: 30
           arch: x86_64
-          profile: Nexus 5X
+          profile: pixel_7
           disable-animations: true
-          # force-avd-creation: false # reaproveita AVD entre execuções se usar cache
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none -no-snapshot -memory 4096 -cores 2
-          # api-level: 30
-          # arch: x86_64
-          # profile: pixel_7
-          # disable-animations: true
-          # emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
 
           script: |
             echo "=== Emulator pronto e bootado automaticamente pela Action ==="
@@ -467,7 +460,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "🚨[ALERTA MOBILE] Giro/Wemobi/UTP - Monit. Cont"
           to: anderson.ssantos@jcatlm.com.br
-          # cc: fabiano.britto@externo-jcatlm.com.br
+          cc: fabiano.britto@externo-jcatlm.com.br
           from: "Monitoramento Contínuo"
           html_body: |
             <!DOCTYPE html>
