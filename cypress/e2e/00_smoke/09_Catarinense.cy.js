@@ -5,12 +5,12 @@
 require("cypress-xpath");
 
 import loc from "../../support/locators.js";
-import LoginPage from "../../pages/LoginPage";
-import SearchPage from "../../pages/SearchPage";
-import OfferPage from "../../pages/OfferPage";
-import PassengerPage from "../../pages/PassengerPage";
-import SeatMapPage from "../../pages/SeatMapPage";
-import CheckoutPage from "../../pages/CheckoutPage";
+import LoginPage from "../../pages/LoginPage.js";
+import SearchPage from "../../pages/SearchPage.js";
+import OfferPage from "../../pages/OfferPage.js";
+import PassengerPage from "../../pages/PassengerPage.js";
+import SeatMapPage from "../../pages/SeatMapPage.js";
+import CheckoutPage from "../../pages/CheckoutPage.js";
 const catarinense = "https://www.catarinense.com.br/?utm_source=synthetic_test&utm_medium=internal&utm_campaign=operacao";
 
 describe("Catarinense", () => {
