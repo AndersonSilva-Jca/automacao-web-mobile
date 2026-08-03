@@ -1,7 +1,7 @@
 import loc from "../support/locators";
 
 class LoginPage {
-  // UTP
+  //------------------ UTP ------------------
   abrirModalLogin() {
     cy.get(loc.HEADER_BOTAO_LOGIN).click();
   }
@@ -23,7 +23,7 @@ class LoginPage {
     cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
   }
 
-  // OUTLET DE PASSANGENS
+  //------------------ OUTLET DE PASSANGENS ------------------
   odpModalLogin() {
     cy.get(loc.ODP_BOTAO_LOGIN).click();
   }
@@ -44,7 +44,7 @@ class LoginPage {
     cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
   }
 
-  // CLUBE GIRO
+  //------------------ CLUBE GIRO ------------------
 
   giroModalLogin() {
     cy.get(loc.GIRO_BOTAO_LOGIN).should("be.visible").click();
@@ -86,7 +86,7 @@ class LoginPage {
     cy.get(loc.MENSAGEM_LOGADO).should("contain", "ANDERSON");
   }
 
-  // WEMOBI
+  //------------------ WEMOBI ------------------
 
   wemobiModalLogin() {
     cy.get(loc.WEMOBI_BOTAO_LOGIN).click();

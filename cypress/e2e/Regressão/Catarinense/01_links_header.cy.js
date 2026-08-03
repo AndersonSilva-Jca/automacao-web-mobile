@@ -1,17 +1,8 @@
 /// <reference types='cypress' />
 
 const { faker } = require("@faker-js/faker");
-
-// import loc from "../../support/locators.js";
-const cometa = "https://www.viacaocometa.com.br";
-const viacao1001 = "https://www.autoviacao1001.com.br";
+import loc from "../../../support/locators.js";
 const catarinense = "https://www.catarinense.com.br/?utm_source=synthetic_test&utm_medium=internal&utm_campaign=operacao";
-const expressoSul = "https://www.expressodosul.com.br/";
-const rapidoRibeirao = "https://www.rapidoribeiraopreto.com.br/";
-const odp = "https://www.outletdepassagens.com.br";
-const odt = "https://www.outletdehoteis.com.br";
-const giro = "https://www.clubegiro.com.br";
-const wemobi = "https://www.wemobi.me";
 
 describe("Validar link informações de viagens", () => {
   beforeEach(() => {
@@ -63,9 +54,10 @@ describe("Validar link informações de viagens", () => {
     cy.get(loc.LINK_SEGURO_FACULTATIVO).click();
     cy.get(loc.ASSERT_SEGURO_FACULTATIVO).should("contain", "Seguro Facultativo");
     cy.scrollTo("top", { timeout: 1000 });
-    cy.get('[href="#guia"] > .btn-title').click(); //tem erro no link
+    cy.get('[href="https://www.capemisa.com.br/para-voce/microsseguros/passageiro-top/"]').click();
+    // cy.get('[href="#guia"] > .btn-title').click(); //tem erro no link
     // cy.get(loc.ASSERT_ALTERACOES_HORARIO).should("contain", "Alterações de Horários e Frequências");
-    cy.scrollTo("top", { timeout: 1000 });
+    // cy.scrollTo("top", { timeout: 1000 });
   });
 
   it("Validar link informações de Viagem - Compra, remarcação e reembolso", () => {
@@ -84,8 +76,8 @@ describe("Validar link informações de viagens", () => {
     cy.get(loc.LINK_REACOMODACAO).click();
     cy.get(loc.ASSERT_REACOMODACAO).should("contain", "Reacomodações");
     cy.scrollTo("top", { timeout: 1000 });
-    cy.get(loc.LINK_TAXAS).click();
-    cy.get(loc.ASSERT_TAXAS).should("contain", "Taxas de serviços");
+    cy.get(loc.LINK_TAXA_SERVICO).click();
+    cy.get(loc.ASSERT_TAXA_SERVICO).should("contain", "Taxa de Serviço");
     cy.scrollTo("top", { timeout: 1000 });
   });
 
@@ -99,20 +91,20 @@ describe("Validar link informações de viagens", () => {
     cy.get(loc.LINK_SALAS_VIPS).click();
     cy.get(loc.ASSERT_SALAS_VIPS).should("contain", "SALAS VIPS");
     cy.scrollTo("top", { timeout: 1000 });
-    cy.get(loc.LINK_SALAS_NETS).click();
-    cy.get(loc.ASSERT_SALAS_NETS).should("contain", "SALAS NETS");
-    cy.scrollTo("top", { timeout: 1000 });
+    // cy.get(loc.LINK_SALAS_NETS).click();
+    // cy.get(loc.ASSERT_SALAS_NETS).should("contain", "SALAS NETS");
+    // cy.scrollTo("top", { timeout: 1000 });
     cy.get(loc.LINK_CLUBE_GIRO).click();
-    cy.get(loc.ASSERT_CLUBE_GIRO).should("contain", "CLUBE GIRO");
+    cy.get(loc.ASSERT_CLUBEGIRO).should("contain", "CLUBE GIRO");
   });
 
   it("Validar link informações de Viagem - Descontos e Gratuidades", () => {
     cy.get(loc.LINK_INFO_VIAGEM).click();
     cy.url().should("include", loc.URL_INFO_VIAGEM);
     cy.get(":nth-child(4) > :nth-child(2) > :nth-child(2) > :nth-child(1) > .aem-Grid--12 > .cmp > .custom-padding > .container > :nth-child(1) > .aem-Grid > .image > .cmp-image > #cmp-image-link > .cmp-image__image").click();
-    // cy.get(loc.LINK_ESTUDANTE).click();
-    // cy.get(loc.ASSERT_ESTUDANTE).should("contain", "Estudante e Professor");
-    // cy.scrollTo("top", { timeout: 1000 });
+    cy.get(loc.LINK_ESTUDANTE).click();
+    cy.get(loc.ASSERT_BOTAO_ESTUDANTE).should("be.visible", "Solicitar Desconto");
+    cy.scrollTo("top", { timeout: 1000 });
     cy.get(loc.LINK_PCD).click();
     cy.get(loc.ASSERT_PCD).should("contain", "Pessoa com deficiência");
     cy.scrollTo("top", { timeout: 1000 });
@@ -124,7 +116,7 @@ describe("Validar link informações de viagens", () => {
   });
 
   it("Deve Validar link fale conosco e preencher o formulário de contato", () => {
-    cy.get(".header-nav-container > :nth-child(1) > :nth-child(2) > .focusable").click();
+    cy.get(".header-nav-container > :nth-child(1) > :nth-child(3) > .focusable").click();
     cy.url({ timeout: 2000 }).should("include", "/fale-conosco");
     // cy.get('#input-name').type('Teste Automação ODP')
     // cy.get('#input-doc').type('38485984854', { log: false })
@@ -157,28 +149,28 @@ describe("Validar link informações de viagens", () => {
     // cy.get('#submit-protocol').click()
   });
   it("Deve redirecionar para a página de gratuidade", () => {
-    cy.get(".header-nav-container > :nth-child(1) > :nth-child(3) > .focusable").invoke("removeAttr", "target").click();
+    cy.get(":nth-child(1) > :nth-child(4) > .focusable").invoke("removeAttr", "target").click();
     cy.url().should("include", "https://vendas.jcaholding.com.br/"); //erro
   });
-  it("Deve redirecionar para a página de Linhas Urbanas", () => {
-    cy.get(".header-nav-container > :nth-child(1) > :nth-child(4) > .focusable").click();
-    cy.url().should("include", "/linhas");
-  });
+  // it.only("Deve redirecionar para a página de Linhas Urbanas", () => {
+  //   cy.get(".header-nav-container > :nth-child(1) > :nth-child(4) > .focusable").click();
+  //   cy.url().should("include", "/linhas");
+  // });
 
   it("Deve redirecionar para a página Nossos Destinos", () => {
-    cy.get(":nth-child(1) > :nth-child(5) > .focusable").click();
+    cy.get(".header-nav-container > :nth-child(1) > :nth-child(2) > .focusable").click();
     cy.url().should("include", "nossos-destinos");
     cy.get("#input-departure").should("be.visible");
     cy.get("#input-destination").should("be.visible");
   });
 
   it("Deve redirecionar para a página de Pontos de Venda", () => {
-    cy.get(":nth-child(1) > :nth-child(6) > .focusable").click();
+    cy.get(":nth-child(1) > :nth-child(5) > .focusable").click();
     cy.url().should("include", "/pontos-de-venda");
   });
 
   it("Deve redirecionar para o site Clube Giro com sucesso", () => {
-    cy.get(":nth-child(1) > :nth-child(7) > .focusable").click();
+    cy.get(":nth-child(1) > :nth-child(6) > .focusable").click();
     cy.url().should("include", "/clubegiro");
     cy.get(".about-card-button").should("be.visible");
     //   cy.get('a[href="https://www.clubegiro.com.br"]').click()

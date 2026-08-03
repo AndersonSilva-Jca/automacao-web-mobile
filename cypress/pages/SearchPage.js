@@ -1,7 +1,7 @@
 import loc from "../support/locators";
 
 class SearchPage {
-  // UTP
+  //------------------ UTP ------------------
   buscaOrigem() {
     cy.get(loc.BUSCAS.DESTINO_IDA).click().type(loc.SP_TIETE, { delay: 100 }).should("exist").invoke("show");
     cy.xpath(loc.XPATH_SP_TIETE).click({ force: true });
@@ -21,7 +21,7 @@ class SearchPage {
     cy.selecionarDataIda(4);
   }
 
-  // OUTLET DE HOTEIS
+  //------------------ OUTLET DE HOTEIS ------------------
   odhBuscaDestino() {
     const cidades = ["Rio de Janeiro (e arredores)", "São Paulo (e arredores)", "Belo Horizonte (e arredores)", "Curitiba (e arredores)", "Salvador (e arredores)"];
     const indiceAleatorio = Math.floor(Math.random() * cidades.length);
@@ -44,7 +44,7 @@ class SearchPage {
     cy.get(loc.ODH_LOADER_BUSCA).should("be.visible");
   }
 
-  // OUTLET DE PASSAGENS
+  //------------------ OUTLET DE PASSAGENS ------------------
   odpBuscaOrigem() {
     cy.wait(12000);
     cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Rodoviária Tietê (SP)", { delay: 100 });
@@ -65,7 +65,7 @@ class SearchPage {
     cy.get(loc.BUSCAS.BOTAO_BUSCAR, { timeout: 90000 }).should("be.visible").click();
   }
 
-  // CLUBE GIRO
+  //------------------ CLUBE GIRO ------------------
   giroBuscaOrigem() {
     cy.get(loc.BUSCAS.DESTINO_IDA).clear().click({ force: true });
     cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Todos (SP)", { delay: 150 });
@@ -91,7 +91,7 @@ class SearchPage {
     cy.get(loc.BUSCAS.BOTAO_BUSCAR, { timeout: 90000 }).should("be.visible").click();
   }
 
-  // WEMOBI
+  //------------------ WEMOBI ------------------
   wemobiBuscaOrigem() {
     cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Rodoviária Tietê (SP)", { delay: 100 });
     cy.xpath(loc.WEMOBI_XPATH_SP).click({ force: true });

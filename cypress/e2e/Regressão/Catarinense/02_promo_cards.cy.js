@@ -1,19 +1,8 @@
 /// <reference types='cypress' />
 
 const { faker } = require("@faker-js/faker");
-
-import loc from "../../support/locators.js";
-const cometa = "https://www.viacaocometa.com.br";
-const viacao1001 = "https://www.autoviacao1001.com.br";
+import loc from "../../../support/locators.js";
 const catarinense = "https://www.catarinense.com.br/?utm_source=synthetic_test&utm_medium=internal&utm_campaign=operacao";
-const expressoSul = "https://www.expressodosul.com.br/";
-const rapidoRibeirao = "https://www.rapidoribeiraopreto.com.br/";
-const odp = "https://www.outletdepassagens.com.br";
-const odt = "https://www.outletdehoteis.com.br";
-const giro = "https://www.clubegiro.com.br";
-const wemobi = "https://www.wemobi.me";
-
-import loc from "../../support/locators";
 
 describe("Validar cards de promoção", () => {
   beforeEach(() => {

@@ -1,16 +1,8 @@
 /// <reference types='cypress' />
 
 const { faker } = require("@faker-js/faker");
-
-const cometa = "https://www.viacaocometa.com.br";
-const viacao1001 = "https://www.autoviacao1001.com.br";
+import loc from "../../../support/locators.js";
 const catarinense = "https://www.catarinense.com.br/?utm_source=synthetic_test&utm_medium=internal&utm_campaign=operacao";
-const expressoSul = "https://www.expressodosul.com.br/";
-const rapidoRibeirao = "https://www.rapidoribeiraopreto.com.br/";
-const odp = "https://www.outletdepassagens.com.br";
-const odt = "https://www.outletdehoteis.com.br";
-const giro = "https://www.clubegiro.com.br";
-const wemobi = "https://www.wemobi.me";
 
 describe("Validar link do clube giro", () => {
   beforeEach(() => {
@@ -50,7 +42,7 @@ describe("Validar link do clube giro", () => {
     // cy.url().should('include', '/destinos/porto-santos')
   });
 
-  it.only("Deve validar o link do card de conexão com os ônibus e redirecionar para a página de contato", () => {
+  it("Deve validar o link do card de conexão com os ônibus e redirecionar para a página de contato", () => {
     cy.get("#headingitem0").click();
     cy.get("#headingitem1").click();
     cy.get("#headingitem2").click();

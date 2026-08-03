@@ -1,6 +1,7 @@
 import loc from "../support/locators";
 
 class HomePage {
+  //------------------ OUTLET DE HOTEIS ------------------
   odhAssertHome() {
     cy.contains(loc.ODH_ASSERT_MINHAS_VIAGENS).should("be.visible");
     cy.contains(loc.ODH_ASSERT_CARRINHO).should("be.visible");
