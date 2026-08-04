@@ -31,8 +31,8 @@ jobs:
         id: cypress
         continue-on-error: true
         run:
-          npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/02_ODP.cy.js'
-          # npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/**/*.cy.js'
+          npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/**/*.cy.js'
+          # npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/02_ODP.cy.js'
         env:
           LOGIN: ${{ secrets.LOGIN }}
           SENHA: ${{ secrets.SENHA }}
@@ -133,7 +133,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "🚨[ALERTA SITES] E-Bus/UTP - Monit. Cont."
           to: anderson.ssantos@jcatlm.com.br
-          # cc: fabiano.britto@externo-jcatlm.com.br,ariane.izac@jcatlm.com.br,anderson.psilva@jcatlm.com.br
+          # cc: fabiano.britto@externo-jcatlm.com.br,ariane.izac@jcatlm.com.br,anderson.psilva@jcatlm.com.br,maysa.marco@jcatlm.com.br
           from: "Monitoramento Contínuo"
           html_body: |
             <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6; max-width: 850px; margin: 0 auto; padding: 10px 0;">
