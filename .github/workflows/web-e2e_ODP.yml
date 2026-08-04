@@ -219,7 +219,9 @@ jobs:
       - name: Testes ODP
         id: cypress
         continue-on-error: true
-        run: npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/02_ODP.cy.js'
+        run:
+          npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/**/*.cy.js'
+          # npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/02_ODP.cy.js'::
         env:
           LOGIN: ${{ secrets.LOGIN }}
           SENHA: ${{ secrets.SENHA }}
