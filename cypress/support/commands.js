@@ -206,13 +206,13 @@ Cypress.Commands.add("selecionarDataViagem", (range = 5) => {
   });
 });
 
-// Cypress.Commands.add('fecharModalCupom', () => {
-//    cy.get('#header-navbar > :nth-child(5)').then(($el) => {
-//   if ($el.length > 0) {
-//     cy.wrap($el).invoke('remove')
-//   }
-// });
-//   });
+Cypress.Commands.add("fecharModalCupom", () => {
+  cy.get("#header-navbar > :nth-child(5)").then(($el) => {
+    if ($el.length > 0) {
+      cy.wrap($el).invoke("remove");
+    }
+  });
+});
 
 Cypress.Commands.add("fecharModalOutlet", () => {
   cy.get(".QSIWebResponsiveDialog-Layout1-SI_5q1nvjK5caHM6p0_content").then(($el) => {

@@ -1,20 +1,23 @@
 import loc from "../support/locators";
 
 class LoginPage {
-  // UTP
+  //------------------ UTP ------------------
   abrirModalLogin() {
     cy.get(loc.HEADER_BOTAO_LOGIN).click();
   }
+
   preencherUsuario() {
     cy.env(["login1"]).then((env) => {
       cy.get(loc.USUARIO).type(env.login1);
     });
   }
+
   PreencherSenha() {
     cy.env(["senha1"]).then((env) => {
       cy.get(loc.SENHA).type(env.senha1, { log: false });
     });
   }
+
   confirmarLogin() {
     cy.get(loc.BOTAO_LOGIN).click({ force: true });
   }
@@ -23,28 +26,32 @@ class LoginPage {
     cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
   }
 
-  // OUTLET DE PASSANGENS
+  //------------------ OUTLET DE PASSANGENS ------------------
   odpModalLogin() {
     cy.get(loc.ODP_BOTAO_LOGIN).click();
   }
+
   odpPreencherUsuario() {
     cy.env(["login"]).then((env) => {
       cy.get(loc.USUARIO).type(env.login);
     });
   }
+
   odpPreencherSenha() {
     cy.env(["senha"]).then((env) => {
       cy.get(loc.SENHA).type(env.senha, { log: false });
     });
   }
+
   odpConfirmarLogin() {
     cy.get(loc.ODP_BOTAO_LOGAR).click();
   }
+
   odpLogadoComSucesso() {
     cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
   }
 
-  // CLUBE GIRO
+  //------------------ CLUBE GIRO ------------------
 
   giroModalLogin() {
     cy.get(loc.GIRO_BOTAO_LOGIN).should("be.visible").click();
@@ -53,17 +60,21 @@ class LoginPage {
   giroAssertAcesse() {
     cy.get(loc.ACESSE_GIRO).should("contain", "Acesse o Giro");
   }
+
   giroPreencherUsuario() {
     cy.get(loc.USUARIO).should("be.visible").type("andynho1987@gmail.com", { delay: 50 });
   }
+
   giroPreencherSenha() {
     cy.env(["senha"]).then((env) => {
       cy.get(loc.SENHA).should("be.visible").type(env.senha, { log: false }, { delay: 100 });
     });
   }
+
   giroConfirmarLogin() {
     cy.get(loc.GIRO_BOTAO_ENTRAR).click();
   }
+
   preencher2FA() {
     cy.wait(2000);
     cy.get("body").then(($body) => {
@@ -82,28 +93,33 @@ class LoginPage {
     });
     cy.fecharModalGiro();
   }
+
   giroLogadoComSucesso() {
     cy.get(loc.MENSAGEM_LOGADO).should("contain", "ANDERSON");
   }
 
-  // WEMOBI
+  //------------------ WEMOBI ------------------
 
   wemobiModalLogin() {
     cy.get(loc.WEMOBI_BOTAO_LOGIN).click();
   }
+
   wemobiPreencherUsuario() {
     cy.env(["login"]).then((env) => {
       cy.get(loc.USUARIO).type(env.login);
     });
   }
+
   wemobiPreencherSenha() {
     cy.env(["senha"]).then((env) => {
       cy.get(loc.SENHA).type(env.senha, { log: false });
     });
   }
+
   wemobiConfirmarLogin() {
     cy.get(loc.WEMOBI_BOTAO_ENTRAR).click();
   }
+
   wemobiLogadoComSucesso() {
     cy.get(loc.MENSAGEM_LOGADO).should("contain", "Olá");
   }
