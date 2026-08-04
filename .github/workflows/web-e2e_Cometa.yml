@@ -1,4 +1,4 @@
-name: 04 - Monitoramento Contínuo Cypress E2E
+name: COMETA
 on:
   # push:
   #   branches:
