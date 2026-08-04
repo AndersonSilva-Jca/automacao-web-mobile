@@ -3,14 +3,7 @@
 const { faker } = require("@faker-js/faker");
 
 import loc from "../../support/locators.js";
-const cometa = "https://www.viacaocometa.com.br";
-const viacao1001 = "https://www.autoviacao1001.com.br";
-const catarinense = "https://www.catarinense.com.br/";
-const expressoSul = "https://www.expressodosul.com.br/";
-const rapidoRibeirao = "https://www.rapidoribeiraopreto.com.br/";
-const odp = "https://www.outletdepassagens.com.br";
-const odt = "https://www.outletdehoteis.com.br";
-const giro = "https://www.clubegiro.com.br";
+
 const wemobi = "https://www.wemobi.me/?utm_source=synthetic_test&utm_medium=internal&utm_campaign=operacao";
 
 import loc from "../../support/locators";
@@ -19,7 +12,7 @@ describe("Validar cards de promoção", () => {
   beforeEach(() => {
     cy.clearCookies();
     cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
-    cy.visit("/");
+    cy.visit(wemobi);
   });
 
   it("Deve validar o link do 1º card de promoção e redirecionar para a página de login", () => {
