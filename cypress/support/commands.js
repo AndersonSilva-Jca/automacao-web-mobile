@@ -10,6 +10,24 @@ Cypress.Commands.add("selecionarDataIda", (range = 3) => {
   });
 });
 
+Cypress.Commands.add("selecionarDataIdaTotem", (range = 3) => {
+  cy.get(".whitespace-nowrap").click();
+  cy.get(".react-calendar__navigation__label__labelText").should("be.visible");
+  cy.get(".react-calendar__month-view__days > :nth-child(12)").then(($days) => {
+    const proximosDias = $days.slice(0, range);
+    const randomIndex = Math.floor(Math.random() * proximosDias.length);
+    cy.wrap(proximosDias[randomIndex]).click({ force: true });
+  });
+});
+
+Cypress.Commands.add("SelecionarAssentoTotem", (range = 3) => {
+  cy.get(":nth-child(3) > :nth-child(1) > .bg-\[url\('\/assets\/bus\/assento-disponivel\.svg'\)\] > span").then(($ofertas) => {
+    const passagensAleatorias = $ofertas.slice(0, range);
+    const randomIndex = Math.floor(Math.random() * passagensAleatorias.length);
+    cy.wrap(passagensAleatorias[randomIndex]).click({ force: true });
+  });
+});
+
 Cypress.Commands.add("selecionarDataVolta", (range = 6) => {
   cy.get('td[data-handler="selectDay"] a').then(($days) => {
     const proximosDias = $days.slice(0, range);
@@ -49,6 +67,36 @@ Cypress.Commands.add("selecionarAssentoAleatorioWemobi", () => {
   });
   cy.get("#seat-reservation-v2-button-proceed").should("be.visible").log("Assento selecionado");
   cy.get("#seat-reservation-v2-button-proceed", { timeout: 90000 }).should("be.visible").and("not.be.disabled").click();
+});
+
+// cypress/support/commands.js
+
+Cypress.Commands.add("selecionarAssentoTotem", (limiteMaximo) => {
+  // @param {number} limiteMaximo
+
+  const seletorAssentoDinamico = 'div[data-select="false"][class*="assento-disponivel"].opacity-100';
+  cy.log("Buscando assentos disponíveis (não ocupados e clicáveis)...");
+
+  // const seletorAssentoDisponivel = "[class*='assento-disponivel']";
+  // const elementoIgnorado = ":nth-child(2) > :nth-child(1) > [class*='assento-disponivel']";
+  cy.get(seletorAssentoDinamico)
+    // .not(elementoIgnorado)
+    .should("be.visible")
+    .then(($assentos) => {
+      const assentosFiltrados = limiteMaximo ? $assentos.slice(0, limiteMaximo) : $assentos;
+
+      const totalDisponivel = assentosFiltrados.length;
+      expect(totalDisponivel, "Nenhum assento disponível/clicável foi encontrado na tela").to.be.greaterThan(0);
+
+      // Gera um índice randômico entre 0 e (total - 1)
+      const indiceSorteado = Math.floor(Math.random() * totalDisponivel);
+
+      // Log para visualização no painel lateral do Cypress
+      cy.log(`🎲 Assento clicável sorteado: ${indiceSorteado + 1} de ${totalDisponivel} livres no mapa.`);
+
+      // Clica no assento sorteado
+      cy.wrap(assentosFiltrados).eq(indiceSorteado).click({ force: true });
+    });
 });
 
 Cypress.Commands.add("selecionarAssentoAleatorio", () => {
