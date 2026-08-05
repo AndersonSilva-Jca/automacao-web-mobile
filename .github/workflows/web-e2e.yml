@@ -133,7 +133,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "🚨[ALERTA SITES] E-Bus/UTP - Monit. Cont."
           to: anderson.ssantos@jcatlm.com.br
-          cc: fabiano.britto@externo-jcatlm.com.br,ariane.izac@jcatlm.com.br,anderson.psilva@jcatlm.com.br,maysa.marco@jcatlm.com.br
+          cc: fabiano.britto@externo-jcatlm.com.br,anderson.psilva@jcatlm.com.br,maysa.marco@jcatlm.com.br
           from: "Monitoramento Contínuo"
           html_body: |
             <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6; max-width: 850px; margin: 0 auto; padding: 10px 0;">
