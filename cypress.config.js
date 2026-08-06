@@ -1,5 +1,4 @@
 const { defineConfig } = require("cypress");
-import { cloudPlugin } from "cypress-cloud/plugin";
 const { ImapFlow } = require("imapflow");
 const { simpleParser } = require("mailparser");
 const path = require("path"); // 💡 Importa o módulo de caminhos do Node
@@ -8,8 +7,6 @@ const path = require("path"); // 💡 Importa o módulo de caminhos do Node
 require("dotenv").config({ path: path.resolve(__dirname, ".env") });
 
 module.exports = defineConfig({
-  // projectId: "uGiAle",
-  // recordKey: "CzoZoiBdsxqiq8Q5",
   // ... resto do seu código
   // projectId: "yc5eka",
   reporter: "cypress-mochawesome-reporter",
@@ -25,7 +22,7 @@ module.exports = defineConfig({
   },
   screenshotOnRunFailure: true,
   screenshotsFolder: "cypress/reports/screenshots",
-  video: true,
+  video: false,
   chromeWebSecurity: false,
   viewportWidth: 1920,
   viewportHeight: 1080,
@@ -55,7 +52,7 @@ module.exports = defineConfig({
     pageLoadTimeout: 120000, // Espera até 60s para a página carregar totalmente
     requestTimeout: 20000, // Espera até 15s por respostas de APIs (cy.request)
     responseTimeout: 15000, // Espera até 15s por respostas de interceptações
-    async setupNodeEvents(on, config) {
+    setupNodeEvents(on, config) {
       // on("after:spec", (spec, results) => {
       //   if (results && results.video) {
       //     // Verifica se houve alguma falha no arquivo de teste atual
@@ -156,8 +153,6 @@ module.exports = defineConfig({
           return codigoSorteado;
         },
       });
-      const result = await cloudPlugin(on, config);
-      return result;
     },
     allowCypressEnv: true,
     trashAssetsBeforeRuns: true, // Evita deletar vídeos e screenshots antigos, útil para análise pós-falha
