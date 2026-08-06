@@ -53,7 +53,7 @@ class SearchPage {
 
   odpBuscaDestino() {
     cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("Rio De Janeiro - Todos (RJ)", { delay: 100 });
-    cy.xpath(loc.ODP_XPATH_RJ_TODOS).click({ force: true });
+    cy.xpath(loc.ODP_XPATH_RJ_TODOS, { timeout: 10000 }).click({ force: true });
   }
 
   odpDataIda() {

@@ -8,8 +8,8 @@ const path = require("path"); // 💡 Importa o módulo de caminhos do Node
 require("dotenv").config({ path: path.resolve(__dirname, ".env") });
 
 module.exports = defineConfig({
-  projectId: "uGiAle",
-  recordKey: "CzoZoiBdsxqiq8Q5",
+  // projectId: "uGiAle",
+  // recordKey: "CzoZoiBdsxqiq8Q5",
   // ... resto do seu código
   // projectId: "yc5eka",
   reporter: "cypress-mochawesome-reporter",
