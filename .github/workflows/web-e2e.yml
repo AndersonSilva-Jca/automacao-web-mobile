@@ -11,6 +11,11 @@ on:
     # - cron: "00 * * * *"
 
   workflow_dispatch:
+
+concurrency:
+  group: gh-pages-deploy
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
@@ -77,7 +82,7 @@ jobs:
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "✅[SITES] TESTE TOTEM - E-Bus/UTP - Monit. Cont."
-          # to: anderson.ssantos@jcatlm.com.br,maysa.marco@jcatlm.com.br
+          to: anderson.ssantos@jcatlm.com.br,maysa.marco@jcatlm.com.br
           from: "Monitoramento Contínuo"
           html_body: |
             <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6; max-width: 850px; margin: 0 auto; padding: 10px 0;">
