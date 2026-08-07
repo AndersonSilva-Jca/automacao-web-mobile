@@ -58,7 +58,6 @@ describe("Totem", () => {
     cy.contains("button", /^l$/i).click();
     cy.contains("button", /^v$/i).click();
     cy.contains("button", /^a$/i).click();
-
     cy.get("#birthday").type("14111987", { delay: 100 });
     cy.contains("button", /^Confirmar$/i).click({ force: true });
     cy.contains("button", /^x$/i).click({ force: true });
