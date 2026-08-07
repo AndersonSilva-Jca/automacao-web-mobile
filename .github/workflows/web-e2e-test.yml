@@ -432,9 +432,10 @@ jobs:
             --key ${{ secrets.CURRENTS_RECORD_KEY }} \
             --ci-build-id "${{ github.repository }}-${{ github.run_id }}-${{ github.run_attempt }}"
         env:
+          CYPRESS_API_URL: "https://cy.currents.dev"
           CYPRESS_RECORD_KEY: ${{ secrets.CURRENTS_RECORD_KEY }} # 🟢 Nome exigido pelo Cypress
           CURRENTS_RECORD_KEY: ${{ secrets.CURRENTS_RECORD_KEY }} # 🟢 Nome exigido pelo Currents
-          PROJECT_ID: ${{ secrets.PROJECT_ID }}
+          PROJECT_ID: "uGiAle"
           RECORD_KEY: ${{ secrets.RECORD_KEY }}
           LOGIN: ${{ secrets.LOGIN }}
           SENHA: ${{ secrets.SENHA }}

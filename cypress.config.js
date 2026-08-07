@@ -158,8 +158,9 @@ module.exports = defineConfig({
           return codigoSorteado;
         },
       });
-      const result = await cloudPlugin(on, config);
-      return result;
+      // const result = await cloudPlugin(on, config);
+      // return result;
+      return await cloudPlugin(on, config);
     },
     allowCypressEnv: true,
     trashAssetsBeforeRuns: true, // Evita deletar vídeos e screenshots antigos, útil para análise pós-falha
