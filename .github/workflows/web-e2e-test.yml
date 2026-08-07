@@ -411,8 +411,7 @@ on:
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
-    # Se estiver usando container Docker oficial, garanta a compatibilidade do Node
-    container: cypress/included:13.6.0
+    container: cypress/included:12.17.0
 
     steps:
       - name: Checkout do Código
@@ -427,8 +426,10 @@ jobs:
       - name: Instalar Dependências do Projeto
         run: npm ci
 
+      - name: Instalar Dependências
+        run: npx cypress install --force
         env:
-          CYPRESS_API_URL: "https://cy.currents.dev"
+          CYPRESS_DOWNLOAD_MIRROR: "https://cy-mirror.currents.dev"
 
       - name: Executar Testes E2E via Currents
         id: cypress
@@ -442,7 +443,7 @@ jobs:
             --key ${{ secrets.CURRENTS_RECORD_KEY }} \
             --ci-build-id "${{ github.repository }}-${{ github.run_id }}-${{ github.run_attempt }}"
         env:
-          CYPRESS_API_URL: "https://cy.currents.dev"
+          # CYPRESS_API_URL: "https://cy.currents.dev"
           CYPRESS_RECORD_KEY: ${{ secrets.CURRENTS_RECORD_KEY }} # 🟢 Nome exigido pelo Cypress
           CURRENTS_RECORD_KEY: ${{ secrets.CURRENTS_RECORD_KEY }} # 🟢 Nome exigido pelo Currents
           PROJECT_ID: "uGiAle"
