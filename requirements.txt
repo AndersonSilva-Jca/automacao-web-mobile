@@ -1,3 +1,5 @@
 robotframework
 robotframework-appiumlibrary
 python-dotenv
+
+# npx cypress-cloud run --parallel --record --key CzoZoiBdsxqiq8Q5 --ci-build-id hello-currents
