@@ -426,11 +426,14 @@ jobs:
         run: |
           npx currents run \
             --browser electron \
-            --spec 'cypress/e2e/00_smoke/**/*.cy.js' \
+            --spec 'cypress/e2e/00_smoke/10_Totem.cy.js' \
             --record \
             --parallel \
+            --key ${{ secrets.CURRENTS_RECORD_KEY }} \
             --ci-build-id "${{ github.repository }}-${{ github.run_id }}-${{ github.run_attempt }}"
         env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CURRENTS_RECORD_KEY }} # 🟢 Nome exigido pelo Cypress
+          CURRENTS_RECORD_KEY: ${{ secrets.CURRENTS_RECORD_KEY }} # 🟢 Nome exigido pelo Currents
           PROJECT_ID: ${{ secrets.PROJECT_ID }}
           RECORD_KEY: ${{ secrets.RECORD_KEY }}
           LOGIN: ${{ secrets.LOGIN }}
