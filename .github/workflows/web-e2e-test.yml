@@ -421,7 +421,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20 # Ou a versão suportada pelo seu projeto
+          node-version: 22 # Ou a versão suportada pelo seu projeto
 
       - name: Instalar Dependências do Projeto
         run: npm ci
