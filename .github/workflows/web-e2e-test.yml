@@ -420,6 +420,9 @@ jobs:
       - name: Instalar Dependências do Projeto
         run: npm ci
 
+      - name: Patch Cypress binary for Currents
+        run: npx cy2 patch
+
       - name: Executar Testes E2E via Currents
         id: cypress
         continue-on-error: true
