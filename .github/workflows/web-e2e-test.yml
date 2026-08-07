@@ -428,6 +428,7 @@ jobs:
             --browser electron \
             --spec 'cypress/e2e/00_smoke/**/*.cy.js' \
             --record \
+            --parallel \
             --ci-build-id "${{ github.repository }}-${{ github.run_id }}-${{ github.run_attempt }}"
         env:
           PROJECT_ID: ${{ secrets.PROJECT_ID }}
