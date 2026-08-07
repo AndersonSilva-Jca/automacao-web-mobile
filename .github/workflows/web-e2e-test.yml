@@ -427,7 +427,7 @@ jobs:
         id: cypress
         continue-on-error: true
         run: |
-          npx cypress-cloud run \
+          npx currents run \
             --browser electron \
             --spec 'cypress/e2e/00_smoke/10_Totem.cy.js' \
             --record \
