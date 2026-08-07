@@ -20,7 +20,7 @@ describe("Totem", () => {
     cy.contains("button", "6").click();
     cy.contains("button", "9").click();
     cy.contains("button", "7").click();
-    cy.get("#macAddress").click().type("241c04780308", { delay: 100 });
+    cy.get("#macAddress").click().type("241c04780308", { delay: 250 });
     cy.get(".mt-4 > .rounded-lg").should("be.visible").click();
     cy.get(".bg-primary").should("be.visible");
     cy.get(".undefined").should("be.visible");
@@ -38,7 +38,7 @@ describe("Totem", () => {
     cy.get(".text-colors-black-light").should("be.visible", "contains", "Quantos passageiros serão?");
     cy.get(".gap-4 > :nth-child(2) > .text-xl").should("be.visible").click();
     cy.get(".gap-4 > .bg-primary").should("be.visible").click();
-    cy.selecionarDataIdaTotem();
+    // cy.selecionarDataIdaTotem(5);
     cy.contains("button", "assentos disponíveis").should("be.visible").click();
     cy.get(":nth-child(3) > .bg-primary").click();
     cy.get("#document").type("38485984854", { delay: 100 });

@@ -10,10 +10,10 @@ Cypress.Commands.add("selecionarDataIda", (range = 3) => {
   });
 });
 
-Cypress.Commands.add("selecionarDataIdaTotem", (range = 3) => {
+Cypress.Commands.add("selecionarDataIdaTotem", (range = 5) => {
   cy.get(".whitespace-nowrap").click();
   cy.get(".react-calendar__navigation__label__labelText").should("be.visible");
-  cy.get(".react-calendar__month-view__days > :nth-child(12)").then(($days) => {
+  cy.get(".react-calendar__month-view__days").then(($days) => {
     const proximosDias = $days.slice(0, range);
     const randomIndex = Math.floor(Math.random() * proximosDias.length);
     cy.wrap(proximosDias[randomIndex]).click({ force: true });
