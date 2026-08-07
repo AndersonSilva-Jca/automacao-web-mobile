@@ -419,6 +419,9 @@ jobs:
 
       - name: Instalar Dependências do Projeto
         run: npm ci
+      - name: Instalar Binário Desbloqueado do Cypress para o Currents
+        run: |
+          CYPRESS_DOWNLOAD_MIRROR=https://cy-cdn.currents.dev npx cypress install --force
 
       - name: Executar Testes E2E via Currents
         id: cypress
