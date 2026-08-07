@@ -2,7 +2,6 @@ const { defineConfig } = require("cypress");
 const { ImapFlow } = require("imapflow");
 const { simpleParser } = require("mailparser");
 const path = require("path"); // 💡 Importa o módulo de caminhos do Node
-// const { cloudPlugin } = require("cypress-cloud/plugin");
 // 🔥 Força o dotenv a carregar o arquivo .env correto usando o diretório atual
 require("dotenv").config({ path: path.resolve(__dirname, ".env") });
 
@@ -158,9 +157,6 @@ module.exports = defineConfig({
           return codigoSorteado;
         },
       });
-      // const result = await cloudPlugin(on, config);
-      // return result;
-      // return await cloudPlugin(on, config);
     },
     allowCypressEnv: true,
     trashAssetsBeforeRuns: true, // Evita deletar vídeos e screenshots antigos, útil para análise pós-falha

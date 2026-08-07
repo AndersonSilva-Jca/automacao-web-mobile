@@ -18,7 +18,7 @@ import "cypress-mochawesome-reporter/register";
 import "@cypress/xpath";
 import "./commands";
 import "cypress-if";
-import "cypress-cloud/support";
+// import "cypress-cloud/support";
 
 Cypress.ElementSelector.defaults({
   selectorPriority: ["data-*", "id", "class", "attributes", "tag", "data-js", "data-qa", "nth-child", "data-pagetype", "name"],
