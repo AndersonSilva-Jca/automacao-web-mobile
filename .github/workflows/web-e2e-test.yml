@@ -427,9 +427,6 @@ jobs:
       - name: Instalar Dependências do Projeto
         run: npm ci
 
-      # 🟢 PASSO 2: Aplicação do Patch do Currents com a variável informada
-      - name: Patch Cypress binary for Currents
-        run: npx currents-patch
         env:
           CYPRESS_API_URL: "https://cy.currents.dev"
 
