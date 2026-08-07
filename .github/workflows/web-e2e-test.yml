@@ -421,7 +421,7 @@ jobs:
         run: npm ci
 
       - name: Patch Cypress binary for Currents
-        run: npx cy2 patch
+        run: npx current-patch
 
       - name: Executar Testes E2E via Currents
         id: cypress
