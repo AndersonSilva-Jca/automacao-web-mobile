@@ -428,9 +428,8 @@ jobs:
             --browser electron \
             --spec 'cypress/e2e/00_smoke/10_Totem.cy.js' \
             --record \
-            --parallel \
             --key ${{ secrets.CURRENTS_RECORD_KEY }} \
-            --ci-build-id "${{ github.repository }}-${{ github.run_id }}-${{ github.run_attempt }}"
+            # --ci-build-id "${{ github.repository }}-${{ github.run_id }}-${{ github.run_attempt }}"
         env:
           CYPRESS_API_URL: "https://cy.currents.dev"
           CYPRESS_RECORD_KEY: ${{ secrets.CURRENTS_RECORD_KEY }} # 🟢 Nome exigido pelo Cypress

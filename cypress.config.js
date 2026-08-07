@@ -2,7 +2,7 @@ const { defineConfig } = require("cypress");
 const { ImapFlow } = require("imapflow");
 const { simpleParser } = require("mailparser");
 const path = require("path"); // 💡 Importa o módulo de caminhos do Node
-import { cloudPlugin } from "cypress-cloud/plugin";
+const { cloudPlugin } = require("cypress-cloud/plugin");
 // 🔥 Força o dotenv a carregar o arquivo .env correto usando o diretório atual
 require("dotenv").config({ path: path.resolve(__dirname, ".env") });
 
