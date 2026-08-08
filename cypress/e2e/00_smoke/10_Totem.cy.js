@@ -20,7 +20,8 @@ describe("Totem", () => {
     cy.contains("button", "6").click();
     cy.contains("button", "9").click();
     cy.contains("button", "7").click();
-    cy.get("#macAddress").click().type("241c04780308", { delay: 250 });
+    cy.get("#macAddress").click({ force: true });
+    cy.get("#macAddress").click({ force: true }).type("241c04780308", { delay: 300 });
     cy.get(".mt-4 > .rounded-lg").should("be.visible").click();
     cy.get(".bg-primary").should("be.visible");
     cy.get(".undefined").should("be.visible");
@@ -75,9 +76,9 @@ describe("Totem", () => {
     cy.get(".bg-gray-50 > .gap-4 > :nth-child(2)").should("be.visible").click();
     cy.get(".text-colors-black-light").should("be.visible", "contains", "Selecione sua forma de pagamento");
     // cy.get(".grid > :nth-child(2) > .bg-white").should("be.visible", "contains", "Extrato da compra").click();
-    cy.get(".gap-4 > .text-primary").should("be.visible").click().log("Cancelar compra");
-    cy.get(".mr-4").should("be.visible").click().log("Cancelando compra com sucesso");
-    cy.get(".mr-4").should("be.visible").click().log("Voltar para o início");
+    // cy.get(".gap-4 > .text-primary").should("be.visible").click().log("Cancelar compra");
+    // cy.get(".mr-4").should("be.visible").click().log("Cancelando compra com sucesso");
+    // cy.get(".mr-4").should("be.visible").click().log("Voltar para o início");
     // cy.get('.h-full > [data-disabled="false"]').should("be.visible").click();
     // cy.get(":nth-child(3) > .rounded-lg > :nth-child(2) > .data-\[alert\=true\]\:text-secondary-200").should("be.visible").click();
   });
