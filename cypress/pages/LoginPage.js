@@ -7,14 +7,14 @@ class LoginPage {
   }
 
   preencherUsuario() {
-    cy.env(["login1"]).then((env) => {
-      cy.get(loc.USUARIO).type(env.login1);
+    cy.env(["login"]).then((env) => {
+      cy.get(loc.USUARIO).type(env.login);
     });
   }
 
   PreencherSenha() {
-    cy.env(["senha1"]).then((env) => {
-      cy.get(loc.SENHA).type(env.senha1, { log: false });
+    cy.env(["senha"]).then((env) => {
+      cy.get(loc.SENHA).type(env.senha, { log: false });
     });
   }
 
@@ -66,8 +66,8 @@ class LoginPage {
   }
 
   giroPreencherSenha() {
-    cy.env(["senha"]).then((env) => {
-      cy.get(loc.SENHA).should("be.visible").type(env.senha, { log: false }, { delay: 100 });
+    cy.env(["senha2"]).then((env) => {
+      cy.get(loc.SENHA).should("be.visible").type(env.senha2, { log: false }, { delay: 100 });
     });
   }
 

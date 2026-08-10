@@ -16,10 +16,17 @@ describe("Totem", () => {
     cy.get("#agencyId").should("be.visible").click({ force: true });
     cy.get("#agencyId").should("be.visible").click({ force: true });
     cy.contains("button", "1").click();
+    cy.wait(500);
+    cy.contains("button", "2").click();
+    cy.wait(500);
     cy.contains("button", "8").click();
+    cy.wait(500);
     cy.contains("button", "6").click();
+    cy.wait(500);
     cy.contains("button", "9").click();
+    cy.wait(500);
     cy.contains("button", "7").click();
+    cy.wait(500);
     cy.get("#macAddress").click({ force: true });
     cy.get("#macAddress").click({ force: true }).type("241c04780308", { delay: 300 });
     cy.get(".mt-4 > .rounded-lg").should("be.visible").click();

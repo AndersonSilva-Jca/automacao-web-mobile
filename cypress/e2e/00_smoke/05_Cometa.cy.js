@@ -22,7 +22,7 @@ describe("Viação Cometa", () => {
   });
 
   it("Viação Cometa - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
-    cy.env(["login1", "senha1"]).then(() => {
+    cy.env(["login", "senha"]).then(() => {
       cy.visit(cometa);
       LoginPage.abrirModalLogin();
       LoginPage.preencherUsuario();
