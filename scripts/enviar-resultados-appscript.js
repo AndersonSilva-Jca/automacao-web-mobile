@@ -134,32 +134,34 @@ function buscarPrintFalha(nomeSpecArquivo, nomeTeste) {
   return encontrado ? path.join(pastaSpec, encontrado) : null;
 }
 
-function enviarParaAppsScript(payload, urlAlvo = APPS_SCRIPT_URL) {
+const https = require("https");
+const { URL } = require("url");
+
+function enviarParaAppsScript(payload, urlAlvo = process.env.APPS_SCRIPT_URL) {
   return new Promise((resolve, reject) => {
     const dados = JSON.stringify(payload);
     const url = new URL(urlAlvo);
 
-    const req = https.request(
-      {
-        hostname: url.hostname,
-        path: url.pathname + url.search,
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Content-Length": Buffer.byteLength(dados),
-        },
+    const options = {
+      hostname: url.hostname,
+      path: url.pathname + url.search,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Content-Length": Buffer.byteLength(dados),
       },
-      (res) => {
-        // Se o Google solicitar redirecionamento (status 301 ou 302), segue para a nova URL
-        if (res.statusCode === 301 || res.statusCode === 302) {
-          return resolve(enviarParaAppsScript(payload, res.headers.location));
-        }
+    };
 
-        let corpo = "";
-        res.on("data", (c) => (corpo += c));
-        res.on("end", () => resolve(corpo));
-      },
-    );
+    const req = https.request(options, (res) => {
+      // Segue o redirecionamento 301/302 enviado pelo Google Apps Script
+      if (res.statusCode === 301 || res.statusCode === 302) {
+        return resolve(enviarParaAppsScript(payload, res.headers.location));
+      }
+
+      let corpo = "";
+      res.on("data", (chunk) => (corpo += chunk));
+      res.on("end", () => resolve(corpo));
+    });
 
     req.on("error", reject);
     req.write(dados);
