@@ -15,8 +15,8 @@ const RUN_NUMBER = process.env.GITHUB_RUN_NUMBER || "0";
 const REPO_OWNER = process.env.REPO_OWNER;
 const REPO_NAME = process.env.REPO_NAME;
 
-const REPORTS_DIR = "cypress/reports/";
-const SCREENSHOTS_DIR = "cypress/reports/screenshots";
+const REPORTS_DIR = "cypress/reports";
+const SCREENSHOTS_DIR = "cypress/screenshots";
 
 // Nome do arquivo de spec (sem .cy.js) -> nome da marca que aparece no dashboard.
 // Ajuste aqui se adicionar, renomear ou remover algum spec no futuro.
