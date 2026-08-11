@@ -15,8 +15,8 @@ const RUN_NUMBER = process.env.GITHUB_RUN_NUMBER || "0";
 const REPO_OWNER = process.env.REPO_OWNER;
 const REPO_NAME = process.env.REPO_NAME;
 
-const REPORTS_DIR = "cypress/reports";
-const SCREENSHOTS_DIR = "cypress/screenshots";
+const REPORTS_DIR = "cypress/reports/";
+const SCREENSHOTS_DIR = "cypress/reports/screenshots";
 
 // Nome do arquivo de spec (sem .cy.js) -> nome da marca que aparece no dashboard.
 // Ajuste aqui se adicionar, renomear ou remover algum spec no futuro.
@@ -33,28 +33,65 @@ const MAPA_MARCAS = {
   "10_Totem": "Totem",
 };
 
-// Procura o JSON principal do Mochawesome dentro de cypress/reports (pode estar em subpasta,
-// dependendo de como o reporter está configurado no cypress.config.js)
+// Procura e consolida TODOS os JSONs gerados pelo Mochawesome dentro de cypress/reports
 function encontrarJsonMochawesome(dir) {
   if (!fs.existsSync(dir)) return null;
-  const itens = fs.readdirSync(dir, { withFileTypes: true });
-  for (const item of itens) {
-    const caminho = path.join(dir, item.name);
-    if (item.isDirectory()) {
-      const achado = encontrarJsonMochawesome(caminho);
-      if (achado) return achado;
-    } else if (item.name.endsWith(".json")) {
-      try {
-        const conteudo = JSON.parse(fs.readFileSync(caminho, "utf-8"));
-        // o JSON principal do mochawesome tem "results" (array, 1 item por spec)
-        if (Array.isArray(conteudo.results)) return conteudo;
-      } catch (e) {
-        // não é o arquivo certo, ignora e continua procurando
+
+  let resultadosConsolidados = [];
+
+  function varrerDiretorio(diretorioAtual) {
+    const itens = fs.readdirSync(diretorioAtual, { withFileTypes: true });
+    for (const item of itens) {
+      const caminho = path.join(diretorioAtual, item.name);
+
+      if (item.isDirectory()) {
+        varrerDiretorio(caminho);
+      } else if (item.name.endsWith(".json")) {
+        try {
+          const conteudo = JSON.parse(fs.readFileSync(caminho, "utf-8"));
+
+          // Se for um JSON individual de spec ou um arquivo compilado contendo 'results'
+          if (Array.isArray(conteudo.results) && conteudo.results.length > 0) {
+            resultadosConsolidados.push(...conteudo.results);
+          }
+        } catch (e) {
+          // Ignora arquivos JSON corrompidos ou com formato incompatível
+        }
       }
     }
   }
+
+  varrerDiretorio(dir);
+
+  if (resultadosConsolidados.length > 0) {
+    return { results: resultadosConsolidados };
+  }
+
   return null;
 }
+
+// Procura o JSON principal do Mochawesome dentro de cypress/reports (pode estar em subpasta,
+// dependendo de como o reporter está configurado no cypress.config.js)
+// function encontrarJsonMochawesome(dir) {
+//   if (!fs.existsSync(dir)) return null;
+//   const itens = fs.readdirSync(dir, { withFileTypes: true });
+//   for (const item of itens) {
+//     const caminho = path.join(dir, item.name);
+//     if (item.isDirectory()) {
+//       const achado = encontrarJsonMochawesome(caminho);
+//       if (achado) return achado;
+//     } else if (item.name.endsWith(".json")) {
+//       try {
+//         const conteudo = JSON.parse(fs.readFileSync(caminho, "utf-8"));
+//         // o JSON principal do mochawesome tem "results" (array, 1 item por spec)
+//         if (Array.isArray(conteudo.results)) return conteudo;
+//       } catch (e) {
+//         // não é o arquivo certo, ignora e continua procurando
+//       }
+//     }
+//   }
+//   return null;
+// }
 
 // Conta testes recursivamente (specs podem ter suites aninhadas)
 function contarTestes(suites) {
