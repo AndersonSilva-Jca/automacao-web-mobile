@@ -29,7 +29,7 @@ describe("Totem", () => {
     cy.wait(500);
     cy.get("#macAddress").click({ force: true });
     cy.get("#macAddress").click({ force: true }).type("241c04780308", { delay: 300 });
-    cy.get(".mt-4 > .rounded-lg").should("be.visible").click();
+    cy.get(".mt-4 > .rounded-lg").should("be.visible").click({ force: true });
     cy.get(".bg-primary").should("be.visible");
     cy.get(".undefined").should("be.visible");
     cy.get(".bg-primary").click();
