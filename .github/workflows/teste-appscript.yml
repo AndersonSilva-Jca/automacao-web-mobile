@@ -220,6 +220,7 @@ jobs:
           # npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/**/*.cy.js'
           npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/10_Totem.cy.js'
         env:
+          APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
           LOGIN: ${{ secrets.LOGIN }}
           SENHA: ${{ secrets.SENHA }}
           LOGIN1: ${{ secrets.LOGIN1 }}
