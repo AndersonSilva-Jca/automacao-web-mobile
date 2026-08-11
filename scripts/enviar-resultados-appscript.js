@@ -134,7 +134,6 @@ function buscarPrintFalha(nomeSpecArquivo, nomeTeste) {
   return encontrado ? path.join(pastaSpec, encontrado) : null;
 }
 
-const https = require("https");
 const { URL } = require("url");
 
 function enviarParaAppsScript(payload, urlAlvo = process.env.APPS_SCRIPT_URL) {
