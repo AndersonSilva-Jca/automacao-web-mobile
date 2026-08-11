@@ -232,7 +232,6 @@ async function main() {
       run_id: `${RUN_ID}`,
       data_hora: new Date().toISOString(),
       marca,
-      plataforma: "web",
       total_testes: total,
       total_passou: passou,
       total_falhou: falhou,
