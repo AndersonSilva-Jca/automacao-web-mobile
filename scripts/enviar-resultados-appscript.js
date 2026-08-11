@@ -134,10 +134,11 @@ function buscarPrintFalha(nomeSpecArquivo, nomeTeste) {
   return encontrado ? path.join(pastaSpec, encontrado) : null;
 }
 
-function enviarParaAppsScript(payload) {
+function enviarParaAppsScript(payload, urlAlvo = APPS_SCRIPT_URL) {
   return new Promise((resolve, reject) => {
     const dados = JSON.stringify(payload);
-    const url = new URL(APPS_SCRIPT_URL);
+    const url = new URL(urlAlvo);
+
     const req = https.request(
       {
         hostname: url.hostname,
@@ -149,16 +150,48 @@ function enviarParaAppsScript(payload) {
         },
       },
       (res) => {
+        // Se o Google solicitar redirecionamento (status 301 ou 302), segue para a nova URL
+        if (res.statusCode === 301 || res.statusCode === 302) {
+          return resolve(enviarParaAppsScript(payload, res.headers.location));
+        }
+
         let corpo = "";
         res.on("data", (c) => (corpo += c));
         res.on("end", () => resolve(corpo));
       },
     );
+
     req.on("error", reject);
     req.write(dados);
     req.end();
   });
 }
+
+// function enviarParaAppsScript(payload) {
+//   return new Promise((resolve, reject) => {
+//     const dados = JSON.stringify(payload);
+//     const url = new URL(APPS_SCRIPT_URL);
+//     const req = https.request(
+//       {
+//         hostname: url.hostname,
+//         path: url.pathname + url.search,
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//           "Content-Length": Buffer.byteLength(dados),
+//         },
+//       },
+//       (res) => {
+//         let corpo = "";
+//         res.on("data", (c) => (corpo += c));
+//         res.on("end", () => resolve(corpo));
+//       },
+//     );
+//     req.on("error", reject);
+//     req.write(dados);
+//     req.end();
+//   });
+// }
 
 async function main() {
   if (!APPS_SCRIPT_URL) {
