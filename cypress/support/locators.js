@@ -10,7 +10,7 @@ const loc = {
   SENHA: "#input-password",
   BOTAO_LOGIN: "#button-login",
 
-  ODH_ASSERT_MINHAS_VIAGENS: "Minhas viagenssss",
+  ODH_ASSERT_MINHAS_VIAGENS: "Minhas viagens",
   ODH_ASSERT_CARRINHO: "Carrinho",
   ODH_ASSERT_RESULT_HOSPEDAGENS: /(resultados de hospedagens|Nenhum hotel encontrado)/i,
   ODH_INPUT_DESTINO: ".h-full > .flex > .min-w-0 > .w-full",
