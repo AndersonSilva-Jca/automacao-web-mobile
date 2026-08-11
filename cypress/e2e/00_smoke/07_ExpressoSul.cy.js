@@ -14,7 +14,7 @@ import CheckoutPage from "../../pages/CheckoutPage";
 
 const expressoSul = "https://www.expressodosul.com.br/?utm_source=synthetic_test&utm_medium=internal&utm_campaign=operacao";
 
-describe("Expresso Sul", () => {
+describe("Expresso do Sul", () => {
   beforeEach(() => {
     cy.clearCookies();
     cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
