@@ -46,10 +46,10 @@ module.exports = defineConfig({
     recordKey: process.env.RECORD_KEY,
   },
   e2e: {
-    retries: {
-      runMode: 2, // O GitHub Actions vai tentar até 3 vezes se o elemento sumir do DOM
-      openMode: 0, // No seu PC desenvolvendo, ele falha de primeira para você ver o erro
-    },
+    // retries: {
+    //   runMode: 2, // O GitHub Actions vai tentar até 3 vezes se o elemento sumir do DOM
+    //   openMode: 0, // No seu PC desenvolvendo, ele falha de primeira para você ver o erro
+    // },
     // baseUrl: "https://www.viacaocometa.com.br",
     scrollBehavior: "nearest", // Evita que o Cypress role a página automaticamente durante os testes
     screenshotsFolder: "cypress/reports/screenshots",
