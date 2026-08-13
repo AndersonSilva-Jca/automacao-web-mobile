@@ -95,6 +95,10 @@ jobs:
           '
           curl http://127.0.0.1:4723/status
 
+      - name: Capture ADB Logs on Failure
+        if: failure()
+        run: adb logcat -d > android_crash.log
+
       - name: Run Tests with Android Emulator
         id: run_tests
         uses: reactivecircus/android-emulator-runner@v2
