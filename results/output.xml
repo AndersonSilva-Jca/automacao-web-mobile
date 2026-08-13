@@ -1,555 +1,230 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 7.4.2 (Python 3.14.5 on win32)" generated="2026-08-08T13:57:42.021921" rpa="false" schemaversion="5">
+<robot generator="Robot 7.4.2 (Python 3.14.5 on win32)" generated="2026-08-13T16:50:28.468839" rpa="false" schemaversion="5">
 <suite id="s1" name="Automacao-Web-Mobile" source="C:\automacao-web-mobile">
 <suite id="s1-s1" name="App" source="C:\automacao-web-mobile\app">
-<suite id="s1-s1-s1" name="App1001" source="C:\automacao-web-mobile\app\app1001">
-<suite id="s1-s1-s1-s1" name="1001 Checkout" source="C:\automacao-web-mobile\app\app1001\1001_checkout.robot">
-<test id="s1-s1-s1-s1-t1" name="Deve realizar o fluxo até o checkout de pagamento" line="14">
-<kw name="Start session" owner="base">
-<kw name="Carregar Variaveis De Ambiente" owner="base">
+<suite id="s1-s1-s1" name="appGiro" source="C:\automacao-web-mobile\app\appGiro">
+<suite id="s1-s1-s1-s1" name="Giro Login" source="C:\automacao-web-mobile\app\appGiro\giro_login.robot">
+<test id="s1-s1-s1-s1-t1" name="Deve Realizar O Login Com Sucesso Tratando 2FA Se Solicitado" line="16">
+<kw name="Start session" owner="giro_base">
+<kw name="Carregar Variaveis De Ambiente" owner="giro_base">
 <kw name="Evaluate" owner="BuiltIn">
 <arg>__import__('dotenv').load_dotenv(dotenv_path='app/.env')</arg>
 <doc>Evaluates the given expression in Python and returns the result.</doc>
-<status status="PASS" start="2026-08-08T13:57:43.530512" elapsed="0.028308"/>
+<status status="PASS" start="2026-08-13T16:50:28.839797" elapsed="0.009209"/>
 </kw>
 <kw name="Get Environment Variable" owner="OperatingSystem">
-<msg time="2026-08-08T13:57:43.559645" level="INFO">${env_login} = anderson.ssantos@jcatlm.com.br</msg>
-<var>${env_login}</var>
-<arg>LOGIN</arg>
+<msg time="2026-08-13T16:50:28.849744" level="INFO">${env_login2} = anderson.ssantos@jcatlm.com.br</msg>
+<var>${env_login2}</var>
+<arg>LOGIN2</arg>
 <doc>Returns the value of an environment variable with the given name.</doc>
-<status status="PASS" start="2026-08-08T13:57:43.559250" elapsed="0.001113"/>
+<status status="PASS" start="2026-08-13T16:50:28.849308" elapsed="0.000664"/>
 </kw>
 <kw name="Get Environment Variable" owner="OperatingSystem">
-<msg time="2026-08-08T13:57:43.561151" level="INFO">${env_senha} = AndJca26</msg>
-<var>${env_senha}</var>
-<arg>SENHA</arg>
+<msg time="2026-08-13T16:50:28.850490" level="INFO">${env_senha2} = AndJca26</msg>
+<var>${env_senha2}</var>
+<arg>SENHA2</arg>
 <doc>Returns the value of an environment variable with the given name.</doc>
-<status status="PASS" start="2026-08-08T13:57:43.560675" elapsed="0.000794"/>
+<status status="PASS" start="2026-08-13T16:50:28.850174" elapsed="0.000670"/>
 </kw>
 <kw name="Get Environment Variable" owner="OperatingSystem">
-<msg time="2026-08-08T13:57:43.563019" level="INFO">${env_gmail_pass} = xhhq qfkh lhei coyr</msg>
+<msg time="2026-08-13T16:50:28.851494" level="INFO">${env_gmail_pass} = xhhq qfkh lhei coyr</msg>
 <var>${env_gmail_pass}</var>
 <arg>GMAIL_APP_PASS</arg>
 <doc>Returns the value of an environment variable with the given name.</doc>
-<status status="PASS" start="2026-08-08T13:57:43.561896" elapsed="0.001554"/>
+<status status="PASS" start="2026-08-13T16:50:28.851027" elapsed="0.000605"/>
 </kw>
 <kw name="Get Environment Variable" owner="OperatingSystem">
-<msg time="2026-08-08T13:57:43.564248" level="INFO">${env_gmail_user} = andynho1987@gmail.com</msg>
+<msg time="2026-08-13T16:50:28.852301" level="INFO">${env_gmail_user} = andynho1987@gmail.com</msg>
 <var>${env_gmail_user}</var>
 <arg>GMAIL_USER</arg>
 <doc>Returns the value of an environment variable with the given name.</doc>
-<status status="PASS" start="2026-08-08T13:57:43.563756" elapsed="0.000886"/>
+<status status="PASS" start="2026-08-13T16:50:28.851790" elapsed="0.000744"/>
+</kw>
+<kw name="Get Environment Variable" owner="OperatingSystem">
+<msg time="2026-08-13T16:50:28.853346" level="INFO">${env_remetente_app} = noreply-admin@jcatlm.com.br</msg>
+<var>${env_remetente_app}</var>
+<arg>REMETENTE_APP</arg>
+<doc>Returns the value of an environment variable with the given name.</doc>
+<status status="PASS" start="2026-08-13T16:50:28.852849" elapsed="0.000684"/>
 </kw>
 <kw name="Set Global Variable" owner="BuiltIn">
-<msg time="2026-08-08T13:57:43.565840" level="INFO">${LOGIN} = anderson.ssantos@jcatlm.com.br</msg>
-<arg>${LOGIN}</arg>
-<arg>${env_login}</arg>
+<msg time="2026-08-13T16:50:28.854562" level="INFO">${LOGIN2} = anderson.ssantos@jcatlm.com.br</msg>
+<arg>${LOGIN2}</arg>
+<arg>${env_login2}</arg>
 <doc>Makes a variable available globally in all tests and suites.</doc>
-<status status="PASS" start="2026-08-08T13:57:43.564950" elapsed="0.001256"/>
+<status status="PASS" start="2026-08-13T16:50:28.853799" elapsed="0.000977"/>
 </kw>
 <kw name="Set Global Variable" owner="BuiltIn">
-<msg time="2026-08-08T13:57:43.566978" level="INFO">${SENHA} = AndJca26</msg>
-<arg>${SENHA}</arg>
-<arg>${env_senha}</arg>
+<msg time="2026-08-13T16:50:28.855586" level="INFO">${SENHA2} = AndJca26</msg>
+<arg>${SENHA2}</arg>
+<arg>${env_senha2}</arg>
 <doc>Makes a variable available globally in all tests and suites.</doc>
-<status status="PASS" start="2026-08-08T13:57:43.566492" elapsed="0.000641"/>
+<status status="PASS" start="2026-08-13T16:50:28.854958" elapsed="0.000791"/>
 </kw>
 <kw name="Set Global Variable" owner="BuiltIn">
-<msg time="2026-08-08T13:57:43.568012" level="INFO">${GMAIL_USER} = andynho1987@gmail.com</msg>
+<msg time="2026-08-13T16:50:28.857564" level="INFO">${GMAIL_USER} = andynho1987@gmail.com</msg>
 <arg>${GMAIL_USER}</arg>
 <arg>${env_gmail_user}</arg>
 <doc>Makes a variable available globally in all tests and suites.</doc>
-<status status="PASS" start="2026-08-08T13:57:43.567281" elapsed="0.000961"/>
+<status status="PASS" start="2026-08-13T16:50:28.856027" elapsed="0.001847"/>
 </kw>
 <kw name="Set Global Variable" owner="BuiltIn">
-<msg time="2026-08-08T13:57:43.569150" level="INFO">${GMAIL_APP_PASS} = xhhq qfkh lhei coyr</msg>
+<msg time="2026-08-13T16:50:28.859564" level="INFO">${GMAIL_APP_PASS} = xhhq qfkh lhei coyr</msg>
 <arg>${GMAIL_APP_PASS}</arg>
 <arg>${env_gmail_pass}</arg>
 <doc>Makes a variable available globally in all tests and suites.</doc>
-<status status="PASS" start="2026-08-08T13:57:43.568591" elapsed="0.000705"/>
+<status status="PASS" start="2026-08-13T16:50:28.858249" elapsed="0.001586"/>
 </kw>
-<doc>Carrega o arquivo .env e cria as variáveis globais para o teste.</doc>
-<status status="PASS" start="2026-08-08T13:57:43.529399" elapsed="0.040016"/>
+<kw name="Set Global Variable" owner="BuiltIn">
+<msg time="2026-08-13T16:50:28.861057" level="INFO">${REMETENTE_APP} = noreply-admin@jcatlm.com.br</msg>
+<arg>${REMETENTE_APP}</arg>
+<arg>${env_remetente_app}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="PASS" start="2026-08-13T16:50:28.860065" elapsed="0.001283"/>
+</kw>
+<status status="PASS" start="2026-08-13T16:50:28.838629" elapsed="0.022894"/>
 </kw>
 <kw name="Open Application" owner="AppiumLibrary">
-<msg time="2026-08-08T13:57:45.610075" level="WARN">Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente")': /session</msg>
-<msg time="2026-08-08T13:57:47.643872" level="WARN">Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente")': /session</msg>
-<msg time="2026-08-08T13:57:49.677761" level="WARN">Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente")': /session</msg>
+<msg time="2026-08-13T16:50:30.888310" level="WARN">Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente")': /session</msg>
+<msg time="2026-08-13T16:50:32.920599" level="WARN">Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente")': /session</msg>
+<msg time="2026-08-13T16:50:34.940779" level="WARN">Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente")': /session</msg>
 <kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2026-08-08T13:57:51.726757" level="FAIL">No application is open</msg>
+<msg time="2026-08-13T16:50:36.974013" level="FAIL">No application is open</msg>
 <doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2026-08-08T13:57:51.726287" elapsed="0.148106">No application is open</status>
+<status status="FAIL" start="2026-08-13T16:50:36.973332" elapsed="0.011366">No application is open</status>
 </kw>
-<msg time="2026-08-08T13:57:51.874636" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2026-08-08T13:57:51.885014" level="FAIL">MaxRetryError: HTTPConnectionPool(host='127.0.0.1', port=4723): Max retries exceeded with url: /session (Caused by NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente"))</msg>
+<msg time="2026-08-13T16:50:36.984970" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
+<msg time="2026-08-13T16:50:36.992966" level="FAIL">MaxRetryError: HTTPConnectionPool(host='127.0.0.1', port=4723): Max retries exceeded with url: /session (Caused by NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente"))</msg>
 <arg>http://127.0.0.1:4723</arg>
 <arg>platformName=Android</arg>
 <arg>appium:deviceName=emulator-5554</arg>
 <arg>appium:automationName=UiAutomator2</arg>
-<arg>appium:appPackage=br.com.autoviacao1001.autoviacao1001app</arg>
+<arg>appium:appPackage=com.everymind.clubegiro</arg>
 <arg>appium:appActivity=.MainActivity</arg>
-<arg>appWaitDuration=60000</arg>
-<arg>appium:noReset=${False}</arg>
+<arg>appWaitDuration=50000</arg>
 <arg>appium:autoGrantPermissions=${True}</arg>
 <arg>appium:ensureWebviewsHavePages=${True}</arg>
 <arg>appium:clearDeviceLogs=${True}</arg>
 <arg>appium:nativeWebScreenshot=${True}</arg>
-<arg>appium:uiautomator2ServerServerInstallTimeout=${60000}</arg>
-<arg>appium:uiautomator2ServerLaunchTimeout=${120000}</arg>
+<arg>appium:uiautomator2ServerLaunchTimeout=${90000}</arg>
 <arg>appium:uiautomator2ServerInstallTimeout=${60000}</arg>
 <arg>appium:adbExecTimeout=${60000}</arg>
 <arg>appium:newCommandTimeout=${300}</arg>
 <arg>appium:connectHardwareKeyboard=${True}</arg>
 <arg>appium:socketConnectionTimeout=${90000}</arg>
-<arg>appium:androidInstallTimeout= ${120000}</arg>
 <doc>Opens a new application to the given Appium server.
 Capabilities of appium server, Android and iOS,
 Please check https://appium.io/docs/en/2.19/guides/caps/
 | *Option*            | *Man.* | *Description*     |
 | remote_url          | Yes    | Appium server url |
 | alias               | No     | alias             |</doc>
-<status status="FAIL" start="2026-08-08T13:57:43.569539" elapsed="8.322503">MaxRetryError: HTTPConnectionPool(host='127.0.0.1', port=4723): Max retries exceeded with url: /session (Caused by NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente"))</status>
+<status status="FAIL" start="2026-08-13T16:50:28.861697" elapsed="8.138453">MaxRetryError: HTTPConnectionPool(host='127.0.0.1', port=4723): Max retries exceeded with url: /session (Caused by NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente"))</status>
 </kw>
-<status status="FAIL" start="2026-08-08T13:57:43.527752" elapsed="8.364555">MaxRetryError: HTTPConnectionPool(host='127.0.0.1', port=4723): Max retries exceeded with url: /session (Caused by NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente"))</status>
+<status status="FAIL" start="2026-08-13T16:50:28.837837" elapsed="8.162582">MaxRetryError: HTTPConnectionPool(host='127.0.0.1', port=4723): Max retries exceeded with url: /session (Caused by NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente"))</status>
 </kw>
-<kw name="Login" owner="base">
-<status status="NOT RUN" start="2026-08-08T13:57:51.892876" elapsed="0.000254"/>
+<kw name="Login" owner="giro_base">
+<doc>Preenche credenciais e clica ACESSAR.
+► Antes de clicar: fotografa o ID do último e-mail (âncora).
+► Ap</doc>
+<status status="NOT RUN" start="2026-08-13T16:50:37.000896" elapsed="0.000248"/>
 </kw>
-<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
-<arg>xpath=//android.widget.TextView[@text="Buscar"]</arg>
-<arg>timeout=60s</arg>
-<doc>Waits until the element specified by the ``locator`` is visible.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.893352" elapsed="0.000150"/>
-</kw>
-<kw name="Log To Console" owner="BuiltIn">
-<arg>\n Elemento "Buscar" visível</arg>
-<doc>Logs the given message to the console.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.893814" elapsed="0.000139"/>
+<kw name="Tratar Banner De Login Se Aparecer" owner="giro_base">
+<status status="NOT RUN" start="2026-08-13T16:50:37.001472" elapsed="0.000163"/>
 </kw>
 <kw name="Click Element" owner="AppiumLibrary">
-<arg>xpath=//android.widget.EditText[@resource-id="origin"]</arg>
+<arg>xpath=//android.widget.TextView[@text="Menu"]</arg>
 <doc>Clicks the element identified by ``locator``.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.894194" elapsed="0.000111"/>
+<status status="NOT RUN" start="2026-08-13T16:50:37.001825" elapsed="0.000130"/>
 </kw>
 <kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
-<arg>android=new UiSelector().resourceId("locationSearch")</arg>
-<arg>timeout=60s</arg>
-<doc>Waits until the element specified by the ``locator`` is visible.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.894541" elapsed="0.000199"/>
-</kw>
-<kw name="Input Text" owner="AppiumLibrary">
-<arg>android=new UiSelector().resourceId("locationSearch")</arg>
-<arg>Sao Paulo (Rod. Tietê)</arg>
-<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.895010" elapsed="0.000129"/>
-</kw>
-<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
-<arg>xpath=//android.widget.TextView[@text="São Paulo (Rod. Tietê) (SP)"]</arg>
-<doc>Waits until the element specified by the ``locator`` is visible.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.895301" elapsed="0.000101"/>
-</kw>
-<kw name="Click Element" owner="AppiumLibrary">
-<arg>xpath=//android.widget.TextView[@text="São Paulo (Rod. Tietê) (SP)"]</arg>
-<doc>Clicks the element identified by ``locator``.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.895552" elapsed="0.000100"/>
-</kw>
-<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
-<arg>xpath=//android.widget.TextView[@text="Destino"]</arg>
-<arg>timeout=60s</arg>
-<doc>Waits until the element specified by the ``locator`` is visible.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.895840" elapsed="0.000090"/>
-</kw>
-<kw name="Input Text" owner="AppiumLibrary">
-<arg>android=new UiSelector().resourceId("locationSearch")</arg>
-<arg>Rio de Janeiro (Novo Rio) (RJ)</arg>
-<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.896132" elapsed="0.000113"/>
-</kw>
-<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
-<arg>xpath=//android.widget.TextView[@text="Rio de Janeiro (Novo Rio) (RJ)"]</arg>
-<arg>timeout=60s</arg>
-<doc>Waits until the element specified by the ``locator`` is visible.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.896514" elapsed="0.000154"/>
-</kw>
-<kw name="Click Element" owner="AppiumLibrary">
-<arg>xpath=//android.widget.TextView[@text="Rio de Janeiro (Novo Rio) (RJ)"]</arg>
-<doc>Clicks the element identified by ``locator``.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.896856" elapsed="0.000112"/>
-</kw>
-<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
-<arg>xpath=//android.view.ViewGroup[@resource-id="calendarComponentContainer"]</arg>
-<arg>timeout=30</arg>
-<doc>Waits until the element specified by the ``locator`` is visible.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.897137" elapsed="0.000104"/>
-</kw>
-<kw name="Obter Dia Aleatorio Ida" owner="GeradorDataIda">
-<var>${data_ida}</var>
-<status status="NOT RUN" start="2026-08-08T13:57:51.897417" elapsed="0.000113"/>
-</kw>
-<kw name="Log To Console" owner="BuiltIn">
-<arg>\nData gerada: ${data_ida}</arg>
-<doc>Logs the given message to the console.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.897708" elapsed="0.000130"/>
-</kw>
-<kw name="Click Element" owner="AppiumLibrary">
-<arg>android=new UiSelector().className("android.widget.EditText").instance(0)</arg>
-<doc>Clicks the element identified by ``locator``.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.898114" elapsed="0.000253"/>
-</kw>
-<kw name="Input Text" owner="AppiumLibrary">
-<arg>android=new UiSelector().className("android.widget.EditText").instance(0)</arg>
-<arg>${data_ida}</arg>
-<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.898915" elapsed="0.000282"/>
-</kw>
-<kw name="Log To Console" owner="BuiltIn">
-<arg>\nData de ida selecionada com sucesso!</arg>
-<doc>Logs the given message to the console.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.899449" elapsed="0.000142"/>
-</kw>
-<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
-<arg>xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View</arg>
-<arg>timeout=60s</arg>
-<doc>Waits until the element specified by the ``locator`` is visible.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.899808" elapsed="0.000131"/>
-</kw>
-<kw name="Click Element" owner="AppiumLibrary">
-<arg>xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View</arg>
-<doc>Clicks the element identified by ``locator``.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.900199" elapsed="0.000356"/>
-</kw>
-<kw name="Log To Console" owner="BuiltIn">
-<arg>message=Data confirmada</arg>
-<doc>Logs the given message to the console.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.901040" elapsed="0.000200"/>
-</kw>
-<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
-<arg>xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View</arg>
-<arg>timeout=60s</arg>
-<doc>Waits until the element specified by the ``locator`` is visible.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.901578" elapsed="0.000195"/>
-</kw>
-<kw name="Click Element" owner="AppiumLibrary">
-<arg>xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View</arg>
-<doc>Clicks the element identified by ``locator``.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.901970" elapsed="0.000151"/>
-</kw>
-<kw name="Log To Console" owner="BuiltIn">
-<arg>message=passageiros confirmado</arg>
-<doc>Logs the given message to the console.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.902318" elapsed="0.000095"/>
-</kw>
-<kw name="Aguardar Elemento Com Retry" owner="base">
-<arg>xpath=//android.widget.TextView[@text="Buscar"]</arg>
-<doc>Reexecuta o wait em vez de confiar em cache de elemento</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.903141" elapsed="0.000179"/>
-</kw>
-<kw name="Log To Console" owner="BuiltIn">
-<arg>message=Buscar Passagens confirmado</arg>
-<doc>Logs the given message to the console.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.903534" elapsed="0.000138"/>
-</kw>
-<kw name="Click Element" owner="AppiumLibrary">
-<arg>xpath=//android.widget.TextView[@text="Buscar"]</arg>
-<doc>Clicks the element identified by ``locator``.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.903904" elapsed="0.000133"/>
-</kw>
-<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
-<arg>android=new UiSelector().className("android.view.ViewGroup").instance(47)</arg>
-<arg>timeout=90s</arg>
-<doc>Waits until the element specified by the ``locator`` is visible.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.904198" elapsed="0.000098"/>
-</kw>
-<kw name="Swipe" owner="AppiumLibrary">
-<arg>start_x=489</arg>
-<arg>start_y=1791</arg>
-<arg>end_x=500</arg>
-<arg>end_y=919</arg>
-<arg>duration=1s</arg>
-<doc>Swipes from one point to another point, for an optional ``duration``.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.904520" elapsed="0.000107"/>
-</kw>
-<kw name="Click Element" owner="AppiumLibrary">
-<arg>xpath=//android.view.View</arg>
-<doc>Clicks the element identified by ``locator``.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.904834" elapsed="0.000144"/>
-</kw>
-<kw name="Tratar Banner De Horario Se Aparecer" owner="base">
-<status status="NOT RUN" start="2026-08-08T13:57:51.905224" elapsed="0.000123"/>
-</kw>
-<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
-<arg>xpath=//android.widget.TextView[@text="Adicione um passageiro salvo"]</arg>
-<arg>timeout=30s</arg>
-<doc>Waits until the element specified by the ``locator`` is visible.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.905499" elapsed="0.000110"/>
-</kw>
-<kw name="Click Element" owner="AppiumLibrary">
-<arg>xpath=//android.widget.TextView[@text="Adicione um passageiro salvo"]</arg>
-<doc>Clicks the element identified by ``locator``.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.905798" elapsed="0.000089"/>
-</kw>
-<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
-<arg>xpath=//android.widget.TextView[@text="Quem é o passageiro?"]</arg>
-<arg>timeout=30s</arg>
-<doc>Waits until the element specified by the ``locator`` is visible.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.906019" elapsed="0.000088"/>
-</kw>
-<kw name="Click Element" owner="AppiumLibrary">
-<arg>xpath=//android.view.ViewGroup[@content-desc="A, Anderson Silva dos Santos, (Eu), Use seus dados de cadastro"]</arg>
-<doc>Clicks the element identified by ``locator``.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.906317" elapsed="0.000137"/>
-</kw>
-<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
-<arg>xpath=//android.widget.TextView[@text="Avançar"]</arg>
-<arg>timeout=30s</arg>
-<doc>Waits until the element specified by the ``locator`` is visible.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.906665" elapsed="0.000109"/>
-</kw>
-<kw name="Click Element" owner="AppiumLibrary">
-<arg>xpath=//android.widget.TextView[@text="Avançar"]</arg>
-<doc>Clicks the element identified by ``locator``.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.906978" elapsed="0.000124"/>
-</kw>
-<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
-<arg>xpath=//android.widget.TextView[@text="Passageiro 1"]</arg>
-<arg>timeout=30s</arg>
-<doc>Waits until the element specified by the ``locator`` is visible.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.907260" elapsed="0.000098"/>
-</kw>
-<kw name="Click Element" owner="AppiumLibrary">
-<arg>xpath=//android.view.ViewGroup[@content-desc="Passageiro 1, Anderson Silva dos Santos, Selecione o assento"]</arg>
-<doc>Clicks the element identified by ``locator``.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.907499" elapsed="0.000093"/>
-</kw>
-<kw name="Aguardar Elemento Com Retry" owner="base">
-<arg>xpath=//android.widget.TextView[@text="Mapa de assentos"]</arg>
-<arg>timeout=60s</arg>
-<doc>Reexecuta o wait em vez de confiar em cache de elemento</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.908049" elapsed="0.000265"/>
-</kw>
-<kw name="Selecionar Assento Livre Aleatoriamente" owner="base">
-<status status="NOT RUN" start="2026-08-08T13:57:51.908702" elapsed="0.000160"/>
-</kw>
-<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
-<arg>xpath=//android.widget.TextView[@text="Continuar "]</arg>
-<arg>timeout=30s</arg>
-<doc>Waits until the element specified by the ``locator`` is visible.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.909054" elapsed="0.000133"/>
-</kw>
-<kw name="Click Element" owner="AppiumLibrary">
-<arg>xpath=//android.widget.TextView[@text="Continuar "]</arg>
-<doc>Clicks the element identified by ``locator``.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.909455" elapsed="0.000124"/>
-</kw>
-<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
-<arg>xpath=//android.widget.TextView[@text="Digite o CUPOM"]</arg>
+<arg>xpath=//android.widget.TextView[@text="Acessar minha conta"]</arg>
 <arg>timeout=40s</arg>
 <doc>Waits until the element specified by the ``locator`` is visible.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.909745" elapsed="0.000095"/>
+<status status="NOT RUN" start="2026-08-13T16:50:37.002194" elapsed="0.000154"/>
 </kw>
-<kw name="Log To Console" owner="BuiltIn">
-<arg>message=Teste finalizado com sucesso</arg>
-<doc>Logs the given message to the console.</doc>
-<status status="NOT RUN" start="2026-08-08T13:57:51.909992" elapsed="0.000102"/>
+<kw name="Swipe" owner="AppiumLibrary">
+<arg>start_x=545</arg>
+<arg>start_y=2280</arg>
+<arg>end_x=559</arg>
+<arg>end_y=78</arg>
+<arg>duration=1s</arg>
+<doc>Swipes from one point to another point, for an optional ``duration``.</doc>
+<status status="NOT RUN" start="2026-08-13T16:50:37.002560" elapsed="0.000133"/>
 </kw>
-<kw name="Close session" owner="base">
-<status status="NOT RUN" start="2026-08-08T13:57:51.910320" elapsed="0.000152"/>
-</kw>
-<status status="FAIL" start="2026-08-08T13:57:43.518922" elapsed="8.392064">MaxRetryError: HTTPConnectionPool(host='127.0.0.1', port=4723): Max retries exceeded with url: /session (Caused by NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente"))</status>
-</test>
-<status status="FAIL" start="2026-08-08T13:57:42.134623" elapsed="9.788775"/>
-</suite>
-<suite id="s1-s1-s1-s2" name="1001 Login" source="C:\automacao-web-mobile\app\app1001\1001_login.robot">
-<test id="s1-s1-s1-s2-t1" name="Deve realizar o login com sucesso" line="10">
-<kw name="Start session" owner="base">
-<kw name="Carregar Variaveis De Ambiente" owner="base">
-<kw name="Evaluate" owner="BuiltIn">
-<arg>__import__('dotenv').load_dotenv(dotenv_path='app/.env')</arg>
-<doc>Evaluates the given expression in Python and returns the result.</doc>
-<status status="PASS" start="2026-08-08T13:57:51.952037" elapsed="0.001449"/>
-</kw>
-<kw name="Get Environment Variable" owner="OperatingSystem">
-<msg time="2026-08-08T13:57:51.953833" level="INFO">${env_login} = anderson.ssantos@jcatlm.com.br</msg>
-<var>${env_login}</var>
-<arg>LOGIN</arg>
-<doc>Returns the value of an environment variable with the given name.</doc>
-<status status="PASS" start="2026-08-08T13:57:51.953628" elapsed="0.000352"/>
-</kw>
-<kw name="Get Environment Variable" owner="OperatingSystem">
-<msg time="2026-08-08T13:57:51.954337" level="INFO">${env_senha} = AndJca26</msg>
-<var>${env_senha}</var>
-<arg>SENHA</arg>
-<doc>Returns the value of an environment variable with the given name.</doc>
-<status status="PASS" start="2026-08-08T13:57:51.954110" elapsed="0.000337"/>
-</kw>
-<kw name="Get Environment Variable" owner="OperatingSystem">
-<msg time="2026-08-08T13:57:51.954904" level="INFO">${env_gmail_pass} = xhhq qfkh lhei coyr</msg>
-<var>${env_gmail_pass}</var>
-<arg>GMAIL_APP_PASS</arg>
-<doc>Returns the value of an environment variable with the given name.</doc>
-<status status="PASS" start="2026-08-08T13:57:51.954555" elapsed="0.000464"/>
-</kw>
-<kw name="Get Environment Variable" owner="OperatingSystem">
-<msg time="2026-08-08T13:57:51.955560" level="INFO">${env_gmail_user} = andynho1987@gmail.com</msg>
-<var>${env_gmail_user}</var>
-<arg>GMAIL_USER</arg>
-<doc>Returns the value of an environment variable with the given name.</doc>
-<status status="PASS" start="2026-08-08T13:57:51.955142" elapsed="0.000525"/>
-</kw>
-<kw name="Set Global Variable" owner="BuiltIn">
-<msg time="2026-08-08T13:57:51.956392" level="INFO">${LOGIN} = anderson.ssantos@jcatlm.com.br</msg>
-<arg>${LOGIN}</arg>
-<arg>${env_login}</arg>
-<doc>Makes a variable available globally in all tests and suites.</doc>
-<status status="PASS" start="2026-08-08T13:57:51.955810" elapsed="0.000718"/>
-</kw>
-<kw name="Set Global Variable" owner="BuiltIn">
-<msg time="2026-08-08T13:57:51.957201" level="INFO">${SENHA} = AndJca26</msg>
-<arg>${SENHA}</arg>
-<arg>${env_senha}</arg>
-<doc>Makes a variable available globally in all tests and suites.</doc>
-<status status="PASS" start="2026-08-08T13:57:51.956675" elapsed="0.000941"/>
-</kw>
-<kw name="Set Global Variable" owner="BuiltIn">
-<msg time="2026-08-08T13:57:51.959704" level="INFO">${GMAIL_USER} = andynho1987@gmail.com</msg>
-<arg>${GMAIL_USER}</arg>
-<arg>${env_gmail_user}</arg>
-<doc>Makes a variable available globally in all tests and suites.</doc>
-<status status="PASS" start="2026-08-08T13:57:51.958077" elapsed="0.003967"/>
-</kw>
-<kw name="Set Global Variable" owner="BuiltIn">
-<msg time="2026-08-08T13:57:51.963746" level="INFO">${GMAIL_APP_PASS} = xhhq qfkh lhei coyr</msg>
-<arg>${GMAIL_APP_PASS}</arg>
-<arg>${env_gmail_pass}</arg>
-<doc>Makes a variable available globally in all tests and suites.</doc>
-<status status="PASS" start="2026-08-08T13:57:51.962626" elapsed="0.002795"/>
-</kw>
-<doc>Carrega o arquivo .env e cria as variáveis globais para o teste.</doc>
-<status status="PASS" start="2026-08-08T13:57:51.951770" elapsed="0.014063"/>
-</kw>
-<kw name="Open Application" owner="AppiumLibrary">
-<msg time="2026-08-08T13:57:53.992576" level="WARN">Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente")': /session</msg>
-<msg time="2026-08-08T13:57:56.041854" level="WARN">Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente")': /session</msg>
-<msg time="2026-08-08T13:57:58.075038" level="WARN">Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente")': /session</msg>
-<kw name="Capture Page Screenshot" owner="AppiumLibrary">
-<msg time="2026-08-08T13:58:00.125188" level="FAIL">No application is open</msg>
-<doc>Takes a screenshot of the current page and embeds it into the log.</doc>
-<status status="FAIL" start="2026-08-08T13:58:00.124724" elapsed="0.011517">No application is open</status>
-</kw>
-<msg time="2026-08-08T13:58:00.136509" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2026-08-08T13:58:00.152993" level="FAIL">MaxRetryError: HTTPConnectionPool(host='127.0.0.1', port=4723): Max retries exceeded with url: /session (Caused by NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente"))</msg>
-<arg>http://127.0.0.1:4723</arg>
-<arg>platformName=Android</arg>
-<arg>appium:deviceName=emulator-5554</arg>
-<arg>appium:automationName=UiAutomator2</arg>
-<arg>appium:appPackage=br.com.autoviacao1001.autoviacao1001app</arg>
-<arg>appium:appActivity=.MainActivity</arg>
-<arg>appWaitDuration=60000</arg>
-<arg>appium:noReset=${False}</arg>
-<arg>appium:autoGrantPermissions=${True}</arg>
-<arg>appium:ensureWebviewsHavePages=${True}</arg>
-<arg>appium:clearDeviceLogs=${True}</arg>
-<arg>appium:nativeWebScreenshot=${True}</arg>
-<arg>appium:uiautomator2ServerServerInstallTimeout=${60000}</arg>
-<arg>appium:uiautomator2ServerLaunchTimeout=${120000}</arg>
-<arg>appium:uiautomator2ServerInstallTimeout=${60000}</arg>
-<arg>appium:adbExecTimeout=${60000}</arg>
-<arg>appium:newCommandTimeout=${300}</arg>
-<arg>appium:connectHardwareKeyboard=${True}</arg>
-<arg>appium:socketConnectionTimeout=${90000}</arg>
-<arg>appium:androidInstallTimeout= ${120000}</arg>
-<doc>Opens a new application to the given Appium server.
-Capabilities of appium server, Android and iOS,
-Please check https://appium.io/docs/en/2.19/guides/caps/
-| *Option*            | *Man.* | *Description*     |
-| remote_url          | Yes    | Appium server url |
-| alias               | No     | alias             |</doc>
-<status status="FAIL" start="2026-08-08T13:57:51.966224" elapsed="8.195283">MaxRetryError: HTTPConnectionPool(host='127.0.0.1', port=4723): Max retries exceeded with url: /session (Caused by NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente"))</status>
-</kw>
-<status status="FAIL" start="2026-08-08T13:57:51.951333" elapsed="8.210524">MaxRetryError: HTTPConnectionPool(host='127.0.0.1', port=4723): Max retries exceeded with url: /session (Caused by NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente"))</status>
-</kw>
-<kw name="Login" owner="base">
-<status status="NOT RUN" start="2026-08-08T13:58:00.162520" elapsed="0.000323"/>
+<kw name="Swipe" owner="AppiumLibrary">
+<arg>start_x=556</arg>
+<arg>start_y=1995</arg>
+<arg>end_x=553</arg>
+<arg>end_y=542</arg>
+<arg>duration=1s</arg>
+<doc>Swipes from one point to another point, for an optional ``duration``.</doc>
+<status status="NOT RUN" start="2026-08-13T16:50:37.002869" elapsed="0.000117"/>
 </kw>
 <kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
-<arg>android=new UiSelector().className("android.view.ViewGroup").instance(13)</arg>
+<arg>xpath=//android.view.ViewGroup[@content-desc="Sair do app"]</arg>
+<arg>timeout=40s</arg>
 <doc>Waits until the element specified by the ``locator`` is visible.</doc>
-<status status="NOT RUN" start="2026-08-08T13:58:00.163148" elapsed="0.000231"/>
+<status status="NOT RUN" start="2026-08-13T16:50:37.003175" elapsed="0.000108"/>
 </kw>
 <kw name="Click Element" owner="AppiumLibrary">
-<arg>android=new UiSelector().className("android.view.ViewGroup").instance(13)</arg>
+<arg>xpath=//android.view.ViewGroup[@content-desc="Sair do app"]</arg>
 <doc>Clicks the element identified by ``locator``.</doc>
-<status status="NOT RUN" start="2026-08-08T13:58:00.163771" elapsed="0.000257"/>
+<status status="NOT RUN" start="2026-08-13T16:50:37.003453" elapsed="0.000100"/>
 </kw>
 <kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
-<arg>xpath=//android.widget.TextView[@resource-id="name"]</arg>
+<arg>xpath=//android.widget.Button[@resource-id="android:id/button1"]</arg>
+<arg>timeout=30s</arg>
 <doc>Waits until the element specified by the ``locator`` is visible.</doc>
-<status status="NOT RUN" start="2026-08-08T13:58:00.164500" elapsed="0.000226"/>
-</kw>
-<kw name="Log To Console" owner="BuiltIn">
-<arg>\nLogin realizado com sucesso!</arg>
-<doc>Logs the given message to the console.</doc>
-<status status="NOT RUN" start="2026-08-08T13:58:00.165085" elapsed="0.000297"/>
-</kw>
-<kw name="Log To Console" owner="BuiltIn">
-<arg>\nOlá, Anderson Silva</arg>
-<doc>Logs the given message to the console.</doc>
-<status status="NOT RUN" start="2026-08-08T13:58:00.165782" elapsed="0.000371"/>
-</kw>
-<kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
-<arg>xpath=//android.widget.TextView[@text="Sair"]</arg>
-<arg>timeout=15s</arg>
-<doc>Waits until the element specified by the ``locator`` is visible.</doc>
-<status status="NOT RUN" start="2026-08-08T13:58:00.166707" elapsed="0.000289"/>
+<status status="NOT RUN" start="2026-08-13T16:50:37.003973" elapsed="0.000250"/>
 </kw>
 <kw name="Click Element" owner="AppiumLibrary">
-<arg>xpath=//android.widget.TextView[@text="Sair"]</arg>
+<arg>xpath=//android.widget.Button[@resource-id="android:id/button1"]</arg>
 <doc>Clicks the element identified by ``locator``.</doc>
-<status status="NOT RUN" start="2026-08-08T13:58:00.167399" elapsed="0.000247"/>
+<status status="NOT RUN" start="2026-08-13T16:50:37.004613" elapsed="0.000211"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>\nSaindo do App Giro.</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="NOT RUN" start="2026-08-13T16:50:37.005048" elapsed="0.000286"/>
 </kw>
 <kw name="Wait Until Element Is Visible" owner="AppiumLibrary">
-<arg>xpath=//android.widget.TextView[@text="Digite seu CPF ou E-mail"]</arg>
+<arg>accessibility_id=Entrar</arg>
 <arg>timeout=60s</arg>
 <doc>Waits until the element specified by the ``locator`` is visible.</doc>
-<status status="NOT RUN" start="2026-08-08T13:58:00.168216" elapsed="0.000321"/>
+<status status="NOT RUN" start="2026-08-13T16:50:37.005697" elapsed="0.000212"/>
 </kw>
-<kw name="Log To Console" owner="BuiltIn">
-<arg>\nUsuário deslogado com sucesso!</arg>
-<doc>Logs the given message to the console.</doc>
-<status status="NOT RUN" start="2026-08-08T13:58:00.169431" elapsed="0.000808"/>
-</kw>
-<status status="FAIL" start="2026-08-08T13:57:51.945958" elapsed="8.225260">MaxRetryError: HTTPConnectionPool(host='127.0.0.1', port=4723): Max retries exceeded with url: /session (Caused by NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente"))</status>
+<tag>login</tag>
+<tag>smoke</tag>
+<status status="FAIL" start="2026-08-13T16:50:28.821425" elapsed="8.184959">MaxRetryError: HTTPConnectionPool(host='127.0.0.1', port=4723): Max retries exceeded with url: /session (Caused by NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente"))</status>
 </test>
-<status status="FAIL" start="2026-08-08T13:57:51.935814" elapsed="8.269064"/>
+<doc>Suíte de testes focada no cenário de login da aplicação Clube Giro.</doc>
+<status status="FAIL" start="2026-08-13T16:50:28.546093" elapsed="8.485784"/>
 </suite>
-<status status="FAIL" start="2026-08-08T13:57:42.129983" elapsed="18.101713"/>
+<status status="FAIL" start="2026-08-13T16:50:28.534227" elapsed="8.503666"/>
 </suite>
-<status status="FAIL" start="2026-08-08T13:57:42.124717" elapsed="18.114702"/>
+<status status="FAIL" start="2026-08-13T16:50:28.519078" elapsed="8.527068"/>
 </suite>
-<status status="FAIL" start="2026-08-08T13:57:42.045553" elapsed="18.220965"/>
+<status status="FAIL" start="2026-08-13T16:50:28.474683" elapsed="8.575151"/>
 </suite>
 <statistics>
 <total>
-<stat pass="0" fail="2" skip="0">All Tests</stat>
+<stat pass="0" fail="1" skip="0">All Tests</stat>
 </total>
 <tag>
+<stat pass="0" fail="1" skip="0">login</stat>
+<stat pass="0" fail="1" skip="0">smoke</stat>
 </tag>
 <suite>
-<stat name="Automacao-Web-Mobile" id="s1" pass="0" fail="2" skip="0">Automacao-Web-Mobile</stat>
-<stat name="App" id="s1-s1" pass="0" fail="2" skip="0">Automacao-Web-Mobile.App</stat>
-<stat name="App1001" id="s1-s1-s1" pass="0" fail="2" skip="0">Automacao-Web-Mobile.App.App1001</stat>
-<stat name="1001 Checkout" id="s1-s1-s1-s1" pass="0" fail="1" skip="0">Automacao-Web-Mobile.App.App1001.1001 Checkout</stat>
-<stat name="1001 Login" id="s1-s1-s1-s2" pass="0" fail="1" skip="0">Automacao-Web-Mobile.App.App1001.1001 Login</stat>
+<stat name="Automacao-Web-Mobile" id="s1" pass="0" fail="1" skip="0">Automacao-Web-Mobile</stat>
+<stat name="App" id="s1-s1" pass="0" fail="1" skip="0">Automacao-Web-Mobile.App</stat>
+<stat name="appGiro" id="s1-s1-s1" pass="0" fail="1" skip="0">Automacao-Web-Mobile.App.appGiro</stat>
+<stat name="Giro Login" id="s1-s1-s1-s1" pass="0" fail="1" skip="0">Automacao-Web-Mobile.App.appGiro.Giro Login</stat>
 </suite>
 </statistics>
 <errors>
-<msg time="2026-08-08T13:57:45.610075" level="WARN">Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente")': /session</msg>
-<msg time="2026-08-08T13:57:47.643872" level="WARN">Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente")': /session</msg>
-<msg time="2026-08-08T13:57:49.677761" level="WARN">Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente")': /session</msg>
-<msg time="2026-08-08T13:57:51.874636" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
-<msg time="2026-08-08T13:57:53.992576" level="WARN">Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente")': /session</msg>
-<msg time="2026-08-08T13:57:56.041854" level="WARN">Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente")': /session</msg>
-<msg time="2026-08-08T13:57:58.075038" level="WARN">Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente")': /session</msg>
-<msg time="2026-08-08T13:58:00.136509" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
+<msg time="2026-08-13T16:50:30.888310" level="WARN">Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente")': /session</msg>
+<msg time="2026-08-13T16:50:32.920599" level="WARN">Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente")': /session</msg>
+<msg time="2026-08-13T16:50:34.940779" level="WARN">Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='127.0.0.1', port=4723): Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente")': /session</msg>
+<msg time="2026-08-13T16:50:36.984970" level="WARN">Keyword 'Capture Page Screenshot' could not be run on failure: No application is open</msg>
 </errors>
 </robot>

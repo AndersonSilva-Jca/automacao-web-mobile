@@ -2,7 +2,7 @@
 
 const { faker } = require("@faker-js/faker");
 
-import loc from "../../support/locators.js";
+import loc from "../../../support/locators";
 const rapidoRibeirao = "https://www.rapidoribeiraopreto.com.br/?utm_source=synthetic_test&utm_medium=internal&utm_campaign=operacao";
 
 describe("Validar Cards - dúvidas frequentes", () => {

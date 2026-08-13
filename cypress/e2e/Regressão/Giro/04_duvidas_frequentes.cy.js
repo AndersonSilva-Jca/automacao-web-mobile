@@ -2,7 +2,7 @@
 
 const { faker } = require("@faker-js/faker");
 
-import loc from "../../support/locators.js";
+import loc from "../../../support/locators";
 const cometa = "https://www.viacaocometa.com.br";
 const viacao1001 = "https://www.autoviacao1001.com.br";
 const catarinense = "https://www.catarinense.com.br/";

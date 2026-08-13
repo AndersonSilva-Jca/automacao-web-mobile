@@ -55,7 +55,8 @@ Start session
     ...    appium:automationName=UiAutomator2
     ...    appium:appPackage=com.everymind.clubegiro
     ...    appium:appActivity=.MainActivity
-    ...    appWaitDuration=50000
+    ...    appium:appWaitDuration=60000
+    ...    appium:deviceReadyTimeout=60
     # ...    appium:noReset=${True}
     ...    appium:autoGrantPermissions=${True}
     ...    appium:ensureWebviewsHavePages=${True}

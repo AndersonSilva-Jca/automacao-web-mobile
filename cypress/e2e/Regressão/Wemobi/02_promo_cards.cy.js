@@ -2,11 +2,9 @@
 
 const { faker } = require("@faker-js/faker");
 
-import loc from "../../support/locators.js";
-
 const wemobi = "https://www.wemobi.me/?utm_source=synthetic_test&utm_medium=internal&utm_campaign=operacao";
 
-import loc from "../../support/locators";
+import loc from "../../../support/locators";
 
 describe("Validar cards de promoção", () => {
   beforeEach(() => {

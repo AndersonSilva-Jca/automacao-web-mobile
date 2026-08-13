@@ -2,10 +2,9 @@
 
 const { faker } = require("@faker-js/faker");
 
-import loc from "../../support/locators.js";
 const rapidoRibeirao = "https://www.rapidoribeiraopreto.com.br/?utm_source=synthetic_test&utm_medium=internal&utm_campaign=operacao";
 
-import loc from "../../support/locators";
+import loc from "../../../support/locators";
 
 describe("Validar cards de promoção", () => {
   beforeEach(() => {
