@@ -62,12 +62,14 @@ class LoginPage {
   }
 
   giroPreencherUsuario() {
-    cy.get(loc.USUARIO).should("be.visible").type("andynho1987@gmail.com", { delay: 50 });
+    cy.env(["login1"]).then((env) => {
+      cy.get(loc.USUARIO).should("be.visible").type(env.login1, { delay: 50 });
+    });
   }
 
   giroPreencherSenha() {
-    cy.env(["senha2"]).then((env) => {
-      cy.get(loc.SENHA).should("be.visible").type(env.senha2, { log: false }, { delay: 100 });
+    cy.env(["senha1"]).then((env) => {
+      cy.get(loc.SENHA).should("be.visible").type(env.senha1, { log: false }, { delay: 100 });
     });
   }
 
