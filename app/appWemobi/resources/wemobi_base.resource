@@ -5,8 +5,8 @@ Library     OperatingSystem
 
 *** Variables ***
 ${ENTRAR}               id=user
-${LOGIN2}                ${EMPTY}
-${SENHA2}                ${EMPTY}
+${LOGIN2}               ${EMPTY}
+${SENHA2}               ${EMPTY}
 ${MAIL_USERNAME}        ${EMPTY}
 ${GMAIL_APP_PASS}       ${EMPTY}
 
