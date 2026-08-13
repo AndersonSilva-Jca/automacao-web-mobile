@@ -28,7 +28,7 @@ describe("Totem", () => {
     cy.contains("button", "7").click();
     cy.wait(400);
     cy.get("#macAddress").click({ force: true }).type("241c04780308", { delay: 200 });
-    cy.get("#macAddress").click({ force: true }).type("241c04780308", { delay: 500 });
+    cy.get("#macAddress").click({ force: true }).clear().type("241c04780308", { delay: 500 });
     cy.get(".mt-4 > .rounded-lg").click({ force: true });
 
     // cy.get(".bg-primary").should("be.visible");
