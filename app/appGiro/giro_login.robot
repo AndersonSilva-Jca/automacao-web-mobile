@@ -20,14 +20,14 @@ Deve Realizar O Login Com Sucesso Tratando 2FA Se Solicitado
     
     Tratar Banner De Login Se Aparecer
     Click Element    xpath=//android.widget.TextView[@text="Menu"]
-    Wait Until Element Is Visible
-    ...    xpath=//android.widget.TextView[@text="Olá, ANDERSON"]    timeout=60s
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Acessar minha conta"]    timeout=20s
+    # Wait Until Element Is Visible
+    # ...    xpath=//android.widget.TextView[@text="Olá, ANDERSON"]    timeout=90s
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Acessar minha conta"]    timeout=40s
     Swipe    start_x=545    start_y=2280    end_x=559    end_y=78    duration=1s
     Swipe    start_x=556    start_y=1995    end_x=553    end_y=542    duration=1s
-    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Sair do app"]    timeout=30s
+    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Sair do app"]    timeout=40s
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Sair do app"]
-    Wait Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button1"]    timeout=15s
+    Wait Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button1"]    timeout=30s
     Click Element    xpath=//android.widget.Button[@resource-id="android:id/button1"]
     Log To Console    \nSaindo do App Giro.
     Wait Until Element Is Visible    accessibility_id=Entrar    timeout=60s

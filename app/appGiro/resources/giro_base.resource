@@ -92,7 +92,7 @@ Login
     ...    xpath=//android.widget.EditText[@resource-id="email-input-login"]    timeout=60s
      Log To Console    \nFazendo o Login 2...
     Input Text
-    ...    xpath=//android.widget.EditText[@resource-id="email-input-login"]    ${LOGIN2}
+    ...    xpath=//android.widget.EditText[@resource-id="email-input-login"]    ${GMAIL_USER}
     Log To Console    \nDigitando email...
 
     Input Password
@@ -121,7 +121,7 @@ Tratar Fluxo De 2FA Se Necessario
     ...    SE não aparecer → login foi direto, sem 2FA.
 
     ${modal}=    Run Keyword And Return Status
-    ...    Wait Until Element Is Visible    ${XPATH_TITULO_2FA}    timeout=45s
+    ...    Wait Until Element Is Visible    ${XPATH_TITULO_2FA}    timeout=15s
 
     IF    ${modal}
         Log To Console    \n[2FA] Modal detectado. Buscando código no Gmail...
