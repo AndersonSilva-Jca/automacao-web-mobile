@@ -59,8 +59,7 @@ function encontrarJsonMochawesome(dir) {
 
 // Conta testes recursivamente (specs podem ter suites aninhadas).
 // O nomeCompleto é reconstruído manualmente com " -- " entre suite e teste porque é
-// esse o separador que o Cypress usa no nome do arquivo do print — o campo fullTitle
-// do Mochawesome vem separado só por espaço, então não bate com o arquivo real.
+// esse o separador que o Cypress usa no nome do arquivo do print.
 function contarTestes(suites) {
   let total = 0,
     passou = 0,
@@ -68,16 +67,20 @@ function contarTestes(suites) {
   const falhas = [];
 
   function percorrer(suite, caminhoSuites) {
-    const caminhoAtual = suite.title ? [...caminhoSuites, suite.title] : caminhoSuites;
+    // Limpa espaços extras no final/início do nome da suite (describe)
+    const tituloSuite = suite.title ? suite.title.trim() : "";
+    const caminhoAtual = tituloSuite ? [...caminhoSuites, tituloSuite] : caminhoSuites;
 
     (suite.tests || []).forEach((t) => {
       total++;
       if (t.state === "passed") passou++;
       if (t.state === "failed") {
         falhou++;
+        // Limpa espaços extras no final/início do nome do teste (it)
+        const tituloTeste = t.title ? t.title.trim() : "";
         falhas.push({
-          nome: t.title,
-          nomeCompleto: [...caminhoAtual, t.title].join(" -- "),
+          nome: tituloTeste,
+          nomeCompleto: [...caminhoAtual, tituloTeste].join(" -- "),
           erro: t.err && t.err.message ? t.err.message : "Erro não especificado",
         });
       }
@@ -99,8 +102,10 @@ function extrairNomeSpec(caminhoArquivo) {
 //   "<...> (failed) (attempt 2).png"  / "(attempt 3).png" quando há retry
 function buscarUrlPrintFalha(nomeSpecArquivo, nomeCompletoTeste) {
   const pastaSpecLocal = path.join(SCREENSHOTS_DIR, `${nomeSpecArquivo}.cy.js`);
+  const nomeLimpo = nomeCompletoTeste ? nomeCompletoTeste.trim() : "";
+
   console.log(`   🔍 procurando print em: "${pastaSpecLocal}"`);
-  console.log(`   🔍 nome completo reconstruído: "${nomeCompletoTeste}"`);
+  console.log(`   🔍 nome completo reconstruído: "${nomeLimpo}"`);
 
   if (!fs.existsSync(pastaSpecLocal)) {
     console.log(`   ⚠️  pasta não existe: "${pastaSpecLocal}"`);
@@ -110,7 +115,7 @@ function buscarUrlPrintFalha(nomeSpecArquivo, nomeCompletoTeste) {
   const arquivos = fs.readdirSync(pastaSpecLocal);
   console.log(`   🔍 arquivos encontrados na pasta: ${JSON.stringify(arquivos)}`);
 
-  const prefixo = `${nomeCompletoTeste} (failed)`;
+  const prefixo = `${nomeLimpo} (failed)`;
   console.log(`   🔍 prefixo esperado: "${prefixo}"`);
   const candidatos = arquivos.filter((a) => a.startsWith(prefixo));
   if (candidatos.length === 0) {
