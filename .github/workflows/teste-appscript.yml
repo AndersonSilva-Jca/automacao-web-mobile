@@ -218,7 +218,7 @@ jobs:
         continue-on-error: true
         run:
           # npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/**/*.cy.js'
-          npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/01_ODH.cy.js'
+          npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/10_totem.cy.js'
         env:
           APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
           LOGIN: ${{ secrets.LOGIN }}
