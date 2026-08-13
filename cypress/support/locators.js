@@ -56,6 +56,7 @@ const loc = {
   ASSERT_VALORTOTAL: ".title > .cmp-text > p > b",
   LOADER: '[alt="loader"]',
 
+  LINK_INFO_VIAGEM_UTP: ".at-element-marker > :nth-child(1)",
   LINK_INFO_VIAGEM: ".header-nav-container > :nth-child(1) > :nth-child(1) > .focusable",
   URL_INFO_VIAGEM: "informacao-para-sua-viagem",
   LINK_BAGAGEM: ".aem-Grid--12 > :nth-child(4) > .custom-padding > .container > :nth-child(1) > .aem-Grid > .image > .cmp-image > #cmp-image-link > .cmp-image__image",

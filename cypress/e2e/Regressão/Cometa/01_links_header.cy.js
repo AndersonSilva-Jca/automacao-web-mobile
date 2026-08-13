@@ -13,7 +13,7 @@ describe("Validar link informações de viagens", () => {
     cy.visit(cometa);
   });
   it("Validar link informações de Viagem - Bagagem", () => {
-    cy.get(loc.LINK_INFO_VIAGEM).click();
+    cy.get(loc.LINK_INFO_VIAGEM_UTP).click();
     cy.url().should("include", loc.URL_INFO_VIAGEM);
     cy.get(loc.LINK_BAGAGEM).click();
     cy.get(loc.ASSERT_BAGAGEM_DE_MAO).should("contain", "Bagagem de mão");
@@ -38,7 +38,7 @@ describe("Validar link informações de viagens", () => {
   });
 
   it("Validar link informações de Viagem - Informações para embarque", () => {
-    cy.get(loc.LINK_INFO_VIAGEM).click();
+    cy.get(loc.LINK_INFO_VIAGEM_UTP).click();
     cy.url().should("include", loc.URL_INFO_VIAGEM);
     cy.get(loc.LINK_EMBARQUE).click();
     cy.get(loc.LINK_DOCUMENTACAO_EMBARQUE).click();
@@ -62,7 +62,7 @@ describe("Validar link informações de viagens", () => {
   });
 
   it("Validar link informações de Viagem - Compra, remarcação e reembolso", () => {
-    cy.get(loc.LINK_INFO_VIAGEM).click();
+    cy.get(loc.LINK_INFO_VIAGEM_UTP).click();
     cy.url().should("include", loc.URL_INFO_VIAGEM);
     cy.get(loc.LINK_COMPRA_REMARCACAO).click();
     cy.get(loc.LINK_FORMAS_PAGAMENTO).click();
@@ -83,7 +83,7 @@ describe("Validar link informações de viagens", () => {
   });
 
   it("Validar link informações de Viagem - Nossos serviços", () => {
-    cy.get(loc.LINK_INFO_VIAGEM).click();
+    cy.get(loc.LINK_INFO_VIAGEM_UTP).click();
     cy.url().should("include", loc.URL_INFO_VIAGEM);
     cy.get(loc.LINK_NOSSOS_SERVICOS).click();
     cy.get(loc.LINK_NOSSOS_ONIBUS).click();
@@ -100,7 +100,7 @@ describe("Validar link informações de viagens", () => {
   });
 
   it("Validar link informações de Viagem - Descontos e Gratuidades", () => {
-    cy.get(loc.LINK_INFO_VIAGEM).click();
+    cy.get(loc.LINK_INFO_VIAGEM_UTP).click();
     cy.url().should("include", loc.URL_INFO_VIAGEM);
     cy.get(loc.LINK_DESCONTOS_GRATUIDADES).click();
     cy.get(loc.LINK_ESTUDANTE).click();
