@@ -212,7 +212,7 @@ module.exports = defineConfig({
   },
   e2e: {
     retries: {
-      runMode: 3, // O GitHub Actions vai tentar até 3 vezes se o elemento sumir do DOM
+      runMode: 2, // O GitHub Actions vai tentar até 3 vezes se o elemento sumir do DOM
       openMode: 0, // No seu PC desenvolvendo, ele falha de primeira para você ver o erro
     },
     // baseUrl: "https://www.viacaocometa.com.br",
