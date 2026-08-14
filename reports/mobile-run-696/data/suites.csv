@@ -1,0 +1,2 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"failed","Fri Aug 14 14:32:39 UTC 2026","Fri Aug 14 14:33:46 UTC 2026","66418","","Monitoramento Mobile","","","","Deve Realizar O Login Com Sucesso Tratando 2FA Se Solicitado",""
