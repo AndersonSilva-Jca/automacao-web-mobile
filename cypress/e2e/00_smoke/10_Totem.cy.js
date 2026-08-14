@@ -28,6 +28,7 @@ describe("Totem", () => {
     cy.contains("button", "7").click();
     cy.wait(400);
     cy.get("#macAddress").click({ force: true }).type("241c04780308", { delay: 200 });
+    cy.wait(3000);
     cy.get("#macAddress").click({ force: true }).clear().type("241c04780308", { delay: 500 });
     cy.get(".mt-4 > .rounded-lg").click({ force: true });
 
@@ -44,8 +45,11 @@ describe("Totem", () => {
     cy.get(".relative > .rounded").should("be.visible").type("Rio de Janeiro (Novo Rio)");
     cy.get(".grid > .flex > :nth-child(1)").should("be.visible").click();
     cy.get(".bg-gray-50 > .gap-4 > :nth-child(2)").should("be.visible").click();
-    cy.get(".text-colors-black-light").should("be.visible", "contains", "Quantos passageiros serão?");
-    cy.get(".gap-4 > :nth-child(2) > .text-xl").should("be.visible").click();
+    cy.get(".max-w-screen-lg > .items-center > .text-primary").should("be.visible");
+    cy.get(".gap-4 > .border").should("be.visible");
+    cy.wait(1500);
+    // cy.get(".text-colors-black-light").should("be.visible", "contains", "Quantos passageiros serão?");
+    cy.get(".gap-4 > :nth-child(2) > .text-xl").click();
     cy.get(".gap-4 > .bg-primary").should("be.visible").click();
     // cy.selecionarDataIdaTotem(5);
     cy.contains("button", "assentos disponíveis").should("be.visible").click();
