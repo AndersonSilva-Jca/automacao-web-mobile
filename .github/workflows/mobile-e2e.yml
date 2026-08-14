@@ -152,8 +152,7 @@ jobs:
 
             echo "Iniciando a execução do Robot Framework com Allure..."
             # AJUSTADO: Adicionado o listener do Allure para alimentar o painel de monitoramento 
-            robot -T -d ./results --listener allure_robotframework:$ALLURE_DIR --name "Monitoramento Mobile" app/appGiro/giro_login.robot
-            # app/appWemobi/wemobi_login.robot app/app1001/1001_login.robot app/appCatarinense/catarinense_login.robot app/appCometa/cometa_login.robot
+            robot -T -d ./results --listener allure_robotframework:$ALLURE_DIR --name "Monitoramento Mobile" app/appWemobi/wemobi_login.robot app/app1001/1001_login.robot app/appCatarinense/catarinense_login.robot app/appCometa/cometa_login.robot
             # app/appGiro/giro_login.robot
             # Se o Robot falhou, extrai o logcat AQUI (com o emulador ainda vivo!)
             if [ "$ROBOT_FAILED" = "true" ]; then
@@ -162,22 +161,6 @@ jobs:
 
             echo $! > appium.pid
             kill $(cat appium.pid) || true
-        # env:
-        #   LOGIN: ${{ secrets.APP_LOGIN }}
-        #   PASSWORD: ${{ secrets.APP_PASSWORD }}
-      # 📌 ENCAIXE AQUI: Captura o log se houver qualquer falha nos testes acima
-      # - name: Capture ADB Logs on Failure
-      #   if: failure()
-      #   run: adb logcat -d > android_crash.log
-
-      # # 📌 Opcional (Recomendado): Faz o upload do log capturado nos Artefatos
-      # - name: Upload Android Crash Log
-      #   if: failure()
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: android-crash-log-run-${{ github.run_number }}
-      #     path: android_crash.log
-      #     retention-days: 7
 
       - name: Limpar APKs do Workspace para liberar espaço
         if: always()
