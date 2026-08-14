@@ -126,15 +126,7 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
 
           script: |
-            echo "Aguardando boot completo do emulador..."
-            adb wait-for-device
-            shell_ready=""
-            while [ "$shell_ready" != "1" ]; do
-              shell_ready=$(adb shell getprop sys.boot_completed 2>&1 | tr -d '\r')
-              sleep 2
-            done
-            adb shell input keyevent 82
-            echo "Emulador pronto! Executando testes..."
+
             echo "=== Emulator pronto e bootado automaticamente pela Action ==="
             adb devices
 
