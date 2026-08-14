@@ -19,6 +19,7 @@ import "@cypress/xpath";
 import "./commands";
 import "cypress-if";
 // import "cypress-cloud/support";
+Cypress.Screenshot.defaults({ capture: "viewport" });
 
 Cypress.ElementSelector.defaults({
   selectorPriority: ["data-*", "id", "class", "attributes", "tag", "data-js", "data-qa", "nth-child", "data-pagetype", "name"],
