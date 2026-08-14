@@ -55,8 +55,8 @@ Start session
     ...    appium:automationName=UiAutomator2
     ...    appium:appPackage=com.everymind.clubegiro
     ...    appium:appActivity=.MainActivity
-    ...    appium:app=app/apks/clube_giro/ClubeGiro.apk  # 👈 Adicionado: garanta o caminho exato do .apk no projeto
-    ...    appium:appWaitActivity=.MainActivity,*.MainActivity
+    ...    appium:appWaitActivity=*
+    ...    appium:appWaitPackage=com.everymind.clubegiro
     ...    appium:appWaitDuration=60000
     ...    appium:deviceReadyTimeout=60
     # ...    appium:noReset=${True}

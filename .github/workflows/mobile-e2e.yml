@@ -154,7 +154,6 @@ jobs:
             echo "Verificando status do Appium..."
             curl http://localhost:4723/status
 
-            adb shell am start -n com.everymind.clubegiro/.MainActivity
 
             echo "Iniciando a execução do Robot Framework com Allure..."
             # AJUSTADO: Adicionado o listener do Allure para alimentar o painel de monitoramento
