@@ -134,10 +134,6 @@ jobs:
             echo "Iniciando a execução do Robot Framework..."
             robot -T -d ./results --listener allure_robotframework:$ALLURE_DIR --name "Monitoramento Mobile" app/appGiro/giro_login.robot
 
-      - name: Capture ADB Logs on Failure
-        if: failure()
-        run: adb logcat -d > android_crash.log
-
       - name: Limpar APKs do Workspace
         if: always()
         run: rm -rf app/apks/
