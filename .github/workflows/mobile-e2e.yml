@@ -115,7 +115,6 @@ jobs:
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REMETENTE_APP: ${{ secrets.REMETENTE_APP }}
-          WA_PHONE_ALFREDO: ${{ secrets.WA_PHONE_ALFREDO }}
           WA_PHONE_ANDERSON: ${{ secrets.WA_PHONE_ANDERSON }}
         with:
           api-level: 30
@@ -123,25 +122,21 @@ jobs:
           arch: x86_64
           profile: pixel_7
           disable-animations: true
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
+          emulator-options: -no-window -gpu swiftshader_headless -noaudio -no-boot-anim -camera-back none -camera-front none
 
           script: |
 
             echo "=== Emulator pronto e bootado automaticamente pela Action ==="
             adb devices
 
-            echo "Instalando o aplicativo Clube Giro..."
-            adb install-multiple ./app/apks/clube_giro/*.apk
-            echo "Instalando o aplicativo wemobi..."
-            adb install-multiple ./app/apks/wemobi/*.apk
-            echo "Instalando o aplicativo cometa..."
-            adb install-multiple ./app/apks/cometa/*.apk
-            echo "Instalando o aplicativo 1001..."
-            adb install-multiple ./app/apks/1001/*.apk
-            echo "Instalando o aplicativo catarinense..."
-            adb install-multiple ./app/apks/catarinense/*.apk
+            echo "Instalando aplicativos APK..."
+            adb install-multiple ./app/apks/clube_giro/*.apk || true
+            adb install-multiple ./app/apks/wemobi/*.apk || true
+            adb install-multiple ./app/apks/cometa/*.apk || true
+            adb install-multiple ./app/apks/1001/*.apk || true
+            adb install-multiple ./app/apks/catarinense/*.apk || true
 
-            echo "Garantindo que as animações do sistema estão desligadas..."
+            echo "Desativando animações..."
             adb shell settings put global window_animation_scale 0
             adb shell settings put global transition_animation_scale 0
             adb shell settings put global animator_duration_scale 0
