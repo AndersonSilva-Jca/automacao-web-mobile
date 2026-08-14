@@ -1,0 +1,2 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"failed","Fri Aug 14 15:25:14 UTC 2026","Fri Aug 14 15:26:26 UTC 2026","71340","","Monitoramento Mobile","","","","Deve Realizar O Login Com Sucesso Tratando 2FA Se Solicitado","Valida o acesso ao aplicativo Clube Giro e realiza o logout com sucesso."
