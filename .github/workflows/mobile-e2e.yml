@@ -158,10 +158,9 @@ jobs:
             if [ "$ROBOT_FAILED" = "true" ]; then
             echo "🚨 O Teste falhou! Coletando adb logcat..."
             adb logcat -d > android_crash.log
-              exit 1
-            fi
-            # echo $! > appium.pid
-            # kill $(cat appium.pid) || true
+
+            echo $! > appium.pid
+            kill $(cat appium.pid) || true
         # env:
         #   LOGIN: ${{ secrets.APP_LOGIN }}
         #   PASSWORD: ${{ secrets.APP_PASSWORD }}
