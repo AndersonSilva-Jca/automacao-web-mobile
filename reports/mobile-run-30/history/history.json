@@ -1,0 +1,1 @@
+{"fa950da178e98ce4f5affdf2a3d77f78":{"statistic":{"failed":1,"broken":0,"skipped":0,"passed":0,"unknown":0,"total":1},"items":[{"uid":"4a008d9d29586cf4","status":"failed","statusDetails":"Element locator 'xpath=//android.view.ViewGroup[@content-desc=\"Entrar\"]' did not match any elements after 1 minute","time":{"start":1786735758574,"stop":1786735827323,"duration":68749}}]}}
