@@ -30,6 +30,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Configurar Android SDK no PATH
+        run: |
+          echo "$ANDROID_HOME/platform-tools" >> $GITHUB_PATH
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -101,6 +105,9 @@ jobs:
 
       - name: Aguardar boot completo do Emulador
         run: |
+          # Adiciona o ADB ao PATH da sessão atual
+          export PATH=$PATH:$ANDROID_HOME/platform-tools
+
           adb wait-for-device
           shell_ready=""
           while [ "$shell_ready" != "1" ]; do
