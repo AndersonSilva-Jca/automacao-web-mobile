@@ -5,10 +5,7 @@ on:
     # Roda nos minutos 0 and 40 das horas pares (0, 2, 4, 6...)
     - cron: "30 0-22/2 * * *"
     # Roda no minuto 20 das horas ímpares (1, 3, 5, 7...)
-    # - cron: "30 1-23/2 * * *"
     - cron: "30 1-23/2 * * *"
-  # - cron: "00 * * * *"
-  # - cron: "40 * * * *"
   workflow_dispatch:
 
 concurrency:
@@ -30,9 +27,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Configurar Android SDK no PATH
-        run: |
-          echo "$ANDROID_HOME/platform-tools" >> $GITHUB_PATH
+      # 1. Configura o Android SDK e adiciona o ADB ao PATH globalmente
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -103,19 +100,7 @@ jobs:
         if: failure()
         run: adb logcat -d > android_crash.log
 
-      - name: Aguardar boot completo do Emulador
-        run: |
-          # Adiciona o ADB ao PATH da sessão atual
-          export PATH=$PATH:$ANDROID_HOME/platform-tools
-
-          adb wait-for-device
-          shell_ready=""
-          while [ "$shell_ready" != "1" ]; do
-            shell_ready=$(adb shell getprop sys.boot_completed 2>&1 | tr -d '\r')
-            sleep 2
-          done
-          adb shell input keyevent 82 # Desbloqueia a tela do emulador
-
+      # 2. O emulador sobe AQUI e o script de aguardar boot executa dentro dele
       - name: Run Tests with Android Emulator
         id: run_tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -132,20 +117,24 @@ jobs:
           REMETENTE_APP: ${{ secrets.REMETENTE_APP }}
           WA_PHONE_ALFREDO: ${{ secrets.WA_PHONE_ALFREDO }}
           WA_PHONE_ANDERSON: ${{ secrets.WA_PHONE_ANDERSON }}
-
         with:
           api-level: 30
-          # target: google_apis_playstore
-          # arch: x86
-          # target: google_apis
-          # arch: x86_64
-          target: google_apis_playstore # 👈 Mantém a Play Store que o app exige
+          target: google_apis_playstore
           arch: x86_64
           profile: pixel_7
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
 
           script: |
+            echo "Aguardando boot completo do emulador..."
+            adb wait-for-device
+            shell_ready=""
+            while [ "$shell_ready" != "1" ]; do
+              shell_ready=$(adb shell getprop sys.boot_completed 2>&1 | tr -d '\r')
+              sleep 2
+            done
+            adb shell input keyevent 82
+            echo "Emulador pronto! Executando testes..."
             echo "=== Emulator pronto e bootado automaticamente pela Action ==="
             adb devices
 
