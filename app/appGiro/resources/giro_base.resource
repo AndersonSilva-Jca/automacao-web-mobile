@@ -54,22 +54,21 @@ Start session
     ...    appium:deviceName=emulator-5554
     ...    appium:automationName=UiAutomator2
     ...    appium:appPackage=com.everymind.clubegiro
-    ...    appium:appActivity=.MainActivity
-    ...    appium:appWaitActivity=*
+    ...    appium:appActivity=com.everymind.clubegiro.MainActivity
+    ...    appium:appWaitActivity=com.everymind.clubegiro.*,*.MainActivity
     ...    appium:appWaitPackage=com.everymind.clubegiro
-    ...    appium:appWaitDuration=60000
-    ...    appium:deviceReadyTimeout=60
-    # ...    appium:noReset=${True}
+    ...    appium:appWaitDuration=120000
+    ...    appium:deviceReadyTimeout=120
     ...    appium:autoGrantPermissions=${True}
     ...    appium:ensureWebviewsHavePages=${True}
     ...    appium:clearDeviceLogs=${True}
     ...    appium:nativeWebScreenshot=${True}
-    ...    appium:uiautomator2ServerLaunchTimeout=${90000}
-    ...    appium:uiautomator2ServerInstallTimeout=${60000}
-    ...    appium:adbExecTimeout=${60000}
+    ...    appium:uiautomator2ServerLaunchTimeout=${120000}
+    ...    appium:uiautomator2ServerInstallTimeout=${120000}
+    ...    appium:adbExecTimeout=${120000}
     ...    appium:newCommandTimeout=${300}
     ...    appium:connectHardwareKeyboard=${True}
-    ...    appium:socketConnectionTimeout=${90000}
+    ...    appium:socketConnectionTimeout=${120000}
 
 # ─────────────────────────────────────────────────────────────────────────────
 Login
