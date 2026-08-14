@@ -1,33 +1,72 @@
-Robot Framework
+# Robot Framework
+# *** Settings ***
+# Documentation     Suíte de testes focada no cenário de login da aplicação Clube Giro.
+# Resource          ../appGiro/resources/giro_base.resource
+# Library           ../appGiro/resources/GeradorDataIda.py
+# Library           ../appGiro/resources/GeradorDataVolta.py
+# # Library           ../libraries/GmailHelper.py
+# # Library           String
+# Library           ImapLibrary2
+# Library             AppiumLibrary
+
+# # Test Setup        Start session
+# # Test Teardown     Encerrar Sessao E Gravar Video
+
+# *** Test Cases ***
+# Deve Realizar O Login Com Sucesso Tratando 2FA Se Solicitado
+#     Start session
+#     [Tags]    smoke    login
+#     Login
+    
+#     Tratar Banner De Login Se Aparecer
+#     Click Element    xpath=//android.widget.TextView[@text="Menu"]
+#     # Wait Until Element Is Visible
+#     # ...    xpath=//android.widget.TextView[@text="Olá, ANDERSON"]    timeout=90s
+#     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Acessar minha conta"]    timeout=40s
+#     Swipe    start_x=545    start_y=2280    end_x=559    end_y=78    duration=1s
+#     Swipe    start_x=556    start_y=1995    end_x=553    end_y=542    duration=1s
+#     Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Sair do app"]    timeout=40s
+#     Click Element    xpath=//android.view.ViewGroup[@content-desc="Sair do app"]
+#     Wait Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button1"]    timeout=30s
+#     Click Element    xpath=//android.widget.Button[@resource-id="android:id/button1"]
+#     Log To Console    \nSaindo do App Giro.
+#     Wait Until Element Is Visible    accessibility_id=Entrar    timeout=60s
+
 *** Settings ***
-Documentation     Suíte de testes focada no cenário de login da aplicação Clube Giro.
+Documentation     Suíte de testes focada no cenário de login e logout da aplicação Clube Giro.
 Resource          ../appGiro/resources/giro_base.resource
 Library           ../appGiro/resources/GeradorDataIda.py
 Library           ../appGiro/resources/GeradorDataVolta.py
-# Library           ../libraries/GmailHelper.py
-# Library           String
 Library           ImapLibrary2
-Library             AppiumLibrary
+Library           AppiumLibrary
 
-# Test Setup        Start session
-# Test Teardown     Encerrar Sessao E Gravar Video
+Test Setup        Start session
+Test Teardown     Encerrar Sessao E Gravar Video
 
 *** Test Cases ***
 Deve Realizar O Login Com Sucesso Tratando 2FA Se Solicitado
-    Start session
-    [Tags]    smoke    login
+    [Documentation]    Valida o acesso ao aplicativo Clube Giro e realiza o logout com sucesso.
+    [Tags]             smoke    login
+
     Login
-    
     Tratar Banner De Login Se Aparecer
-    Click Element    xpath=//android.widget.TextView[@text="Menu"]
-    # Wait Until Element Is Visible
-    # ...    xpath=//android.widget.TextView[@text="Olá, ANDERSON"]    timeout=90s
+
+    # Acessa o menu principal
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Menu"]    timeout=40s
+    Click Element                    xpath=//android.widget.TextView[@text="Menu"]
+
+    # Rola até a opção de sair do aplicativo
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Acessar minha conta"]    timeout=40s
-    Swipe    start_x=545    start_y=2280    end_x=559    end_y=78    duration=1s
-    Swipe    start_x=556    start_y=1995    end_x=553    end_y=542    duration=1s
+    Swipe    start_x=545    start_y=2280    end_x=559    end_y=78     duration=1000
+    Swipe    start_x=556    start_y=1995    end_x=553    end_y=542    duration=1000
+
+    # Realiza o Logout
     Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Sair do app"]    timeout=40s
-    Click Element    xpath=//android.view.ViewGroup[@content-desc="Sair do app"]
+    Click Element                    xpath=//android.view.ViewGroup[@content-desc="Sair do app"]
+
+    # Confirma no Modal do Android/App
     Wait Until Element Is Visible    xpath=//android.widget.Button[@resource-id="android:id/button1"]    timeout=30s
-    Click Element    xpath=//android.widget.Button[@resource-id="android:id/button1"]
+    Click Element                    xpath=//android.widget.Button[@resource-id="android:id/button1"]
+
     Log To Console    \nSaindo do App Giro.
     Wait Until Element Is Visible    accessibility_id=Entrar    timeout=60s
