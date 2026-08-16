@@ -1,0 +1,110 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 1,
+    "passes": 1,
+    "pending": 0,
+    "failures": 0,
+    "testsRegistered": 1,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false,
+    "start": "2026-08-16T19:05:08.315Z",
+    "end": "2026-08-16T19:05:55.339Z",
+    "duration": 47024
+  },
+  "results": [
+    {
+      "uuid": "c621f89f-754c-4b0a-9f9c-244dd16c1fcd",
+      "title": "",
+      "fullFile": "cypress/e2e/00_smoke/10_Totem.cy.js",
+      "file": "cypress/e2e/00_smoke/10_Totem.cy.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "b44101a2-655a-4fd6-9c31-0eb229f9634a",
+          "title": "Totem",
+          "fullFile": "cypress/e2e/00_smoke/10_Totem.cy.js",
+          "file": "cypress/e2e/00_smoke/10_Totem.cy.js",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "Totem - teste inicial ",
+              "fullTitle": "Totem Totem - teste inicial ",
+              "timedOut": null,
+              "duration": 44939,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(totem);\ncy.get(\".text-colors-black\").should(\"be.visible\", \"contains\", \"Digite o número da agência para iniciar\");\ncy.get(\"#agencyId\").should(\"be.visible\").click({\n  force: true\n});\ncy.get(\"#agencyId\").should(\"be.visible\").click({\n  force: true\n});\ncy.contains(\"button\", \"1\").click();\ncy.wait(400);\ncy.contains(\"button\", \"2\").click();\ncy.wait(400);\ncy.contains(\"button\", \"8\").click();\ncy.wait(400);\ncy.contains(\"button\", \"6\").click();\ncy.wait(400);\ncy.contains(\"button\", \"9\").click();\ncy.wait(400);\ncy.contains(\"button\", \"7\").click();\ncy.wait(400);\ncy.get(\"#macAddress\").click({\n  force: true\n});\ncy.wait(5000);\ncy.get(\"#macAddress\").click({\n  force: true\n}).clear().type(\"241c04780308\", {\n  delay: 500\n});\ncy.get(\"#macAddress\").click({\n  force: true\n}).clear().type(\"241c04780308\", {\n  delay: 500\n});\ncy.get(\"#macAddress\").click({\n  force: true\n}).clear().type(\"241c04780308\", {\n  delay: 500\n});\ncy.get(\".mt-4 > .rounded-lg\").click({\n  force: true\n});\n// cy.get(\".bg-primary\").should(\"be.visible\");\n// cy.get(\".text-colors-black\").should(\"contains\", \"Como podemos te ajudar?\").log(\"Como Podemos te ajudar?\");\ncy.get(\".bg-primary > .text-xl\").click();\n// cy.get(\":nth-child(3) > .bg-primary\").click();\ncy.get(\".text-colors-black-light\").should(\"be.visible\");\ncy.get(\":nth-child(3) > .bg-primary\").click();\ncy.get(\".rounded\").clear().type(\"São Paulo (Rod. Tietê)\");\ncy.get(\".grid > .flex > :nth-child(1)\").should(\"be.visible\").click();\ncy.get(\".bg-gray-50 > .gap-4 > :nth-child(2)\").should(\"be.visible\").click();\ncy.get(\".text-colors-black-light\").should(\"be.visible\", \"contains\", \"Qual o destino da sua viagem?\");\ncy.get(\".relative > .rounded\").should(\"be.visible\").type(\"Rio de Janeiro (Novo Rio)\");\ncy.get(\".grid > .flex > :nth-child(1)\").should(\"be.visible\").click();\ncy.get(\".bg-gray-50 > .gap-4 > :nth-child(2)\").should(\"be.visible\").click();\ncy.get(\".max-w-screen-lg > .items-center > .text-primary\").should(\"be.visible\");\ncy.get(\".gap-4 > .border\").should(\"be.visible\");\ncy.wait(1500);\n// cy.get(\".text-colors-black-light\").should(\"be.visible\", \"contains\", \"Quantos passageiros serão?\");\ncy.get(\".gap-4 > :nth-child(2) > .text-xl\").click();\ncy.get(\".gap-4 > .bg-primary\").should(\"be.visible\").click();\n// cy.selecionarDataIdaTotem(5);\ncy.contains(\"button\", \"assentos disponíveis\").should(\"be.visible\").click();\ncy.get(\":nth-child(3) > .bg-primary\").click();\ncy.get(\"#document\").type(\"38485984854\", {\n  delay: 100\n});\n// cy.get(\"#name\").should(\"be.visible\").type(\"anderson silva\", { delay: 150 });\ncy.get(\"#name\").click({\n  force: true\n});\ncy.contains(\"button\", /^a$/i).click();\ncy.contains(\"button\", /^n$/i).click();\ncy.contains(\"button\", /^d$/i).click();\ncy.contains(\"button\", /^e$/i).click();\ncy.contains(\"button\", /^r$/i).click();\ncy.contains(\"button\", /^s$/i).click();\ncy.contains(\"button\", /^o$/i).click();\ncy.contains(\"button\", /^n$/i).click();\ncy.contains(\"button\", /^Espaço$/i).click();\ncy.contains(\"button\", /^s$/i).click();\ncy.contains(\"button\", /^i$/i).click();\ncy.contains(\"button\", /^l$/i).click();\ncy.contains(\"button\", /^v$/i).click();\ncy.contains(\"button\", /^a$/i).click();\ncy.get(\"#birthday\").type(\"14111987\", {\n  delay: 100\n});\ncy.contains(\"button\", /^Confirmar$/i).click({\n  force: true\n});\ncy.contains(\"button\", /^x$/i).click({\n  force: true\n});\n// cy.get(\"#birthday\").click();\n// cy.get(\".text-colors-black-light\").should(\"be.visible\", \"contains\", \"Informe seus dados\");\ncy.get(\":nth-child(3) > .bg-primary\").click();\ncy.get(\"#phone\").type(\"11999999999\", {\n  delay: 100\n});\ncy.contains(\"button\", /^Confirmar$/i).click({\n  force: true\n});\ncy.contains(\"button\", /^x$/i).click({\n  force: true\n});\ncy.get(\":nth-child(3) > .bg-primary\").click();\ncy.selecionarAssentoTotem();\ncy.get(\".bg-primary\").click();\ncy.get(\".text-colors-black-light\").should(\"be.visible\", \"contains\", \"Resumo da sua compra\");\ncy.get(\".bg-primary\").should(\"be.visible\").click();\ncy.get(\".bg-gray-50 > .gap-4 > :nth-child(2)\").should(\"be.visible\").click();\ncy.get(\".text-colors-black-light\").should(\"be.visible\", \"contains\", \"Selecione sua forma de pagamento\");\n// cy.get(\".grid > :nth-child(2) > .bg-white\").should(\"be.visible\", \"contains\", \"Extrato da compra\").click();\n// cy.get(\".gap-4 > .text-primary\").should(\"be.visible\").click().log(\"Cancelar compra\");\n// cy.get(\".mr-4\").should(\"be.visible\").click().log(\"Cancelando compra com sucesso\");\n// cy.get(\".mr-4\").should(\"be.visible\").click().log(\"Voltar para o início\");\n// cy.get('.h-full > [data-disabled=\"false\"]').should(\"be.visible\").click();\n// cy.get(\":nth-child(3) > .rounded-lg > :nth-child(2) > .data-\\[alert\\=true\\]\\:text-secondary-200\").should(\"be.visible\").click();",
+              "err": {},
+              "uuid": "fcc0eadb-6fa2-4726-b355-3a81a5f6b7d4",
+              "parentUUID": "b44101a2-655a-4fd6-9c31-0eb229f9634a",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "fcc0eadb-6fa2-4726-b355-3a81a5f6b7d4"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 44939,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.2.0"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.4"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/reports/.jsons",
+        "charts": true,
+        "reportPageTitle": "Relatório de Testes em Produção - ODH/ODP/Giro/Wemobi/UTP",
+        "overwrite": false,
+        "html": false,
+        "json": true,
+        "saveJson": true,
+        "embeddedScreenshots": true,
+        "inlineAssets": true
+      },
+      "version": "6.3.2"
+    }
+  }
+}
