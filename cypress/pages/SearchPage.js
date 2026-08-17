@@ -46,7 +46,7 @@ class SearchPage {
 
   //------------------ OUTLET DE PASSAGENS ------------------
   odpBuscaOrigem() {
-    cy.wait(12000);
+    cy.wait(15000);
     cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Rodoviária Tietê (SP)", { delay: 100 });
     cy.xpath(loc.ODP_XPATH_SP_TIETE).click({ force: true });
   }

@@ -414,7 +414,7 @@ jobs:
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "✅[MOBILE] Giro/Wemobi/UTP - Monit. Cont."
-          to: anderson.ssantos@jcatlm.com.br,maysa.marco@jcatlm.com.br
+          to: anderson.ssantos@jcatlm.com.br,maysa.marco@jcatlm.com.br,qa.monitor@odptech.com.br
           from: "Monitoramento Contínuo"
           html_body: |
             <!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
@@ -464,7 +464,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "🚨[ALERTA MOBILE] Giro/Wemobi/UTP - Monit. Cont"
           to: anderson.ssantos@jcatlm.com.br
-          # cc: fabiano.britto@externo-jcatlm.com.br,maysa.marco@jcatlm.com.br
+          cc: qa.monitor@odptech.com.br,maysa.marco@jcatlm.com.br
           from: "Monitoramento Contínuo"
           html_body: |
             <!DOCTYPE html>
