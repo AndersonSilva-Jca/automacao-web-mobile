@@ -3,11 +3,11 @@ on:
   # push:
   #   branches:
   #     - main
-  # schedule:
-  #   # Roda nos minutos 0 and 40 das horas pares (0, 2, 4, 6...)
-  #   - cron: "0 0-22/2 * * *"
-  #   # Roda no minuto 20 das horas ímpares (1, 3, 5, 7...)
-  #   - cron: "0 1-23/2 * * *"
+  schedule:
+    # Roda nos minutos 0 and 40 das horas pares (0, 2, 4, 6...)
+    - cron: "0 0-22/2 * * *"
+    # Roda no minuto 20 das horas ímpares (1, 3, 5, 7...)
+    - cron: "0 1-23/2 * * *"
   # - cron: "00 * * * *"
 
   workflow_dispatch:
@@ -138,7 +138,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "🚨[ALERTA SITES] TESTE TOTEM - E-Bus/UTP - Monit. Cont."
           to: anderson.ssantos@jcatlm.com.br
-          cc: qa.monitor@odptech.com.br,anderson.psilva@jcatlm.com.br,maysa.marco@jcatlm.com.br
+          # cc: qa.monitor@odptech.com.br,anderson.psilva@jcatlm.com.br,maysa.marco@jcatlm.com.br
           from: "Monitoramento Contínuo"
           html_body: |
             <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6; max-width: 850px; margin: 0 auto; padding: 10px 0;">
