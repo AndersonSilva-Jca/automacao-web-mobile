@@ -274,7 +274,7 @@ jobs:
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "✅[SITES] E-Bus/UTP - Monit. Cont."
+          subject: "✅[SITES] TESTE TOTEM"
           to: anderson.ssantos@jcatlm.com.br
           from: "Monitoramento Contínuo"
           html_body: |
@@ -329,7 +329,7 @@ jobs:
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "🚨[ALERTA SITES] TESTE TOTEM - E-Bus/UTP - Monit. Cont."
+          subject: "🚨[ALERTA SITES] TESTE TOTEM "
           to: anderson.ssantos@jcatlm.com.br
           from: "Monitoramento Contínuo"
           html_body: |
