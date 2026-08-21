@@ -1,5 +1,4 @@
-import loc from "../support/locators";
-
+import loc from "../../support/hml_locators";
 class HomePage {
   //------------------ OUTLET DE HOTEIS ------------------
   odhAssertHome() {

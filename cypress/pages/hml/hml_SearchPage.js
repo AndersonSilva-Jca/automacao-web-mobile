@@ -1,9 +1,10 @@
-import loc from "../support/locators";
-
+import loc from "../../support/hml_locators";
 class SearchPage {
   //------------------ UTP ------------------
   buscaOrigem() {
     cy.get(loc.BUSCAS.DESTINO_IDA).click().type(loc.SP_TIETE, { delay: 100 }).should("exist").invoke("show");
+    cy.wait(1000);
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().clear().type(loc.SP_TIETE, { delay: 100 }).should("exist").invoke("show");
     cy.xpath(loc.XPATH_SP_TIETE).click({ force: true });
   }
 
@@ -75,8 +76,9 @@ class SearchPage {
   }
 
   giroBuscaDestino() {
-    cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("Rio De Janeiro - Todos (RJ)", { delay: 100 });
-    cy.contains(" Rio De Janeiro - Todos (RJ) ").click({ force: true });
+    cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("Rio De Janeiro - Rodoviária Novo Rio (RJ)", { delay: 100 });
+    // cy.contains(" Rio De Janeiro - Todos (RJ) ").click({ force: true });
+    cy.contains(".location-title", " Rio de Janeiro - Rodoviária Novo Rio (RJ) ").should("be.visible").closest(".ui-menu-item-wrapper").click();
   }
 
   giroDataIda() {
@@ -93,8 +95,23 @@ class SearchPage {
 
   //------------------ WEMOBI ------------------
   wemobiBuscaOrigem() {
-    cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Rodoviária Tietê (SP)", { delay: 100 });
-    cy.xpath(loc.WEMOBI_XPATH_SP).click({ force: true });
+    cy.get(".logged-message").should("be.visible").log("Mensagem de usuário Logado");
+    cy.get(loc.BUSCAS.DESTINO_IDA).should("be.visible").clear().focus().click().type("{downArrow}").type("São Paulo - Todos (SP)");
+    cy.get(loc.BUSCAS.DESTINO_IDA).should("be.visible").clear().focus().click().type("{downArrow}").type("São Paulo - Todos (SP)");
+    cy.get(loc.BUSCAS.DESTINO_IDA).should("be.visible").clear().focus().click().type("{downArrow}").type("São Paulo - Todos (SP)");
+    cy.get(loc.BUSCAS.DESTINO_IDA).should("be.visible").clear().focus().click().type("{downArrow}").type("São Paulo - Todos (SP)");
+    cy.get(loc.BUSCAS.DESTINO_IDA).should("be.visible").clear().focus().click().type("{downArrow}").type("São Paulo - Todos (SP)");
+    cy.get(loc.BUSCAS.DESTINO_IDA).should("be.visible").clear().focus().click().type("{downArrow}").type("São Paulo - Todos (SP)");
+    cy.get(loc.BUSCAS.DESTINO_IDA).should("be.visible").clear().focus().click().type("{downArrow}").type("São Paulo - Todos (SP)");
+    cy.get(loc.BUSCAS.DESTINO_IDA).should("be.visible").clear().focus().click().type("{downArrow}").type("São Paulo - Todos (SP)");
+    cy.get(loc.BUSCAS.DESTINO_IDA).should("be.visible").clear().focus().click().type("{downArrow}").type("São Paulo - Todos (SP)");
+    cy.get(loc.BUSCAS.DESTINO_IDA).should("be.visible").clear().focus().click().type("{downArrow}").type("São Paulo - Todos (SP)");
+    // cy.get(".ui-autocomplete:visible").find(".ui-menu-item").eq(1).find(".ui-menu-item-wrapper").click();
+    cy.get(loc.BUSCAS.DESTINO_IDA).should("be.visible").clear().focus().click().type("{downArrow}").type("São Paulo - Todos (SP)", { delay: 100 });
+    // cy.get(".ui-menu-item .use-location-border ", { timeout: 10000 }).click().should("be.visible").invoke("show");
+    // cy.get(loc.BUSCAS.DESTINO_IDA).click().click().clear().type("São Paulo - Todos (SP)", { delay: 150 });
+    // cy.xpath(loc.WEMOBI_XPATH_SP).click({ force: true });
+    cy.contains(".location-title", " São Paulo - Todos (SP) ").should("be.visible").closest(".ui-menu-item-wrapper").click();
   }
 
   wemobiBuscaDestino() {

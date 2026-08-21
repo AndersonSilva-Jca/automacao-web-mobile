@@ -29,8 +29,11 @@ describe("Totem", () => {
     cy.wait(400);
     cy.get("#macAddress").click({ force: true });
     cy.wait(5000);
-    cy.get("#macAddress").click({ force: true }).clear().type("241c04780308", { delay: 500 });
-    cy.get("#macAddress").click({ force: true }).clear().type("241c04780308", { delay: 500 });
+    cy.get("#macAddress").click({ force: true }).clear().type("241c04780308");
+    cy.get("#macAddress").click({ force: true }).clear().type("241c04780308");
+    cy.get("#macAddress").click({ force: true }).clear().type("241c04780308");
+    cy.get("#macAddress").click({ force: true }).clear().type("241c04780308");
+    cy.get("#macAddress").click({ force: true }).clear().type("241c04780308");
     cy.get("#macAddress").click({ force: true }).clear().type("241c04780308", { delay: 500 });
     cy.get(".mt-4 > .rounded-lg").click({ force: true });
 

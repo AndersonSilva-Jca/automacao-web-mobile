@@ -1,5 +1,4 @@
-import loc from "../support/locators";
-
+import loc from "../../support/hml_locators";
 class LoginPage {
   //------------------ UTP ------------------
   abrirModalLogin() {
@@ -97,7 +96,7 @@ class LoginPage {
   }
 
   giroLogadoComSucesso() {
-    cy.get(loc.MENSAGEM_LOGADO).should("contain", "ANDERSON");
+    cy.get(loc.MENSAGEM_LOGADO).should("contain", "anderson");
   }
 
   //------------------ WEMOBI ------------------

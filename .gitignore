@@ -6,7 +6,7 @@ cypress/screenshots
 cypress/fixtures/login.json
 .env
 cypress/downloads/00_smoke/
-cypress/e2e/01_hml
+# cypress/e2e/01_hml
 cypress/e2e/00_smoke/teste_compra.cy.js
 cypress/e2e/00_smoke/02_giro_wemobi_busca_passagens.cy.js
 cypress/e2e/testes

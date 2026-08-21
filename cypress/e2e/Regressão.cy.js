@@ -1,9 +1,9 @@
 /// <reference types='cypress' />
 
-// import "./Regressão/ODH_regressao.cy.js";
-// import "../Regressão/ODP_regressao.cy.js";
-// import "../Regressão/Giro_regressao.cy.js";
-// import "../Regressão/Wemobi_regressao.cy.js";
+import "./Regressão/ODH_regressao.cy.js";
+import "../Regressão/ODP_regressao.cy.js";
+import "../Regressão/Giro_regressao.cy.js";
+import "../Regressão/Wemobi_regressao.cy.js";
 
 // UTP
 import "./Regressão/Cometa_regressao.cy";

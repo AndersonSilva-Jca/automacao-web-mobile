@@ -1,5 +1,4 @@
-import loc from "../support/locators";
-
+import loc from "../../support/hml_locators";
 class SeatMapPage {
   // UTP
   selecionarAssento() {
@@ -12,6 +11,9 @@ class SeatMapPage {
   giroSelecionarAssento() {
     cy.selecionarAssentoAleatorio({ timeout: 90000 });
     cy.get(loc.BOTAO_AVANCAR).should("be.visible").click();
+    cy.wait(2000);
+    // cy.selecionarAssentoAleatorio({ timeout: 90000 });
+    // cy.get(loc.BOTAO_AVANCAR).should("be.visible").click();
   }
 
   // WEMOBI
