@@ -17,15 +17,15 @@ describe("Validar todos os Links Footer", () => {
     cy.get('[alt="Facebook alt"]').click();
   });
   it("Deve validar Links Footer - Atendimento virtual whatsapp", () => {
-    cy.get('[href="https://api.whatsapp.com/send?phone=5548988567424"]').click();
+    cy.get('[href="https://api.whatsapp.com/send?phone=5511972645808"]').click();
     // cy.url().should('include', '/send?phone=5511972645808')
   });
   it("Deve validar Links Footer - Vendas whatsapp", () => {
-    cy.get('[href="https://api.whatsapp.com/send?phone=5548988567424"]').click();
+    cy.get(':nth-child(2) > [href="https://wa.me/5511933153607"]').click();
     // cy.url().should('include', '/5511933153607')
   });
   it("Deve validar Links Footer - Fale Conosco", () => {
-    cy.get('[href="/fale-conosco.html"]').click();
+    cy.get(':nth-child(1) > [href="/fale-conosco"]').click();
     cy.url().should("include", "/fale-conosco");
   });
 });
