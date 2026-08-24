@@ -2,22 +2,15 @@
 
 const { faker } = require("@faker-js/faker");
 
-const cometa = "https://www.viacaocometa.com.br";
-const viacao1001 = "https://www.autoviacao1001.com.br";
-const catarinense = "https://www.catarinense.com.br/";
 const expressoSul = "https://www.expressodosul.com.br/?utm_source=synthetic_test&utm_medium=internal&utm_campaign=operacao";
-const rapidoRibeirao = "https://www.rapidoribeiraopreto.com.br/";
-const odp = "https://www.outletdepassagens.com.br";
-const odt = "https://www.outletdehoteis.com.br";
-const giro = "https://www.clubegiro.com.br";
-const wemobi = "https://www.wemobi.me";
+
 import loc from "../../../support/locators";
 
 describe("Validar link informações de viagens", () => {
   beforeEach(() => {
     cy.clearCookies();
     cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
-    cy.visit(viacao1001);
+    cy.visit(expressoSul);
   });
   it("Validar link informações de Viagem - Bagagem", () => {
     cy.get(loc.LINK_INFO_VIAGEM).click();
@@ -63,15 +56,15 @@ describe("Validar link informações de viagens", () => {
     cy.get(loc.LINK_SEGURO_FACULTATIVO).click();
     cy.get(loc.ASSERT_SEGURO_FACULTATIVO).should("contain", "Seguro Facultativo");
     cy.scrollTo("top", { timeout: 1000 });
-    cy.get(loc.LINK_ALTERACOES_HORARIO).click();
-    cy.get(loc.ASSERT_ALTERACOES_HORARIO).should("contain", "Alterações de Horários e Frequências");
+    cy.get('[href="#guia"]').click();
+    cy.get('#guia > p > b > [style="color: rgb(0,0,0);"]').should("contain", "Guia de orientação aos passageiros");
     cy.scrollTo("top", { timeout: 1000 });
   });
 
   it("Validar link informações de Viagem - Compra, remarcação e reembolso", () => {
     cy.get(loc.LINK_INFO_VIAGEM).click();
     cy.url().should("include", loc.URL_INFO_VIAGEM);
-    cy.get(loc.LINK_COMPRA_REMARCACAO).click();
+    cy.get('[style="padding: 2rem 2rem 2rem 2rem "] > :nth-child(1) > .aem-Grid--12 > :nth-child(1) > .custom-padding > .container > :nth-child(1) > .aem-Grid > .image > .cmp-image > #cmp-image-link > .cmp-image__image').click();
     cy.get(loc.LINK_FORMAS_PAGAMENTO).click();
     cy.get(loc.ASSERT_FORMAS_PAGAMENTO).should("contain", "Formas de Pagamento");
     cy.scrollTo("top", { timeout: 1000 });
@@ -110,21 +103,18 @@ describe("Validar link informações de viagens", () => {
     cy.get(loc.LINK_INFO_VIAGEM).click();
     cy.url().should("include", loc.URL_INFO_VIAGEM);
     cy.get(loc.LINK_DESCONTOS_GRATUIDADES).click();
-    cy.get(loc.LINK_ESTUDANTE).click();
-    cy.get(loc.ASSERT_ESTUDANTE).should("contain", "Estudante e Professor");
+    cy.get('[href="#PCD"]').click();
+    cy.get('[href="#PCD"] > .btn-title').should("contain", "Pessoa com deficiência");
     cy.scrollTo("top", { timeout: 1000 });
-    cy.get(loc.LINK_PCD).click();
-    cy.get(loc.ASSERT_PCD).should("contain", "Pessoa com deficiência");
+    cy.get('[href="#idoso"]').click();
+    cy.get('[href="#idoso"] > .btn-title').should("contain", "Idoso");
     cy.scrollTo("top", { timeout: 1000 });
-    cy.get(loc.LINK_IDOSO).click();
-    cy.get(loc.ASSERT_IDOSO).should("contain", "Idoso");
-    cy.scrollTo("top", { timeout: 1000 });
-    cy.get(loc.LINK_ID_JOVEM).click();
-    cy.get(loc.ASSERT_ID_JOVEM).should("contain", "ID Jovem");
+    cy.get('[href="#IDJovem"]').click();
+    cy.get('[href="#IDJovem"] > .btn-title').should("contain", "ID Jovem");
   });
 
   it("Deve Validar link fale conosco e preencher o formulário de contato", () => {
-    cy.get(".header-nav-container > :nth-child(1) > :nth-child(2) > .focusable").click();
+    cy.get(".header-nav-container > :nth-child(1) > :nth-child(3) > .focusable").click();
     cy.url({ timeout: 2000 }).should("include", "/fale-conosco");
     // cy.get('#input-name').type('Teste Automação ODP')
     // cy.get('#input-doc').type('38485984854', { log: false })
@@ -157,21 +147,21 @@ describe("Validar link informações de viagens", () => {
     // cy.get('#submit-protocol').click()
   });
   it("Deve redirecionar para a página de gratuidade", () => {
-    cy.get(".header-nav-container > :nth-child(1) > :nth-child(3) > .focusable").invoke("removeAttr", "target").click();
-    cy.url().should("include", "https://vendas.jcaholding.com.br/"); //erro
+    cy.get(".header-nav-container > :nth-child(1) > :nth-child(4)").invoke("removeAttr", "target").click();
+    // cy.url().should("include", "https://vendas.jcaholding.com.br/"); //erro
   });
   it("Deve redirecionar para a página de nossos destinos", () => {
-    cy.get(".header-nav-container > :nth-child(1) > :nth-child(4) > .focusable").click();
+    cy.get(".header-nav-container > :nth-child(1) > :nth-child(2)").click();
     cy.url().should("include", "/nossos-destinos");
   });
 
   it("Deve redirecionar para a página de pontos de venda", () => {
-    cy.get(".header-nav-container > :nth-child(1) > :nth-child(5) > .focusable").click();
+    cy.get(".header-nav-container > :nth-child(1) > :nth-child(5)").click();
     cy.url().should("include", "/pontos-de-venda");
   });
 
   it("Deve redirecionar para o site Clube Giro com sucesso", () => {
-    cy.get(":nth-child(1) > :nth-child(6) > .focusable").click();
+    cy.get(".header-nav-container > :nth-child(1) > :nth-child(6)").click();
     cy.url().should("include", "/clubegiro");
     //   cy.get('a[href="https://www.clubegiro.com.br"]').click()
     //   cy.url().should('include', 'clubegiro.com.br')

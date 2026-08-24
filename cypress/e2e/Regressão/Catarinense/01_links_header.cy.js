@@ -54,9 +54,11 @@ describe("Validar link informações de viagens", () => {
     cy.get(loc.LINK_SEGURO_FACULTATIVO).click();
     cy.get(loc.ASSERT_SEGURO_FACULTATIVO).should("contain", "Seguro Facultativo");
     cy.scrollTo("top", { timeout: 1000 });
-    cy.get('[href="https://www.capemisa.com.br/para-voce/microsseguros/passageiro-top/"]').click();
-    // cy.get('[href="#guia"] > .btn-title').click(); //tem erro no link
-    // cy.get(loc.ASSERT_ALTERACOES_HORARIO).should("contain", "Alterações de Horários e Frequências");
+    cy.get(':nth-child(6) > [href="https://www.capemisa.com.br/para-voce/microsseguros/passageiro-top/"]').should("be.visible");
+    cy.get(':nth-child(4) > [href="https://www.capemisa.com.br/para-voce/microsseguros/passageiro-top/"]').should("be.visible");
+    cy.get('[href="#guia"]').click();
+    cy.get('#guia > p > b > [style="color: rgb(0,160,227);"]').should("be.visible");
+    cy.get('[href="https://www.catarinense.com.br/content/dam/jca/pdf/GUIA%20DE%20ORIENTA%C3%87%C3%83O%20AOS%20PASSAGEIROS%20CATARINENSE.pdf"]').should("be.visible");
     // cy.scrollTo("top", { timeout: 1000 });
   });
 

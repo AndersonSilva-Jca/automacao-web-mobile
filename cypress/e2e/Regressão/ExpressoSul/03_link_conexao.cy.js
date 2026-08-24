@@ -17,7 +17,7 @@ describe("Validar link do clube giro", () => {
   beforeEach(() => {
     cy.clearCookies();
     cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
-    cy.visit("/");
+    cy.visit(expressoSul);
   });
 
   it("Deve validar o link do card de clube giro e redirecionar para a página do clube giro", () => {

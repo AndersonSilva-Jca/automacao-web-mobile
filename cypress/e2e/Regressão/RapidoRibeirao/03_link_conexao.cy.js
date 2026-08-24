@@ -46,9 +46,7 @@ describe("Validar link do clube giro", () => {
   it("Deve validar o link do card de conexão com os ônibus e redirecionar para a página de contato", () => {
     cy.get("#headingitem0").click();
     cy.get("#headingitem1").click();
-    cy.get("#headingitem2").click();
-    cy.get("#headingitem3").click();
-    cy.get('[style="color: rgb(255,0,150);"] > .focusable > span').click({ force: true });
+    cy.get('.focusable > [style="color: rgb(16,152,247);"]').click({ force: true });
     cy.url().should("include", "fale-conosco");
   });
 });
