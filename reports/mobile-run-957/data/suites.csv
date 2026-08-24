@@ -1,0 +1,5 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"passed","Mon Aug 24 23:52:37 UTC 2026","Mon Aug 24 23:52:57 UTC 2026","20123","","Monitoramento Mobile","1001 Login","","","Deve realizar o login com sucesso",""
+"passed","Mon Aug 24 23:52:13 UTC 2026","Mon Aug 24 23:52:37 UTC 2026","24362","","Monitoramento Mobile","Wemobi Login","","","Deve realizar o login com sucesso",""
+"passed","Mon Aug 24 23:52:57 UTC 2026","Mon Aug 24 23:53:15 UTC 2026","17789","","Monitoramento Mobile","Catarinense Login","","","Deve realizar o login com sucesso",""
+"passed","Mon Aug 24 23:53:15 UTC 2026","Mon Aug 24 23:53:48 UTC 2026","32730","","Monitoramento Mobile","Cometa Login","","","Deve realizar o login com sucesso",""
