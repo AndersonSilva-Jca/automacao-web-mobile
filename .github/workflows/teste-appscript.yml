@@ -443,7 +443,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CYPRESS_R2_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: us-east-1
         run: |
-          aws s3 sync ./cypress/reports s3://NOME-DO-SEU-BUCKET-CYPRESS/reports/${{ github.run_number }}/01_e2e \
+          aws s3 sync ./cypress/reports s3://cypress-reports/reports/${{ github.run_number }}/01_e2e \
             --endpoint-url https://${{ secrets.CYPRESS_R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
 
       - name: Enviar resultados para o Dashboard (Apps Script)
