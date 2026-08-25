@@ -7,14 +7,7 @@ describe("Totem", () => {
     cy.clearCookies();
     cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.once("uncaught:exception", () => false);
-    Cypress.on("uncaught:exception", (err) => {
-      if (err.name === "AxiosError" && err.message.includes("status code 404")) {
-        cy.log("Ignorando 404 conhecido da aplicação");
-        return false;
-      }
-
-      return true;
-    });
+    Cypress.on("uncaught:exception", () => false);
   });
 
   it("Totem - teste inicial ", () => {
