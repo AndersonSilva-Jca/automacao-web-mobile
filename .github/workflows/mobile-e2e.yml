@@ -1091,7 +1091,7 @@ env:
   RESULTS_DIR: results
   ALLURE_DIR: allure-results
   # 💡 SUBSTITUA pela sua URL pública ativada no Passo 1
-  R2_PUBLIC_URL: "https://pub-xxxxxxxx.r2.dev"
+  R2_PUBLIC_URL: "https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev"
 
 jobs:
   mobile-tests:
