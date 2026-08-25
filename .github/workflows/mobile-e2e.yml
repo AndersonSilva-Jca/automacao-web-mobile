@@ -95,10 +95,6 @@ jobs:
           '
           curl http://127.0.0.1:4723/status
 
-      - name: Capture ADB Logs on Failure
-        if: failure()
-        run: adb logcat -d > android_crash.log
-
       - name: Run Tests with Android Emulator
         id: run_tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -152,7 +148,7 @@ jobs:
 
             echo "Iniciando a execução do Robot Framework com Allure..."
             # AJUSTADO: Adicionado o listener do Allure para alimentar o painel de monitoramento 
-            robot -T -d ./results --listener allure_robotframework:$ALLURE_DIR --name "Monitoramento Mobile" app/appWemobi/wemobi_login.robot app/app1001/1001_login.robot app/appCatarinense/catarinense_login.robot app/appCometa/cometa_login.robot
+            robot -d ./results --listener allure_robotframework:$ALLURE_DIR --name "Monitoramento Mobile" app/appWemobi/wemobi_login.robot app/app1001/1001_login.robot app/appCatarinense/catarinense_login.robot app/appCometa/cometa_login.robot
             # app/appGiro/giro_login.robot
             # Se o Robot falhou, extrai o logcat AQUI (com o emulador ainda vivo!
 
