@@ -27,6 +27,15 @@ jobs:
     steps:
       - name: Checkout do Código
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          sparse-checkout: |
+            .github
+            cypress
+            scripts
+            package.json
+            package-lock.json
+            cypress.config.js
 
       # 🎯 PASSO ADICIONADO: Instala os pacotes do package.json (imapflow, etc)
       - name: Instalar Dependências do Projeto
