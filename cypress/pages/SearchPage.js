@@ -45,7 +45,14 @@ class SearchPage {
   }
 
   //------------------ OUTLET DE PASSAGENS ------------------
-  odpBuscaOrigem() {
+  odpBuscaOrigemHoraMarcada() {
+    cy.wait(15000);
+    cy.get('[data-js="btn-select-flow-top-store"] > div.btn-select-flow > [data-js="search-agency-flow"]').should("be.visible").click();
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Rodoviária Tietê (SP)", { delay: 100 });
+    cy.xpath(loc.ODP_XPATH_SP_TIETE).click({ force: true });
+  }
+
+  odpBuscaOrigemMelhorPreco() {
     cy.wait(15000);
     cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Rodoviária Tietê (SP)", { delay: 100 });
     cy.xpath(loc.ODP_XPATH_SP_TIETE).click({ force: true });
@@ -93,7 +100,7 @@ class SearchPage {
 
   //------------------ WEMOBI ------------------
   wemobiBuscaOrigem() {
-    cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Rodoviária Tietê (SP)", { delay: 100 });
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Todos (SP)", { delay: 100 });
     cy.xpath(loc.WEMOBI_XPATH_SP).click({ force: true });
   }
 

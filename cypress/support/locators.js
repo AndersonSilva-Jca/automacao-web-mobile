@@ -26,7 +26,7 @@ const loc = {
 
   WEMOBI_BOTAO_LOGIN: "#button-header-login",
   WEMOBI_BOTAO_ENTRAR: "#button-login-confirm",
-  WEMOBI_XPATH_SP: '//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]',
+  WEMOBI_XPATH_SP: '//*[@id="São-Paulo---Todos-(SP)"]/p[1]',
   WEMOBI_XPATH_RJ: '//*[@id="Rio-de-Janeiro---Todos-(RJ)"]/p[1]',
   WEMOBI_AVANCAR_PASSAGEIRO: "#passenger-identification-proceed",
   WEMOBI_BOTAO_RESERVAR_ASSENTO: "#reservation-seat-0",
@@ -42,6 +42,8 @@ const loc = {
   ODP_BOTAO_AVANCAR: ".btn-footer",
   ODP_ABA_PAGAMENTOS: ".payment-type-container > .col-12 > .active",
   ODP_ASSERT_VALORTOTAL: ":nth-child(5) > .title > .cmp-text > p > b",
+  ODP_BOTAO_RESERVAR_ASSENTO: "#reservation-seat-0",
+  ODP_BOTAO_ESCOLHER_ASSENTO: '[data-value="choose-seat"] > .option-content',
 
   GIRO_BOTAO_LOGIN: '[data-js="header-login-button"]',
   GIRO_BOTAO_ENTRAR: ".row > .btn-giro",

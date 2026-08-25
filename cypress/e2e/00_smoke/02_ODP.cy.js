@@ -10,6 +10,7 @@ import SearchPage from "../../pages/SearchPage.js";
 import OfferPage from "../../pages/OfferPage.js";
 import PassengerPage from "../../pages/PassengerPage.js";
 import CheckoutPage from "../../pages/CheckoutPage.js";
+import SeatMapPage from "../../pages/SeatMapPage.js";
 const odp = "https://www.outletdepassagens.com.br/?utm_source=synthetic_test&utm_medium=internal&utm_campaign=operacao";
 
 describe("Outlet de Passagens", () => {
@@ -20,7 +21,7 @@ describe("Outlet de Passagens", () => {
     Cypress.on("uncaught:exception", () => false);
   });
 
-  it("Outlet de passagens - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
+  it("Outlet de passagens - Deve selecionar passagens com Hora Marcada", () => {
     cy.env(["login", "senha"]).then(() => {
       cy.visit(odp);
       LoginPage.odpModalLogin();
@@ -29,7 +30,25 @@ describe("Outlet de Passagens", () => {
       LoginPage.odpConfirmarLogin();
       LoginPage.odpLogadoComSucesso();
     });
-    SearchPage.odpBuscaOrigem();
+    SearchPage.odpBuscaOrigemHoraMarcada();
+    SearchPage.odpBuscaDestino();
+    SearchPage.odpDataIda();
+    SearchPage.odpConfirmarBusca();
+    OfferPage.odpSelecionarPassagemIda();
+    PassengerPage.odpSelecionarPassageiro();
+    SeatMapPage.odpSelecionarAssentoMarcado();
+    CheckoutPage.odpResumoDaCompra();
+  });
+  it("Outlet de passagens - Deve selecionar passagens com Melhor Preço", () => {
+    cy.env(["login", "senha"]).then(() => {
+      cy.visit(odp);
+      LoginPage.odpModalLogin();
+      LoginPage.odpPreencherUsuario();
+      LoginPage.odpPreencherSenha();
+      LoginPage.odpConfirmarLogin();
+      LoginPage.odpLogadoComSucesso();
+    });
+    SearchPage.odpBuscaOrigemMelhorPreco();
     SearchPage.odpBuscaDestino();
     SearchPage.odpDataIda();
     SearchPage.odpConfirmarBusca();
