@@ -436,6 +436,7 @@ jobs:
         run: ls -R cypress/reports || true
 
       # 🚀 Upload do Relatório para o Cloudflare R2 (Substituiu o GitHub Pages)
+      # 🚀 Instalar a AWS CLI e Fazer Upload do Relatório para o Cloudflare R2
       - name: Deploy do Relatório para Cloudflare R2
         if: always()
         env:
@@ -443,6 +444,12 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CYPRESS_R2_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: us-east-1
         run: |
+          # Instala a AWS CLI no container Linux
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip -q awscliv2.zip
+          ./aws/install
+
+          # Executa o upload para o R2
           aws s3 sync ./cypress/reports s3://cypress-reports/reports/${{ github.run_number }}/01_e2e \
             --endpoint-url https://${{ secrets.CYPRESS_R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
 
