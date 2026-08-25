@@ -194,7 +194,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: gh-pages-deploy
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
 
 permissions:
