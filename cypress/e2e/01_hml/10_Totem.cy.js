@@ -34,6 +34,16 @@ describe("Totem", () => {
     cy.wait(400);
     cy.contains("button", "7").click();
     cy.get("#macAddress").click({ force: true }).type("241c04780308", { delay: 100 });
+    cy.get("#macAddress").click({ force: true }).type("241c04780308", { delay: 100 });
+    cy.get("#macAddress").click({ force: true }).type("241c04780308", { delay: 100 });
+    cy.get("#macAddress").click({ force: true }).type("241c04780308", { delay: 100 });
+    cy.get("#macAddress").click({ force: true }).type("241c04780308", { delay: 100 });
+    cy.get("#macAddress").click({ force: true }).type("241c04780308", { delay: 100 });
+    cy.get("#macAddress").click({ force: true }).type("241c04780308", { delay: 100 });
+    cy.get("#macAddress").click({ force: true }).type("241c04780308", { delay: 100 });
+    cy.get("#macAddress").click({ force: true }).type("241c04780308", { delay: 100 });
+    cy.get("#macAddress").click({ force: true }).type("241c04780308", { delay: 100 });
+    cy.get("#macAddress").click({ force: true }).type("241c04780308", { delay: 100 });
     cy.get(".mt-4 > .rounded-lg").should("be.visible").click({ force: true });
     cy.get("body").then(($body) => {
       const erroAgencia = $body.find(".text-red-700");

@@ -60,7 +60,7 @@ describe("Wemobi", () => {
     CheckoutPage.wemobiResumoCompra();
   });
 
-  it.only("Wemobi - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos marcado", () => {
+  it("Wemobi - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos marcado", () => {
     cy.env(["login", "senha"]).then(() => {
       cy.visit(wemobi);
       LoginPage.wemobiModalLogin();
@@ -79,7 +79,7 @@ describe("Wemobi", () => {
     CheckoutPage.wemobiResumoCompra();
   });
 
-  it.only("Wemobi - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assento aleatório", () => {
+  it("Wemobi - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assento aleatório", () => {
     cy.env(["login", "senha"]).then(() => {
       cy.visit(wemobi);
       LoginPage.wemobiModalLogin();
