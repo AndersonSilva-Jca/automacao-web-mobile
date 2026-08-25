@@ -1245,8 +1245,8 @@ jobs:
       - name: Deploy do Relatório para Cloudflare R2
         if: always()
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: auto
         run: |
           aws s3 sync allure-report/ s3://allure-reports/reports/mobile-run-${{ github.run_number }} \
