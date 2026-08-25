@@ -235,9 +235,9 @@ const APPS_SCRIPT_URL = process.env.APPS_SCRIPT_URL;
 const RUN_ID = process.env.GITHUB_RUN_ID || `local_${Date.now()}`;
 const RUN_NUMBER = process.env.GITHUB_RUN_NUMBER || "0";
 const BRANCH = process.env.GITHUB_REF_NAME || "main";
-const REPO_OWNER = process.env.REPO_OWNER;
-const REPO_NAME = process.env.REPO_NAME;
-
+// const REPO_OWNER = process.env.REPO_OWNER;
+// const REPO_NAME = process.env.REPO_NAME;
+const R2_PUBLIC_URL = "https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev";
 const REPORTS_DIR = "cypress/reports";
 const SCREENSHOTS_DIR = "cypress/reports/screenshots"; // confirmado via log do GitHub Actions
 
@@ -349,7 +349,7 @@ function buscarUrlsPrintFalha(nomeSpecArquivo, nomeCompletoTeste) {
     return urlsPorTentativa;
   }
 
-  const urlBase = `https://${REPO_OWNER}.github.io/${REPO_NAME}/reports/${RUN_NUMBER}/01_e2e/screenshots`;
+  const urlBase = `${R2_PUBLIC_URL}/reports/${RUN_NUMBER}/01_e2e/index.html`;
 
   candidatos.forEach((nomeArquivo) => {
     // sem "(attempt N)" no nome = tentativa 1 (primeira execução, antes de qualquer retry)
@@ -401,7 +401,9 @@ async function main() {
     process.exit(1);
   }
 
-  const urlRelatorio = `https://${REPO_OWNER}.github.io/${REPO_NAME}/reports/${RUN_NUMBER}/01_e2e/index.html`;
+  // const urlRelatorio = `https://${REPO_OWNER}.github.io/${REPO_NAME}/reports/${RUN_NUMBER}/01_e2e/index.html`;
+
+  const urlRelatorio = `${R2_PUBLIC_URL}/reports/${RUN_NUMBER}/01_e2e/index.html`;
 
   console.log(`📦 ${relatorio.results.length} spec(s) encontrado(s) no relatório. Enviando para o dashboard...`);
 
