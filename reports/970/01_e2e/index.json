@@ -1,0 +1,574 @@
+{
+  "stats": {
+    "suites": 9,
+    "tests": 9,
+    "passes": 9,
+    "pending": 0,
+    "failures": 0,
+    "testsRegistered": 9,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false,
+    "start": "2026-08-25T07:35:37.989Z",
+    "end": "2026-08-25T07:44:01.431Z",
+    "duration": 503442
+  },
+  "results": [
+    {
+      "uuid": "7e3c023c-3a51-4366-8bb5-7dfd321e0302",
+      "title": "",
+      "fullFile": "cypress/e2e/00_smoke/02_ODP.cy.js",
+      "file": "cypress/e2e/00_smoke/02_ODP.cy.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "d3af98f6-0fd2-4cf0-bc32-632528b1e4fc",
+          "title": "Outlet de Passagens",
+          "fullFile": "cypress/e2e/00_smoke/02_ODP.cy.js",
+          "file": "cypress/e2e/00_smoke/02_ODP.cy.js",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "Outlet de passagens - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos",
+              "fullTitle": "Outlet de Passagens Outlet de passagens - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos",
+              "timedOut": null,
+              "duration": 61412,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.env([\"login\", \"senha\"]).then(() => {\n  cy.visit(odp);\n  _LoginPage.default.odpModalLogin();\n  _LoginPage.default.odpPreencherUsuario();\n  _LoginPage.default.odpPreencherSenha();\n  _LoginPage.default.odpConfirmarLogin();\n  _LoginPage.default.odpLogadoComSucesso();\n});\n_SearchPage.default.odpBuscaOrigem();\n_SearchPage.default.odpBuscaDestino();\n_SearchPage.default.odpDataIda();\n_SearchPage.default.odpConfirmarBusca();\n_OfferPage.default.odpSelecionarPassagemIda();\n_PassengerPage.default.odpSelecionarPassageiro();\n_CheckoutPage.default.odpResumoDaCompra();",
+              "err": {},
+              "uuid": "a7292c6b-67fd-4b3c-8e22-41861c5e28a7",
+              "parentUUID": "d3af98f6-0fd2-4cf0-bc32-632528b1e4fc",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "a7292c6b-67fd-4b3c-8e22-41861c5e28a7"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 61412,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    },
+    {
+      "uuid": "f07598b5-1a2f-43a9-b61d-b83aaf0ce18b",
+      "title": "",
+      "fullFile": "cypress/e2e/00_smoke/03_Giro.cy.js",
+      "file": "cypress/e2e/00_smoke/03_Giro.cy.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "74c4982a-f765-41fb-91f9-4ef13e35f6db",
+          "title": "Clube Giro",
+          "fullFile": "cypress/e2e/00_smoke/03_Giro.cy.js",
+          "file": "cypress/e2e/00_smoke/03_Giro.cy.js",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "Giro - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos",
+              "fullTitle": "Clube Giro Giro - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos",
+              "timedOut": null,
+              "duration": 73692,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.env([\"login1\", \"senha1\"]).then(() => {\n  cy.visit(giro);\n  _LoginPage.default.giroModalLogin();\n  _LoginPage.default.giroAssertAcesse();\n  _LoginPage.default.giroPreencherUsuario();\n  _LoginPage.default.giroPreencherSenha();\n  _LoginPage.default.giroConfirmarLogin();\n});\n_LoginPage.default.preencher2FA();\n_LoginPage.default.giroLogadoComSucesso();\n_SearchPage.default.giroBuscaOrigem();\n_SearchPage.default.giroBuscaDestino();\n_SearchPage.default.giroDataIda();\n_SearchPage.default.giroConfirmarBusca();\n_OfferPage.default.giroSelecionarPassagemIda();\n_PassengerPage.default.giroSelecionarPassageiro();\n_SeatMapPage.default.giroSelecionarAssento();\n_CheckoutPage.default.giroResumoCompra();",
+              "err": {},
+              "uuid": "8883f783-b69f-4a51-98a3-4d7312e490c0",
+              "parentUUID": "74c4982a-f765-41fb-91f9-4ef13e35f6db",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "8883f783-b69f-4a51-98a3-4d7312e490c0"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 73692,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    },
+    {
+      "uuid": "148b3d26-5605-4a25-b414-51fd3c336fc0",
+      "title": "",
+      "fullFile": "cypress/e2e/00_smoke/04_Wemobi.cy.js",
+      "file": "cypress/e2e/00_smoke/04_Wemobi.cy.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "49b3719c-a56d-4258-9631-d0d1373f037c",
+          "title": "Wemobi",
+          "fullFile": "cypress/e2e/00_smoke/04_Wemobi.cy.js",
+          "file": "cypress/e2e/00_smoke/04_Wemobi.cy.js",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "Wemobi - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos",
+              "fullTitle": "Wemobi Wemobi - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos",
+              "timedOut": null,
+              "duration": 57342,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.env([\"login\", \"senha\"]).then(() => {\n  cy.visit(wemobi);\n  _LoginPage.default.wemobiModalLogin();\n  _LoginPage.default.wemobiPreencherUsuario();\n  _LoginPage.default.wemobiPreencherSenha();\n  _LoginPage.default.wemobiConfirmarLogin();\n  _LoginPage.default.wemobiLogadoComSucesso();\n});\n_SearchPage.default.wemobiBuscaOrigem();\n_SearchPage.default.wemobiBuscaDestino();\n_SearchPage.default.wemobiDataIda();\n_SearchPage.default.wemobiConfirmarBusca();\n_OfferPage.default.wemobiSelecionarPassagemIda();\n_PassengerPage.default.wemobiSelecionarPassageiro();\n_SeatMapPage.default.wemobiSelecionarAssento();\n_CheckoutPage.default.wemobiResumoCompra();",
+              "err": {},
+              "uuid": "82927704-e579-473d-bd93-cbb32a77081b",
+              "parentUUID": "49b3719c-a56d-4258-9631-d0d1373f037c",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "82927704-e579-473d-bd93-cbb32a77081b"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 57342,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    },
+    {
+      "uuid": "36e7f97d-fc7f-4589-8faa-76dc2f94360b",
+      "title": "",
+      "fullFile": "cypress/e2e/00_smoke/05_Cometa.cy.js",
+      "file": "cypress/e2e/00_smoke/05_Cometa.cy.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "22974b3f-4d5a-45b6-8065-6190c51f2d08",
+          "title": "Viação Cometa",
+          "fullFile": "cypress/e2e/00_smoke/05_Cometa.cy.js",
+          "file": "cypress/e2e/00_smoke/05_Cometa.cy.js",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "Viação Cometa - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos",
+              "fullTitle": "Viação Cometa Viação Cometa - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos",
+              "timedOut": null,
+              "duration": 49553,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.env([\"login\", \"senha\"]).then(() => {\n  cy.visit(cometa);\n  _LoginPage.default.abrirModalLogin();\n  _LoginPage.default.preencherUsuario();\n  _LoginPage.default.PreencherSenha();\n  _LoginPage.default.confirmarLogin();\n  _LoginPage.default.logadoComSucesso();\n});\n_SearchPage.default.buscaOrigem();\n_SearchPage.default.buscaDestino();\n_SearchPage.default.dataIda();\n_SearchPage.default.confirmarBusca();\n_OfferPage.default.selecionarPassagemIda();\n_PassengerPage.default.selecionarPassageiro();\n_SeatMapPage.default.selecionarAssento();\n_CheckoutPage.default.resumoDaCompra();\n// cy.get('[alt=\"loader\"]').should('not.be.visible')\n// cy.url({ timeout: 90000 }).should('include', '/pagamento')\n// Não finalizar a compra para evitar transações reais\n// cy.get('[alt=\"loader\"]').should('not.exist')\n// cy.get('#tab-pix').click()\n// cy.get('.conditions-check', { timeout: 20000 }).click({ force: true })\n// cy.get('#payment-submit').should('be.visible').and('not.be.disabled').click();",
+              "err": {},
+              "uuid": "980c9cc7-ccdb-4f0b-9d9a-4c6cbdc76312",
+              "parentUUID": "22974b3f-4d5a-45b6-8065-6190c51f2d08",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "980c9cc7-ccdb-4f0b-9d9a-4c6cbdc76312"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 49553,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    },
+    {
+      "uuid": "cda0005f-8384-40f3-ba8f-b727a7e33d34",
+      "title": "",
+      "fullFile": "cypress/e2e/00_smoke/06_1001.cy.js",
+      "file": "cypress/e2e/00_smoke/06_1001.cy.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "edfc79fe-f218-4c06-b4da-eccd94df852c",
+          "title": "Auto Viação 1001",
+          "fullFile": "cypress/e2e/00_smoke/06_1001.cy.js",
+          "file": "cypress/e2e/00_smoke/06_1001.cy.js",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "Auto Viação 1001 - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos",
+              "fullTitle": "Auto Viação 1001 Auto Viação 1001 - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos",
+              "timedOut": null,
+              "duration": 49777,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.env([\"login\", \"senha\"]).then(() => {\n  cy.visit(viacao1001);\n  _LoginPage.default.abrirModalLogin();\n  _LoginPage.default.preencherUsuario();\n  _LoginPage.default.PreencherSenha();\n  _LoginPage.default.confirmarLogin();\n  _LoginPage.default.logadoComSucesso();\n});\n_SearchPage.default.buscaOrigem();\n_SearchPage.default.buscaDestino();\n_SearchPage.default.dataIda();\n_SearchPage.default.confirmarBusca();\n_OfferPage.default.selecionarPassagemIda();\n_PassengerPage.default.selecionarPassageiro();\n_SeatMapPage.default.selecionarAssento();\n_CheckoutPage.default.resumoDaCompra();\n// cy.get('[alt=\"loader\"]').should('not.be.visible')\n// cy.url({ timeout: 90000 }).should('include', '/pagamento')\n// Não finalizar a compra para evitar transações reais\n// cy.get(loc.LOADER).should('not.exist')\n// cy.get('#tab-pix').click()\n// cy.get('.conditions-check', { timeout: 20000 }).click({ force: true })\n// cy.get('#payment-submit').should('be.visible').and('not.be.disabled').click();",
+              "err": {},
+              "uuid": "0b446cf0-555f-470d-b1ff-c5bc05ad3883",
+              "parentUUID": "edfc79fe-f218-4c06-b4da-eccd94df852c",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "0b446cf0-555f-470d-b1ff-c5bc05ad3883"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 49777,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    },
+    {
+      "uuid": "4347e197-0960-4306-a1e9-e1578334b895",
+      "title": "",
+      "fullFile": "cypress/e2e/00_smoke/07_ExpressoSul.cy.js",
+      "file": "cypress/e2e/00_smoke/07_ExpressoSul.cy.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "73dc23cb-55ca-4cea-bf61-16e4ab72639b",
+          "title": "Expresso do Sul",
+          "fullFile": "cypress/e2e/00_smoke/07_ExpressoSul.cy.js",
+          "file": "cypress/e2e/00_smoke/07_ExpressoSul.cy.js",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "Expresso Sul - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos",
+              "fullTitle": "Expresso do Sul Expresso Sul - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos",
+              "timedOut": null,
+              "duration": 51203,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.env([\"login\", \"senha\"]).then(() => {\n  cy.visit(expressoSul);\n  _LoginPage.default.abrirModalLogin();\n  _LoginPage.default.preencherUsuario();\n  _LoginPage.default.PreencherSenha();\n  _LoginPage.default.confirmarLogin();\n  _LoginPage.default.logadoComSucesso();\n});\n_SearchPage.default.buscaOrigem();\n_SearchPage.default.buscaDestino();\n_SearchPage.default.dataIda();\n_SearchPage.default.confirmarBusca();\n_OfferPage.default.selecionarPassagemIda();\n_PassengerPage.default.selecionarPassageiro();\n_SeatMapPage.default.selecionarAssento();\n_CheckoutPage.default.resumoDaCompra();\n// cy.get(loc.LOADER).should('not.be.visible')\n// cy.url({ timeout: 90000 }).should('include', '/pagamento')\n// Não finalizar a compra para evitar transações reais\n// cy.get(loc.LOADER).should('not.exist')\n// cy.get('#tab-pix').click()\n// cy.get('.conditions-check', { timeout: 20000 }).click({ force: true })\n// cy.get('#payment-submit').should('be.visible').and('not.be.disabled').click();",
+              "err": {},
+              "uuid": "429ded8c-57ef-46fd-ba84-7927a0cab02a",
+              "parentUUID": "73dc23cb-55ca-4cea-bf61-16e4ab72639b",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "429ded8c-57ef-46fd-ba84-7927a0cab02a"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 51203,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    },
+    {
+      "uuid": "0abcd3d4-ceb7-481f-98d0-6150bc08344f",
+      "title": "",
+      "fullFile": "cypress/e2e/00_smoke/08_RapidoRibeirao.cy.js",
+      "file": "cypress/e2e/00_smoke/08_RapidoRibeirao.cy.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "2bec3a84-96d1-4117-8c7e-aa54a7b0f21f",
+          "title": "Rapido Ribeirão",
+          "fullFile": "cypress/e2e/00_smoke/08_RapidoRibeirao.cy.js",
+          "file": "cypress/e2e/00_smoke/08_RapidoRibeirao.cy.js",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "Rapido Ribeirão - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos",
+              "fullTitle": "Rapido Ribeirão Rapido Ribeirão - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos",
+              "timedOut": null,
+              "duration": 50511,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.env([\"login\", \"senha\"]).then(() => {\n  cy.visit(rapidoRibeirao);\n  _LoginPage.default.abrirModalLogin();\n  _LoginPage.default.preencherUsuario();\n  _LoginPage.default.PreencherSenha();\n  _LoginPage.default.confirmarLogin();\n  _LoginPage.default.logadoComSucesso();\n});\n_SearchPage.default.buscaOrigem();\n_SearchPage.default.buscaDestino();\n_SearchPage.default.dataIda();\n_SearchPage.default.confirmarBusca();\n_OfferPage.default.selecionarPassagemIda();\n_PassengerPage.default.selecionarPassageiro();\n_SeatMapPage.default.selecionarAssento();\n_CheckoutPage.default.resumoDaCompra();\n// cy.url({ timeout: 90000 }).should('include', '/pagamento')\n// Não finalizar a compra para evitar transações reais\n// cy.get(loc.LOADER).should('not.exist')\n// cy.get('#tab-pix').click()\n// cy.get('.conditions-check', { timeout: 20000 }).click({ force: true })\n// cy.get('#payment-submit').should('be.visible').and('not.be.disabled').click();",
+              "err": {},
+              "uuid": "65060835-d838-42fd-b77f-ea7d1f03ffb0",
+              "parentUUID": "2bec3a84-96d1-4117-8c7e-aa54a7b0f21f",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "65060835-d838-42fd-b77f-ea7d1f03ffb0"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 50511,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    },
+    {
+      "uuid": "e1411d65-63dd-48fa-9f85-1983fec7609e",
+      "title": "",
+      "fullFile": "cypress/e2e/00_smoke/09_Catarinense.cy.js",
+      "file": "cypress/e2e/00_smoke/09_Catarinense.cy.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "56250792-24ff-4082-833f-2ed02aef5d8a",
+          "title": "Catarinense",
+          "fullFile": "cypress/e2e/00_smoke/09_Catarinense.cy.js",
+          "file": "cypress/e2e/00_smoke/09_Catarinense.cy.js",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "Catarinense - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos",
+              "fullTitle": "Catarinense Catarinense - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos",
+              "timedOut": null,
+              "duration": 49739,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.env([\"login\", \"senha\"]).then(() => {\n  cy.visit(catarinense);\n  _LoginPage.default.abrirModalLogin();\n  _LoginPage.default.preencherUsuario();\n  _LoginPage.default.PreencherSenha();\n  _LoginPage.default.confirmarLogin();\n  _LoginPage.default.logadoComSucesso();\n});\n_SearchPage.default.buscaOrigem();\n_SearchPage.default.buscaDestino();\n_SearchPage.default.dataIda();\n_SearchPage.default.confirmarBusca();\n_OfferPage.default.selecionarPassagemIda();\n_PassengerPage.default.selecionarPassageiro();\n_SeatMapPage.default.selecionarAssento();\n_CheckoutPage.default.resumoDaCompra();\n// cy.get(loc.LOADER).should('not.be.visible')\n// cy.url({ timeout: 90000 }).should('include', '/pagamento')\n// Não finalizar a compra para evitar transações reais\n// cy.get(loc.LOADER).should('not.exist')\n// cy.get('#tab-pix').click()\n// cy.get('.conditions-check', { timeout: 20000 }).click({ force: true })\n// cy.get('#payment-submit').should('be.visible').and('not.be.disabled').click();",
+              "err": {},
+              "uuid": "cadaeb80-7fd5-4d3e-a0f5-a2abdfa0d122",
+              "parentUUID": "56250792-24ff-4082-833f-2ed02aef5d8a",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "cadaeb80-7fd5-4d3e-a0f5-a2abdfa0d122"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 49739,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    },
+    {
+      "uuid": "353cf362-6f1c-478a-a27e-0dd5a751dcfd",
+      "title": "",
+      "fullFile": "cypress/e2e/00_smoke/01_ODH.cy.js",
+      "file": "cypress/e2e/00_smoke/01_ODH.cy.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "04ae8558-37e9-4d80-8870-88dd796e4a5f",
+          "title": "Outlet de Hotéis",
+          "fullFile": "cypress/e2e/00_smoke/01_ODH.cy.js",
+          "file": "cypress/e2e/00_smoke/01_ODH.cy.js",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "Outlet de Hotéis - Busca de destinos, Hotéis em promoção hoje, Promoção em hotéis por destino",
+              "fullTitle": "Outlet de Hotéis Outlet de Hotéis - Busca de destinos, Hotéis em promoção hoje, Promoção em hotéis por destino",
+              "timedOut": null,
+              "duration": 24149,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(odh);\n_HomePage.default.odhAssertHome();\ncy.wait(2000);\n_SearchPage.default.odhBuscaDestino();\n_SearchPage.default.odhCheckIn();\n_SearchPage.default.odhConfirmarBusca();\n_SearchPage.default.odhLoaderBusca();\n_OfferPage.default.odhSelecionarHospedagem();\n_HomePage.default.odhHome();\n_HomePage.default.odhPromoHoje();\n// Promoção em hotéis por destino\n// cy.contains(\"Promoção em hotéis por destino\").should(\"be.visible\");\n// cy.get('img[alt=\"Fernando de Noronha\"]').click();\n// cy.contains(/(resultados de hospedagens|Nenhum hotel encontrado)/i).should(\"be.visible\");\n// cy.get(\".cursor-pointer > .h-8\").click();\n// cy.get('img[alt=\"Jericoacoara\"]').click();\n// cy.contains(/(resultados de hospedagens|Nenhum hotel encontrado)/i).should(\"be.visible\");\n// cy.get(\".cursor-pointer > .h-8\").click();\n// cy.get('img[alt=\"Porto de Galinhas\"]').click();\n// cy.contains(/(resultados de hospedagens|Nenhum hotel encontrado)/i).should(\"be.visible\");\n// cy.get(\".cursor-pointer > .h-8\").click();",
+              "err": {},
+              "uuid": "46a3aaf6-1862-44dd-82ed-644e2d895e85",
+              "parentUUID": "04ae8558-37e9-4d80-8870-88dd796e4a5f",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "46a3aaf6-1862-44dd-82ed-644e2d895e85"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 24149,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.2.0"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.4"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/reports/.jsons",
+        "charts": true,
+        "reportPageTitle": "Relatório de Testes em Produção - ODH/ODP/Giro/Wemobi/UTP",
+        "overwrite": false,
+        "html": false,
+        "json": true,
+        "saveJson": true,
+        "embeddedScreenshots": true,
+        "inlineAssets": true
+      },
+      "version": "6.3.2"
+    }
+  }
+}
