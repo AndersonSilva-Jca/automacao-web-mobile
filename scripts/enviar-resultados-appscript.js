@@ -237,7 +237,7 @@ const RUN_NUMBER = process.env.GITHUB_RUN_NUMBER || "0";
 const BRANCH = process.env.GITHUB_REF_NAME || "main";
 // const REPO_OWNER = process.env.REPO_OWNER;
 // const REPO_NAME = process.env.REPO_NAME;
-const R2_PUBLIC_URL = "https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev";
+const R2_PUBLIC_URL = "https://pub-d1d1771e31d74b1bbd9e4e70c153e790.r2.dev";
 const REPORTS_DIR = "cypress/reports";
 const SCREENSHOTS_DIR = "cypress/reports/screenshots"; // confirmado via log do GitHub Actions
 

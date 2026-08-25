@@ -382,7 +382,7 @@ concurrency:
   cancel-in-progress: false
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   cypress-run:
@@ -435,18 +435,16 @@ jobs:
         if: always()
         run: ls -R cypress/reports || true
 
-      # 🎯 OTIMIZADO: v4 + Shallow Clone da gh-pages (mantém histórico e roda em 10s)
-      - name: Deploy do Relatório para GitHub Pages
+      # 🚀 Upload do Relatório para o Cloudflare R2 (Substituiu o GitHub Pages)
+      - name: Deploy do Relatório para Cloudflare R2
         if: always()
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./cypress/reports
-          destination_dir: reports/${{ github.run_number }}/01_e2e
-          keep_files: true
-          # Força o clone a baixar apenas a ponta da branch (evita baixar GBs de histórico no clone)
-          user_name: "github-actions[bot]"
-          user_email: "github-actions[bot]@users.noreply.github.com"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.CYPRESS_R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.CYPRESS_R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-east-1
+        run: |
+          aws s3 sync ./cypress/reports s3://NOME-DO-SEU-BUCKET-CYPRESS/reports/${{ github.run_number }}/01_e2e \
+            --endpoint-url https://${{ secrets.CYPRESS_R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
 
       - name: Enviar resultados para o Dashboard (Apps Script)
         if: always()
@@ -488,7 +486,7 @@ jobs:
                   <div style="background-color: #ebfff6; border-left: 4px solid #84e4a1; padding: 15px; margin: 20px 0;">
                     <h4 style="margin: 0 0 12px 0; color: #0db94f; font-size: 15px; font-family: Arial, sans-serif;">📊 Relatórios e Evidências Disponíveis: Run #${{ github.run_number }} . ${{ env.DATA_ALERTA }} às ${{ env.HORA_ALERTA }}</h4>
                     <p style="margin: 0; line-height: 1.6; font-family: Arial, sans-serif;">
-                      🔹 <a href="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/${{ github.run_number }}/01_e2e/index.html" style="color: #1565c0; font-weight: bold; text-decoration: none; font-size: 14px;">Clique aqui para Acessar o Relatório dos Testes</a><br>
+                      🔹 <a href="https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev/reports/${{ github.run_number }}/01_e2e/index.html" style="color: #1565c0; font-weight: bold; text-decoration: none; font-size: 14px;">Clique aqui para Acessar o Relatório dos Testes</a><br>
                       <span style="display: inline-block; margin-top: 8px;">🔹 <a href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" style="color: #000000; text-decoration: none; font-size: 13px;">Analisar Logs Técnicos da Pipeline (GitHub Actions)</a></span>
                     </p>
                   </div>
@@ -544,7 +542,7 @@ jobs:
                 <div style="background-color: #ffebee; border-left: 4px solid #c62828; padding: 15px; margin: 20px 0;">
                   <h4 style="margin: 0 0 12px 0; color: #b71c1c;">📊 Ações Imediatas:</h4>
                   <p style="margin: 0; line-height: 1.6; font-family: Arial, sans-serif;">
-                    ⚠️ <strong><a href="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/${{ github.run_number }}/01_e2e/index.html" style="color: #b71c1c; font-weight: bold; text-decoration: underline;">Clique aqui para abrir o Relatório de Evidências dos Testes</a></strong><br>
+                    ⚠️ <strong><a href="https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev/reports/${{ github.run_number }}/01_e2e/index.html" style="color: #b71c1c; font-weight: bold; text-decoration: underline;">Clique aqui para abrir o Relatório de Evidências dos Testes</a></strong><br>
                     <span style="display: inline-block; margin-top: 8px;">🛠️ <a href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" style="color: #000000; text-decoration: none; font-size: 13px;">Analisar Logs Técnicos da Pipeline (Logs do GitHub Actions)</a></span>
                   </p>
                 </div>
