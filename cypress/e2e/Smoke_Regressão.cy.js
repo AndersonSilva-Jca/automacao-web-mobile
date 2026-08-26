@@ -1,6 +1,6 @@
 /// <reference types='cypress' />
 
-import "./01_hml/10_Totem.cy.js";
+import "./00_smoke/10_Totem.cy.js";
 import "./00_smoke/01_ODH.cy.js";
 import "./00_smoke/02_ODP.cy.js";
 import "./00_smoke/03_Giro.cy.js";
