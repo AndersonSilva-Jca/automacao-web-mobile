@@ -237,7 +237,7 @@ const RUN_NUMBER = process.env.GITHUB_RUN_NUMBER || "0";
 const BRANCH = process.env.GITHUB_REF_NAME || "main";
 // const REPO_OWNER = process.env.REPO_OWNER;
 // const REPO_NAME = process.env.REPO_NAME;
-const CYPRESS_R2_PUBLIC_URL = "https://pub-d1d1771e31d74b1bbd9e4e70c153e790.r2.dev";
+const CYPRESS_R2_PUBLIC_URL = process.env.CYPRESS_R2_PUBLIC_URL;
 const REPORTS_DIR = "cypress/reports";
 const SCREENSHOTS_DIR = "cypress/reports/screenshots"; // confirmado via log do GitHub Actions
 
@@ -405,7 +405,7 @@ async function main() {
 
   // const urlRelatorio = `https://${REPO_OWNER}.github.io/${REPO_NAME}/reports/${RUN_NUMBER}/01_e2e/index.html`;
 
-  const urlRelatorio = `${R2_PUBLIC_URL}/reports/${RUN_NUMBER}/01_e2e/index.html`;
+  const urlRelatorio = `${CYPRESS_R2_PUBLIC_URL}/reports/${RUN_NUMBER}/01_e2e/index.html`;
 
   console.log(`📦 ${relatorio.results.length} spec(s) encontrado(s) no relatório. Enviando para o dashboard...`);
 
