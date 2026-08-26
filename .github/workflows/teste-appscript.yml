@@ -263,6 +263,7 @@ jobs:
         env:
           GITHUB_RUN_NUMBER: ${{ github.run_number }}
           APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
+          CYPRESS_R2_PUBLIC_URL: "https://pub-d1d1771e31d74b1bbd9e4e70c153e790.r2.dev"
           REPO_OWNER: ${{ github.repository_owner }}
           REPO_NAME: ${{ github.event.repository.name }}
         run: node scripts/enviar-resultados-appscript.js
@@ -298,7 +299,7 @@ jobs:
                   <div style="background-color: #ebfff6; border-left: 4px solid #84e4a1; padding: 15px; margin: 20px 0;">
                     <h4 style="margin: 0 0 12px 0; color: #0db94f; font-size: 15px; font-family: Arial, sans-serif;">📊 Relatórios e Evidências Disponíveis: Run #${{ github.run_number }} . ${{ env.DATA_ALERTA }} às ${{ env.HORA_ALERTA }}</h4>
                     <p style="margin: 0; line-height: 1.6; font-family: Arial, sans-serif;">
-                      🔹 <a href="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/${{ github.run_number }}/01_e2e/index.html" style="color: #1565c0; font-weight: bold; text-decoration: none; font-size: 14px;">Clique aqui para Acessar o Relatório dos Testes</a><br>
+                      🔹 <a href="https://pub-d1d1771e31d74b1bbd9e4e70c153e790.r2.dev/reports/${{ github.run_number }}/01_e2e/index.html" style="color: #1565c0; font-weight: bold; text-decoration: none; font-size: 14px;">Clique aqui para Acessar o Relatório dos Testes</a><br>
                       <span style="display: inline-block; margin-top: 8px;">🔹 <a href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" style="color: #000000; text-decoration: none; font-size: 13px;">Analisar Logs Técnicos da Pipeline (GitHub Actions)</a></span>
                     </p>
                   </div>
@@ -353,7 +354,7 @@ jobs:
                 <div style="background-color: #ffebee; border-left: 4px solid #c62828; padding: 15px; margin: 20px 0;">
                   <h4 style="margin: 0 0 12px 0; color: #b71c1c;">📊 Ações Imediatas:</h4>
                   <p style="margin: 0; line-height: 1.6; font-family: Arial, sans-serif;">
-                    ⚠️ <strong><a href="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/reports/${{ github.run_number }}/01_e2e/index.html" style="color: #b71c1c; font-weight: bold; text-decoration: underline;">Clique aqui para abrir o Relatório de Evidências dos Testes</a></strong><br>
+                    ⚠️ <strong><a href="https://pub-d1d1771e31d74b1bbd9e4e70c153e790.r2.dev/reports/${{ github.run_number }}/01_e2e/index.html" style="color: #b71c1c; font-weight: bold; text-decoration: underline;">Clique aqui para abrir o Relatório de Evidências dos Testes</a></strong><br>
                     <span style="display: inline-block; margin-top: 8px;">🛠️ <a href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" style="color: #000000; text-decoration: none; font-size: 13px;">Analisar Logs Técnicos da Pipeline (Logs do GitHub Actions)</a></span>
                   </p>
                 </div>
