@@ -253,7 +253,13 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CYPRESS_R2_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: auto
         run: |
-          npx --yes aws-cli s3 sync ./cypress/reports s3://cypress-reports/reports/${{ github.run_number }}/01_e2e \
+          # Instala a AWS CLI oficial rapidamente
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip -q awscliv2.zip
+          ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
+
+          # Executa o sync para o R2
+          aws s3 sync ./cypress/reports s3://cypress-reports/reports/${{ github.run_number }}/01_e2e \
             --endpoint-url https://${{ secrets.CYPRESS_R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
 
       - name: Enviar resultados para o Dashboard (Apps Script)
