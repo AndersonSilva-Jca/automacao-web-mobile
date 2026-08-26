@@ -422,6 +422,8 @@ jobs:
           GMAIL_MAIL: ${{ secrets.GMAIL_MAIL }}
           GMAIL_APP_PASS: ${{ secrets.GMAIL_APP_PASS }}
           WA_PHONE_ANDERSON: ${{ secrets.WA_PHONE_ANDERSON }}
+          CYPRESS_R2_ACCESS_KEY_ID: ${{ secrets.CYPRESS_R2_ACCESS_KEY_ID }}
+          CYPRESS_R2_SECRET_ACCESS_KEY: ${{ secrets.CYPRESS_R2_SECRET_ACCESS_KEY }}
           NODE_TLS_REJECT_UNAUTHORIZED: "0"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

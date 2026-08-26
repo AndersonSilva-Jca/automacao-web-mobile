@@ -1184,8 +1184,9 @@ jobs:
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REMETENTE_APP: ${{ secrets.REMETENTE_APP }}
-          WA_PHONE_ALFREDO: ${{ secrets.WA_PHONE_ALFREDO }}
           WA_PHONE_ANDERSON: ${{ secrets.WA_PHONE_ANDERSON }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
 
         with:
           api-level: 30
