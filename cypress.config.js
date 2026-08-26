@@ -227,6 +227,9 @@ module.exports = defineConfig({
     requestTimeout: 20000, // Espera até 15s por respostas de APIs (cy.request)
     responseTimeout: 15000, // Espera até 15s por respostas de interceptações
     async setupNodeEvents(on, config) {
+      if (!config.env.SPEC) {
+        config.env.SPEC = "cypress/e2e/00_smoke/**/*.cy.js";
+      }
       cypressSplit(on, config);
 
       // on("after:spec", (spec, results) => {
