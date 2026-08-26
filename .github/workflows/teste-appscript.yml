@@ -23,6 +23,11 @@ jobs:
   cypress-run:
     runs-on: ubuntu-latest
     container: cypress/included:13.6.0
+    strategy:
+      fail-fast: false
+      matrix:
+        # Divide os arquivos de teste em 3 máquinas em paralelo para acelerar o Electron
+        containers: [1, 2, 3]
 
     steps:
       - name: Checkout do Código
@@ -36,9 +41,10 @@ jobs:
         id: cypress
         continue-on-error: true
         run: |
-          npx cypress run --browser chrome --spec 'cypress/e2e/00_smoke/**/*.cy.js'
-          # npx cypress run --browser chrome --spec 'cypress/e2e/00_smoke/03_Giro.cy.js'
+          npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/**/*.cy.js'
+          # npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/03_Giro.cy.js'
         env:
+          ELECTRON_EXTRA_LAUNCH_ARGS: "--disable-gpu --disable-dev-shm-usage --no-sandbox"
           APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
           LOGIN: ${{ secrets.LOGIN }}
           SENHA: ${{ secrets.SENHA }}
@@ -78,7 +84,8 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: cypress-reports-artifact
+          name: cypress-reports-artifact-${{ matrix.containers }}
+          compression-level: 0 # Desativa compressão para economizar tempo
           path: |
             cypress/reports
             status/
@@ -86,23 +93,29 @@ jobs:
   deploy-r2:
     needs: cypress-run
     if: always()
-    runs-on: ubuntu-latest # Roda direto na VM do GitHub (com aws-cli nativa, igual ao Mobile)
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout do Código
         uses: actions/checkout@v4
 
-      - name: Instalar Dependências do Node (para o script enviar-resultados)
-        run: npm ci
-
-      - name: Baixar Artefatos dos Relatórios
+      - name: Baixar Todos os Artefatos dos Relatórios
         uses: actions/download-artifact@v4
         with:
-          name: cypress-reports-artifact
-          path: .
+          path: ./temp-artifacts
 
-      - name: Ler Status e Recriar Variáveis
+      - name: Consolidar Artefatos e Status
         run: |
-          echo "CYPRESS_OUTCOME=$(cat status/cypress_outcome.txt)" >> $GITHUB_ENV
+          mkdir -p cypress/reports status
+          # Consolida os relatórios das 3 máquinas paralelas em uma única pasta
+          cp -rn ./temp-artifacts/cypress-reports-artifact-*/cypress/reports/* ./cypress/reports/ || true
+
+          # Se qualquer container falhar, marca como failure
+          if grep -q "failure" ./temp-artifacts/cypress-reports-artifact-*/status/cypress_outcome.txt 2>/dev/null; then
+            echo "CYPRESS_OUTCOME=failure" >> $GITHUB_ENV
+          else
+            echo "CYPRESS_OUTCOME=success" >> $GITHUB_ENV
+          fi
+
           echo "DATA_ALERTA=$(TZ='America/Sao_Paulo' date +'%d/%m/%Y')" >> $GITHUB_ENV
           echo "HORA_ALERTA=$(TZ='America/Sao_Paulo' date +'%H:%M:%S')" >> $GITHUB_ENV
 
