@@ -174,12 +174,11 @@ async function main() {
     process.exit(1);
   }
 
+  // const urlRelatorio = `https://${REPO_OWNER}.github.io/${REPO_NAME}/reports/${RUN_NUMBER}/01_e2e/index.html`;
+
   const urlRelatorio = `${CYPRESS_R2_PUBLIC_URL}/reports/${RUN_NUMBER}/01_e2e/index.html`;
 
-  console.log(`📦 ${relatorio.results.length} spec(s) encontrado(s) no relatório. Processando lote...`);
-
-  // Array para acumular todas as marcas em um único envio
-  const lotePayloads = [];
+  console.log(`📦 ${relatorio.results.length} spec(s) encontrado(s) no relatório. Enviando para o dashboard...`);
 
   for (const specResult of relatorio.results) {
     const caminhoSpec = specResult.file || specResult.fullFile || "";
@@ -201,8 +200,7 @@ async function main() {
       };
     });
 
-    // Em vez de enviar direto, salva o payload no array do lote
-    lotePayloads.push({
+    const payload = {
       run_id: `${RUN_ID}`,
       marca,
       plataforma: "web",
@@ -215,16 +213,14 @@ async function main() {
       url_allure: "",
       url_mochawesome: urlRelatorio,
       falhas: falhasComPrint,
-    });
-  }
+    };
 
-  // Envia TODOS os resultados em uma ÚNICA requisição HTTP POST
-  try {
-    console.log(`🚀 Enviando lote completo com ${lotePayloads.length} spec(s) para o Apps Script...`);
-    const resposta = await enviarParaAppsScript({ specs: lotePayloads });
-    console.log(`✅ Lote enviado com sucesso! Resposta do Apps Script ->`, resposta);
-  } catch (err) {
-    console.error(`❌ Falha ao enviar lote para o Apps Script:`, err.message);
+    try {
+      const resposta = await enviarParaAppsScript(payload);
+      console.log(`✅ [${marca}] enviado — total:${total} passou:${passou} falhou:${falhou} ->`, resposta);
+    } catch (err) {
+      console.error(`❌ [${marca}] falhou ao enviar:`, err.message);
+    }
   }
 }
 
