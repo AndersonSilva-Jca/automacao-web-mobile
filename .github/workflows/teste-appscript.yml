@@ -438,6 +438,37 @@ jobs:
         if: always()
         run: ls -R cypress/reports || true
 
+      - name: Instalar AWS CLI
+        if: always()
+        run: |
+          echo "Verificando dependências..."
+          command -v curl
+          command -v unzip
+
+          ARCH="$(uname -m)"
+
+          if [ "$ARCH" = "x86_64" ]; then
+            AWS_ARCH="x86_64"
+          elif [ "$ARCH" = "aarch64" ]; then
+            AWS_ARCH="aarch64"
+          else
+            echo "Arquitetura não suportada: $ARCH"
+            exit 1
+          fi
+
+          echo "Arquitetura: $ARCH"
+
+          curl -fsSL \
+            "https://awscli.amazonaws.com/awscli-exe-linux-${AWS_ARCH}.zip" \
+            -o /tmp/awscliv2.zip
+
+          unzip -q /tmp/awscliv2.zip -d /tmp
+
+          /tmp/aws/install
+
+          echo "AWS CLI instalada:"
+          aws --version
+
       - name: Validar conexão com Cloudflare R2
         if: always()
         env:
@@ -453,38 +484,6 @@ jobs:
 
           echo "Conexão com R2 OK"
 
-        # 🚀 1. Configura e instala a AWS CLI via Action Oficial
-      - name: Configurar AWS CLI
-        if: always()
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.CYPRESS_R2_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.CYPRESS_R2_SECRET_ACCESS_KEY }}
-          aws-region: auto
-
-      - name: Instalar AWS CLI
-        if: always()
-        run: |
-          apt-get update
-          apt-get install -y curl unzip
-
-          ARCH=$(uname -m)
-
-          if [ "$ARCH" = "x86_64" ]; then
-            AWS_ARCH="x86_64"
-          elif [ "$ARCH" = "aarch64" ]; then
-            AWS_ARCH="aarch64"
-          else
-            echo "Arquitetura não suportada: $ARCH"
-            exit 1
-          fi
-
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-${AWS_ARCH}.zip" -o "awscliv2.zip"
-          unzip -q awscliv2.zip
-          ./aws/install
-
-          aws --version
-
       - name: Deploy do Relatório para Cloudflare R2
         if: always()
         env:
@@ -494,7 +493,7 @@ jobs:
           AWS_EC2_METADATA_DISABLED: "true"
         run: |
           aws s3 sync ./cypress/reports \
-            s3://cypress-reports/reports/${{ github.run_number }}/01_e2e \
+            "s3://cypress-reports/reports/${{ github.run_number }}/01_e2e" \
             --endpoint-url "https://${{ secrets.CYPRESS_R2_ACCOUNT_ID }}.r2.cloudflarestorage.com"
 
       - name: Enviar resultados para o Dashboard (Apps Script)
@@ -502,7 +501,7 @@ jobs:
         env:
           GITHUB_RUN_NUMBER: ${{ github.run_number }}
           APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
-          R2_PUBLIC_URL: ${{ secrets.R2_PUBLIC_URL }}
+          CYPRESS_R2_PUBLIC_URL: ${{ secrets.CYPRESS_R2_PUBLIC_URL }}
           REPO_OWNER: ${{ github.repository_owner }}
           REPO_NAME: ${{ github.event.repository.name }}
         run: node scripts/enviar-resultados-appscript.js
