@@ -197,6 +197,8 @@ Cypress.Commands.add("selecionarPassagemSemExperienciaWemobi", () => {
   cy.get("li.list-companies-item", { timeout: 90000 }).should("be.visible");
 
   cy.wait(1000);
+  cy.scrollTo("bottom");
+  cy.wait(1000);
 
   // 1. Filtra APENAS os cards de empresas que NÃO contêm a "Experiência wemobi"
   cy.get("li.list-companies-item")
