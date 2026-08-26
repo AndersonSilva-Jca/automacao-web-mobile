@@ -164,6 +164,7 @@
 //   },
 // });
 const { defineConfig } = require("cypress");
+const cypressSplit = require("cypress-split");
 const { ImapFlow } = require("imapflow");
 const { simpleParser } = require("mailparser");
 const path = require("path"); // 💡 Importa o módulo de caminhos do Node
@@ -226,6 +227,8 @@ module.exports = defineConfig({
     requestTimeout: 20000, // Espera até 15s por respostas de APIs (cy.request)
     responseTimeout: 15000, // Espera até 15s por respostas de interceptações
     async setupNodeEvents(on, config) {
+      cypressSplit(on, config);
+
       // on("after:spec", (spec, results) => {
       //   if (results && results.video) {
       //     // Verifica se houve alguma falha no arquivo de teste atual
@@ -331,6 +334,7 @@ module.exports = defineConfig({
           return codigoSorteado;
         },
       });
+      return config;
     },
     allowCypressEnv: true,
     trashAssetsBeforeRuns: true, // Evita deletar vídeos e screenshots antigos, útil para análise pós-falha

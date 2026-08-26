@@ -19,6 +19,7 @@
     "cypress-if": "^1.13.2",
     "cypress-mochawesome-reporter": "^4.0.2",
     "cypress-multi-reporters": "^2.0.5",
+    "cypress-split": "^1.25.0",
     "cypress-xpath": "^2.0.1",
     "gmail-tester": "^1.4.0",
     "mocha-junit-reporter": "^2.2.1",
