@@ -101,18 +101,36 @@ jobs:
       - name: Checkout do Código
         uses: actions/checkout@v4
 
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
       - name: Baixar Todos os Artefatos dos Relatórios
         uses: actions/download-artifact@v4
         with:
           path: ./temp-artifacts
 
-      - name: Consolidar Artefatos e Status
+      - name: Consolidar JSONs e Gerar Relatório HTML Unificado
         run: |
-          mkdir -p cypress/reports status
-          # Consolida os relatórios das 3 máquinas paralelas em uma única pasta
-          cp -rn ./temp-artifacts/cypress-reports-artifact-*/cypress/reports/* ./cypress/reports/ || true
+          mkdir -p cypress/reports/mocha status
 
-          # Se qualquer container falhar, marca como failure
+          # 1. Copia todos os JSONs gerados por cada container paralelo
+          cp -rn ./temp-artifacts/cypress-reports-artifact-*/cypress/reports/mocha/*.json ./cypress/reports/mocha/ || true
+
+          # 2. Instala utilitários para mesclar os dados do mochawesome
+          npm install -g mochawesome-merge mochawesome-report-generator
+
+          # 3. Une todos os JSONs em um único relatório consolidado (full_report.json)
+          npx mochawesome-merge ./cypress/reports/mocha/*.json > ./cypress/reports/full_report.json
+
+          # 4. Gera o index.html final a partir do JSON mesclado
+          npx mochawesome-report-generator ./cypress/reports/full_report.json \
+            --reportDir ./cypress/reports \
+            --reportFilename index.html \
+            --inline true
+
+          # 5. Verifica se algum container reportou falha nos testes
           if grep -q "failure" ./temp-artifacts/cypress-reports-artifact-*/status/cypress_outcome.txt 2>/dev/null; then
             echo "CYPRESS_OUTCOME=failure" >> $GITHUB_ENV
           else
