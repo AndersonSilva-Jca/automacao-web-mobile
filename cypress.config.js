@@ -209,6 +209,9 @@ module.exports = defineConfig({
     cypress_download_mirror: process.env.CYPRESS_DOWNLOAD_MIRROR,
     projectId: process.env.PROJECT_ID,
     recordKey: process.env.RECORD_KEY,
+    cypress_r2_access_key: process.env.CYPRESS_R2_ACCESS_KEY_ID,
+    cypress_r2_secret_access_key_id: process.env.CYPRESS_R2_SECRET_ACCESS_KEY,
+    cypress_r2_account_id: process.env.CYPRESS_R2_ACCOUNT_ID,
   },
   e2e: {
     retries: {
