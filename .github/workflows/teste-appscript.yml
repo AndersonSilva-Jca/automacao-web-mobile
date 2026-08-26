@@ -424,6 +424,7 @@ jobs:
           WA_PHONE_ANDERSON: ${{ secrets.WA_PHONE_ANDERSON }}
           CYPRESS_R2_ACCESS_KEY_ID: ${{ secrets.CYPRESS_R2_ACCESS_KEY_ID }}
           CYPRESS_R2_SECRET_ACCESS_KEY: ${{ secrets.CYPRESS_R2_SECRET_ACCESS_KEY }}
+          CYPRESS_R2_ACCOUNT_ID: ${{ secrets.CYPRESS_R2_ACCOUNT_ID }}
           NODE_TLS_REJECT_UNAUTHORIZED: "0"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -437,14 +438,20 @@ jobs:
         if: always()
         run: ls -R cypress/reports || true
 
-      # 🚀 Upload do Relatório para o Cloudflare R2 (Substituiu o GitHub Pages)
+      # 🚀 Deploy do Relatório para o Cloudflare R2
       - name: Deploy do Relatório para Cloudflare R2
         if: always()
         env:
-          CYPRESS_R2_ACCESS_KEY_ID: ${{ secrets.CYPRESS_R2_ACCESS_KEY_ID }}
-          CYPRESS_R2_SECRET_ACCESS_KEY: ${{ secrets.CYPRESS_R2_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.CYPRESS_R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.CYPRESS_R2_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: auto
         run: |
+          # 1. Instala a AWS CLI no container Linux
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip -q awscliv2.zip
+          ./aws/install
+
+          # 2. Executa a sincronização com o R2
           aws s3 sync ./cypress/reports s3://cypress-reports/reports/${{ github.run_number }}/01_e2e \
             --endpoint-url https://${{ secrets.CYPRESS_R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
 
