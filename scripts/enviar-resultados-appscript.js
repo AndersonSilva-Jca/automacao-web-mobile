@@ -349,12 +349,14 @@ function buscarUrlsPrintFalha(nomeSpecArquivo, nomeCompletoTeste) {
     return urlsPorTentativa;
   }
 
-  const urlBase = `${R2_PUBLIC_URL}/reports/${RUN_NUMBER}/01_e2e/index.html`;
+  // URL base direcionando para a pasta de screenshots
+  const urlBase = `${R2_PUBLIC_URL}/reports/${RUN_NUMBER}/01_e2e/screenshots`;
 
   candidatos.forEach((nomeArquivo) => {
-    // sem "(attempt N)" no nome = tentativa 1 (primeira execução, antes de qualquer retry)
     const attempt = parseInt((nomeArquivo.match(/attempt (\d+)/) || [])[1] || "1", 10);
-    if (attempt < 1 || attempt > 3) return; // suporte a até 3 tentativas
+    if (attempt < 1 || attempt > 3) return;
+
+    // Monta a estrutura correta: .../screenshots/<nomeSpec.cy.js>/<nomeDoPrint.png>
     const urlFinal = `${urlBase}/${encodeURIComponent(nomeSpecArquivo + ".cy.js")}/${encodeURIComponent(nomeArquivo)}`;
     urlsPorTentativa[attempt - 1] = urlFinal;
     console.log(`   ✅ tentativa ${attempt} -> "${nomeArquivo}"`);
