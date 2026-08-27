@@ -2,6 +2,17 @@ import loc from "../../support/hml_locators";
 class SearchPage {
   //------------------ UTP ------------------
   buscaOrigem() {
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().type(loc.SP_TIETE).should("exist").invoke("show");
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().type(loc.SP_TIETE).should("exist").invoke("show");
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().type(loc.SP_TIETE).should("exist").invoke("show");
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().type(loc.SP_TIETE).should("exist").invoke("show");
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().type(loc.SP_TIETE).should("exist").invoke("show");
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().type(loc.SP_TIETE).should("exist").invoke("show");
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().type(loc.SP_TIETE).should("exist").invoke("show");
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().type(loc.SP_TIETE).should("exist").invoke("show");
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().type(loc.SP_TIETE).should("exist").invoke("show");
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().type(loc.SP_TIETE).should("exist").invoke("show");
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().type(loc.SP_TIETE).should("exist").invoke("show");
     cy.get(loc.BUSCAS.DESTINO_IDA).click().type(loc.SP_TIETE, { delay: 100 }).should("exist").invoke("show");
     cy.wait(1000);
     cy.get(loc.BUSCAS.DESTINO_IDA).click().clear().type(loc.SP_TIETE, { delay: 100 }).should("exist").invoke("show");

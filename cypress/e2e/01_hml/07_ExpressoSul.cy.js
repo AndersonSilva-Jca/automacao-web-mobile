@@ -38,6 +38,13 @@ describe("Expresso Sul", () => {
     cy.get(loc.BUSCAS.DESTINO_IDA).click().clear().type("São Paulo (Tietê) (SP)").should("exist").invoke("show");
     cy.get(loc.BUSCAS.DESTINO_IDA).click().clear().type("São Paulo (Tietê) (SP)").should("exist").invoke("show");
     cy.get(loc.BUSCAS.DESTINO_IDA).click().clear().type("São Paulo (Tietê) (SP)").should("exist").invoke("show");
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().clear().type("São Paulo (Tietê) (SP)").should("exist").invoke("show");
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().clear().type("São Paulo (Tietê) (SP)").should("exist").invoke("show");
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().clear().type("São Paulo (Tietê) (SP)").should("exist").invoke("show");
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().clear().type("São Paulo (Tietê) (SP)").should("exist").invoke("show");
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().clear().type("São Paulo (Tietê) (SP)").should("exist").invoke("show");
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().clear().type("São Paulo (Tietê) (SP)").should("exist").invoke("show");
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().clear().type("São Paulo (Tietê) (SP)").should("exist").invoke("show");
     cy.get(loc.BUSCAS.DESTINO_IDA).click().clear().type("São Paulo (Tietê) (SP)", { delay: 100 }).should("exist").invoke("show");
     cy.xpath('//*[@id="São-Paulo-(Tietê)-(SP)"]/p[1]').should("be.visible").click();
     SearchPage.buscaDestino();
