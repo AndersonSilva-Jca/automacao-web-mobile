@@ -11,7 +11,7 @@ import PassengerPage from "../../pages/hml/hml_PassengerPage";
 import SeatMapPage from "../../pages/hml/hml_SeatMapPage";
 import CheckoutPage from "../../pages/hml/hml_CheckoutPage";
 import loc from "../../support/locators.js";
-const rapidoRibeirao = "https://www.rapidoribeiraopreto.com.br/?utm_source=synthetic_test&utm_medium=internal&utm_campaign=operacao";
+const rapidoRibeirao = "https://rapidoribeiraopretostage.vendasjca.com.br/";
 
 describe("Rapido Ribeirão", () => {
   beforeEach(() => {

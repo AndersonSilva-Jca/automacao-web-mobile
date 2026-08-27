@@ -11,7 +11,7 @@ import OfferPage from "../../pages/hml/hml_OfferPage";
 import PassengerPage from "../../pages/hml/hml_PassengerPage";
 import SeatMapPage from "../../pages/hml/hml_SeatMapPage";
 import CheckoutPage from "../../pages/hml/hml_CheckoutPage";
-const cometa = "https://www.viacaocometa.com.br/?utm_source=synthetic_test&utm_medium=internal&utm_campaign=operacao";
+const cometa = "https://viacaocometastage.vendasjca.com.br/";
 
 describe("Viação Cometa", () => {
   beforeEach(() => {
@@ -22,8 +22,8 @@ describe("Viação Cometa", () => {
   });
 
   it("Viação Cometa - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
-    cy.env(["login1", "senha1"]).then(() => {
-      cy.visit("https://viacaocometastage.vendasjca.com.br/");
+    cy.env(["login", "senha"]).then(() => {
+      cy.visit(cometa);
       //viacaocometastage.vendasjca.com.br/
       LoginPage.abrirModalLogin();
       LoginPage.preencherUsuario();

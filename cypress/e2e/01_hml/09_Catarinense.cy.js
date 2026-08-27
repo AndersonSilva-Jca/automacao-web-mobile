@@ -11,7 +11,7 @@ import OfferPage from "../../pages/hml/hml_OfferPage.js";
 import PassengerPage from "../../pages/hml/hml_PassengerPage.js";
 import SeatMapPage from "../../pages/hml/hml_SeatMapPage.js";
 import CheckoutPage from "../../pages/hml/hml_CheckoutPage.js";
-const catarinense = "https://www.catarinense.com.br/?utm_source=synthetic_test&utm_medium=internal&utm_campaign=operacao";
+const catarinense = "https://catarinensestage.vendasjca.com.br/";
 
 describe("Catarinense", () => {
   beforeEach(() => {
