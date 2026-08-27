@@ -23,11 +23,6 @@ jobs:
   cypress-run:
     runs-on: ubuntu-latest
     container: cypress/included:13.6.0
-    strategy:
-      fail-fast: false
-      matrix:
-        # Divide os arquivos de teste em 3 máquinas em paralelo para acelerar o Electron
-        containers: [1, 2, 3]
 
     steps:
       - name: Checkout do Código
@@ -44,9 +39,9 @@ jobs:
           npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/**/*.cy.js'
           # npx cypress run --browser electron --spec 'cypress/e2e/00_smoke/03_Giro.cy.js'
         env:
-          SPEC: "cypress/e2e/00_smoke/**/*.cy.js"
-          SPLIT: ${{ strategy.job-total }}
-          SPLIT_INDEX: ${{ strategy.job-index }}
+          # SPEC: "cypress/e2e/00_smoke/**/*.cy.js"
+          # SPLIT: ${{ strategy.job-total }}
+          # SPLIT_INDEX: ${{ strategy.job-index }}
           ELECTRON_EXTRA_LAUNCH_ARGS: "--disable-gpu --disable-dev-shm-usage --no-sandbox"
           APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
           LOGIN: ${{ secrets.LOGIN }}
