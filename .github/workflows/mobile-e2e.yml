@@ -317,7 +317,7 @@ jobs:
                   <div class="card"><span class="n red">${{ steps.metrics.outputs.failed }}</span><div class="l">❌ Failed</div></div>
                   <div class="card"><span class="n blue">${{ steps.metrics.outputs.total }}</span><div class="l">🔢 Total</div></div>
                 </div>
-                <a class="btn btn-gray" href="https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev/${{ github.run_number }}/index.html">🔍 Relatório Allure</a>
+                <a class="btn btn-gray" href="https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev/reports/mobile-run-${{ github.run_number }}/index.html">🔍 Relatório Allure</a>
                 <a class="btn btn-gray" href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}">⚙️ Ver Execução no GitHub Actions</a>
                 <a class="btn btn-gray" href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}#artifacts">📦 Download Artefatos (90 dias)</a>
               </div>
@@ -385,7 +385,7 @@ jobs:
                     <div class="card"><span class="n red">${{ steps.metrics.outputs.failed }}</span><div class="l">❌ Failed</div></div>
                     <div class="card"><span class="n blue">${{ steps.metrics.outputs.total }}</span><div class="l">🔢 Total</div></div>
                   </div>
-                  <a class="btn btn-gray" href="https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev/${{ github.run_number }}/index.html">🔍 Analisar Evidências </a>
+                  <a class="btn btn-gray" href="https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev/reports/mobile-run-${{ github.run_number }}/index.html">🔍 Analisar Evidências </a>
                   ${{ steps.evidence.outputs.screenshot_link && format('<a class="btn btn-gray" href="{0}">🖼️ Ver Print do Erro</a>', steps.evidence.outputs.screenshot_link) }}
                   ${{ steps.evidence.outputs.video_link && format('<a class="btn btn-gray" href="{0}">🎥 Ver Vídeo do Erro</a>', steps.evidence.outputs.video_link) }}
                   <a class="btn btn-gray" href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}">⚙️ Ver Log Completo no GitHub Actions</a>
