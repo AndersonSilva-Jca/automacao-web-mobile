@@ -182,7 +182,7 @@ module.exports = defineConfig({
     charts: true,
     reportPageTitle: "Relatório de Testes em Produção - ODH/ODP/Giro/Wemobi/UTP",
     overwrite: false,
-    html: false,
+    html: true,
     json: true,
     saveJson: true,
     embeddedScreenshots: true,
