@@ -1,4 +1,5 @@
-name: TESTE APPSCRIPT
+name: Web E2E - EBus/UTP AppScript
+
 on:
   # push:
   #   branches:
@@ -14,7 +15,7 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 permissions:
   contents: write
