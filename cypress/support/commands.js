@@ -348,6 +348,10 @@ Cypress.Commands.add("selecionarPassagemExperienciaWemobi", () => {
 Cypress.Commands.add("selecionarPassagemAleatoria1", () => {
   cy.contains("ESCOLHER PASSAGENS", { timeout: 90000 }).should("be.visible");
   cy.log("⏳ Aguardando estabilização da página de ofertas...");
+  cy.wait(1000);
+  cy.scrollTo("bottom");
+  cy.wait(1000);
+  cy.scrollTo("bottom");
 
   cy.get('li[data-js^="offer-element-"]', { timeout: 90000 }).should("be.visible");
 

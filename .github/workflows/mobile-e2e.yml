@@ -2,8 +2,9 @@ name: Mobile E2E - Giro/Wemobi/UTP
 
 on:
   schedule:
-    - cron: "30 0-22/2 * * *"
-    - cron: "30 1-23/2 * * *"
+    # - cron: "30 0-22/2 * * *"
+    # - cron: "30 1-23/2 * * *"
+    - cron: "*/30 * * * *"
   workflow_dispatch:
 
 concurrency:
