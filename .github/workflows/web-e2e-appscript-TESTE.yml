@@ -22,9 +22,22 @@ permissions:
 
 jobs:
   cypress-run:
+    strategy:
+      fail-fast: false
+      matrix:
+        spec:
+          - cypress/e2e/00_smoke/01_ODH.cy.js
+          - cypress/e2e/00_smoke/02_ODP.cy.js
+          - cypress/e2e/00_smoke/03_Giro.cy.js
+          - cypress/e2e/00_smoke/04_Wemobi.cy.js
+          - cypress/e2e/00_smoke/05_Cometa.cy.js
+          - cypress/e2e/00_smoke/06_1001.cy.js
+          - cypress/e2e/00_smoke/07_ExpressoSul.cy.js
+          - cypress/e2e/00_smoke/08_RapidoRibeirao.cy.js
+          - cypress/e2e/00_smoke/09_Catarinense.cy.js
+          - cypress/e2e/00_smoke/10_Totem.cy.js
     runs-on: ubuntu-latest
     container: cypress/included:15.19.0
-
     steps:
       - name: Checkout do Código
         uses: actions/checkout@v4
@@ -40,17 +53,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      # 🎯 PASSO ADICIONADO: Instala os pacotes do package.json (imapflow, etc)
-
       - name: Instalar Dependências do Projeto
         run: npm ci --prefer-offline --no-audit --no-fund
 
       - name: Testes E2E E-Bus/UTP
         id: cypress
         continue-on-error: true
-        run: |
-          npx cypress run --browser electron --config video=false --spec 'cypress/e2e/00_smoke/**/*.cy.js'
-          # npx cypress run --browser electron --config video=false --spec 'cypress/e2e/01_hml/10_Totem.cy.js'
+        run: npx cypress run --browser electron --config video=false --spec '${{ matrix.spec }}'
         env:
           ELECTRON_EXTRA_LAUNCH_ARGS: "--disable-gpu --disable-dev-shm-usage --no-sandbox"
           APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
@@ -79,37 +88,50 @@ jobs:
       - name: Debug - listar arquivos
         run: ls -R cypress/reports || true
 
-      # Preserva os status para o próximo job
+      - name: Nome sanitizado do spec
+        if: always()
+        run: echo "SPEC_NAME=$(basename ${{ matrix.spec }} .cy.js)" >> $GITHUB_ENV
+
       - name: Salvar Status da Execução
         if: always()
         run: |
           mkdir -p status
-          echo "${{ steps.cypress.outcome }}" > status/cypress_outcome.txt
-      # Salva a pasta de relatórios gerada dentro do container
+          echo "${{ steps.cypress.outcome }}" > status/cypress_outcome_${{ env.SPEC_NAME }}.txt
+
       - name: Upload de Artefatos de Relatório
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: cypress-reports-artifact
+          name: cypress-reports-${{ env.SPEC_NAME }}
           path: |
             cypress/reports
             status/
-  deploy-r2:
+
+  deploy-r2-cloudflare:
     needs: cypress-run
     if: always()
-    runs-on: ubuntu-latest # Roda direto na VM do GitHub (com aws-cli nativa, igual ao Mobile)
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout do Código
         uses: actions/checkout@v4
 
-      - name: Instalar Dependências do Node (para o script enviar-resultados)
+      - name: Instalar Dependências do Node
         run: npm ci
 
-      - name: Baixar Artefatos dos Relatórios
+      - name: Baixar Todos os Artefatos dos Relatórios
         uses: actions/download-artifact@v4
         with:
-          name: cypress-reports-artifact
+          pattern: cypress-reports-*
           path: .
+          merge-multiple: true
+
+      - name: Consolidar Status Geral
+        run: |
+          if grep -q "failure" status/*.txt; then
+            echo "CYPRESS_OUTCOME=failure" >> $GITHUB_ENV
+          else
+            echo "CYPRESS_OUTCOME=success" >> $GITHUB_ENV
+          fi
 
       - name: Ler Status e Recriar Variáveis
         run: |
