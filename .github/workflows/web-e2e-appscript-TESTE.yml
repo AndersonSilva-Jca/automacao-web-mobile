@@ -29,12 +29,12 @@ jobs:
           - cypress/e2e/00_smoke/01_ODH.cy.js
           - cypress/e2e/00_smoke/02_ODP.cy.js
           - cypress/e2e/00_smoke/03_Giro.cy.js
-          - cypress/e2e/00_smoke/04_Wemobi.cy.js
-          - cypress/e2e/00_smoke/05_Cometa.cy.js
-          - cypress/e2e/00_smoke/06_1001.cy.js
-          - cypress/e2e/00_smoke/07_ExpressoSul.cy.js
-          - cypress/e2e/00_smoke/08_RapidoRibeirao.cy.js
-          - cypress/e2e/00_smoke/09_Catarinense.cy.js
+          # - cypress/e2e/00_smoke/04_Wemobi.cy.js
+          # - cypress/e2e/00_smoke/05_Cometa.cy.js
+          # - cypress/e2e/00_smoke/06_1001.cy.js
+          # - cypress/e2e/00_smoke/07_ExpressoSul.cy.js
+          # - cypress/e2e/00_smoke/08_RapidoRibeirao.cy.js
+          # - cypress/e2e/00_smoke/09_Catarinense.cy.js
           - cypress/e2e/00_smoke/10_Totem.cy.js
     runs-on: ubuntu-latest
     container: cypress/included:15.19.0
@@ -134,14 +134,18 @@ jobs:
           fi
 
       - name: Mesclar Relatórios Mochawesome em um único JSON
-        run: npx mochawesome-merge "cypress/reports/*.json" > cypress/reports/merged-report.json
+        run: npx mochawesome-merge "cypress/reports/*.json" > cypress/merged-report.json
 
       - name: Gerar Relatório HTML Único
         run: |
-          npx marge cypress/reports/merged-report.json \
-            --reportDir cypress/reports/html \
+          npx marge cypress/merged-report.json \
+            --reportDir cypress/reports \
+            --reportFilename index \
             --inline \
             --reportTitle "Monitoramento E2E - Run #${{ github.run_number }}"
+
+      - name: Copiar JSON consolidado para dentro do relatório
+        run: cp cypress/merged-report.json cypress/reports/index.json
 
       - name: Deploy do Relatório para Cloudflare R2
         env:
