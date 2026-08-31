@@ -29,23 +29,15 @@ const MAPA_MARCAS = {
 
 // Procura o JSON principal do Mochawesome dentro de cypress/reports (pode estar em subpasta,
 // dependendo de como o reporter está configurado no cypress.config.js)
+// Lê diretamente o JSON mesclado, sem varredura — elimina a ambiguidade
 function encontrarJsonMochawesome(dir) {
-  if (!fs.existsSync(dir)) return null;
-  const itens = fs.readdirSync(dir, { withFileTypes: true });
-  for (const item of itens) {
-    const caminho = path.join(dir, item.name);
-    if (item.isDirectory()) {
-      const achado = encontrarJsonMochawesome(caminho);
-      if (achado) return achado;
-    } else if (item.name.endsWith(".json")) {
-      try {
-        const conteudo = JSON.parse(fs.readFileSync(caminho, "utf-8"));
-        // o JSON principal do mochawesome tem "results" (array, 1 item por spec)
-        if (Array.isArray(conteudo.results)) return conteudo;
-      } catch (e) {
-        // não é o arquivo certo, ignora e continua procurando
-      }
-    }
+  const caminhoIndex = path.join(dir, "index.json");
+  if (!fs.existsSync(caminhoIndex)) return null;
+  try {
+    const conteudo = JSON.parse(fs.readFileSync(caminhoIndex, "utf-8"));
+    if (Array.isArray(conteudo.results)) return conteudo;
+  } catch (e) {
+    console.error(`❌ Erro ao ler/parsear ${caminhoIndex}:`, e.message);
   }
   return null;
 }

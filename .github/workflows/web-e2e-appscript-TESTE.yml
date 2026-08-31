@@ -85,6 +85,7 @@ jobs:
         run: |
           echo "DATA_ALERTA=$(TZ='America/Sao_Paulo' date +'%d/%m/%Y')" >> $GITHUB_ENV
           echo "HORA_ALERTA=$(TZ='America/Sao_Paulo' date +'%H:%M:%S')" >> $GITHUB_ENV
+
       - name: Debug - listar arquivos
         run: ls -R cypress/reports || true
 
