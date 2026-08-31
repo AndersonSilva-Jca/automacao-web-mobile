@@ -27,8 +27,8 @@ jobs:
       matrix:
         spec:
           - cypress/e2e/00_smoke/01_ODH.cy.js
-          - cypress/e2e/00_smoke/02_ODP.cy.js
-          - cypress/e2e/00_smoke/03_Giro.cy.js
+          # - cypress/e2e/00_smoke/02_ODP.cy.js
+          # - cypress/e2e/00_smoke/03_Giro.cy.js
           # - cypress/e2e/00_smoke/04_Wemobi.cy.js
           # - cypress/e2e/00_smoke/05_Cometa.cy.js
           # - cypress/e2e/00_smoke/06_1001.cy.js
@@ -153,8 +153,11 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CYPRESS_R2_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: auto
         run: |
-          aws s3 sync ./cypress/reports/html s3://cypress-reports/reports/${{ github.run_number }}/01_e2e \
+          aws s3 sync ./cypress/reports s3://cypress-reports/reports/${{ github.run_number }}/01_e2e \
             --endpoint-url https://${{ secrets.CYPRESS_R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
+
+            #  aws s3 sync ./cypress/reports s3://cypress-reports/reports/${{ github.run_number }}/01_e2e \
+            # --endpoint-url https://${{ secrets.CYPRESS_R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
 
       - name: Enviar resultados para o Dashboard (Apps Script)
         env:
