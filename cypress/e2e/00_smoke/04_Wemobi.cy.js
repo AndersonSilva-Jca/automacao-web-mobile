@@ -35,13 +35,12 @@ describe("Wemobi", () => {
     SearchPage.wemobiDataIda();
     SearchPage.wemobiConfirmarBusca();
     OfferPage.passagemExperienciaWemobi();
-
     PassengerPage.wemobiSelecionarPassageiro();
     SeatMapPage.wemobiSelecionarAssentoMarcado();
     CheckoutPage.wemobiResumoCompra();
   });
 
-  it.only("Wemobi- selecionar experiência wemobi com Assento Aleatório", () => {
+  it("Wemobi- selecionar experiência wemobi com Assento Aleatório", () => {
     cy.env(["login", "senha"]).then(() => {
       cy.visit(wemobi);
       LoginPage.wemobiModalLogin();

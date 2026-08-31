@@ -306,7 +306,8 @@ Cypress.Commands.add("selecionarPassagemExperienciaWemobi", () => {
   cy.get("li.list-companies-item", { timeout: 90000 }).should("be.visible");
 
   cy.wait(1000);
-
+  cy.scrollTo("bottom");
+  cy.wait(1500);
   // 1. Busca os cards de empresas que contêm o marcador "Experiência wemobi"
   cy.get("li.list-companies-item")
     .filter((_, el) => {
