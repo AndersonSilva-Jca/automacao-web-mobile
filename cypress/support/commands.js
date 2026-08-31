@@ -4,7 +4,7 @@ import LoginPage from "../pages/LoginPage";
 
 Cypress.Commands.add("selecionarDataIda", (range = 3) => {
   cy.get('td[data-handler="selectDay"] a').then(($days) => {
-    const proximosDias = $days.slice(1, range);
+    const proximosDias = $days.slice(0, range);
     const randomIndex = Math.floor(Math.random() * proximosDias.length);
     cy.wrap(proximosDias[randomIndex]).click({ force: true });
   });
