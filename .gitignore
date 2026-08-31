@@ -13,13 +13,13 @@ cypress/e2e/testes
 mobile/logs/__pycache__/*.pyc
 mobile/appGiro/resources/__pycache__
 mobile/appWemobi/resources/__pycache__
-.github/workflows/web-e2e_2.yml
 # .github/workflows/mobile-e2e-test.yml
-.github/workflows/web-e2e_3.yml
-.github/workflows/web-e2e_4.yml
-.github/workflows/web-e2e_5.yml
-.github/workflows/ci_teste.yml
-.github/workflows/ci_links_cards.yml
+.github/workflows/test-mobile.yml
+.github/workflows/web-e2e_1001.yml
+.github/workflows/web-e2e_Cometa.yml
+.github/workflows/web-e2e_ODP.yml
+.github/workflows/web-e2e_Giro
+.github/workflows/web-e2e-browserStack.yml
 .github/workflows/web-e2e-regressao.yml
 .github/workflows/ci_teste_mobile.yml
 public
