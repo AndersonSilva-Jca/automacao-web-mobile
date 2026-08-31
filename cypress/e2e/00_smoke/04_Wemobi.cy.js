@@ -21,7 +21,7 @@ describe("Wemobi", () => {
     Cypress.on("uncaught:exception", () => false);
   });
 
-  it.only("Wemobi- selecionar experiência wemobi com Lugar Marcado", () => {
+  it("Wemobi- selecionar experiência wemobi com Lugar Marcado", () => {
     cy.env(["login", "senha"]).then(() => {
       cy.visit(wemobi);
       LoginPage.wemobiModalLogin();
@@ -41,7 +41,7 @@ describe("Wemobi", () => {
     CheckoutPage.wemobiResumoCompra();
   });
 
-  it("Wemobi- selecionar experiência wemobi com Assento Aleatório", () => {
+  it.only("Wemobi- selecionar experiência wemobi com Assento Aleatório", () => {
     cy.env(["login", "senha"]).then(() => {
       cy.visit(wemobi);
       LoginPage.wemobiModalLogin();
