@@ -133,19 +133,32 @@ jobs:
             echo "CYPRESS_OUTCOME=success" >> $GITHUB_ENV
           fi
 
+      - name: Mesclar Relatórios Mochawesome em um único JSON
+        run: |
+          npx mochawesome-merge "cypress/reports/**/*.json" > cypress/reports/merged-report.json
+
+      - name: Gerar Relatório HTML Único
+        run: |
+          npx marge cypress/reports/merged-report.json \
+            --reportDir cypress/reports/html \
+            --inline \
+            --reportTitle "Monitoramento E2E - Run #${{ github.run_number }}"
+
       - name: Ler Status e Recriar Variáveis
         run: |
           echo "CYPRESS_OUTCOME=$(cat status/cypress_outcome.txt)" >> $GITHUB_ENV
           echo "DATA_ALERTA=$(TZ='America/Sao_Paulo' date +'%d/%m/%Y')" >> $GITHUB_ENV
           echo "HORA_ALERTA=$(TZ='America/Sao_Paulo' date +'%H:%M:%S')" >> $GITHUB_ENV
+
       - name: Deploy do Relatório para Cloudflare R2
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.CYPRESS_R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CYPRESS_R2_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: auto
         run: |
-          aws s3 sync ./cypress/reports s3://cypress-reports/reports/${{ github.run_number }}/01_e2e \
+          aws s3 sync ./cypress/reports/html s3://cypress-reports/reports/${{ github.run_number }}/01_e2e \
             --endpoint-url https://${{ secrets.CYPRESS_R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
+
       - name: Enviar resultados para o Dashboard (Apps Script)
         env:
           GITHUB_RUN_NUMBER: ${{ github.run_number }}
