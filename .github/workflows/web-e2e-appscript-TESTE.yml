@@ -99,10 +99,11 @@ jobs:
           mkdir -p status
           echo "${{ steps.cypress.outcome }}" > status/cypress_outcome_${{ env.SPEC_NAME }}.txt
 
-      - name: Renomear relatórios com o nome do spec
+      - name: Organizar JSON do relatório para upload
         if: always()
         run: |
           mkdir -p cypress/reports/json
+          # Move e renomeia qualquer JSON gerado dentro de reports para uma subpasta única
           find cypress/reports -maxdepth 1 -name "*.json" -exec mv {} cypress/reports/json/${{ env.SPEC_NAME }}.json \;
 
       - name: Upload de Artefatos de Relatório
@@ -111,8 +112,7 @@ jobs:
         with:
           name: cypress-reports-${{ env.SPEC_NAME }}
           path: |
-            cypress/reports/json/
-            cypress/reports/screenshots/
+            cypress/reports/
             status/
 
   deploy-r2-cloudflare:
