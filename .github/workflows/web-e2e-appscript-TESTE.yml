@@ -134,8 +134,7 @@ jobs:
           fi
 
       - name: Mesclar Relatórios Mochawesome em um único JSON
-        run: |
-          npx mochawesome-merge "cypress/reports/**/*.json" > cypress/reports/merged-report.json
+        run: npx mochawesome-merge "cypress/reports/*.json" > cypress/reports/merged-report.json
 
       - name: Gerar Relatório HTML Único
         run: |
@@ -143,12 +142,6 @@ jobs:
             --reportDir cypress/reports/html \
             --inline \
             --reportTitle "Monitoramento E2E - Run #${{ github.run_number }}"
-
-      - name: Ler Status e Recriar Variáveis
-        run: |
-          echo "CYPRESS_OUTCOME=$(cat status/cypress_outcome.txt)" >> $GITHUB_ENV
-          echo "DATA_ALERTA=$(TZ='America/Sao_Paulo' date +'%d/%m/%Y')" >> $GITHUB_ENV
-          echo "HORA_ALERTA=$(TZ='America/Sao_Paulo' date +'%H:%M:%S')" >> $GITHUB_ENV
 
       - name: Deploy do Relatório para Cloudflare R2
         env:
