@@ -99,13 +99,20 @@ jobs:
           mkdir -p status
           echo "${{ steps.cypress.outcome }}" > status/cypress_outcome_${{ env.SPEC_NAME }}.txt
 
+      - name: Renomear relatórios com o nome do spec
+        if: always()
+        run: |
+          mkdir -p cypress/reports/json
+          find cypress/reports -maxdepth 1 -name "*.json" -exec mv {} cypress/reports/json/${{ env.SPEC_NAME }}.json \;
+
       - name: Upload de Artefatos de Relatório
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: cypress-reports-${{ env.SPEC_NAME }}
           path: |
-            cypress/reports
+            cypress/reports/json/
+            cypress/reports/screenshots/
             status/
 
   deploy-r2-cloudflare:
@@ -135,7 +142,7 @@ jobs:
           fi
 
       - name: Mesclar Relatórios Mochawesome em um único JSON
-        run: npx mochawesome-merge "cypress/reports/*.json" > cypress/merged-report.json
+        run: npx mochawesome-merge "cypress/reports/json/*.json" > cypress/merged-report.json
 
       - name: Gerar Relatório HTML Único
         run: |
