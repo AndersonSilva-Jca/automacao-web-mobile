@@ -285,7 +285,6 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "✅[MOBILE] Giro/Wemobi/UTP - Monit. Cont."
           to: anderson.ssantos@jcatlm.com.br
-          cc: maysa.marco@jcatlm.com.br,qa.monitor@odptech.com.br
           from: "Monitoramento Contínuo"
           html_body: |
             <!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
