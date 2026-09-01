@@ -104,7 +104,8 @@ jobs:
 
         with:
           api-level: 30
-          target: google_apis
+          # target: google_apis
+          target: playstore
           arch: x86_64
           profile: pixel_7
           disable-animations: true
