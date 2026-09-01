@@ -54,7 +54,7 @@ Start session
     ...    appium:deviceName=emulator-5554
     ...    appium:automationName=UiAutomator2
     ...    appium:appPackage=com.everymind.clubegiro
-    ...    appium:appActivity=.MainActivity
+    ...    appium:appWaitActivity=*
     ...    appium:appWaitDuration=60000
     ...    appium:deviceReadyTimeout=60
     # ...    appium:noReset=${True}

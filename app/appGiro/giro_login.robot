@@ -38,7 +38,7 @@ Resource          ../appGiro/resources/giro_base.resource
 Library           ../appGiro/resources/GeradorDataIda.py
 Library           ../appGiro/resources/GeradorDataVolta.py
 Library           ImapLibrary2
-Library           AppiumLibrary
+# Library           AppiumLibrary
 
 Test Setup        Start session
 Test Teardown     Encerrar Sessao E Gravar Video
