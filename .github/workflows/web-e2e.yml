@@ -204,10 +204,6 @@ on:
 
   workflow_dispatch:
 
-concurrency:
-  group: deploy-r2-cloudflare
-  cancel-in-progress: false
-
 permissions:
   contents: write
 
@@ -310,6 +306,11 @@ jobs:
     needs: cypress-run
     if: always()
     runs-on: ubuntu-latest
+
+    concurrency:
+      group: deploy-r2-cloudflare
+      cancel-in-progress: false
+
     steps:
       - name: Checkout do Código
         uses: actions/checkout@v4
