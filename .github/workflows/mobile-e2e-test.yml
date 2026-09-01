@@ -130,7 +130,13 @@ jobs:
             echo "Criando pastas de resultados..."
             mkdir -p $RESULTS_DIR $ALLURE_DIR
 
+            echo "Fechando apps em segundo plano (Play Store/Settings)..."
+            adb shell input keyevent 3
+            sleep 2
 
+            echo "Forçando a inicialização do Clube Giro..."
+            adb shell am start -S -n com.everymind.clubegiro/com.everymind.clubegiro.MainActivity || true
+            sleep 5
 
 
 

@@ -79,7 +79,9 @@ Start session
     
     # ── DESATIVA O AGUARDO RÍGIDO DA ACTIVITY PELO ADB (-W) ──
     ...    appium:appWaitActivity=*
-    ...    appium:appWaitForLaunch=${False}
+    # ── FORÇA O RE-LANÇAMENTO DO APP ──
+    ...    appium:forceAppLaunch=${True}
+    ...    appium:dontStopAppOnReset=${False}
     
     # ── ELEVA OS TIMEOUTS DE CONEXÃO DO UIAUTOMATOR2 ──
     ...    appium:adbExecTimeout=${180000}
