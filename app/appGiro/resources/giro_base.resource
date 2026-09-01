@@ -69,7 +69,6 @@ Carregar Variaveis De Ambiente
 #     ...    appium:connectHardwareKeyboard=${True}
 #     ...    appium:socketConnectionTimeout=${90000}
 
-    # *** Keywords ***
 Start session
     Carregar Variaveis De Ambiente
     Open Application    http://127.0.0.1:4723
@@ -77,34 +76,25 @@ Start session
     ...    appium:deviceName=emulator-5554
     ...    appium:automationName=UiAutomator2
     ...    appium:appPackage=com.everymind.clubegiro
-    ...    appium:appActivity=com.everymind.clubegiro.MainActivity
-    ...    appium:appWaitActivity=*
-    ...    appium:forceAppLaunch=${True}
-    ...    appium:autoLaunch=${True}
     
-    # ── AJUSTES DE TIMEOUT PARA O GITHUB ACTIONS ──
-    ...    appium:adbExecTimeout=${120000}
-    ...    appium:appWaitDuration=120000
-    ...    appium:deviceReadyTimeout=120
-    ...    appium:autoGrantPermissions=${True}
-    ...    appium:ensureWebviewsHavePages=${True}
-    ...    appium:clearDeviceLogs=${True}
-    ...    appium:nativeWebScreenshot=${True}
-    ...    appium:uiautomator2ServerLaunchTimeout=${120000}
-    ...    appium:uiautomator2ServerInstallTimeout=${120000}
-    ...    appium:newCommandTimeout=${300}
-    ...    appium:connectHardwareKeyboard=${True}
+    # ── DESATIVA O AGUARDO RÍGIDO DA ACTIVITY PELO ADB (-W) ──
+    ...    appium:appWaitActivity=*
+    ...    appium:appWaitForLaunch=${False}
+    
+    # ── ELEVA OS TIMEOUTS DE CONEXÃO DO UIAUTOMATOR2 ──
+    ...    appium:adbExecTimeout=${180000}
+    ...    appium:uiautomator2ServerLaunchTimeout=${180000}
+    ...    appium:uiautomator2ServerInstallTimeout=${180000}
+    ...    appium:deviceReadyTimeout=180
+    ...    appium:appWaitDuration=180000
     
     # ── OUTRAS CONFIGURAÇÕES DE SESSÃO ──
     ...    appium:autoGrantPermissions=${True}
     ...    appium:ensureWebviewsHavePages=${True}
     ...    appium:clearDeviceLogs=${True}
     ...    appium:nativeWebScreenshot=${True}
-    ...    appium:uiautomator2ServerLaunchTimeout=${120000}
-    ...    appium:uiautomator2ServerInstallTimeout=${120000}
     ...    appium:newCommandTimeout=${300}
     ...    appium:connectHardwareKeyboard=${True}
-    ...    appium:socketConnectionTimeout=${120000}
 
     # Aguarda a animação da Splash Screen no CI
     Sleep    15s
@@ -256,7 +246,7 @@ Tratar Banner De Login Se Aparecer
     # 1. Verifica se o elemento aparece na tela em até 5 segundos
     # O Robot guarda True (se achou) ou False (se não achou) na variável
     ${cookie_visivel}=    Run Keyword And Return Status
-    ...    Wait Until Element Is Visible    xpath=//android.widget.Button[@content-desc="Fechar"]    timeout=30s
+    ...    Wait Until Element Is Visible    xpath=//android.widget.Button[@content-desc="Fechar"]    timeout=45s
 
     # 2. Se a resposta for True, ele entra no bloco e clica para aceitar
     IF    ${cookie_visivel}

@@ -52,7 +52,7 @@ Deve Realizar O Login Com Sucesso Tratando 2FA Se Solicitado
     Tratar Banner De Login Se Aparecer
 
     # Acessa o menu principal
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Menu"]    timeout=40s
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Menu"]    timeout=60s
     Click Element                    xpath=//android.widget.TextView[@text="Menu"]
 
     # Rola até a opção de sair do aplicativo
