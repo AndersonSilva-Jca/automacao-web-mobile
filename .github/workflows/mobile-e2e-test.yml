@@ -117,7 +117,7 @@ jobs:
             # adb install-multiple ./app/apks/wemobi/*.apk
             # adb install-multiple ./app/apks/cometa/*.apk
             # adb install-multiple ./app/apks/1001/*.apk
-            # adb install-multiple ./app/apks/catarinense/*.apk
+            adb install-multiple ./app/apks/catarinense/*.apk
             adb install-multiple ./app/apks/giro/*.apk
             echo "Garantindo que as animações do sistema estão desligadas..."
             adb shell settings put global window_animation_scale 0

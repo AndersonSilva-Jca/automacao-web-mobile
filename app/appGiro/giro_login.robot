@@ -57,8 +57,8 @@ Deve Realizar O Login Com Sucesso Tratando 2FA Se Solicitado
 
     # Rola até a opção de sair do aplicativo
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Acessar minha conta"]    timeout=40s
-    Swipe    start_x=545    start_y=2280    end_x=559    end_y=78     duration=1000
-    Swipe    start_x=556    start_y=1995    end_x=553    end_y=542    duration=1000
+    Swipe    start_x=545    start_y=2280    end_x=559    end_y=78     duration=1000ms
+    Swipe    start_x=556    start_y=1995    end_x=553    end_y=542    duration=1000ms
 
     # Realiza o Logout
     Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Sair do app"]    timeout=40s
