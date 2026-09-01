@@ -130,14 +130,9 @@ jobs:
             echo "Criando pastas de resultados..."
             mkdir -p $RESULTS_DIR $ALLURE_DIR
 
-            echo "Limpando logs do Android..."
-            adb logcat -c
 
-            echo "Iniciando a execução do Robot Framework com Allure..."
-            robot -d ./results --listener allure_robotframework:$ALLURE_DIR --name "Monitoramento Mobile" app/appGiro/giro_login.robot || true
 
-            echo "Capturando traceback do crash do Android (Logcat)..."
-            adb logcat -d *:E > ./results/android_crash.log
+
 
             echo "Iniciando a execução do Robot Framework com Allure..."
             robot -d ./results --listener allure_robotframework:$ALLURE_DIR --name "Monitoramento Mobile" app/appGiro/giro_login.robot 
