@@ -105,8 +105,7 @@ jobs:
         with:
           api-level: 30
           target: google_apis
-          # arch: x86_64
-          arch: arm64-v8a
+          arch: x86_64
           profile: pixel_7
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
@@ -119,7 +118,7 @@ jobs:
             # adb install-multiple ./app/apks/cometa/*.apk
             # adb install-multiple ./app/apks/1001/*.apk
             adb install-multiple ./app/apks/catarinense/*.apk
-            adb install-multiple ./app/apks/giro/*.apk
+            adb install-multiple ./app/apks/clube_giro/*.apk
 
             adb shell am start -n com.everymind.clubegiro/com.everymind.clubegiro.MainActivity || true
 
@@ -143,6 +142,7 @@ jobs:
             robot -d ./results --listener allure_robotframework:$ALLURE_DIR --name "Monitoramento Mobile" app/appGiro/giro_login.robot 
             echo $! > appium.pid
             kill $(cat appium.pid) || true
+
       - name: Limpar APKs do Workspace para liberar espaço
         if: always()
         run: |
