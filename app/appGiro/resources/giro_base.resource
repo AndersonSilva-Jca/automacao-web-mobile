@@ -217,7 +217,7 @@ Tratar Banner De Login Se Aparecer
     # 1. Verifica se o elemento aparece na tela em até 5 segundos
     # O Robot guarda True (se achou) ou False (se não achou) na variável
     ${cookie_visivel}=    Run Keyword And Return Status
-    ...    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Compre agora!"]    timeout=30s
+    ...    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Não desejo mais ver esta mensagem"]    timeout=30s
 
     # 2. Se a resposta for True, ele entra no bloco e clica para aceitar
     IF    ${cookie_visivel}
