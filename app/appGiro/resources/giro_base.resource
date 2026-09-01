@@ -113,6 +113,7 @@ Login
 
     # Se estiver visível, segue o fluxo normal
     Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Entrar"]    timeout=60s
+       Log To Console    \nClicando em Entrar!
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Entrar"]
 
      Log To Console    \nFazendo o Login...
