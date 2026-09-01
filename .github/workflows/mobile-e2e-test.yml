@@ -119,6 +119,9 @@ jobs:
             # adb install-multiple ./app/apks/1001/*.apk
             adb install-multiple ./app/apks/catarinense/*.apk
             adb install-multiple ./app/apks/giro/*.apk
+
+            adb shell am start -n com.everymind.clubegiro/com.everymind.clubegiro.MainActivity || true
+
             echo "Garantindo que as animações do sistema estão desligadas..."
             adb shell settings put global window_animation_scale 0
             adb shell settings put global transition_animation_scale 0

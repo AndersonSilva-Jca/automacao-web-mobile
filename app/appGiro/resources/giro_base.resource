@@ -77,14 +77,23 @@ Start session
     ...    appium:deviceName=emulator-5554
     ...    appium:automationName=UiAutomator2
     ...    appium:appPackage=com.everymind.clubegiro
-    # ...    appium:appActivity=com.everymind.clubegiro.MainActivity
+    ...    appium:appActivity=com.everymind.clubegiro.MainActivity
     ...    appium:appWaitActivity=*
+    ...    appium:forceAppLaunch=${True}
+    ...    appium:autoLaunch=${True}
     
     # ── AJUSTES DE TIMEOUT PARA O GITHUB ACTIONS ──
     ...    appium:adbExecTimeout=${120000}
-    ...    appium:appWaitForLaunch=${False}
     ...    appium:appWaitDuration=120000
     ...    appium:deviceReadyTimeout=120
+    ...    appium:autoGrantPermissions=${True}
+    ...    appium:ensureWebviewsHavePages=${True}
+    ...    appium:clearDeviceLogs=${True}
+    ...    appium:nativeWebScreenshot=${True}
+    ...    appium:uiautomator2ServerLaunchTimeout=${120000}
+    ...    appium:uiautomator2ServerInstallTimeout=${120000}
+    ...    appium:newCommandTimeout=${300}
+    ...    appium:connectHardwareKeyboard=${True}
     
     # ── OUTRAS CONFIGURAÇÕES DE SESSÃO ──
     ...    appium:autoGrantPermissions=${True}
@@ -110,8 +119,7 @@ Login
     # Sleep    7s
     # Wait Until Element Is Visible    id=android:id/content    timeout=40s
     Log To Console    \nCarregando tela inicial!
-    # Wait Until Element Is Visible    xpath=/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout    timeout=60s
-        Log To Console    \ncarregando tela inicial..
+    # Wait Until Element Is Visible    xpath=/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout    timeout=60
 
     # Se estiver visível, segue o fluxo normal
     Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Entrar"]    timeout=60s
