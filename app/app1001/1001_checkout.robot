@@ -24,7 +24,7 @@ Deve realizar o fluxo até o checkout de pagamento
     Input Text    android=new UiSelector().resourceId("locationSearch")    Sao Paulo (Rod. Tietê)
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="São Paulo (Rod. Tietê) (SP)"]
     Click Element    xpath=//android.widget.TextView[@text="São Paulo (Rod. Tietê) (SP)"]
-    Click Element    xpath=//android.widget.TextView[@text="São Paulo (Rod. Tietê) (SP)"]
+    # Click Element    xpath=//android.widget.TextView[@text="São Paulo (Rod. Tietê) (SP)"]
     log To Console    \nOrigem selecionado com sucesso!
     Sleep    1s
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Destino"]    timeout=60s
