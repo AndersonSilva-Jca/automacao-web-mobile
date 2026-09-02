@@ -118,10 +118,17 @@ jobs:
             # adb install-multiple ./app/apks/wemobi/*.apk
             # adb install-multiple ./app/apks/cometa/*.apk
             # adb install-multiple ./app/apks/1001/*.apk
-            adb install-multiple ./app/apks/catarinense/*.apk
-            adb install-multiple ./app/apks/clube_giro/*.apk
 
+            adb install-multiple ./app/apks/catarinense/*.apk || true
+            adb install-multiple ./app/apks/clube_giro/*.apk || true
+
+            echo "🚫 Forçando o fechamento/bloqueio da Play Store..."
+            adb shell am force-stop com.android.vending || true
+            adb shell pm disable-user --user 0 com.android.vending || true
+
+            echo "🚀 Abrindo o aplicativo Clube Giro em primeiro plano..."
             adb shell am start -n com.everymind.clubegiro/com.everymind.clubegiro.MainActivity || true
+            sleep 5
 
             echo "Garantindo que as animações do sistema estão desligadas..."
             adb shell settings put global window_animation_scale 0
@@ -149,6 +156,7 @@ jobs:
         if: always()
         run: |
           rm -rf app/apks/
+
       - name: Gera relatório Allure
         if: always()
         run: |
@@ -159,6 +167,7 @@ jobs:
             echo "<html><body><h2>Sem dados de teste — emulador ou Appium falhou.</h2></body></html>" \
               > allure-report/index.html
           fi
+
       - name: Obter Data e Hora Atual (Brasília)
         if: failure()
         run: |

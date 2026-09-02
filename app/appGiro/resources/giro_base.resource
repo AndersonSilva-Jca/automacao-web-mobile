@@ -76,30 +76,26 @@ Start session
     ...    appium:deviceName=emulator-5554
     ...    appium:automationName=UiAutomator2
     ...    appium:appPackage=com.everymind.clubegiro
-    
-    # ── DESATIVA O AGUARDO RÍGIDO DA ACTIVITY PELO ADB (-W) ──
+    ...    appium:appActivity=com.everymind.clubegiro.MainActivity
     ...    appium:appWaitActivity=*
-    # ── FORÇA O RE-LANÇAMENTO DO APP ──
-    ...    appium:forceAppLaunch=${True}
-    ...    appium:dontStopAppOnReset=${False}
     
-    # ── ELEVA OS TIMEOUTS DE CONEXÃO DO UIAUTOMATOR2 ──
-    ...    appium:adbExecTimeout=${180000}
-    ...    appium:uiautomator2ServerLaunchTimeout=${180000}
-    ...    appium:uiautomator2ServerInstallTimeout=${180000}
-    ...    appium:deviceReadyTimeout=180
-    ...    appium:appWaitDuration=180000
+    # ── IMPEDE O ADB DE DISPARAR A PLAY STORE ──
+    ...    appium:appWaitForLaunch=${False}
+    ...    appium:dontStopAppOnReset=${True}
     
-    # ── OUTRAS CONFIGURAÇÕES DE SESSÃO ──
+    # ── TIMEOUTS DE SESSÃO ──
+    ...    appium:adbExecTimeout=${120000}
+    ...    appium:appWaitDuration=120000
+    ...    appium:deviceReadyTimeout=120
     ...    appium:autoGrantPermissions=${True}
     ...    appium:ensureWebviewsHavePages=${True}
     ...    appium:clearDeviceLogs=${True}
     ...    appium:nativeWebScreenshot=${True}
+    ...    appium:uiautomator2ServerLaunchTimeout=${120000}
+    ...    appium:uiautomator2ServerInstallTimeout=${120000}
     ...    appium:newCommandTimeout=${300}
-    ...    appium:connectHardwareKeyboard=${True}
 
-    # Aguarda a animação da Splash Screen no CI
-    Sleep    15s
+    Sleep    10s    
 
 # ─────────────────────────────────────────────────────────────────────────────
 Login
