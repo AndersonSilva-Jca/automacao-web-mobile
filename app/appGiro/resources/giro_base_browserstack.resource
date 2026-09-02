@@ -10,12 +10,14 @@ Library           ../../libraries/GmailHelper.py
 
 *** Variables ***
 
-# ${BROWSERSTACK_USERNAME}       ${EMPTY}
-# ${BROWSERSTACK_ACCESS_KEY}     ${EMPTY}
+${BROWSERSTACK_USERNAME}        ${EMPTY}
+${BROWSERSTACK_ACCESS_KEY}      ${EMPTY}
 # ${REMOTE_URL}        https://${BROWSERSTACK_USERNAME}:${BROWSERSTACK_ACCESS_KEY}@hub-cloud.browserstack.com/wd/hub
 
 ${LOGIN2}               ${EMPTY}
 ${SENHA2}               ${EMPTY}
+${BROWSERSTACK_APP}     ${EMPTY}
+${BROWSERSTACK_DEVICE}  ${EMPTY}
 ${GMAIL_USER}           ${EMPTY}
 ${GMAIL_APP_PASS}       ${EMPTY}
 ${REMETENTE_APP}        ${EMPTY}
@@ -30,46 +32,38 @@ ${XPATH_CODIGO_INVALIDO}    xpath=//android.widget.TextView[@text="Código invá
 Carregar Variaveis De Ambiente
     Evaluate    __import__('dotenv').load_dotenv(dotenv_path='app/.env')
 
-    # ${env_browserstack_username}       Get Environment Variable    BROWSERSTACK_USERNAME
-    # ${env_browserstack_access_key}     Get Environment Variable    BROWSERSTACK_ACCESS_KEY
+    ${env_browserstack_username}       Get Environment Variable    BROWSERSTACK_USERNAME
+    ${env_browserstack_access_key}     Get Environment Variable    BROWSERSTACK_ACCESS_KEY
     ${env_login2}=           Get Environment Variable    LOGIN2
     ${env_senha2}=           Get Environment Variable    SENHA2
+    ${env_browserstack_app}=    Get Environment Variable    BROWSERSTACK_APP
+    ${env_browserstack_device}=    Get Environment Variable    BROWSERSTACK_DEVICE
     ${env_gmail_pass}=       Get Environment Variable    GMAIL_APP_PASS
     ${env_gmail_user}=       Get Environment Variable    GMAIL_USER
     ${env_remetente_app}=    Get Environment Variable    REMETENTE_APP
     
-    # Set Global Variable    ${BROWSERSTACK_USERNAME}       ${env_browserstack_username} 
-    # Set Global Variable    ${BROWSERSTACK_ACCESS_KEY}     ${env_browserstack_access_key}
+    Set Global Variable    ${BROWSERSTACK_USERNAME}       ${env_browserstack_username} 
+    Set Global Variable    ${BROWSERSTACK_ACCESS_KEY}     ${env_browserstack_access_key}
     Set Global Variable    ${LOGIN2}            ${env_login2}
     Set Global Variable    ${SENHA2}            ${env_senha2}
+    Set Global Variable    ${BROWSERSTACK_APP}  ${env_browserstack_app}
+    Set Global Variable    ${BROWSERSTACK_DEVICE}  ${env_browserstack_device}
     Set Global Variable    ${GMAIL_USER}        ${env_gmail_user}
     Set Global Variable    ${GMAIL_APP_PASS}    ${env_gmail_pass}
     Set Global Variable    ${REMETENTE_APP}     ${env_remetente_app}
 
 # ─────────────────────────────────────────────────────────────────────────────
 Start session
+    [Arguments]    ${BROWSERSTACK_OS_VERSION}=    ${browserstack_options}=
     Carregar Variaveis De Ambiente
     Open Application    https://hub-cloud.browserstack.com/wd/hub
-    ...    platformName=Android
-    ...    appium:deviceName=emulator-5554
-    ...    appium:automationName=UiAutomator2
-    # ...    appium:appPackage=com.everymind.clubegiro
-    ...    appium:app=C:\\automacao-web-mobile\\app\\apks\\clube_giro\\base.apk
-    ...    appium:appWaitActivity=*
-    ...    appium:appWaitDuration=60000
-    ...    appium:deviceReadyTimeout=60
-    # ...    appium:noReset=${True}
-    ...    appium:autoGrantPermissions=${True}
-    ...    appium:ensureWebviewsHavePages=${True}
-    ...    appium:clearDeviceLogs=${True}
-    ...    appium:nativeWebScreenshot=${True}
-    ...    appium:uiautomator2ServerLaunchTimeout=${90000}
-    ...    appium:uiautomator2ServerInstallTimeout=${60000}
-    ...    appium:adbExecTimeout=${60000}
-    ...    appium:newCommandTimeout=${300}
-    ...    appium:connectHardwareKeyboard=${True}
-    ...    appium:socketConnectionTimeout=${90000}
-
+...    platformName=Android
+...    appium:automationName=UiAutomator2
+...    appium:app=${BROWSERSTACK_APP}
+...    appium:deviceName=${BROWSERSTACK_DEVICE}
+...    appium:platformVersion=${BROWSERSTACK_OS_VERSION}
+...    appium:autoGrantPermissions=${True}
+...    bstack:options=${browserstack_options}
 
 
 # ─────────────────────────────────────────────────────────────────────────────
