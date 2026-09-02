@@ -125,7 +125,8 @@ jobs:
             echo "Criando pastas de resultados..."
             mkdir -p $RESULTS_DIR $ALLURE_DIR
             echo "Iniciando a execução do Robot Framework com Allure..."
-            robot -d ./results --listener allure_robotframework:$ALLURE_DIR --name "Monitoramento Mobile" app/appWemobi/wemobi_login.robot app/app1001/1001_login.robot app/appCatarinense/catarinense_login.robot app/appCometa/cometa_login.robot
+            robot -d ./results --listener allure_robotframework:$ALLURE_DIR --name "Monitoramento Mobile" app/appWemobi/wemobi_checkout.robot app/app1001/1001_checkout.robot 
+            # app/appWemobi/wemobi_login.robot app/app1001/1001_login.robot app/appCatarinense/catarinense_login.robot app/appCometa/cometa_login.robot
             echo $! > appium.pid
             kill $(cat appium.pid) || true
       - name: Limpar APKs do Workspace para liberar espaço
@@ -333,7 +334,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "🚨[ALERTA MOBILE] Wemobi/UTP - Monit. Cont"
           to: anderson.ssantos@jcatlm.com.br
-          cc: qa.monitor@odptech.com.br,maysa.marco@jcatlm.com.br
+          # cc: qa.monitor@odptech.com.br,maysa.marco@jcatlm.com.br
           from: "Monitoramento Contínuo"
           html_body: |
             <!DOCTYPE html>
