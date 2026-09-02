@@ -41,7 +41,7 @@ Start session
     ...    appium:appPackage=br.com.autoviacao1001.autoviacao1001app
     ...    appium:appActivity=.MainActivity
     ...    appWaitDuration=60000
-    ...    appium:noReset=${False}
+    # ...    appium:noReset=${False}
     ...    appium:autoGrantPermissions=${True}
     ...    appium:ensureWebviewsHavePages=${True}
     ...    appium:clearDeviceLogs=${True}
@@ -100,6 +100,8 @@ Tratar Banner De Horario Se Aparecer
     END
 
 Selecionar Assento Livre Aleatoriamente
+    Swipe    start_x=544    start_y=2115    end_x=544    end_y=926    duration=1s
+
     # 1. XPath para capturar todos os TextViews que representam assentos livres (números de 2 dígitos)
     # Filtramos para pegar textos que não sejam "X", "Livre", "Ocupado", "Selecionado" ou o nome do passageiro
     ${locator_todos_livres}    Set Variable    xpath=//android.widget.TextView[@text!="X" and @text!="Livre" and @text!="Ocupado" and @text!="Selecionado" and string-length(@text) = 2]

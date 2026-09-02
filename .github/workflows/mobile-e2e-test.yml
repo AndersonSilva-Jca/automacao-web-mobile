@@ -118,7 +118,7 @@ jobs:
             echo "=== Emulator pronto e bootado automaticamente pela Action ==="
             adb devices
             echo "Instalando os aplicativos..."
-            # adb install-multiple ./app/apks/wemobi/*.apk
+            adb install-multiple ./app/apks/wemobi/*.apk
             adb install-multiple ./app/apks/cometa/*.apk
             adb install-multiple ./app/apks/1001/*.apk
             adb install-multiple ./app/apks/catarinense/*.apk
