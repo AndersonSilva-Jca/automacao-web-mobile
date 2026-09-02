@@ -29,24 +29,24 @@ Deve realizar o fluxo até o checkout de pagamento
     Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="headerNavContainer"]   timeout=60s
     log To Console    \nClicando no campo de origem...
     Sleep    500ms
-    Aguardar Elemento Com Retry    xpath=//android.widget.EditText[@resource-id="locationSearch"]
-    Click Element    xpath=//android.widget.EditText[@resource-id="locationSearch"]
+    # Aguardar Elemento Com Retry    xpath=//android.widget.EditText[@resource-id="locationSearch"]
+    # Click Element    xpath=//android.widget.EditText[@resource-id="locationSearch"]
     Log To Console    \nClicando em origem...
 
     Input Text    android=new UiSelector().className("android.widget.EditText")    Rio de Janeiro - Rodoviária Novo Rio (RJ)
     Log To Console    \nDigitando destino...
     Wait Until Element Is Visible   xpath=//android.widget.TextView[@text="Rio De Janeiro - Rodoviária Novo Rio (RJ)"]              
-
     Click Element    android=new UiSelector().text("Rio De Janeiro - Rodoviária Novo Rio (RJ)")
     Click Element    android=new UiSelector().text("Rio De Janeiro - Rodoviária Novo Rio (RJ)")
+    Log To Console    \nDestino digitado com sucesso!
 
 
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Destino"]    timeout=45s
     Input Text    android=new UiSelector().className("android.widget.EditText")    São Paulo - Rodoviária Tietê (SP)
     Log To Console    \nDigitando origem...
     Wait Until Element Is Visible   xpath=//android.view.ViewGroup[@content-desc="São Paulo - Rodoviária Tietê (SP), Terminal Rodoviário"]    timeout=60s
-    Log To Console    \nOrigem digitada com sucesso!
     Click Element    accessibility_id=São Paulo - Rodoviária Tietê (SP), Terminal Rodoviário
+    Log To Console    \nOrigem digitada com sucesso!
 
     # Click Element    accessibility_id=São Paulo - Rodoviária Tietê (SP), Terminal Rodoviário
  
