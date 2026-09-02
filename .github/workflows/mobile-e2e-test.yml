@@ -301,7 +301,7 @@ jobs:
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "✅[MOBILE CHECKOUT] Wemobi/UTP - Monit. Cont."
+          subject: "✅[TESTE MOBILE CHECKOUT] Wemobi/UTP - Monit. Cont."
           to: anderson.ssantos@jcatlm.com.br
           from: "Monitoramento Contínuo"
           html_body: |
@@ -349,7 +349,7 @@ jobs:
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "🚨[ALERTA MOBILE CHECKOUT] Wemobi/UTP - Monit. Cont"
+          subject: "🚨[ALERTA TESTE MOBILE CHECKOUT] Wemobi/UTP - Monit. Cont"
           to: anderson.ssantos@jcatlm.com.br
           # cc: qa.monitor@odptech.com.br,maysa.marco@jcatlm.com.br
           from: "Monitoramento Contínuo"

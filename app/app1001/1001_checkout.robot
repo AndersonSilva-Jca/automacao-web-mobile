@@ -54,6 +54,7 @@ Deve realizar o fluxo até o checkout de pagamento
     Wait Until Element Is Visible
     ...    xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
     ...    timeout=60s
+    Aguardar Elemento Com Retry    xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
     Log To Console    \nPassageiros confirmados com sucesso
     Sleep    1s
