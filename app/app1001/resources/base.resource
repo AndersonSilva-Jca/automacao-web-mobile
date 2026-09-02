@@ -41,7 +41,7 @@ Start session
     ...    appium:appPackage=br.com.autoviacao1001.autoviacao1001app
     ...    appium:appActivity=.MainActivity
     ...    appWaitDuration=60000
-    # ...    appium:noReset=${False}
+    ...    appium:noReset=${False}
     ...    appium:autoGrantPermissions=${True}
     ...    appium:ensureWebviewsHavePages=${True}
     ...    appium:clearDeviceLogs=${True}
