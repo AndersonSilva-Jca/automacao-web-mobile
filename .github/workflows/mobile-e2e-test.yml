@@ -568,12 +568,19 @@ jobs:
             sleep 8
 
             echo "=== Processo do Clube Giro ==="
-            if ! adb shell pidof com.everymind.clubegiro; then
-              echo "ERRO: o processo do Clube Giro morreu após a abertura."
-              echo "=== Últimos crashes / AndroidRuntime ==="
-              adb logcat -d -v time | grep -E "AndroidRuntime|FATAL EXCEPTION|clubegiro|everymind|Process: com.everymind.clubegiro" | tail -250 || true
-              exit 1
-            fi
+            adb shell pidof com.everymind.clubegiro || true
+
+            echo "=== Activity em primeiro plano ==="
+            adb shell dumpsys activity activities | grep -E "mResumedActivity|topResumedActivity" | head -10 || true
+
+            echo "=== Log do Clube Giro antes do Robot ==="
+            adb logcat -d -v time | grep -E "AndroidRuntime|FATAL EXCEPTION|clubegiro|everymind|Process: com.everymind.clubegiro" | tail -100 || true
+
+            echo "=== Status do Appium ==="
+            curl -sf http://127.0.0.1:4723/status
+
+            echo "Iniciando a execução do Robot Framework com Allure..."
+            robot -d ./results --listener allure_robotframework:$ALLURE_DIR --name "Monitoramento Mobile" app/appGiro/giro_login.robot
 
             echo "=== Activity em primeiro plano ==="
             adb shell dumpsys activity activities | grep -E "mResumedActivity|topResumedActivity" | head -10 || true

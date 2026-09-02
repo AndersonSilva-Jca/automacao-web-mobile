@@ -10,7 +10,7 @@ Cypress.Commands.add("selecionarDataIda", (range = 3) => {
   });
 });
 
-Cypress.Commands.add("selecionarDataWemobi", (range = 3) => {
+Cypress.Commands.add("selecionarDataWemobi", (range = 7) => {
   cy.get('td[data-handler="selectDay"] a').then(($days) => {
     // Se houver menos de 2 dias disponíveis no mês atual
     if ($days.length < 2) {
@@ -19,13 +19,13 @@ Cypress.Commands.add("selecionarDataWemobi", (range = 3) => {
 
       // Busca os dias do novo mês e seleciona aleatoriamente
       cy.get('td[data-handler="selectDay"] a').then(($newDays) => {
-        const proximosDias = $newDays.slice(0, range);
+        const proximosDias = $newDays.slice(3, range);
         const randomIndex = Math.floor(Math.random() * proximosDias.length);
         cy.wrap(proximosDias[randomIndex]).click({ force: true });
       });
     } else {
       // Mantém o comportamento padrão no mês atual
-      const proximosDias = $days.slice(1, range);
+      const proximosDias = $days.slice(3, range);
       const randomIndex = Math.floor(Math.random() * proximosDias.length);
       cy.wrap(proximosDias[randomIndex]).click({ force: true });
     }
