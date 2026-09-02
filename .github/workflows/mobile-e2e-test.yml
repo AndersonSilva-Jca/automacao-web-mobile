@@ -127,14 +127,16 @@ jobs:
             adb shell settings put global window_animation_scale 0
             adb shell settings put global transition_animation_scale 0
             adb shell settings put global animator_duration_scale 0
+
             echo "Criando pastas de resultados..."
             mkdir -p $RESULTS_DIR $ALLURE_DIR
+
             echo "Iniciando a execução do Robot Framework com Allure..."
             robot -d ./results --listener allure_robotframework:$ALLURE_DIR --name "Monitoramento Mobile" app/app1001/1001_checkout.robot 
             # app/appCatarinense/catarinense_checkout.robot app/appCometa/cometa_checkout.robot
             # app/appWemobi/wemobi_checkout.robot 
             # app/app1001/1001_checkout.robot app/appCatarinense/catarinense_checkout.robot app/appCometa/cometa_checkout.robot
-            app/appWemobi/wemobi_checkout.robot 
+
             echo $! > appium.pid
             kill $(cat appium.pid) || true
 
