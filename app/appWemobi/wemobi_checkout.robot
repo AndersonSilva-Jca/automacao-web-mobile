@@ -24,6 +24,7 @@ Deve realizar o fluxo até o checkout de pagamento
     Wait Until Element Is Visible
     ...    xpath=//android.view.ViewGroup[@content-desc="Buscar"]/android.view.View    timeout=90s
     Log To Console    \nTela de Busca exibida com sucesso!
+
     Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="origin"]    timeout=60s
     Click Element    xpath=//android.widget.EditText[@resource-id="origin"]
     Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="headerNavContainer"]   timeout=60s
@@ -59,9 +60,7 @@ Deve realizar o fluxo até o checkout de pagamento
     Log To Console    \nData gerada: ${data_ida}
 # retorna: 02/06/2026
 
-    Input Text
-    ...    xpath=//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[3]/android.widget.EditText[1]
-    ...    ${data_ida}
+    Input Text    android=new UiSelector().className("android.widget.EditText").instance(0)    ${data_ida}
     log To Console    \nData de ida selecionada com sucesso!
 
     Wait Until Element Is Visible
@@ -96,6 +95,7 @@ Deve realizar o fluxo até o checkout de pagamento
 
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Comprar"]/android.view.View
     Log To Console    \nClicando em Comprar...
+  Tratar Banner De Madrugada Se Aparecer
 
    Wait Until Element Is Visible
     ...    xpath=//android.widget.TextView[@text="Passageiro 1"]

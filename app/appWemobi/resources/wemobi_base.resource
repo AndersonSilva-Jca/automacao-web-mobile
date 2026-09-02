@@ -87,6 +87,20 @@ Tratar Banner De Cookie Se Aparecer
         Log To Console    \n[INFO] Banner de cookie não apareceu. Seguindo o fluxo...
     END
 
+Tratar Banner De Madrugada Se Aparecer
+    # 1. Verifica se o elemento aparece na tela em até 5 segundos
+    # O Robot guarda True (se achou) ou False (se não achou) na variável
+    ${madrugada_visivel}=    Run Keyword And Return Status
+    ...    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="modal"]/android.view.ViewGroup/android.view.ViewGroup[3]    timeout=60s
+
+    # 2. Se a resposta for True, ele entra no bloco e clica para aceitar
+    IF    ${madrugada_visivel}
+        Log To Console    \n[INFO] Banner de madrugada detectado. Aceitando...
+        Click Element    xpath=//android.widget.TextView[@text="Ok, entendi!"]
+    ELSE
+        Log To Console    \n[INFO] Banner de madrugada não apareceu. Seguindo o fluxo...
+    END
+
 Fechar modal do login
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Garanta AGORA até 55% OFF"]    timeout=120s
 
