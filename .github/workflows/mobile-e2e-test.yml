@@ -45,6 +45,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install allure-robotframework robotframework-appiumlibrary allure-python-commons robotframework-imaplibrary2
+
       - name: Install Allure CLI
         run: |
           wget -qO allure.tgz \
@@ -67,9 +68,11 @@ jobs:
         run: |
           npm install -g appium
           appium driver install uiautomator2 || true
+
       - name: Enable KVM group permissions
         run: |
           sudo chmod 666 /dev/kvm
+
       - name: Start Appium
         shell: bash
         run: |
@@ -86,6 +89,7 @@ jobs:
             done
           '
           curl http://127.0.0.1:4723/status
+
       - name: Run Tests with Android Emulator
         id: run_tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -133,10 +137,12 @@ jobs:
             app/appWemobi/wemobi_checkout.robot 
             echo $! > appium.pid
             kill $(cat appium.pid) || true
+
       - name: Limpar APKs do Workspace para liberar espaço
         if: always()
         run: |
           rm -rf app/apks/
+
       - name: Gera relatório Allure
         if: always()
         run: |
@@ -147,11 +153,13 @@ jobs:
             echo "<html><body><h2>Sem dados de teste — emulador ou Appium falhou.</h2></body></html>" \
               > allure-report/index.html
           fi
+
       - name: Obter Data e Hora Atual (Brasília)
         if: failure()
         run: |
           echo "DATA_ALERTA=$(TZ='America/Sao_Paulo' date +'%d/%m/%Y')" >> $GITHUB_ENV
           echo "HORA_ALERTA=$(TZ='America/Sao_Paulo' date +'%H:%M:%S')" >> $GITHUB_ENV
+
       # 🚀 DEPLOY ULTRA RÁPIDO PARA O CLOUDFLARE R2
       - name: Deploy do Relatório para Cloudflare R2
         if: always()
@@ -169,6 +177,7 @@ jobs:
           if [ -f appium.pid ]; then
             kill "$(cat appium.pid)" 2>/dev/null || true
           fi
+
       - name: Upload Allure Report
         if: always()
         uses: actions/upload-artifact@v4
@@ -232,6 +241,7 @@ jobs:
               f.write(f"status_raw={status_raw}\n")
               f.write(f"datetime={now_str}\n")
               f.write(f"errors={error_details}\n")
+
       - name: Extrair Evidências (print/vídeo) de Falhas
         if: always()
         id: evidence
@@ -267,6 +277,7 @@ jobs:
           with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as out:
               out.write(f"screenshot_link={screenshot_link}\n")
               out.write(f"video_link={video_link}\n")
+
       - name: GitHub Summary
         if: always()
         run: |
