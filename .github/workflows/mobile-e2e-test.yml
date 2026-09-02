@@ -126,7 +126,8 @@ jobs:
             echo "Criando pastas de resultados..."
             mkdir -p $RESULTS_DIR $ALLURE_DIR
             echo "Iniciando a execução do Robot Framework com Allure..."
-            robot -d ./results --listener allure_robotframework:$ALLURE_DIR --name "Monitoramento Mobile" app/app1001/1001_checkout.robot app/appCatarinense/catarinense_checkout.robot app/appCometa/cometa_checkout.robot
+            robot -d ./results --listener allure_robotframework:$ALLURE_DIR --name "Monitoramento Mobile" app/app1001/1001_checkout.robot 
+            # app/appCatarinense/catarinense_checkout.robot app/appCometa/cometa_checkout.robot
             app/appWemobi/wemobi_checkout.robot 
             # app/app1001/1001_checkout.robot app/appCatarinense/catarinense_checkout.robot app/appCometa/cometa_checkout.robot
             app/appWemobi/wemobi_checkout.robot 
