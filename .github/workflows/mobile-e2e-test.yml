@@ -114,10 +114,10 @@ jobs:
             echo "=== Emulator pronto e bootado automaticamente pela Action ==="
             adb devices
             echo "Instalando os aplicativos..."
-            adb install-multiple ./app/apks/wemobi/*.apk
-            # adb install-multiple ./app/apks/cometa/*.apk
-            # adb install-multiple ./app/apks/1001/*.apk
-            # adb install-multiple ./app/apks/catarinense/*.apk
+            # adb install-multiple ./app/apks/wemobi/*.apk
+            adb install-multiple ./app/apks/cometa/*.apk
+            adb install-multiple ./app/apks/1001/*.apk
+            adb install-multiple ./app/apks/catarinense/*.apk
 
             echo "Garantindo que as animações do sistema estão desligadas..."
             adb shell settings put global window_animation_scale 0
@@ -126,8 +126,10 @@ jobs:
             echo "Criando pastas de resultados..."
             mkdir -p $RESULTS_DIR $ALLURE_DIR
             echo "Iniciando a execução do Robot Framework com Allure..."
-            robot -d ./results --listener allure_robotframework:$ALLURE_DIR --name "Monitoramento Mobile" app/appWemobi/wemobi_checkout.robot 
+            robot -d ./results --listener allure_robotframework:$ALLURE_DIR --name "Monitoramento Mobile" app/app1001/1001_checkout.robot app/appCatarinense/catarinense_checkout.robot app/appCometa/cometa_checkout.robot
+            app/appWemobi/wemobi_checkout.robot 
             # app/app1001/1001_checkout.robot app/appCatarinense/catarinense_checkout.robot app/appCometa/cometa_checkout.robot
+            app/appWemobi/wemobi_checkout.robot 
             echo $! > appium.pid
             kill $(cat appium.pid) || true
       - name: Limpar APKs do Workspace para liberar espaço
