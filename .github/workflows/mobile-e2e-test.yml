@@ -531,27 +531,27 @@ jobs:
           sudo chmod 666 /dev/kvm
 
       - name: Start Appium
-          shell: bash
-          run: |
-            appium \
-              --relaxed-security \
-              --log-timestamp \
-              --log-no-colors \
-              --log appium.log \
-              > /dev/null 2>&1 &
+        shell: bash
+        run: |
+          appium \
+            --relaxed-security \
+            --log-timestamp \
+            --log-no-colors \
+            --log appium.log \
+            > /dev/null 2>&1 &
 
-            echo $! > appium.pid
+          echo $! > appium.pid
 
-            for i in $(seq 1 45); do
-              if curl -sf http://127.0.0.1:4723/status | grep -q '"ready":true'; then
-                echo "Appium pronto."
-                exit 0
-              fi
-              sleep 2
-            done
+          for i in $(seq 1 45); do
+            if curl -sf http://127.0.0.1:4723/status | grep -q '"ready":true'; then
+              echo "Appium pronto."
+              exit 0
+            fi
+            sleep 2
+          done
 
-            cat appium.log
-            exit 1
+          cat appium.log
+          exit 1
 
       - name: Run Tests with Android Emulator
         id: run_tests
