@@ -5,6 +5,7 @@ Library    ../app1001/resources/GeradorDataVolta.py
 Resource    ../app1001/resources/base.resource
 Library     ../libraries/GmailHelper.py
 
+# robot -d app/logs/testes app/app1001/1001_login.robot
 
 *** Test Cases ***
 Deve realizar o login com sucesso

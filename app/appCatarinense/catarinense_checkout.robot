@@ -8,18 +8,19 @@ Test Teardown    Run Keywords
 ...    Run Keyword If Test Failed    Capturar Evidencia De Falha
 ...    AND    Close All Applications
 
+# robot -d app/logs/testes app/appCatarinense/Catarinense_checkout.robot
 
 *** Test Cases ***
 Deve realizar o fluxo até o checkout de pagamento
     Start session
-    Login
+    # Login
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Buscar"]    timeout=60s
     Log To Console    \n Elemento "Buscar" visível
     Click Element    xpath=//android.widget.EditText[@resource-id="origin"]
     Wait Until Element Is Visible    android=new UiSelector().resourceId("locationSearch")    timeout=60s
-    Input Text    android=new UiSelector().resourceId("locationSearch")    Sao Paulo (Rod. Tietê)
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="São Paulo (Rod. Tietê) (SP)"]    timeout=60s
-    Click Element    xpath=//android.widget.TextView[@text="São Paulo (Rod. Tietê) (SP)"]
+    Input Text    android=new UiSelector().resourceId("locationSearch")    Sao Paulo (Todos) (SP)
+    Wait Until Element Is Visible    accessibility_id=São Paulo (Todos) (SP), Localidade de Grupo    timeout=60s
+    Click Element    accessibility_id=São Paulo (Todos) (SP), Localidade de Grupo
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Destino"]    timeout=60s
     Input Text    android=new UiSelector().resourceId("locationSearch")    Rio de Janeiro (Novo Rio) (RJ)
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Rio de Janeiro (Novo Rio) (RJ)"]    timeout=60s

@@ -39,7 +39,7 @@ Start session
     ...    appium:appPackage=br.com.catarinense.catarinenseapp
     ...    appium:appActivity=.MainActivity
     ...    appWaitDuration=60000
-    ...    appium:noReset=${False}
+    ...    appium:noReset=${True}
     ...    appium:autoGrantPermissions=${True}
     ...    appium:ensureWebviewsHavePages=${True}
     ...    appium:clearDeviceLogs=${True}
