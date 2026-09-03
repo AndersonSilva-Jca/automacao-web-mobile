@@ -20,11 +20,11 @@ describe("Validar todos os Links Footer", () => {
   });
   it("Deve validar Links Footer - Atendimento virtual whatsapp", () => {
     cy.get(".footer-informations-bottom > :nth-child(1) > .aem-Grid > .aem-GridColumn--default--12 > .cmp-text > :nth-child(1)").click();
-    // cy.url().should('include', '/send?phone=5511972645808')
+    cy.url().should("include", "/send?phone=5511972645808");
   });
   it("Deve validar Links Footer - Vendas whatsapp", () => {
     cy.get('[href="https://api.whatsapp.com/send/?phone=5516991222623&text&type=phone_number&app_absent=0"]').click();
-    // cy.url().should('include', '/5511933153607')
+    cy.url().should("include", "/5511933153607");
   });
   it("Deve validar Links Footer - Fale Conosco", () => {
     cy.get('[href="/fale-conosco.html"]').click();

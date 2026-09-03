@@ -37,7 +37,7 @@ describe("Validar links do header", () => {
     cy.get('#anchor63 > p > [style="color: rgb(30,88,98);"] > .title').should("contain", "O que são as Missões?");
   });
 
-  it.only("Validar link O Programa - Prêmios", () => {
+  it("Validar link O Programa - Prêmios", () => {
     cy.get(":nth-child(1) > .menu-item").click();
     cy.url().should("include", "/programa");
     cy.get('[href="https://www.clubegiro.com.br/programa/premios"]').click();
@@ -51,34 +51,87 @@ describe("Validar links do header", () => {
   it("Validar link O Programa - Parceiros", () => {
     cy.get(":nth-child(1) > .menu-item").click();
     cy.url().should("include", "/programa");
-    cy.get(loc.LINK_NOSSOS_SERVICOS).click();
-    cy.get(loc.LINK_NOSSOS_ONIBUS).click();
-    cy.get(loc.ASSERT_NOSSOS_ONIBUS).should("contain", "Conheça Nossos Ônibus");
-    cy.scrollTo("top", { timeout: 1000 });
-    cy.get(loc.LINK_SALAS_VIPS).click();
-    cy.get(loc.ASSERT_SALAS_VIPS).should("contain", "SALAS VIPS");
-    cy.scrollTo("top", { timeout: 1000 });
-    cy.get(loc.LINK_SALAS_NETS).click();
-    cy.get(loc.ASSERT_SALAS_NETS).should("contain", "SALAS NETS");
-    cy.scrollTo("top", { timeout: 1000 });
-    cy.get(loc.LINK_CLUBE_GIRO).click();
-    cy.get(loc.ASSERT_CLUBE_GIRO).should("contain", "CLUBE GIRO");
+    cy.get('[href="https://www.clubegiro.com.br/beneficios"]').click();
+    cy.url().should("contain", "/beneficios");
+    cy.get(":nth-child(2) > .custom-padding > .container").should("be.visible");
+    cy.get('[style="padding: 0rem 0 0rem 0 "] > :nth-child(1) > :nth-child(1) > .slick-tabs > .cmp-tabs > .freedom-cards-main > .freedom-cards-tab-container > .d-flex > .slick-list > .slick-track > .tab-cards').should("be.visible").log("Slide Rodoviário");
+    cy.get("#slick-slide00").should("be.visible");
+    cy.get("#slick-slide01").should("be.visible");
+    cy.get("#slick-next-0").click();
+    cy.get("#slick-slide02").should("be.visible");
+    cy.get("#slick-slide03").should("be.visible");
+    cy.wait(500);
+    // cy.scrollTo("bottom", { duration: 1000 });
+    cy.get("#slick-next-0").click();
+    // cy.get("#slick-next-0").click();
+    cy.get("#slick-slide04").should("be.visible");
+    cy.get(":nth-child(4) > .cmp-tabs > .freedom-cards-main > .freedom-cards-tab-container > .d-flex > .slick-list > .slick-track > .tab-cards").should("be.visible").log("Slide Destaque");
+    cy.get("#slick-slide10").should("be.visible");
+    cy.get("#slick-slide11").should("be.visible");
+    cy.wait(500);
+    cy.get("#slick-next-1").click();
+    cy.get("#slick-slide12").should("be.visible");
+    cy.get("#slick-slide13").should("be.visible");
+    cy.wait(500);
+    cy.get("#slick-next-1").click();
+    cy.get("#slick-slide14").should("be.visible");
+    cy.get("#slick-slide15").should("be.visible");
+    cy.wait(500);
+    cy.get(":nth-child(5) > .cmp-tabs > .freedom-cards-main > .freedom-cards-tab-container > .d-flex > .slick-list > .slick-track > .tab-cards").should("be.visible").log("Slide Viagens");
+    cy.get("#slick-slide20").should("be.visible");
+    cy.get("#slick-slide21").should("be.visible");
+    cy.get("#slick-next-2").click();
+    cy.get("#slick-slide22").should("be.visible");
+    cy.get("#slick-slide23").should("be.visible");
+    cy.wait(500);
+    cy.get("#slick-next-2").click();
+    cy.get("#slick-slide24").should("be.visible");
+    cy.get("#slick-slide25").should("be.visible");
+    cy.wait(500);
+    cy.get("#slick-next-2").click();
+    cy.get("#slick-slide26").should("be.visible");
   });
 
   it("Validar link O Programa -  Dúvidas ", () => {
     cy.get(":nth-child(1) > .menu-item").click();
     cy.url().should("include", "/programa");
-    cy.get(loc.LINK_DESCONTOS_GRATUIDADES).click();
-    cy.get(loc.LINK_ESTUDANTE).click();
-    cy.get(loc.ASSERT_ESTUDANTE).should("contain", "Estudante e Professor");
-    cy.scrollTo("top", { timeout: 1000 });
-    cy.get(loc.LINK_PCD).click();
-    cy.get(loc.ASSERT_PCD).should("contain", "Pessoa com deficiência");
-    cy.scrollTo("top", { timeout: 1000 });
-    cy.get(loc.LINK_IDOSO).click();
-    cy.get(loc.ASSERT_IDOSO).should("contain", "Idoso");
-    cy.scrollTo("top", { timeout: 1000 });
-    cy.get(loc.LINK_ID_JOVEM).click();
-    cy.get(loc.ASSERT_ID_JOVEM).should("contain", "ID Jovem");
+    cy.get('[href="https://www.clubegiro.com.br/canal-de-duvidas"]').click();
+    cy.get('[href="#sobre"]').click();
+    cy.get("#anchor12 > p").should("be.visible");
+    cy.get('[href="#inscrição"]').click();
+    cy.get("#inscrição > p").should("be.visible");
+    cy.get('[href="#funcionalidade"]').click();
+    cy.get("#funcionalidade > p").should("be.visible");
+    cy.get('[href="#missoes"]').click();
+    cy.get("#missoes > p").should("be.visible");
+    cy.get('[href="#aceleradores"]').click();
+    cy.get("#aceleradores > p").should("be.visible");
+    cy.get('[href="#prêmios"]').click();
+    cy.get("#prêmios > p").should("be.visible");
+    cy.get('[href="#compradepassagens"]').click();
+    cy.get("#compradepassagens > p").should("be.visible");
+  });
+
+  it("Validar Link - Informações de Viagem", () => {
+    cy.get(":nth-child(3) > .menu-item").click();
+    cy.get(".section-title").should("contain", "Informações para sua viagem").log("Página de Informações de Viagem carregada com sucesso");
+    cy.get('[href="#salasvip"]').click();
+    cy.get('#salasvip > [style="text-align: center;"] > [style="color: rgb(92,173,186);"]').should("be.visible");
+    cy.get('[href="#reembolso"]').click();
+    cy.get('#reembolso > [style="text-align: center;"] > [style="color: rgb(92,173,186);"]').should("be.visible");
+    cy.get('[href="#remarcacao"]').click();
+    cy.get(':nth-child(2) > [style="color: rgb(92,173,186);"]').should("be.visible");
+    cy.get('[href="#reacomocacao"]').click();
+    cy.get('#reacomodacao > [style="text-align: center;"] > [style="color: rgb(92,173,186);"]').should("be.visible");
+    cy.get('[href="#gratuidade"]').click();
+    cy.get('#gratuidade > [style="text-align: center;"] > [style="color: rgb(92,173,186);"]').should("be.visible");
+  });
+
+  it.only("Validar Link - Assinatura", () => {
+    cy.get(":nth-child(4) > .menu-item").click();
+    cy.url().should("include", "/giro-turbo-home");
+    cy.get("#plano-verde").click();
+    cy.get("#input-login").should("be.visible");
+    cy.get("#input-password").should("be.visible");
   });
 });

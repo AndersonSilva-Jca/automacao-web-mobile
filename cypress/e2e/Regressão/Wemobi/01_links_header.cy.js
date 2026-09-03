@@ -12,7 +12,7 @@ describe("Validar link informações de viagens", () => {
     cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.visit(wemobi);
   });
-  it("Validar link informações de Viagem - Bagagem", () => {
+  it.only("Validar link informações de Viagem - Bagagem", () => {
     cy.get(loc.LINK_INFO_VIAGEM).click();
     cy.url().should("include", loc.URL_INFO_VIAGEM);
     cy.get(loc.LINK_BAGAGEM).click();

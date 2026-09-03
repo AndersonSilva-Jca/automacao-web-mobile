@@ -14,7 +14,7 @@ describe("Validar link do clube giro", () => {
 
   it("Deve validar o link do card de clube giro e redirecionar para a página do clube giro", () => {
     cy.get("#slick-slide20 > .carousel-cards-content-text > .aem-Grid > .button > clientlib > .about-card-button > .focusable").invoke("removeAttr", "target").click({ force: true });
-    // cy.url().should('include', 'https://www.viacaocometa.com.br/clubegiro')
+    cy.url().should("include", "https://www.rapidoribeiraopreto.com.br/clubegiro");
     // cy.env(['login', 'senha']).then((env) => {
     //   cy.get('#header-login-button').click()
     //   cy.get('#input-login').type(env.login)
@@ -26,27 +26,10 @@ describe("Validar link do clube giro", () => {
     // })
   });
 
-  it("Deve validar o link do card de outlet de hotéis e redirecionar para a página do outlet de hotéis", () => {
-    // cy.get('#slick-slide21 > .carousel-cards-content-text > .aem-Grid > .button > clientlib > .about-card-button > .focusable').invoke('removeAttr', 'target').click();
-    // cy.url().should('include', 'www.outletdehoteis.com.br');
-  });
-
-  it("Deve validar o link do card de conexão com aeroportos e redirecionar para a página de conexão com aeroportos", () => {
-    // cy.get('[data-tab="slick_tabs-content-carousel-1"]').click({ force: true });
-    // cy.get('#slick-slide80 > .carousel-cards-content-text > .aem-Grid > .button > clientlib > .about-card-button > .focusable').click({ force: true });
-    // cy.url().should('include', '/destinos/aeroporto')
-  });
-
-  it("Deve validar o link do card de conexão com o Porto de Santos e redirecionar para a página de conexão com o Porto de Santos", () => {
-    // cy.get('[data-tab="slick_tabs-content-carousel-2"]').click({ force: true });
-    // cy.get('#slick-slide90 > .carousel-cards-content-text > .aem-Grid > .button > clientlib > .about-card-button > .focusable').click({ force: true });
-    // cy.url().should('include', '/destinos/porto-santos')
-  });
-
   it("Deve validar o link do card de conexão com os ônibus e redirecionar para a página de contato", () => {
     cy.get("#headingitem0").click();
     cy.get("#headingitem1").click();
     cy.get('.focusable > [style="color: rgb(16,152,247);"]').click({ force: true });
-    cy.url().should("include", "fale-conosco");
+    cy.url().should("include", "/fale-conosco");
   });
 });
