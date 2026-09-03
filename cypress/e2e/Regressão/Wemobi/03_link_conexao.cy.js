@@ -13,43 +13,48 @@ describe("Validar link do clube giro", () => {
     cy.visit(wemobi);
   });
 
-  it("Deve validar o link do card de clube giro e redirecionar para a página do clube giro", () => {
-    cy.get("#slick-slide20 > .carousel-cards-content-text > .aem-Grid > .button > clientlib > .about-card-button > .focusable").invoke("removeAttr", "target").click({ force: true });
-    // cy.url().should('include', 'https://www.viacaocometa.com.br/clubegiro')
-    // cy.env(['login', 'senha']).then((env) => {
-    //   cy.get('#header-login-button').click()
-    //   cy.get('#input-login').type(env.login)
-    //   cy.get('#input-password').type(env.senha, { log: false })
-    //   cy.get('#button-login').click()
-    //   cy.get('.logged-message').should('contain', 'Olá')
-    // cy.get(':nth-child(6) > .custom-padding > .container > :nth-child(1) > .aem-Grid > .button > clientlib > .about-card-button > .focusable').invoke('removeAttr', 'target').click({ force: true })
-    //   cy.url().should('include', 'https://www.clubegiro.com.br/')
-    // })
+  it("Deve validar o link das viações que operam na Wemobi -  Wemobi SP x RJ", () => {
+    cy.get('[href="https://www.wemobi.me/passagens-onibus-sao-paulo-rio-de-janeiro"]').click({ force: true });
+    cy.get('[style="color: rgb(255,115,0);text-align: center;"]').should("be.visible");
   });
 
-  it("Deve validar o link do card de outlet de hotéis e redirecionar para a página do outlet de hotéis", () => {
-    // cy.get('#slick-slide21 > .carousel-cards-content-text > .aem-Grid > .button > clientlib > .about-card-button > .focusable').invoke('removeAttr', 'target').click();
-    // cy.url().should('include', 'www.outletdehoteis.com.br');
+  it("Deve validar o link das viações que operam na Wemobi - Viação 1001", () => {
+    cy.get('.aem-GridColumn--phone--hide > .html-script-comp > .parceiros-wrapper > .parceiros-grid > [href="https://www.wemobi.me/viacao-1001"]').click({ force: true });
+    cy.get(':nth-child(1) > .cmp-text > [style="color: rgb(255,115,0);text-align: center;"]').should("be.visible");
   });
 
-  it("Deve validar o link do card de conexão com aeroportos e redirecionar para a página de conexão com aeroportos", () => {
-    // cy.get('[data-tab="slick_tabs-content-carousel-1"]').click({ force: true });
-    // cy.get('#slick-slide80 > .carousel-cards-content-text > .aem-Grid > .button > clientlib > .about-card-button > .focusable').click({ force: true });
-    // cy.url().should('include', '/destinos/aeroporto')
+  it("Deve validar o link das viações que operam na Wemobi - Busco", () => {
+    cy.get('.aem-GridColumn--phone--hide > .html-script-comp > .parceiros-wrapper > .parceiros-grid > [href="https://www.wemobi.me/busco"]').click({ force: true });
+    cy.get(':nth-child(1) > .cmp-text > [style="color: rgb(255,115,0);text-align: center;"]').should("be.visible");
   });
 
-  it("Deve validar o link do card de conexão com o Porto de Santos e redirecionar para a página de conexão com o Porto de Santos", () => {
-    // cy.get('[data-tab="slick_tabs-content-carousel-2"]').click({ force: true });
-    // cy.get('#slick-slide90 > .carousel-cards-content-text > .aem-Grid > .button > clientlib > .about-card-button > .focusable').click({ force: true });
-    // cy.url().should('include', '/destinos/porto-santos')
+  it("Deve validar o link das viações que operam na Wemobi - Viação Catarinense", () => {
+    cy.get('.aem-GridColumn--phone--hide > .html-script-comp > .parceiros-wrapper > .parceiros-grid > [href="https://www.wemobi.me/viacao-catarinense"]').click({ force: true });
+    cy.get(':nth-child(1) > .cmp-text > [style="color: rgb(255,115,0);text-align: center;"]').should("be.visible");
   });
 
-  it("Deve validar o link do card de conexão com os ônibus e redirecionar para a página de contato", () => {
-    cy.get("#headingitem0").click();
-    cy.get("#headingitem1").click();
-    cy.get("#headingitem2").click();
-    cy.get("#headingitem3").click();
-    cy.get('[style="color: rgb(255,0,150);"] > .focusable > span').click({ force: true });
-    cy.url().should("include", "fale-conosco");
+  it("Deve validar o link das viações que operam na Wemobi - Viação Cometa", () => {
+    cy.get('.aem-GridColumn--phone--hide > .html-script-comp > .parceiros-wrapper > .parceiros-grid > [href="https://www.wemobi.me/viacao-cometa"]').click({ force: true });
+    cy.get(':nth-child(1) > .cmp-text > [style="color: rgb(255,115,0);text-align: center;"]').should("be.visible");
+  });
+
+  it("Deve validar o link das viações que operam na Wemobi - Viação Expresso do Sul", () => {
+    cy.get('.aem-GridColumn--phone--hide > .html-script-comp > .parceiros-wrapper > .parceiros-grid > [href="https://www.wemobi.me/viacao-expresso-do-sul"]').click({ force: true });
+    cy.get(':nth-child(1) > .cmp-text > [style="color: rgb(255,115,0);text-align: center;"]').should("be.visible");
+  });
+
+  it("Deve validar o link das viações que operam na Wemobi - Viação Guanabara", () => {
+    cy.get('.aem-GridColumn--phone--hide > .html-script-comp > .parceiros-wrapper > .parceiros-grid > [href="https://www.wemobi.me/viacao-guanabara"]').click({ force: true });
+    cy.get(':nth-child(1) > .cmp-text > [style="color: rgb(255,115,0);text-align: center;"]').should("be.visible");
+  });
+
+  it("Deve validar o link das viações que operam na Wemobi - Viação Nova Itapemirim", () => {
+    cy.get('.aem-GridColumn--phone--hide > .html-script-comp > .parceiros-wrapper > .parceiros-grid > [href="https://www.wemobi.me/viacao-nova-itapemirim"]').click({ force: true });
+    cy.get(':nth-child(1) > .cmp-text > [style="color: rgb(255,115,0);text-align: center;"]').should("be.visible");
+  });
+
+  it("Deve validar o link das viações que operam na Wemobi - Viação Planalto", () => {
+    cy.get('[href="https://www.wemobi.me/viacao-planalto"]').click({ force: true });
+    cy.get(':nth-child(1) > .cmp-text > [style="color: rgb(255,115,0);text-align: center;"]').should("be.visible");
   });
 });

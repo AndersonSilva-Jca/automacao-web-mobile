@@ -14,12 +14,12 @@ describe("Validar cards de promoção", () => {
   });
 
   it("Deve validar o link do 1º card de promoção e redirecionar para a página de login", () => {
-    cy.get(".aem-GridColumn > .promo-card > .promo-card-content > .promo-card-footer > .promo-card-btn", { timeout: 60000 }).eq(0).click({ force: true });
+    cy.get('a[href="https://www.wemobi.me/disponibilidade?range_data_ida=15&origem_id=2674&destino_id=2697&num_psgr=1&num_chda=0&num_chds=0"]').invoke("removeAttr", "target").click({ force: true });
     cy.selecionarPassagemAleatoria1({ timeout: 60000 });
     cy.env(["login", "senha"]).then((env) => {
       cy.get(loc.USUARIO).type(env.login);
       cy.get(loc.SENHA).type(env.senha, { log: false });
-      cy.get(loc.BOTAO_LOGIN).click({ force: true });
+      cy.get("#login-component-button-login").click({ force: true });
     });
     // cy.get('#buyer-check-1', { timeout: 60000 }).click({ force: true })
     // cy.get('#btn-proceed').should('be.visible').and('not.be.disabled').click();
@@ -33,12 +33,12 @@ describe("Validar cards de promoção", () => {
     // cy.get('#payment-submit').should('be.visible').and('not.be.disabled').click();
   });
   it("Deve validar o link do 2º card de promoção e redirecionar para a página de login", () => {
-    cy.get(".aem-Grid > .aem-GridColumn > .promo-card > .promo-card-content > .promo-card-footer > .promo-card-btn", { timeout: 15000 }).eq(1).click({ force: true });
+    cy.get('a[href="https://www.wemobi.me/disponibilidade?range_data_ida=15&origem_id=2697&destino_id=250&num_psgr=1&num_chda=0&num_chds=0"]').invoke("removeAttr", "target").click({ force: true });
     cy.selecionarPassagemAleatoria1({ timeout: 15000 });
-    cy.env(["login1", "senha1"]).then((env) => {
-      cy.get(loc.USUARIO).type(env.login1);
-      cy.get(loc.SENHA).type(env.senha1, { log: false });
-      cy.get(loc.BOTAO_LOGIN).click({ force: true });
+    cy.env(["login", "senha"]).then((env) => {
+      cy.get(loc.USUARIO).type(env.login);
+      cy.get(loc.SENHA).type(env.senha, { log: false });
+      cy.get("#login-component-button-login").click({ force: true });
       // cy.get(loc.MENSAGEM_LOGADO).if('not.be.visible').get('.normal').should('contain', 'O email ou senha inseridos não constam em nosso cadastro')
     });
     // cy.get('#buyer-check-1', { timeout: 20000 }).click({ force: true })
@@ -50,12 +50,12 @@ describe("Validar cards de promoção", () => {
   });
 
   it("Deve validar o link do 3º card de promoção e redirecionar para a página de login", () => {
-    cy.get(".aem-Grid > .aem-GridColumn > .promo-card > .promo-card-content > .promo-card-footer > .promo-card-btn", { timeout: 60000 }).eq(2).click({ force: true });
+    cy.get('a[href="https://www.wemobi.me/disponibilidade?range_data_ida=15&origem_id=2653&destino_id=2674&num_psgr=1&num_chda=0&num_chds=0"]').invoke("removeAttr", "target").click({ force: true });
     cy.selecionarPassagemAleatoria1({ timeout: 60000 });
     cy.env(["login", "senha"]).then((env) => {
       cy.get(loc.USUARIO).type(env.login);
       cy.get(loc.SENHA).type(env.senha, { log: false });
-      cy.get(loc.BOTAO_LOGIN).click({ force: true });
+      cy.get("#login-component-button-login").click({ force: true });
       // cy.get(loc.MENSAGEM_LOGADO).if('not.be.visi;ble').get('.normal').should('contain', 'O email ou senha inseridos não constam em nosso cadastro')
     });
     // cy.get('#buyer-check-1', { timeout: 20000 }).click({ force: true })
@@ -67,12 +67,12 @@ describe("Validar cards de promoção", () => {
   });
 
   it("Deve validar o link do 4º card de promoção e redirecionar para a página de login", () => {
-    cy.get(".aem-Grid > .aem-GridColumn > .promo-card > .promo-card-content > .promo-card-footer > .promo-card-btn", { timeout: 15000 }).eq(3).click({ force: true });
+    cy.get('a[href="https://www.wemobi.me/disponibilidade?range_data_ida=15&origem_id=2697&destino_id=529&num_psgr=1&num_chda=0&num_chds=0"]').invoke("removeAttr", "target").click({ force: true });
     cy.selecionarPassagemAleatoria1({ timeout: 15000 });
-    cy.env(["login1", "senha1"]).then((env) => {
-      cy.get(loc.USUARIO).type(env.login1);
-      cy.get(loc.SENHA).type(env.senha1, { log: false });
-      cy.get(loc.BOTAO_LOGIN).click({ force: true });
+    cy.env(["login", "senha"]).then((env) => {
+      cy.get(loc.USUARIO).type(env.login);
+      cy.get(loc.SENHA).type(env.senha, { log: false });
+      cy.get("#login-component-button-login").click({ force: true });
       // cy.get(loc.MENSAGEM_LOGADO).if('not.be.visible').get('.normal').should('contain', 'O email ou senha inseridos não constam em nosso cadastro')
     });
     // cy.get('#buyer-check-1', { timeout: 20000 }).click({ force: true })
