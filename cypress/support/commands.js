@@ -392,10 +392,24 @@ Cypress.Commands.add("selecionarPassagemAleatoria1", () => {
     .should("exist")
     .invoke("show")
     .then(($ofertas) => {
+      // const ofertasValidas = $ofertas.filter((i, el) => {
+      //   const textoClasse = Cypress.$(el).find('[data-js^="classtype"]').text().toUpperCase();
+      //   const temBotaoAtivo = Cypress.$(el).find('button[data-js="buy-ticket"]:not([disabled])').length > 0;
+      //   return !textoClasse.includes("CAMA") && temBotaoAtivo;
+      // });
+
       const ofertasValidas = $ofertas.filter((i, el) => {
-        const textoClasse = Cypress.$(el).find('[data-js^="classtype"]').text().toUpperCase();
-        const temBotaoAtivo = Cypress.$(el).find('button[data-js="buy-ticket"]:not([disabled])').length > 0;
-        return !textoClasse.includes("CAMA") && temBotaoAtivo;
+        const $oferta = Cypress.$(el);
+
+        const textoClasse = $oferta.find('[data-js^="classtype"]').text().toUpperCase();
+
+        const textoOferta = $oferta.text();
+
+        const temBotaoAtivo = $oferta.find('button[data-js="buy-ticket"]:not([disabled])').length > 0;
+
+        const temPrecoInvalido = textoOferta.includes("R$$price$decimal");
+
+        return !textoClasse.includes("CAMA") && temBotaoAtivo && !temPrecoInvalido;
       });
 
       const total = ofertasValidas.length;
