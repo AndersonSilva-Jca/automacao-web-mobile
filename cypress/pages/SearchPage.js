@@ -111,7 +111,7 @@ class SearchPage {
 
   wemobiDataIda() {
     cy.get(loc.BUSCAS.DATA_IDA).click();
-    cy.selecionarDataWemobi(5);
+    cy.selecionarDataWemobi();
   }
 
   wemobiConfirmarBusca() {

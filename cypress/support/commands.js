@@ -10,7 +10,7 @@ Cypress.Commands.add("selecionarDataIda", (range = 3) => {
   });
 });
 
-Cypress.Commands.add("selecionarDataWemobi", (range = 7) => {
+Cypress.Commands.add("selecionarDataWemobi", (range = 8) => {
   cy.get('td[data-handler="selectDay"] a').then(($days) => {
     // Se houver menos de 2 dias disponíveis no mês atual
     if ($days.length < 2) {
@@ -19,13 +19,13 @@ Cypress.Commands.add("selecionarDataWemobi", (range = 7) => {
 
       // Busca os dias do novo mês e seleciona aleatoriamente
       cy.get('td[data-handler="selectDay"] a').then(($newDays) => {
-        const proximosDias = $newDays.slice(3, range);
+        const proximosDias = $newDays.slice(6, range);
         const randomIndex = Math.floor(Math.random() * proximosDias.length);
         cy.wrap(proximosDias[randomIndex]).click({ force: true });
       });
     } else {
       // Mantém o comportamento padrão no mês atual
-      const proximosDias = $days.slice(3, range);
+      const proximosDias = $days.slice(6, range);
       const randomIndex = Math.floor(Math.random() * proximosDias.length);
       cy.wrap(proximosDias[randomIndex]).click({ force: true });
     }
@@ -407,7 +407,7 @@ Cypress.Commands.add("selecionarPassagemAleatoria1", () => {
 
         const temBotaoAtivo = $oferta.find('button[data-js="buy-ticket"]:not([disabled])').length > 0;
 
-        const temPrecoInvalido = textoOferta.includes("R$$price$decimal");
+        const temPrecoInvalido = textoOferta.includes("R$$price$decimal").log("❌ Preço inválido detectado, ignorando o R$$price$decimal...");
 
         return !textoClasse.includes("CAMA") && temBotaoAtivo && !temPrecoInvalido;
       });
