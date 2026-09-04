@@ -500,14 +500,6 @@ Cypress.Commands.add("selecionarPassagemAleatoria1", () => {
         .should("exist")
         .and("not.be.disabled")
         .click({ force: true });
-      // cy.wrap($btnCompra)
-      //   .scrollIntoView({ offset: { top: -150 } })
-      //   .should('be.visible')
-      //   .should('exist')
-      //   .invoke('show')
-      //   .and('not.be.disabled')
-      //   .click({ force: true });
-      // Aumentei para 3s para garantir que o erro de 'servicesList' não ocorra
       cy.wait(3000);
 
       cy.get("body").then(($body) => {
@@ -560,7 +552,6 @@ Cypress.Commands.add("fecharModalOutlet", () => {
 
 Cypress.Commands.add("fecharModalGiro", () => {
   cy.wait(1000);
-  // cy.get(loc.MENSAGEM_LOGADO).should("contain", "ANDERSON");
   cy.get("body").then(($body) => {
     if ($body.find(".QSIWebResponsiveDialog-Layout1-SI_a5XuRtOQsuZ5iTA_content").length > 0 && $body.find(".QSIWebResponsiveDialog-Layout1-SI_a5XuRtOQsuZ5iTA_content").is(":visible")) {
       cy.log("⚠️ Modal detectado — fechando...");
@@ -569,14 +560,6 @@ Cypress.Commands.add("fecharModalGiro", () => {
     } else {
       cy.log("✅ Sem modal na tela");
     }
-    // cy.get(loc.MENSAGEM_LOGADO).should("contain", "ANDERSON");
-    // cy.get(loc.BUSCAS.DESTINO_IDA).click();
-    // cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Todos (SP)", { delay: 100 });
-    // cy.contains("São Paulo - Todos (SP)").click({ force: true });
-    // cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("Rio De Janeiro - Todos (RJ)", { delay: 100 });
-    // cy.contains(" Rio De Janeiro - Todos (RJ) ").click({ force: true });
-    // cy.get(loc.BUSCAS.DATA_IDA).click();
-    // cy.log("✅ Sem modal, indo para a tela de passagens");
   });
 });
 
@@ -586,7 +569,6 @@ Cypress.Commands.add("fecharModalUpgradePoltrona", () => {
     if ($body.find(".col-lg-8 > .label-offer > .cmp-text > :nth-child(2)").length > 0 && $body.find(".col-lg-8 > .label-offer > .cmp-text > :nth-child(2)").is(":visible")) {
       cy.log("⚠️ Modal de upgrade detectado — fechando...");
       cy.get("#modal-upsell-buy-ticket-button").click({ force: true });
-      // cy.get("#modal-upsell-buy-ticket-button").should("not.exist");
     } else {
       cy.log("✅ Sem modal de upgrade");
     }

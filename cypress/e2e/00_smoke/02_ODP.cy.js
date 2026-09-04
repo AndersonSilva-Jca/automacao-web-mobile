@@ -39,6 +39,7 @@ describe("Outlet de Passagens", () => {
     SeatMapPage.odpSelecionarAssentoMarcado();
     CheckoutPage.odpResumoDaCompra();
   });
+
   it("Outlet de passagens - Deve selecionar passagens com Melhor Preço", () => {
     cy.env(["login", "senha"]).then(() => {
       cy.visit(odp);
