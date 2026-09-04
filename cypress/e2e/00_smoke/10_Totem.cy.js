@@ -65,6 +65,8 @@ describe("Totem", () => {
     cy.wait(1000);
 
     cy.get(".mt-4 > .rounded-lg").should("be.visible").click({ force: true });
+    cy.contains("Como podemos te ajudar?").should("be.visible");
+    cy.wait(2000);
     cy.get(".bg-primary > .flex-col > .justify-between > .flex").should("be.visible");
     cy.get(".bg-primary > .flex-col > .justify-between > .flex").click();
     // cy.get(":nth-child(3) > .bg-primary").click();
