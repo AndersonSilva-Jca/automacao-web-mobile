@@ -131,10 +131,12 @@ jobs:
             # app/appWemobi/wemobi_login.robot app/app1001/1001_login.robot app/appCatarinense/catarinense_login.robot app/appCometa/cometa_login.robot
             echo $! > appium.pid
             kill $(cat appium.pid) || true
+
       - name: Limpar APKs do Workspace para liberar espaço
         if: always()
         run: |
           rm -rf app/apks/
+
       - name: Gera relatório Allure
         if: always()
         run: |
@@ -145,6 +147,7 @@ jobs:
             echo "<html><body><h2>Sem dados de teste — emulador ou Appium falhou.</h2></body></html>" \
               > allure-report/index.html
           fi
+
       - name: Obter Data e Hora Atual (Brasília)
         if: failure()
         run: |
@@ -160,6 +163,16 @@ jobs:
         run: |
           aws s3 sync allure-report/ s3://allure-reports/reports/mobile-run-${{ github.run_number }} \
             --endpoint-url https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
+
+      - name: Enviar resultados para o Dashboard (Apps Script)
+        if: always()
+        env:
+          GITHUB_RUN_NUMBER: ${{ github.run_number }}
+          APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
+          R2_PUBLIC_URL: ${{ env.R2_PUBLIC_URL }}
+        run: |
+          npm install xml2js
+          node scripts/enviar-resultados-appscript-mobile.js
 
       - name: Stop Appium
         if: always()
