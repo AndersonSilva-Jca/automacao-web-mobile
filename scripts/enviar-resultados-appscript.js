@@ -192,11 +192,22 @@ async function main() {
       };
     });
 
+    const dataHoraFormatada = new Date().toLocaleString("pt-BR", {
+      timeZone: "America/Sao_Paulo",
+      day: "2-digit",
+      month: "2-digit",
+      year: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+
     const payload = {
       run_id: `${RUN_ID}`,
       marca,
       plataforma: "web",
       data_hora: new Date().toISOString(),
+      data_hora_formatada: dataHoraFormatada,
       total_testes: total,
       total_passou: passou,
       total_falhou: falhou,
