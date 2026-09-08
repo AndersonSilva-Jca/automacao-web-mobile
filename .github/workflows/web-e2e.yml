@@ -15,6 +15,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   cypress-run:
@@ -106,7 +107,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: cypress-reports-${{ env.SPEC_NAME }}
+          name: cypress-reports-${{ github.run_id }}-${{ env.SPEC_NAME }}
           path: |
             cypress/reports/
             status/
