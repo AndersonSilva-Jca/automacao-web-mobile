@@ -33,6 +33,7 @@ jobs:
           - cypress/e2e/00_smoke/08_RapidoRibeirao.cy.js
           - cypress/e2e/00_smoke/09_Catarinense.cy.js
           - cypress/e2e/00_smoke/10_Totem.cy.js
+
     runs-on: ubuntu-latest
     container: cypress/included:15.21.1
     steps:

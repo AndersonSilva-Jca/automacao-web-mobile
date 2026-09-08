@@ -60,13 +60,32 @@ async function main() {
   const total = passou + falhou;
 
   // Calcula a duração total em segundos
+  // Lógica corrigida para calcular a duração total em segundos
   let duracaoSeg = 0;
   if (robot.suite && robot.suite[0] && robot.suite[0].status) {
-    const status = robot.suite[0].status[0].$;
-    if (status.starttime && status.endtime) {
-      const start = new Date(status.starttime.replace(/^(\d{4})(\d{2})(\d{2}) (\d{2}):(\d{2}):(\d{2}).*/, "$1-$2-$3T$4:$5:$6"));
-      const end = new Date(status.endtime.replace(/^(\d{4})(\d{2})(\d{2}) (\d{2}):(\d{2}):(\d{2}).*/, "$1-$2-$3T$4:$5:$6"));
-      duracaoSeg = Math.round((end - start) / 1000);
+    const statusObj = robot.suite[0].status[0].$;
+    const startStr = statusObj.starttime || "";
+    const endStr = statusObj.endtime || "";
+
+    if (startStr && endStr) {
+      // Função para converter strings do Robot (ISO ou AAAAMMDD HH:MM:SS) em Date
+      const converterDataRobot = (str) => {
+        // Se estiver no formato AAAAMMDD HH:MM:SS.mmm
+        const match = str.match(/^(\d{4})(\d{2})(\d{2})\s+(\d{2}):(\d{2}):(\d{2})/);
+        if (match) {
+          const [, ano, mes, dia, hora, min, seg] = match;
+          return new Date(`${ano}-${mes}-${dia}T${hora}:${min}:${seg}`);
+        }
+        // Se já estiver em formato ISO
+        return new Date(str);
+      };
+
+      const start = converterDataRobot(startStr);
+      const end = converterDataRobot(endStr);
+
+      if (!isNaN(start.getTime()) && !isNaN(end.getTime())) {
+        duracaoSeg = Math.round((end - start) / 1000);
+      }
     }
   }
 
