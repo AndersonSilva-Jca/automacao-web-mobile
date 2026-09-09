@@ -21,7 +21,7 @@ describe("Outlet de Passagens", () => {
     Cypress.on("uncaught:exception", () => false);
   });
 
-  it("Outlet de passagens - Deve selecionar passagens com Hora Marcada", () => {
+  it("Outlet de passagens - Hora Marcada", () => {
     cy.env(["login", "senha"]).then(() => {
       cy.visit(odp);
       LoginPage.odpModalLogin();
@@ -40,7 +40,7 @@ describe("Outlet de Passagens", () => {
     CheckoutPage.odpResumoDaCompra();
   });
 
-  it("Outlet de passagens - Deve selecionar passagens com Melhor Preço", () => {
+  it("Outlet de passagens - Melhor Preço", () => {
     cy.env(["login", "senha"]).then(() => {
       cy.visit(odp);
       LoginPage.odpModalLogin();
