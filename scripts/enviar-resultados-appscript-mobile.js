@@ -17,7 +17,7 @@ const MAPA_MARCAS_MOBILE = {
   Wemobi: "(APP) Wemobi",
   1001: "(APP) 1001",
   Catarinense: "(APP) Catarinense",
-  Cometa: "(APP) Viação Cometa",
+  Cometa: "(APP) Cometa",
 };
 
 function enviarParaAppsScript(payload) {
