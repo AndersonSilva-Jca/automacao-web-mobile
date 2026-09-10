@@ -363,13 +363,9 @@ const ALLURE_ATTACHMENTS_REPORT = "allure-report/data/attachments";
 // Mapeamento dos nomes de arquivo Robot / Suítes para o Dashboard
 const MAPA_MARCAS_MOBILE = {
   Wemobi: "(APP) Wemobi",
-  1001: "(APP) Auto Viação 1001",
+  1001: "(APP) 1001",
   Catarinense: "(APP) Catarinense",
-  Cometa: "(APP) Viação Cometa",
-  wemobi: "(APP) Wemobi",
-  1001: "(APP) Auto Viação 1001",
-  catarinense: "(APP) Catarinense",
-  cometa: "(APP) Viação Cometa",
+  Cometa: "(APP) Cometa",
 };
 
 function enviarParaAppsScript(payload) {
