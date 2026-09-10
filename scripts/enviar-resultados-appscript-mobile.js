@@ -357,10 +357,8 @@ const BRANCH = process.env.GITHUB_REF_NAME || "main";
 const R2_PUBLIC_URL = process.env.R2_PUBLIC_URL || "https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev";
 
 const OUTPUT_XML = "results/output.xml";
-const ALLURE_DIR = process.env.ALLURE_DIR || "allure-results";
 const ALLURE_ATTACHMENTS_REPORT = "allure-report/data/attachments";
 
-// Mapeamento dos nomes de arquivo Robot / Suítes para o Dashboard
 const MAPA_MARCAS_MOBILE = {
   Wemobi: "(APP) Wemobi",
   1001: "(APP) 1001",
@@ -394,31 +392,34 @@ function enviarParaAppsScript(payload) {
   });
 }
 
-// 🟢 Captura todas as imagens PNG anexadas na pasta de relatórios do Allure enviadas ao R2
-function obterListaImagensAllure(baseUrl) {
-  const listaUrls = [];
+// 🟢 Extrai a imagem Base64 de dentro dos wrappers HTML gerados pelo Allure Robot (>100KB)
+function extrairImagensBase64Allure() {
+  const imagensBase64 = [];
 
-  // 1. Procura na pasta compilada do Allure Report (allure-report/data/attachments)
   if (fs.existsSync(ALLURE_ATTACHMENTS_REPORT)) {
     const arquivos = fs.readdirSync(ALLURE_ATTACHMENTS_REPORT);
+
     arquivos.forEach((arq) => {
-      if (arq.endsWith(".png") || arq.endsWith(".jpg") || arq.endsWith(".jpeg")) {
-        listaUrls.push(`${baseUrl}/data/attachments/${arq}`);
+      const caminhoCompleto = path.join(ALLURE_ATTACHMENTS_REPORT, arq);
+
+      // Processa arquivos HTML pesados (geralmente > 100KB) onde fica o log com a imagem
+      if (arq.endsWith(".html")) {
+        try {
+          const stats = fs.statSync(caminhoCompleto);
+          if (stats.size > 100000) {
+            const htmlContent = fs.readFileSync(caminhoCompleto, "utf-8");
+            // Procura a tag src contendo a imagem em base64
+            const match = htmlContent.match(/src=["'](data:image\/[a-zA-Z]+;base64,[^"']+)["']/);
+            if (match && match[1]) {
+              imagensBase64.push(match[1]);
+            }
+          }
+        } catch (e) {}
       }
     });
   }
 
-  // 2. Fallback: Procura na pasta allure-results se houver arquivos de imagem
-  if (listaUrls.length === 0 && fs.existsSync(ALLURE_DIR)) {
-    const arquivosResults = fs.readdirSync(ALLURE_DIR);
-    arquivosResults.forEach((arq) => {
-      if (arq.endsWith(".png") || arq.endsWith(".jpg")) {
-        listaUrls.push(`${baseUrl}/data/attachments/${arq}`);
-      }
-    });
-  }
-
-  return listaUrls;
+  return imagensBase64;
 }
 
 async function main() {
@@ -437,10 +438,9 @@ async function main() {
   const result = await parser.parseStringPromise(xmlData);
 
   const robot = result.robot;
-  const baseUrlR2 = `${R2_PUBLIC_URL}/reports/mobile-run-${RUN_NUMBER}`;
 
-  const printsDisponiveis = obterListaImagensAllure(baseUrlR2);
-  console.log(`📸 Prints de falha encontrados no Allure/R2: ${printsDisponiveis.length}`);
+  const listaImagensBase64 = extrairImagensBase64Allure();
+  console.log(`📸 Imagens Base64 extraídas dos anexos HTML do Allure: ${listaImagensBase64.length}`);
 
   const suitesPrincipais = robot.suite && robot.suite[0] && robot.suite[0].suite ? robot.suite[0].suite : [];
 
@@ -454,7 +454,7 @@ async function main() {
     second: "2-digit",
   });
 
-  let indicePrint = 0;
+  let ponteiroImagem = 0;
 
   for (const st of suitesPrincipais) {
     const nomeSuiteOriginal = st.$.name || "Mobile Test";
@@ -478,19 +478,19 @@ async function main() {
         const nomeTeste = t.$.name || "Teste Mobile";
         const msgErro = t.status && t.status[0] && t.status[0]._ ? t.status[0]._.trim() : "Falha na execução do teste mobile";
 
-        // Associa o print do Cloudflare R2 caso exista imagem capturada nesta execução
-        let urlPrint = "";
-        if (indicePrint < printsDisponiveis.length) {
-          urlPrint = printsDisponiveis[indicePrint];
-          indicePrint++;
+        let base64String = "";
+        if (ponteiroImagem < listaImagensBase64.length) {
+          base64String = listaImagensBase64[ponteiroImagem];
+          ponteiroImagem++;
         }
 
         falhas.push({
           nome_teste: `${marcaFormatada} - ${nomeTeste}`,
           mensagem_erro: msgErro.replace(/\n/g, " ").replace(/\r/g, "").trim(),
-          url_print_tentativa1: urlPrint,
+          url_print_tentativa1: "",
           url_print_tentativa2: "",
           url_print_tentativa3: "",
+          imagem_base64: base64String,
         });
       }
     });
@@ -512,7 +512,7 @@ async function main() {
 
     try {
       const resposta = await enviarParaAppsScript(payload);
-      console.log(`✅ [${marcaFormatada}] enviado — total:${total} passou:${passou} falhou:${falhou} falhasComPrint:${falhas.length} ->`, resposta);
+      console.log(`✅ [${marcaFormatada}] enviado — total:${total} passou:${passou} falhou:${falhou} falhasComImagem:${falhas.filter((f) => f.imagem_base64).length} ->`, resposta);
     } catch (err) {
       console.error(`❌ [${marcaFormatada}] falhou ao enviar:`, err.message);
     }
