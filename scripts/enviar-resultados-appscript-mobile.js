@@ -45,37 +45,22 @@ function enviarParaAppsScript(payload) {
   });
 }
 
-// 🟢 Mapeia os arquivos de anexo e gera a URL exata do arquivo no Cloudflare R2
-function extrairEvidenciasImagens(baseUrlR2) {
-  const evidencias = [];
+// 🟢 Mapeia os anexos no R2 considerando SOMENTE arquivos acima de 1 MB (> 1.000.000 bytes)
+function obterUrlsAnexosR2(baseUrlR2) {
+  const urlsAnexos = [];
 
   if (fs.existsSync(ALLURE_ATTACHMENTS_REPORT)) {
     const arquivos = fs.readdirSync(ALLURE_ATTACHMENTS_REPORT);
 
     arquivos.forEach((arq) => {
       const caminhoCompleto = path.join(ALLURE_ATTACHMENTS_REPORT, arq);
-
       try {
         const stats = fs.statSync(caminhoCompleto);
 
-        // Se for um anexo pesado (> 300KB) ou imagem, captura o nome exato do arquivo
-        if (stats.size > 300000 || arq.endsWith(".png") || arq.endsWith(".jpg")) {
-          // Monta o caminho exato: https://.../reports/mobile-run-1290/data/attachments/<NOME_DO_ARQUIVO>
-          const urlAnexoDireto = `${baseUrlR2}/data/attachments/${arq}`;
-
-          let base64Img = "";
-          if (arq.endsWith(".html")) {
-            const htmlContent = fs.readFileSync(caminhoCompleto, "utf-8");
-            const match = htmlContent.match(/src=["'](data:image\/[a-zA-Z]+;base64,[^"']+)["']/);
-            if (match && match[1]) {
-              base64Img = match[1];
-            }
-          }
-
-          evidencias.push({
-            url: urlAnexoDireto,
-            base64: base64Img,
-          });
+        // 🟢 Filtro estrito: Pega exclusivamente anexos com tamanho superior a 1 MB
+        if (stats.size >= 1000000) {
+          const urlAnexoR2 = `${baseUrlR2}/data/attachments/${arq}`;
+          urlsAnexos.push(urlAnexoR2);
         }
       } catch (e) {
         console.error(`Erro ao ler anexo ${arq}:`, e.message);
@@ -83,7 +68,7 @@ function extrairEvidenciasImagens(baseUrlR2) {
     });
   }
 
-  return evidencias;
+  return urlsAnexos;
 }
 
 function extrairSuitesRecursivo(suiteObj) {
@@ -120,12 +105,11 @@ async function main() {
   const result = await parser.parseStringPromise(xmlData);
 
   const robot = result.robot;
-
-  // URL base da run no R2
   const baseUrlR2 = `${R2_PUBLIC_URL}/reports/mobile-run-${RUN_NUMBER}`;
 
-  const listaEvidencias = extrairEvidenciasImagens(baseUrlR2);
-  console.log(`📸 Evidências encontradas no Allure: ${listaEvidencias.length}`);
+  // Busca os links dos anexos acima de 1 MB
+  const linksEvidenciasR2 = obterUrlsAnexosR2(baseUrlR2);
+  console.log(`📸 Evidências (>1MB) do R2 identificadas: ${linksEvidenciasR2.length}`);
 
   const todasSuites = extrairSuitesRecursivo(robot.suite);
 
@@ -174,24 +158,19 @@ async function main() {
         const nomeTeste = t.$.name || "Teste Mobile";
         const msgErro = t.status && t.status[0] && t.status[0]._ ? t.status[0]._.trim() : "Falha na execução do teste mobile";
 
-        let urlAnexo = "";
-        let base64Img = "";
-
-        if (ponteiroEvidencia < listaEvidencias.length) {
-          urlAnexo = listaEvidencias[ponteiroEvidencia].url;
-          base64Img = listaEvidencias[ponteiroEvidencia].base64;
+        let urlAnexoR2 = "";
+        if (ponteiroEvidencia < linksEvidenciasR2.length) {
+          urlAnexoR2 = linksEvidenciasR2[ponteiroEvidencia];
           ponteiroEvidencia++;
         }
 
-        // 🟢 Preenche explicitamente url_print_tentativa com o link direto do anexo
-        // Exemplo: https://.../reports/mobile-run-1290/data/attachments/88660879a39cbdc4.html
         falhas.push({
           nome_teste: `${marcaFormatada} - ${nomeTeste}`,
           mensagem_erro: msgErro.replace(/\n/g, " ").replace(/\r/g, "").trim(),
-          url_print_tentativa1: urlAnexo,
-          url_print_tentativa2: urlAnexo,
-          url_print_tentativa3: urlAnexo,
-          imagem_base64: base64Img,
+          url_print_tentativa1: urlAnexoR2,
+          url_print_tentativa2: urlAnexoR2,
+          url_print_tentativa3: urlAnexoR2,
+          imagem_base64: "",
         });
       }
     });
@@ -207,15 +186,15 @@ async function main() {
       total_falhou: falhou,
       duracao_seg: 30,
       branch: BRANCH,
-      url_mochawesome: `${baseUrlR2}/index.html`, // Link do relatório geral
+      url_mochawesome: `${baseUrlR2}/index.html`,
       falhas: falhas,
     };
 
     try {
       const resposta = await enviarParaAppsScript(payload);
-      console.log(`✅ [${marcaFormatada}] enviado ->`, resposta);
+      console.log(`✅ [${marcaFormatada}] enviado para o Apps Script ->`, resposta);
     } catch (err) {
-      console.error(`❌ [${marcaFormatada}] falhou ao enviar:`, err.message);
+      console.error(`❌ [${marcaFormatada}] erro ao enviar:`, err.message);
     }
   }
 }
