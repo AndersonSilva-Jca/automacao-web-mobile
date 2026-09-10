@@ -57,7 +57,7 @@ Login
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Acesse sua conta"]    timeout=60s
     Log To Console    \n Assert Acesse sua conta
     Click Element    xpath=//android.widget.EditText[@resource-id="user"]
-    Input Text    xpath=//android.widget.EditText[@resource-id="user"]    ${LOGIN2}
+    Input Text    xpath=//android.widget.EditText[@resource-id="user"]    ${LOGIN21}
     Input Password    xpath=//android.widget.EditText[@resource-id="password"]    ${SENHA2}
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
     Log To Console    \n Usuário logado com sucesso.
