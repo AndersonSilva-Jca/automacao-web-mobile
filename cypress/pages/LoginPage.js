@@ -107,7 +107,7 @@ class LoginPage {
   }
 
   wemobiPreencherUsuario() {
-    cy.env(["login3"]).then((env) => {
+    cy.env(["login"]).then((env) => {
       cy.get(loc.USUARIO).type(env.login);
     });
   }

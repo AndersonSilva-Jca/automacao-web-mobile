@@ -10,10 +10,9 @@ const BRANCH = process.env.GITHUB_REF_NAME || "main";
 const R2_PUBLIC_URL = process.env.R2_PUBLIC_URL || "https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev";
 
 const OUTPUT_XML = "results/output.xml";
-const ALLURE_DIR = process.env.ALLURE_DIR || "allure-results";
 const ALLURE_ATTACHMENTS_REPORT = "allure-report/data/attachments";
 
-// 🟢 Mapeamento padronizado de marcas exatamente como solicitado
+// 🟢 Mapa de Marcas Mobile Padronizado
 const MAPA_MARCAS_MOBILE = {
   wemobi: "(APP) Wemobi",
   1001: "(APP) 1001",
@@ -47,52 +46,37 @@ function enviarParaAppsScript(payload) {
   });
 }
 
-// 🟢 Varre a pasta do Allure para capturar evidências de imagem (URL no R2 ou Base64 embutido)
-function extrairEvidenciasImagens(baseUrl) {
+// 🟢 Extrai a evidência de imagem (Base64 interna ou URL no R2)
+function extrairEvidenciasImagens(baseUrlR2) {
   const evidencias = [];
 
-  // 1. Procura na pasta compilada do Allure Report (allure-report/data/attachments)
   if (fs.existsSync(ALLURE_ATTACHMENTS_REPORT)) {
     const arquivos = fs.readdirSync(ALLURE_ATTACHMENTS_REPORT);
 
     arquivos.forEach((arq) => {
       const caminhoCompleto = path.join(ALLURE_ATTACHMENTS_REPORT, arq);
 
-      if (arq.endsWith(".png") || arq.endsWith(".jpg") || arq.endsWith(".jpeg")) {
-        evidencias.push({ type: "url", val: `${baseUrl}/data/attachments/${arq}` });
-      } else if (arq.endsWith(".html")) {
-        try {
-          const stats = fs.statSync(caminhoCompleto);
-          if (stats.size > 100000) {
-            const htmlContent = fs.readFileSync(caminhoCompleto, "utf-8");
-            const match = htmlContent.match(/src=["'](data:image\/[a-zA-Z]+;base64,[^"']+)["']/);
-            if (match && match[1]) {
-              evidencias.push({ type: "base64", val: match[1] });
-            }
-          }
-        } catch (e) {}
-      }
-    });
-  }
+      try {
+        const stats = fs.statSync(caminhoCompleto);
 
-  // 2. Fallback: Procura na pasta allure-results caso não tenha encontrado em allure-report
-  if (evidencias.length === 0 && fs.existsSync(ALLURE_DIR)) {
-    const arquivosResults = fs.readdirSync(ALLURE_DIR);
-    arquivosResults.forEach((arq) => {
-      const caminho = path.join(ALLURE_DIR, arq);
-      if (arq.endsWith(".png") || arq.endsWith(".jpg")) {
-        evidencias.push({ type: "url", val: `${baseUrl}/data/attachments/${arq}` });
-      } else if (arq.endsWith(".html") || arq.endsWith(".txt")) {
-        try {
-          const stats = fs.statSync(caminho);
-          if (stats.size > 100000) {
-            const content = fs.readFileSync(caminho, "utf-8");
-            const match = content.match(/src=["'](data:image\/[a-zA-Z]+;base64,[^"']+)["']/);
-            if (match && match[1]) {
-              evidencias.push({ type: "base64", val: match[1] });
-            }
+        // Se for um arquivo de imagem comum (.png / .jpg)
+        if (arq.endsWith(".png") || arq.endsWith(".jpg") || arq.endsWith(".jpeg")) {
+          evidencias.push({ type: "url", val: `${baseUrlR2}/data/attachments/${arq}` });
+        }
+        // Se for o wrapper HTML pesado (> 300 KB) onde o Appium/Robot embute o screenshot em Base64
+        else if (arq.endsWith(".html") && stats.size > 300000) {
+          const htmlContent = fs.readFileSync(caminhoCompleto, "utf-8");
+          const match = htmlContent.match(/src=["'](data:image\/[a-zA-Z]+;base64,[^"']+)["']/);
+
+          if (match && match[1]) {
+            evidencias.push({ type: "base64", val: match[1] });
+          } else {
+            // Se não encontrou o regex, usa a URL direta do HTML como fallback
+            evidencias.push({ type: "url", val: `${baseUrlR2}/data/attachments/${arq}` });
           }
-        } catch (e) {}
+        }
+      } catch (e) {
+        console.error(`Erro ao ler anexo ${arq}:`, e.message);
       }
     });
   }
@@ -100,7 +84,7 @@ function extrairEvidenciasImagens(baseUrl) {
   return evidencias;
 }
 
-// 🟢 Coleta todas as suítes no XML recursivamente
+// 🟢 Coleta todas as suítes no XML do Robot Framework
 function extrairSuitesRecursivo(suiteObj) {
   let acumulado = [];
   if (!suiteObj) return acumulado;
@@ -159,7 +143,7 @@ async function main() {
     const nomeSuiteOriginal = st.$.name || "Mobile Test";
     const nomeChave = nomeSuiteOriginal.toLowerCase().trim();
 
-    // 🟢 Busca a marca no de-para ajustado
+    // Identificação da marca
     let marcaFormatada = "";
     for (const key in MAPA_MARCAS_MOBILE) {
       if (nomeChave.includes(key)) {
@@ -202,7 +186,7 @@ async function main() {
           ponteiroEvidencia++;
         }
 
-        // 🟢 Replicar o mesmo print 3x para preencher Print 1, Print 2 e Print 3 sem quebrar a tabela
+        // Replicando a mesma imagem nas 3 propriedades para garantir preenchimento idêntico no Sheets
         falhas.push({
           nome_teste: `${marcaFormatada} - ${nomeTeste}`,
           mensagem_erro: msgErro.replace(/\n/g, " ").replace(/\r/g, "").trim(),
@@ -214,6 +198,7 @@ async function main() {
       }
     });
 
+    // Payload enviado para o Google Apps Script
     const payload = {
       run_id: `${RUN_ID}`,
       marca: marcaFormatada,
@@ -225,7 +210,7 @@ async function main() {
       total_falhou: falhou,
       duracao_seg: 30,
       branch: BRANCH,
-      url_mochawesome: `${R2_PUBLIC_URL}/reports/mobile-run-${RUN_NUMBER}/index.html`,
+      url_mochawesome: `${baseUrlR2}/index.html`,
       falhas: falhas,
     };
 
@@ -239,3 +224,28 @@ async function main() {
 }
 
 main();
+main();
+
+// antes de tudo , pq esse payload no enviar-resultados-appscript-mobile está com a variavel de mochawesome sendo q é allure , ajuste tbm o caminho pq está errado , um detalhe bem importante, todos os screenshorts geralmente tem mais de 1MB dentro do deploy do relatorio para cloudeflare r2, na pasta que vai o screenshots a maioria dos arquivos que não sao evidencias , tem bytes apenas o arquivo que são extraidos
+
+// no relatorio allure : https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev/reports/mobile-run-1296/index.html#suites/348c6cc3c55a386f3b3eeb4407d668ce/4bad4c49abab1140/
+
+// na parte da falha do teste em executions test body no AppiumLibrary.Capture Page Screenshot 1 attachment tem a keyword log dentro dele que tem disponivel para baixar diretamente a evidencia screenshot , ela vem como data_attachments_81069e1df01319fe
+
+// cloudeflare r2 : allure-reports/reports/mobile-run-1296/data/attachments/
+// exemplo de url: https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev/reports/mobile-run-1290/data/attachments/88660879a39cbdc4.html
+
+//   const payload = {
+//       run_id: `${RUN_ID}`,
+//       marca: marcaFormatada,
+//       plataforma: "mobile",
+//       data_hora: new Date().toISOString(),
+//       data_hora_formatada: dataHoraFormatada,
+//       total_testes: total,
+//       total_passou: passou,
+//       total_falhou: falhou,
+//       duracao_seg: 30,
+//       branch: BRANCH,
+//       url_mochawesome: `${R2_PUBLIC_URL}/reports/mobile-run-${RUN_NUMBER}/index.html`,
+//       falhas: falhas,
+//     };
