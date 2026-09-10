@@ -45,6 +45,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install allure-robotframework robotframework-appiumlibrary allure-python-commons robotframework-imaplibrary2
+
       - name: Install Allure CLI
         run: |
           wget -qO allure.tgz \
@@ -148,12 +149,7 @@ jobs:
               > allure-report/index.html
           fi
 
-      - name: Obter Data e Hora Atual (Brasília)
-        if: failure()
-        run: |
-          echo "DATA_ALERTA=$(TZ='America/Sao_Paulo' date +'%d/%m/%Y')" >> $GITHUB_ENV
-          echo "HORA_ALERTA=$(TZ='America/Sao_Paulo' date +'%H:%M:%S')" >> $GITHUB_ENV
-      # 🚀 DEPLOY ULTRA RÁPIDO PARA O CLOUDFLARE R2
+      # 1º: Sincroniza a pasta gerada no R2 (disponibiliza as imagens dos attachments no link público)
       - name: Deploy do Relatório para Cloudflare R2
         if: always()
         env:
@@ -164,15 +160,45 @@ jobs:
           aws s3 sync allure-report/ s3://allure-reports/reports/mobile-run-${{ github.run_number }} \
             --endpoint-url https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
 
+      # 2º: Lê os resultados, monta os links do R2 com a imagem da falha e envia para a planilha
       - name: Enviar resultados para o Dashboard (Apps Script)
         if: always()
         env:
           GITHUB_RUN_NUMBER: ${{ github.run_number }}
           APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
           R2_PUBLIC_URL: ${{ env.R2_PUBLIC_URL }}
+          ALLURE_DIR: ${{ env.ALLURE_DIR }}
         run: |
           npm install xml2js
           node scripts/enviar-resultados-appscript-mobile.js
+
+      # - name: Gera relatório Allure
+      #   if: always()
+      #   run: |
+      #     if [ -d "$ALLURE_DIR" ] && [ "$(ls -A $ALLURE_DIR 2>/dev/null)" ]; then
+      #       allure generate $ALLURE_DIR --clean -o allure-report
+      #     else
+      #       mkdir -p allure-report
+      #       echo "<html><body><h2>Sem dados de teste — emulador ou Appium falhou.</h2></body></html>" \
+      #         > allure-report/index.html
+      #     fi
+
+      - name: Obter Data e Hora Atual (Brasília)
+        if: failure()
+        run: |
+          echo "DATA_ALERTA=$(TZ='America/Sao_Paulo' date +'%d/%m/%Y')" >> $GITHUB_ENV
+          echo "HORA_ALERTA=$(TZ='America/Sao_Paulo' date +'%H:%M:%S')" >> $GITHUB_ENV
+
+      # # 🚀 DEPLOY ULTRA RÁPIDO PARA O CLOUDFLARE R2
+      # - name: Deploy do Relatório para Cloudflare R2
+      #   if: always()
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      #     AWS_DEFAULT_REGION: auto
+      #   run: |
+      #     aws s3 sync allure-report/ s3://allure-reports/reports/mobile-run-${{ github.run_number }} \
+      #       --endpoint-url https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
 
       - name: Stop Appium
         if: always()
@@ -180,6 +206,7 @@ jobs:
           if [ -f appium.pid ]; then
             kill "$(cat appium.pid)" 2>/dev/null || true
           fi
+
       - name: Upload Allure Report
         if: always()
         uses: actions/upload-artifact@v4
@@ -243,6 +270,7 @@ jobs:
               f.write(f"status_raw={status_raw}\n")
               f.write(f"datetime={now_str}\n")
               f.write(f"errors={error_details}\n")
+
       - name: Extrair Evidências (print/vídeo) de Falhas
         if: always()
         id: evidence
@@ -278,6 +306,7 @@ jobs:
           with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as out:
               out.write(f"screenshot_link={screenshot_link}\n")
               out.write(f"video_link={video_link}\n")
+
       - name: GitHub Summary
         if: always()
         run: |
@@ -339,6 +368,7 @@ jobs:
               </div>
               <div class="footer">Gerado automaticamente · Não responda este e-mail</div>
             </div></body></html>
+
       - name: Enviar E-mail de Falha
         if: failure() # Só roda se o Robot Framework acusar alguma falha de tela ou elemento
         uses: dawidd6/action-send-mail@v4
