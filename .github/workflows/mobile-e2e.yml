@@ -1,4 +1,4 @@
-name: Mobile E2E - Giro/Wemobi/UTP
+name: Mobile E2E - Wemobi/UTP
 
 on:
   # schedule:
