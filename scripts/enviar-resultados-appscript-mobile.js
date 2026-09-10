@@ -357,15 +357,19 @@ const BRANCH = process.env.GITHUB_REF_NAME || "main";
 const R2_PUBLIC_URL = process.env.R2_PUBLIC_URL || "https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev";
 
 const OUTPUT_XML = "results/output.xml";
-const ALLURE_RESULTS_DIR = process.env.ALLURE_DIR || "allure-results";
-const ALLURE_REPORT_ATTACHMENTS = "allure-report/data/attachments";
+const ALLURE_DIR = process.env.ALLURE_DIR || "allure-results";
+const ALLURE_ATTACHMENTS_REPORT = "allure-report/data/attachments";
 
-// Mapeamento das suítes de teste mobile para os nomes no Dashboard
+// Mapeamento dos nomes de arquivo Robot / Suítes para o Dashboard
 const MAPA_MARCAS_MOBILE = {
   Wemobi: "(APP) Wemobi",
-  1001: "(APP) 1001",
+  1001: "(APP) Auto Viação 1001",
   Catarinense: "(APP) Catarinense",
-  Cometa: "(APP) Cometa",
+  Cometa: "(APP) Viação Cometa",
+  wemobi: "(APP) Wemobi",
+  1001: "(APP) Auto Viação 1001",
+  catarinense: "(APP) Catarinense",
+  cometa: "(APP) Viação Cometa",
 };
 
 function enviarParaAppsScript(payload) {
@@ -394,40 +398,31 @@ function enviarParaAppsScript(payload) {
   });
 }
 
-// 🟢 Busca as imagens .png diretamente na pasta gerada do Allure Report (data/attachments)
-function buscarImagensAttachmentsAllure(baseUrl) {
-  const listaImagens = [];
+// 🟢 Captura todas as imagens PNG anexadas na pasta de relatórios do Allure enviadas ao R2
+function obterListaImagensAllure(baseUrl) {
+  const listaUrls = [];
 
-  // 1º Tenta buscar dentro do relatório gerado (allure-report/data/attachments)
-  if (fs.existsSync(ALLURE_REPORT_ATTACHMENTS)) {
-    const arquivos = fs.readdirSync(ALLURE_REPORT_ATTACHMENTS);
+  // 1. Procura na pasta compilada do Allure Report (allure-report/data/attachments)
+  if (fs.existsSync(ALLURE_ATTACHMENTS_REPORT)) {
+    const arquivos = fs.readdirSync(ALLURE_ATTACHMENTS_REPORT);
     arquivos.forEach((arq) => {
       if (arq.endsWith(".png") || arq.endsWith(".jpg") || arq.endsWith(".jpeg")) {
-        listaImagens.push(`${baseUrl}/data/attachments/${arq}`);
+        listaUrls.push(`${baseUrl}/data/attachments/${arq}`);
       }
     });
   }
 
-  // 2º Se não encontrou no report, faz busca nos JSONs do allure-results
-  if (listaImagens.length === 0 && fs.existsSync(ALLURE_RESULTS_DIR)) {
-    const arquivosResults = fs.readdirSync(ALLURE_RESULTS_DIR);
+  // 2. Fallback: Procura na pasta allure-results se houver arquivos de imagem
+  if (listaUrls.length === 0 && fs.existsSync(ALLURE_DIR)) {
+    const arquivosResults = fs.readdirSync(ALLURE_DIR);
     arquivosResults.forEach((arq) => {
-      if (arq.endsWith("-result.json")) {
-        try {
-          const json = JSON.parse(fs.readFileSync(path.join(ALLURE_RESULTS_DIR, arq), "utf-8"));
-          if (Array.isArray(json.attachments)) {
-            json.attachments.forEach((att) => {
-              if (att.type && att.type.startsWith("image/") && att.source) {
-                listaImagens.push(`${baseUrl}/data/attachments/${att.source}`);
-              }
-            });
-          }
-        } catch (e) {}
+      if (arq.endsWith(".png") || arq.endsWith(".jpg")) {
+        listaUrls.push(`${baseUrl}/data/attachments/${arq}`);
       }
     });
   }
 
-  return listaImagens;
+  return listaUrls;
 }
 
 async function main() {
@@ -448,9 +443,8 @@ async function main() {
   const robot = result.robot;
   const baseUrlR2 = `${R2_PUBLIC_URL}/reports/mobile-run-${RUN_NUMBER}`;
 
-  // Carrega todas as URLs públicas dos prints gravados na pasta data/attachments
-  const listaPrintsDisponiveis = buscarImagensAttachmentsAllure(baseUrlR2);
-  console.log(`📸 Prints encontrados no Allure: ${listaPrintsDisponiveis.length}`);
+  const printsDisponiveis = obterListaImagensAllure(baseUrlR2);
+  console.log(`📸 Prints de falha encontrados no Allure/R2: ${printsDisponiveis.length}`);
 
   const suitesPrincipais = robot.suite && robot.suite[0] && robot.suite[0].suite ? robot.suite[0].suite : [];
 
@@ -464,7 +458,7 @@ async function main() {
     second: "2-digit",
   });
 
-  let ponteiroPrint = 0;
+  let indicePrint = 0;
 
   for (const st of suitesPrincipais) {
     const nomeSuiteOriginal = st.$.name || "Mobile Test";
@@ -488,11 +482,11 @@ async function main() {
         const nomeTeste = t.$.name || "Teste Mobile";
         const msgErro = t.status && t.status[0] && t.status[0]._ ? t.status[0]._.trim() : "Falha na execução do teste mobile";
 
-        // Associa o próximo print disponível da lista de attachments do Allure
+        // Associa o print do Cloudflare R2 caso exista imagem capturada nesta execução
         let urlPrint = "";
-        if (ponteiroPrint < listaPrintsDisponiveis.length) {
-          urlPrint = listaPrintsDisponiveis[ponteiroPrint];
-          ponteiroPrint++;
+        if (indicePrint < printsDisponiveis.length) {
+          urlPrint = printsDisponiveis[indicePrint];
+          indicePrint++;
         }
 
         falhas.push({
