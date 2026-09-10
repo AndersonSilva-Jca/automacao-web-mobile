@@ -14,8 +14,15 @@ const ALLURE_DIR = process.env.ALLURE_DIR || "allure-results";
 
 // 🟢 Mapeamento do nome do arquivo Robot / Suíte para o nome exibido nos Gráficos e na Tabela de Falhas
 const MAPA_MARCAS_MOBILE = {
-  wemobi_login: "(APP) Wemobi",
+  emobi_login: "(APP) Wemobi",
   "1001_login": "(APP) 1001",
+  catarinense_login: "(APP) Catarinense",
+  cometa_login: "(APP) Viação Cometa",
+  "Wemobi Login": "(APP) Wemobi",
+  "Catarinense Login": "(APP) Catarinense",
+  "Cometa Login": "(APP) Viação Cometa",
+  wemobi_login: "(APP) Wemobi",
+  "1001_login": "(APP) Auto Viação 1001",
   catarinense_login: "(APP) Catarinense",
   cometa_login: "(APP) Viação Cometa",
 };
