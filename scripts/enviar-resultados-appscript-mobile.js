@@ -12,7 +12,6 @@ const R2_PUBLIC_URL = process.env.R2_PUBLIC_URL || "https://pub-8f8304dd624445ac
 const OUTPUT_XML = "results/output.xml";
 const ALLURE_ATTACHMENTS_REPORT = "allure-report/data/attachments";
 
-// 🟢 Mapa de Marcas Mobile Padronizado
 const MAPA_MARCAS_MOBILE = {
   wemobi: "(APP) Wemobi",
   1001: "(APP) 1001",
@@ -46,7 +45,7 @@ function enviarParaAppsScript(payload) {
   });
 }
 
-// 🟢 Extrai a evidência de imagem (Base64 interna ou URL no R2)
+// 🟢 Mapeia os arquivos de anexo e gera a URL exata do arquivo no Cloudflare R2
 function extrairEvidenciasImagens(baseUrlR2) {
   const evidencias = [];
 
@@ -59,21 +58,24 @@ function extrairEvidenciasImagens(baseUrlR2) {
       try {
         const stats = fs.statSync(caminhoCompleto);
 
-        // Se for um arquivo de imagem comum (.png / .jpg)
-        if (arq.endsWith(".png") || arq.endsWith(".jpg") || arq.endsWith(".jpeg")) {
-          evidencias.push({ type: "url", val: `${baseUrlR2}/data/attachments/${arq}` });
-        }
-        // Se for o wrapper HTML pesado (> 300 KB) onde o Appium/Robot embute o screenshot em Base64
-        else if (arq.endsWith(".html") && stats.size > 300000) {
-          const htmlContent = fs.readFileSync(caminhoCompleto, "utf-8");
-          const match = htmlContent.match(/src=["'](data:image\/[a-zA-Z]+;base64,[^"']+)["']/);
+        // Se for um anexo pesado (> 300KB) ou imagem, captura o nome exato do arquivo
+        if (stats.size > 300000 || arq.endsWith(".png") || arq.endsWith(".jpg")) {
+          // Monta o caminho exato: https://.../reports/mobile-run-1290/data/attachments/<NOME_DO_ARQUIVO>
+          const urlAnexoDireto = `${baseUrlR2}/data/attachments/${arq}`;
 
-          if (match && match[1]) {
-            evidencias.push({ type: "base64", val: match[1] });
-          } else {
-            // Se não encontrou o regex, usa a URL direta do HTML como fallback
-            evidencias.push({ type: "url", val: `${baseUrlR2}/data/attachments/${arq}` });
+          let base64Img = "";
+          if (arq.endsWith(".html")) {
+            const htmlContent = fs.readFileSync(caminhoCompleto, "utf-8");
+            const match = htmlContent.match(/src=["'](data:image\/[a-zA-Z]+;base64,[^"']+)["']/);
+            if (match && match[1]) {
+              base64Img = match[1];
+            }
           }
+
+          evidencias.push({
+            url: urlAnexoDireto,
+            base64: base64Img,
+          });
         }
       } catch (e) {
         console.error(`Erro ao ler anexo ${arq}:`, e.message);
@@ -84,7 +86,6 @@ function extrairEvidenciasImagens(baseUrlR2) {
   return evidencias;
 }
 
-// 🟢 Coleta todas as suítes no XML do Robot Framework
 function extrairSuitesRecursivo(suiteObj) {
   let acumulado = [];
   if (!suiteObj) return acumulado;
@@ -119,13 +120,14 @@ async function main() {
   const result = await parser.parseStringPromise(xmlData);
 
   const robot = result.robot;
+
+  // URL base da run no R2
   const baseUrlR2 = `${R2_PUBLIC_URL}/reports/mobile-run-${RUN_NUMBER}`;
 
   const listaEvidencias = extrairEvidenciasImagens(baseUrlR2);
-  console.log(`📸 Evidências extraídas no Allure: ${listaEvidencias.length}`);
+  console.log(`📸 Evidências encontradas no Allure: ${listaEvidencias.length}`);
 
   const todasSuites = extrairSuitesRecursivo(robot.suite);
-  console.log(`📦 Total de suítes encontradas no XML: ${todasSuites.length}`);
 
   const dataHoraFormatada = new Date().toLocaleString("pt-BR", {
     timeZone: "America/Sao_Paulo",
@@ -143,7 +145,6 @@ async function main() {
     const nomeSuiteOriginal = st.$.name || "Mobile Test";
     const nomeChave = nomeSuiteOriginal.toLowerCase().trim();
 
-    // Identificação da marca
     let marcaFormatada = "";
     for (const key in MAPA_MARCAS_MOBILE) {
       if (nomeChave.includes(key)) {
@@ -173,32 +174,28 @@ async function main() {
         const nomeTeste = t.$.name || "Teste Mobile";
         const msgErro = t.status && t.status[0] && t.status[0]._ ? t.status[0]._.trim() : "Falha na execução do teste mobile";
 
-        let urlUnica = "";
+        let urlAnexo = "";
         let base64Img = "";
 
         if (ponteiroEvidencia < listaEvidencias.length) {
-          const itemEvidencia = listaEvidencias[ponteiroEvidencia];
-          if (itemEvidencia.type === "url") {
-            urlUnica = itemEvidencia.val;
-          } else if (itemEvidencia.type === "base64") {
-            base64Img = itemEvidencia.val;
-          }
+          urlAnexo = listaEvidencias[ponteiroEvidencia].url;
+          base64Img = listaEvidencias[ponteiroEvidencia].base64;
           ponteiroEvidencia++;
         }
 
-        // Replicando a mesma imagem nas 3 propriedades para garantir preenchimento idêntico no Sheets
+        // 🟢 Preenche explicitamente url_print_tentativa com o link direto do anexo
+        // Exemplo: https://.../reports/mobile-run-1290/data/attachments/88660879a39cbdc4.html
         falhas.push({
           nome_teste: `${marcaFormatada} - ${nomeTeste}`,
           mensagem_erro: msgErro.replace(/\n/g, " ").replace(/\r/g, "").trim(),
-          url_print_tentativa1: urlUnica,
-          url_print_tentativa2: urlUnica,
-          url_print_tentativa3: urlUnica,
+          url_print_tentativa1: urlAnexo,
+          url_print_tentativa2: urlAnexo,
+          url_print_tentativa3: urlAnexo,
           imagem_base64: base64Img,
         });
       }
     });
 
-    // Payload enviado para o Google Apps Script
     const payload = {
       run_id: `${RUN_ID}`,
       marca: marcaFormatada,
@@ -210,13 +207,13 @@ async function main() {
       total_falhou: falhou,
       duracao_seg: 30,
       branch: BRANCH,
-      url_mochawesome: `${baseUrlR2}/index.html`,
+      url_mochawesome: `${baseUrlR2}/index.html`, // Link do relatório geral
       falhas: falhas,
     };
 
     try {
       const resposta = await enviarParaAppsScript(payload);
-      console.log(`✅ [${marcaFormatada}] enviado — total:${total} passou:${passou} falhou:${falhou} falhasComEvidencia:${falhas.length} ->`, resposta);
+      console.log(`✅ [${marcaFormatada}] enviado ->`, resposta);
     } catch (err) {
       console.error(`❌ [${marcaFormatada}] falhou ao enviar:`, err.message);
     }
