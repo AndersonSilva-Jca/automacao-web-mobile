@@ -78,7 +78,7 @@ describe("Wemobi", () => {
     CheckoutPage.wemobiResumoCompra();
   });
 
-  it("Wemobi - Semexp. Wemobi Assento Aleatório", () => {
+  it("Wemobi - Sem exp. Wemobi Assento Aleatório", () => {
     cy.env(["login", "senha"]).then(() => {
       cy.visit(wemobi);
       LoginPage.wemobiModalLogin();

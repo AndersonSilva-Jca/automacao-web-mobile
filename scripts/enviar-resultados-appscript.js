@@ -16,9 +16,13 @@ const SCREENSHOTS_DIR = "cypress/reports/screenshots"; // confirmado via log do 
 // Ajuste aqui se adicionar, renomear ou remover algum spec no futuro.
 const MAPA_MARCAS = {
   "01_ODH": "Outlet de Hotéis",
-  "02_ODP": "Outlet de Passagens",
+  "02_ODP": "Outlet de passagens - Hora Marcada",
+  "02_ODP": "Outlet de passagens - Melhor Preço",
   "03_Giro": "Clube Giro",
-  "04_Wemobi": "Wemobi",
+  "04_Wemobi": "Wemobi - exp. Wemobi Lugar Marcado",
+  "04_Wemobi": "Wemobi - exp. Wemobi Assento Aleatório",
+  "04_Wemobi": "Wemobi - Sem exp. Wemobi Lugar Marcado",
+  "04_Wemobi": "Wemobi - Sem exp. Wemobi Assento Aleatório",
   "05_Cometa": "Viação Cometa",
   "06_1001": "Auto Viação 1001",
   "07_ExpressoSul": "Expresso Sul",
