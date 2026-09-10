@@ -224,7 +224,6 @@ async function main() {
 }
 
 main();
-main();
 
 // antes de tudo , pq esse payload no enviar-resultados-appscript-mobile está com a variavel de mochawesome sendo q é allure , ajuste tbm o caminho pq está errado , um detalhe bem importante, todos os screenshorts geralmente tem mais de 1MB dentro do deploy do relatorio para cloudeflare r2, na pasta que vai o screenshots a maioria dos arquivos que não sao evidencias , tem bytes apenas o arquivo que são extraidos
 
