@@ -22,7 +22,7 @@ describe("Outlet de Passagens", () => {
   });
 
   it("Outlet de passagens - Hora Marcada", () => {
-    cy.env(["login", "senha"]).then(() => {
+    cy.env(["login23", "senha"]).then(() => {
       cy.visit(odp);
       LoginPage.odpModalLogin();
       LoginPage.odpPreencherUsuario();
