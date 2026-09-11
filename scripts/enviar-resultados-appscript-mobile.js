@@ -268,7 +268,7 @@ function enviarParaAppsScript(payload) {
   });
 }
 
-// 🟢 Extrai a string Base64 do arquivo HTML e retorna a evidência ajustada
+// 🟢 Mantém o link do arquivo .html do R2 para que possa ser aberto ao clicar
 function obterEvidenciasEBase64R2(baseUrlR2) {
   const evidencias = [];
 
@@ -283,26 +283,11 @@ function obterEvidenciasEBase64R2(baseUrlR2) {
         // Considera apenas anexos com tamanho superior a 1MB
         if (stats.size >= 1000000) {
           const urlAnexoR2 = `${baseUrlR2}/data/attachments/${arq}`;
-          let base64Img = "";
-
-          if (arq.endsWith(".png") || arq.endsWith(".jpg") || arq.endsWith(".jpeg")) {
-            // Se já for imagem direta
-            const buffer = fs.readFileSync(caminhoCompleto);
-            base64Img = `data:image/png;base64,${buffer.toString("base64")}`;
-          } else if (arq.endsWith(".html") || arq.endsWith(".txt")) {
-            // 🎯 Extrai a imagem Base64 de dentro do arquivo HTML gerado pelo Allure
-            const conteudo = fs.readFileSync(caminhoCompleto, "utf-8");
-            const match = conteudo.match(/data:image\/[a-zA-Z]+;base64,[^"'\s)]+/);
-            if (match) {
-              base64Img = match[0];
-            }
-          }
 
           evidencias.push({
-            // 🎯 Se encontrou a imagem em Base64, usa ela como a própria URL_PRINT para renderizar na <img> do Dash
-            urlPrint: base64Img || urlAnexoR2,
+            urlHref: urlAnexoR2, // 🟢 Armazena o link direto (.html)
             urlR2: urlAnexoR2,
-            base64: base64Img,
+            base64: "",
           });
         }
       } catch (e) {
@@ -313,6 +298,83 @@ function obterEvidenciasEBase64R2(baseUrlR2) {
 
   return evidencias;
 }
+
+// Trecho dentro do loop da função main():
+testes.forEach((t) => {
+  total++;
+  const statusObj = t.status && t.status[0] ? t.status[0].$ : {};
+  const statusTeste = statusObj.status || "FAIL";
+
+  if (statusTeste === "PASS") {
+    passou++;
+  } else {
+    falhou++;
+    const nomeTeste = t.$.name || "Teste Mobile";
+    const msgErro = t.status && t.status[0] && t.status[0]._ ? t.status[0]._.trim() : "Falha na execução do teste mobile";
+
+    let urlHrefEvidencia = "";
+
+    if (ponteiroEvidencia < evidenciasR2.length) {
+      urlHrefEvidencia = evidenciasR2[ponteiroEvidencia].urlHref;
+      ponteiroEvidencia++;
+    }
+
+    falhas.push({
+      nome_teste: `${marcaFormatada} - ${nomeTeste}`,
+      mensagem_erro: msgErro.replace(/\n/g, " ").replace(/\r/g, "").trim(),
+      url_print_tentativa1: urlHrefEvidencia, // 🟢 Envia o link direto para acesso
+      url_print_tentativa2: urlHrefEvidencia,
+      url_print_tentativa3: urlHrefEvidencia,
+      imagem_base64: "",
+    });
+  }
+});
+
+// 🟢 Extrai a string Base64 do arquivo HTML e retorna a evidência ajustada
+// function obterEvidenciasEBase64R2(baseUrlR2) {
+//   const evidencias = [];
+
+//   if (fs.existsSync(ALLURE_ATTACHMENTS_REPORT)) {
+//     const arquivos = fs.readdirSync(ALLURE_ATTACHMENTS_REPORT);
+
+//     arquivos.forEach((arq) => {
+//       const caminhoCompleto = path.join(ALLURE_ATTACHMENTS_REPORT, arq);
+//       try {
+//         const stats = fs.statSync(caminhoCompleto);
+
+//         // Considera apenas anexos com tamanho superior a 1MB
+//         if (stats.size >= 1000000) {
+//           const urlAnexoR2 = `${baseUrlR2}/data/attachments/${arq}`;
+//           let base64Img = "";
+
+//           if (arq.endsWith(".png") || arq.endsWith(".jpg") || arq.endsWith(".jpeg")) {
+//             // Se já for imagem direta
+//             const buffer = fs.readFileSync(caminhoCompleto);
+//             base64Img = `data:image/png;base64,${buffer.toString("base64")}`;
+//           } else if (arq.endsWith(".html") || arq.endsWith(".txt")) {
+//             // 🎯 Extrai a imagem Base64 de dentro do arquivo HTML gerado pelo Allure
+//             const conteudo = fs.readFileSync(caminhoCompleto, "utf-8");
+//             const match = conteudo.match(/data:image\/[a-zA-Z]+;base64,[^"'\s)]+/);
+//             if (match) {
+//               base64Img = match[0];
+//             }
+//           }
+
+//           evidencias.push({
+//             // 🎯 Se encontrou a imagem em Base64, usa ela como a própria URL_PRINT para renderizar na <img> do Dash
+//             urlPrint: base64Img || urlAnexoR2,
+//             urlR2: urlAnexoR2,
+//             base64: base64Img,
+//           });
+//         }
+//       } catch (e) {
+//         console.error(`Erro ao processar anexo ${arq}:`, e.message);
+//       }
+//     });
+//   }
+
+//   return evidencias;
+// }
 
 function extrairSuitesRecursivo(suiteObj) {
   let acumulado = [];
