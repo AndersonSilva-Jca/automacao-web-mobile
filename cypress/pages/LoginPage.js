@@ -34,6 +34,7 @@ class LoginPage {
   odpPreencherUsuario() {
     cy.env(["login"]).then((env) => {
       cy.get(loc.USUARIO).type(env.login);
+      cy.get(loc.USUARIO).type("an@kdmsa.com.br");
     });
   }
 
