@@ -367,18 +367,25 @@ async function main() {
   let ponteiroEvidencia = 0;
 
   for (const st of todasSuites) {
-    const nomeSuiteOriginal = st.$.name || "Mobile Test";
-    const nomeChave = nomeSuiteOriginal.toLowerCase().trim();
+    const nomeSuiteOriginal = st.$?.name || "Mobile Test";
+    const sourceSuite = st.$?.source || "";
+
+    // Procura a marca tanto no nome da suíte quanto no caminho do arquivo .robot
+    const contextoMarca = `${nomeSuiteOriginal} ${sourceSuite}`.toLowerCase().trim();
 
     let marcaFormatada = "";
+
     for (const key in MAPA_MARCAS_MOBILE) {
-      if (nomeChave.includes(key)) {
+      if (contextoMarca.includes(key)) {
         marcaFormatada = MAPA_MARCAS_MOBILE[key];
         break;
       }
     }
+
     if (!marcaFormatada) {
-      marcaFormatada = `(APP) ${nomeSuiteOriginal}`;
+      console.warn(`⚠️ Marca não identificada | Suite: ${nomeSuiteOriginal} | Source: ${sourceSuite}`);
+
+      marcaFormatada = "(APP) Marca não identificada";
     }
 
     let total = 0,
