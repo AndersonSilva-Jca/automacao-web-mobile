@@ -1,6 +1,7 @@
 /// <reference types="cypress" />
 
-const totem = "https://totem.jcatlm.com.br/?utm_source=synthetic_test&utm_medium=internal&utm_campaign=operacao";
+const totem = "https://totem.jcatlm.com.br/";
+// const totem = "https://totem.jcatlm.com.br/?utm_source=synthetic_test&utm_medium=internal&utm_campaign=operacao";
 
 describe("Totem", () => {
   beforeEach(() => {
@@ -33,13 +34,13 @@ describe("Totem", () => {
     // cy.get("#macAddress").click({ force: true }).clear().type("241c04780308");
     // cy.get("#macAddress").click({ force: true }).clear().type("241c04780308");
     // cy.get("#macAddress").click({ force: true }).clear().type("241c04780308");
-    // cy.get("#macAddress").click({ force: true }).clear().type("241c04780308");
-    // cy.get("#macAddress").click({ force: true }).clear().type("241c04780308");
-    // cy.get("#macAddress").click({ force: true }).clear().type("241c04780308");
-    // cy.get("#macAddress").click({ force: true }).clear().type("241c04780308");
-    // cy.get("#macAddress").click({ force: true }).clear().type("241c04780308");
+    cy.get("#macAddress").click({ force: true }).clear().type("241c04780308");
+    cy.get("#macAddress").click({ force: true }).clear().type("241c04780308");
+    cy.get("#macAddress").click({ force: true }).clear().type("241c04780308");
+    cy.get("#macAddress").click({ force: true }).clear().type("241c04780308");
+    cy.get("#macAddress").click({ force: true }).clear().type("241c04780308");
 
-    cy.get("#macAddress").click({ force: true }).type("2", { delay: 100 });
+    cy.get("#macAddress").click({ force: true }).clear().type("2", { delay: 100 });
     cy.wait(1000);
     cy.get("#macAddress").click({ force: true }).type("4", { delay: 100 });
     cy.wait(1000);
@@ -61,6 +62,7 @@ describe("Totem", () => {
     cy.wait(1000);
     cy.get("#macAddress").click({ force: true }).type("0", { delay: 100 });
     cy.wait(1000);
+    cy.get("#macAddress").click({ force: true }).type("8", { delay: 100 });
     cy.get("#macAddress").click({ force: true }).type("8", { delay: 100 });
     cy.wait(1000);
 
