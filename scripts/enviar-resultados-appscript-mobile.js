@@ -45,9 +45,9 @@
 //   });
 // }
 
-// // 🟢 Mapeia os anexos no R2 considerando SOMENTE arquivos acima de 1 MB (> 1.000.000 bytes)
-// function obterUrlsAnexosR2(baseUrlR2) {
-//   const urlsAnexos = [];
+// // 🟢 Extrai a string Base64 da imagem e os links do R2
+// function obterEvidenciasEBase64R2(baseUrlR2) {
+//   const evidencias = [];
 
 //   if (fs.existsSync(ALLURE_ATTACHMENTS_REPORT)) {
 //     const arquivos = fs.readdirSync(ALLURE_ATTACHMENTS_REPORT);
@@ -57,18 +57,36 @@
 //       try {
 //         const stats = fs.statSync(caminhoCompleto);
 
-//         // 🟢 Filtro estrito: Pega exclusivamente anexos com tamanho superior a 1 MB
+//         // Considera apenas arquivos acima de 1MB (prints/anexos pesados)
 //         if (stats.size >= 1000000) {
 //           const urlAnexoR2 = `${baseUrlR2}/data/attachments/${arq}`;
-//           urlsAnexos.push(urlAnexoR2);
+//           let base64Img = "";
+
+//           if (arq.endsWith(".png") || arq.endsWith(".jpg")) {
+//             // Se já for arquivo de imagem direto
+//             const buffer = fs.readFileSync(caminhoCompleto);
+//             base64Img = `data:image/png;base64,${buffer.toString("base64")}`;
+//           } else if (arq.endsWith(".html") || arq.endsWith(".txt")) {
+//             // Se for um arquivo HTML do Allure contendo a imagem embutida em base64
+//             const conteudo = fs.readFileSync(caminhoCompleto, "utf-8");
+//             const match = conteudo.match(/data:image\/[a-zA-Z]+;base64,[^"'\s)]+/);
+//             if (match) {
+//               base64Img = match[0];
+//             }
+//           }
+
+//           evidencias.push({
+//             urlR2: urlAnexoR2,
+//             base64: base64Img,
+//           });
 //         }
 //       } catch (e) {
-//         console.error(`Erro ao ler anexo ${arq}:`, e.message);
+//         console.error(`Erro ao processar anexo ${arq}:`, e.message);
 //       }
 //     });
 //   }
 
-//   return urlsAnexos;
+//   return evidencias;
 // }
 
 // function extrairSuitesRecursivo(suiteObj) {
@@ -107,9 +125,9 @@
 //   const robot = result.robot;
 //   const baseUrlR2 = `${R2_PUBLIC_URL}/reports/mobile-run-${RUN_NUMBER}`;
 
-//   // Busca os links dos anexos acima de 1 MB
-//   const linksEvidenciasR2 = obterUrlsAnexosR2(baseUrlR2);
-//   console.log(`📸 Evidências (>1MB) do R2 identificadas: ${linksEvidenciasR2.length}`);
+//   // Busca os anexos R2 e extrai a string base64 do print
+//   const evidenciasR2 = obterEvidenciasEBase64R2(baseUrlR2);
+//   console.log(`📸 Evidências (>1MB) identificadas: ${evidenciasR2.length}`);
 
 //   const todasSuites = extrairSuitesRecursivo(robot.suite);
 
@@ -159,8 +177,11 @@
 //         const msgErro = t.status && t.status[0] && t.status[0]._ ? t.status[0]._.trim() : "Falha na execução do teste mobile";
 
 //         let urlAnexoR2 = "";
-//         if (ponteiroEvidencia < linksEvidenciasR2.length) {
-//           urlAnexoR2 = linksEvidenciasR2[ponteiroEvidencia];
+//         let imagemBase64 = "";
+
+//         if (ponteiroEvidencia < evidenciasR2.length) {
+//           urlAnexoR2 = evidenciasR2[ponteiroEvidencia].urlR2;
+//           imagemBase64 = evidenciasR2[ponteiroEvidencia].base64;
 //           ponteiroEvidencia++;
 //         }
 
@@ -170,7 +191,7 @@
 //           url_print_tentativa1: urlAnexoR2,
 //           url_print_tentativa2: urlAnexoR2,
 //           url_print_tentativa3: urlAnexoR2,
-//           imagem_base64: "",
+//           imagem_base64: imagemBase64, // 🟢 Enviando a string da foto para renderização no HTML/Planilha
 //         });
 //       }
 //     });
@@ -200,7 +221,6 @@
 // }
 
 // main();
-
 const fs = require("fs");
 const path = require("path");
 const https = require("https");
@@ -248,7 +268,7 @@ function enviarParaAppsScript(payload) {
   });
 }
 
-// 🟢 Extrai a string Base64 da imagem e os links do R2
+// 🟢 Extrai a string Base64 do arquivo HTML e retorna a evidência ajustada
 function obterEvidenciasEBase64R2(baseUrlR2) {
   const evidencias = [];
 
@@ -260,17 +280,17 @@ function obterEvidenciasEBase64R2(baseUrlR2) {
       try {
         const stats = fs.statSync(caminhoCompleto);
 
-        // Considera apenas arquivos acima de 1MB (prints/anexos pesados)
+        // Considera apenas anexos com tamanho superior a 1MB
         if (stats.size >= 1000000) {
           const urlAnexoR2 = `${baseUrlR2}/data/attachments/${arq}`;
           let base64Img = "";
 
-          if (arq.endsWith(".png") || arq.endsWith(".jpg")) {
-            // Se já for arquivo de imagem direto
+          if (arq.endsWith(".png") || arq.endsWith(".jpg") || arq.endsWith(".jpeg")) {
+            // Se já for imagem direta
             const buffer = fs.readFileSync(caminhoCompleto);
             base64Img = `data:image/png;base64,${buffer.toString("base64")}`;
           } else if (arq.endsWith(".html") || arq.endsWith(".txt")) {
-            // Se for um arquivo HTML do Allure contendo a imagem embutida em base64
+            // 🎯 Extrai a imagem Base64 de dentro do arquivo HTML gerado pelo Allure
             const conteudo = fs.readFileSync(caminhoCompleto, "utf-8");
             const match = conteudo.match(/data:image\/[a-zA-Z]+;base64,[^"'\s)]+/);
             if (match) {
@@ -279,6 +299,8 @@ function obterEvidenciasEBase64R2(baseUrlR2) {
           }
 
           evidencias.push({
+            // 🎯 Se encontrou a imagem em Base64, usa ela como a própria URL_PRINT para renderizar na <img> do Dash
+            urlPrint: base64Img || urlAnexoR2,
             urlR2: urlAnexoR2,
             base64: base64Img,
           });
@@ -328,7 +350,7 @@ async function main() {
   const robot = result.robot;
   const baseUrlR2 = `${R2_PUBLIC_URL}/reports/mobile-run-${RUN_NUMBER}`;
 
-  // Busca os anexos R2 e extrai a string base64 do print
+  // Busca as evidências e realiza a extração do Base64
   const evidenciasR2 = obterEvidenciasEBase64R2(baseUrlR2);
   console.log(`📸 Evidências (>1MB) identificadas: ${evidenciasR2.length}`);
 
@@ -379,11 +401,12 @@ async function main() {
         const nomeTeste = t.$.name || "Teste Mobile";
         const msgErro = t.status && t.status[0] && t.status[0]._ ? t.status[0]._.trim() : "Falha na execução do teste mobile";
 
-        let urlAnexoR2 = "";
+        let urlPrintEvidencia = "";
         let imagemBase64 = "";
 
         if (ponteiroEvidencia < evidenciasR2.length) {
-          urlAnexoR2 = evidenciasR2[ponteiroEvidencia].urlR2;
+          // 🟢 Passa a string Base64 diretamente para as variáveis de print se extraída com sucesso
+          urlPrintEvidencia = evidenciasR2[ponteiroEvidencia].urlPrint;
           imagemBase64 = evidenciasR2[ponteiroEvidencia].base64;
           ponteiroEvidencia++;
         }
@@ -391,10 +414,10 @@ async function main() {
         falhas.push({
           nome_teste: `${marcaFormatada} - ${nomeTeste}`,
           mensagem_erro: msgErro.replace(/\n/g, " ").replace(/\r/g, "").trim(),
-          url_print_tentativa1: urlAnexoR2,
-          url_print_tentativa2: urlAnexoR2,
-          url_print_tentativa3: urlAnexoR2,
-          imagem_base64: imagemBase64, // 🟢 Enviando a string da foto para renderização no HTML/Planilha
+          url_print_tentativa1: urlPrintEvidencia, // 🟢 Agora envia data:image/png;base64... em vez do link .html
+          url_print_tentativa2: urlPrintEvidencia,
+          url_print_tentativa3: urlPrintEvidencia,
+          imagem_base64: imagemBase64,
         });
       }
     });
