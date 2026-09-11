@@ -59,7 +59,7 @@ Login
     Click Element    xpath=//android.widget.EditText[@resource-id="user"]
     Input Text    xpath=//android.widget.EditText[@resource-id="user"]    ${LOGIN2}
     Input Password    xpath=//android.widget.EditText[@resource-id="password"]    ${SENHA2}
-    Input Password    xpath=//android.widget.EditText[@resource-id="password"]    1
+    # Input Password    xpath=//android.widget.EditText[@resource-id="password"]    1
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
     Log To Console    \n Usuário logado com sucesso.
     ${cookie_visivel}=    Run Keyword And Return Status
