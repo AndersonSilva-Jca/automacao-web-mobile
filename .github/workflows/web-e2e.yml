@@ -105,8 +105,13 @@ jobs:
         if: always()
         run: |
           mkdir -p cypress/reports/json
-          # Move e renomeia qualquer JSON gerado dentro de reports para uma subpasta única
-          find cypress/reports -maxdepth 1 -name "*.json" -exec mv {} cypress/reports/json/${{ env.SPEC_NAME }}.json \;
+          find cypress/reports -name "*.json" -type f -exec cp {} cypress/reports/json/${{ env.SPEC_NAME }}.json \;
+      # - name: Organizar JSON do relatório para upload
+      #   if: always()
+      #   run: |
+      #     mkdir -p cypress/reports/json
+      #     # Move e renomeia qualquer JSON gerado dentro de reports para uma subpasta única
+      #     find cypress/reports -maxdepth 1 -name "*.json" -exec mv {} cypress/reports/json/${{ env.SPEC_NAME }}.json \;
 
       - name: Upload de Artefatos de Relatório
         if: always()
