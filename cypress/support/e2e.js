@@ -13,6 +13,7 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 require("dd-trace/ci/cypress/support");
+import "dd-trace/ci/cypress/support";
 
 import { datadogRum } from "@datadog/browser-rum";
 
