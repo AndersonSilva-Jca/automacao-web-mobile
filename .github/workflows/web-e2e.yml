@@ -59,6 +59,10 @@ jobs:
         continue-on-error: true
         run: npx cypress run --browser electron --config video=false --spec '${{ matrix.spec }}'
         env:
+          DD_CIVISIBILITY_AGENTLESS_ENABLED: true
+          DD_API_KEY: ${{ secrets.DD_API_KEY }}
+          DD_SITE: datadoghq.com
+          JOB_ID: ${{ job.check_run_id }}
           ELECTRON_EXTRA_LAUNCH_ARGS: "--disable-gpu --disable-dev-shm-usage --no-sandbox"
           APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
           LOGIN: ${{ secrets.LOGIN }}

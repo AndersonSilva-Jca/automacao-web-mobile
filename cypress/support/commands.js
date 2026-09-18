@@ -130,10 +130,11 @@ Cypress.Commands.add("selecionarAssentoTotem", (limiteMaximo) => {
     .should("be.visible")
     .then(($assentos) => {
       const assentosFiltrados = limiteMaximo ? $assentos.slice(0, limiteMaximo) : $assentos;
-
+      cy.wait(500);
       const totalDisponivel = assentosFiltrados.length;
       expect(totalDisponivel, "Nenhum assento disponível/clicável foi encontrado na tela").to.be.greaterThan(0);
 
+      cy.wait(500);
       // Gera um índice randômico entre 0 e (total - 1)
       const indiceSorteado = Math.floor(Math.random() * totalDisponivel);
 
@@ -142,6 +143,7 @@ Cypress.Commands.add("selecionarAssentoTotem", (limiteMaximo) => {
 
       // Clica no assento sorteado
       cy.wrap(assentosFiltrados).eq(indiceSorteado).click({ force: true });
+      cy.wait(500);
     });
 });
 

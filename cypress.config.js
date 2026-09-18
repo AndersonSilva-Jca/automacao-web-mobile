@@ -176,5 +176,7 @@ module.exports = defineConfig({
     },
     allowCypressEnv: true,
     trashAssetsBeforeRuns: true, // Evita deletar vídeos e screenshots antigos, útil para análise pós-falha
+    setupNodeEvents: require("dd-trace/ci/cypress/plugin"),
+    supportFile: "cypress/support/e2e.js",
   },
 });

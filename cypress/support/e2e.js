@@ -12,6 +12,19 @@
 // You can read more here:
 // https://on.cypress.io/configuration
 // ***********************************************************
+require("dd-trace/ci/cypress/support");
+
+import { datadogRum } from "@datadog/browser-rum";
+
+datadogRum.init({
+  applicationId: "1dfc208e-bc54-48e1-9a1a-ebbb8baae754",
+  clientToken: "pube96956cddf5e1a7c7775de605b1d2531",
+  site: "datadoghq.com",
+  service: "cypress-tests",
+  env: "test",
+  trackUserInteractions: true,
+  trackResources: true,
+});
 
 // Import commands.js using ES2015 syntax:
 import "cypress-mochawesome-reporter/register";
