@@ -225,10 +225,10 @@ module.exports = defineConfig({
     cypress_r2_account_id: process.env.CYPRESS_R2_ACCOUNT_ID,
   },
   e2e: {
-    retries: {
-      runMode: 2,
-      openMode: 0,
-    },
+    // retries: {
+    //   runMode: 2,
+    //   openMode: 0,
+    // },
     scrollBehavior: "nearest",
     screenshotsFolder: "cypress/reports/screenshots",
     defaultCommandTimeout: 80000,
