@@ -1,191 +1,16 @@
-// const { defineConfig } = require("cypress");
-// const { ImapFlow } = require("imapflow");
-// const { simpleParser } = require("mailparser");
-// const path = require("path"); // 💡 Importa o módulo de caminhos do Node
-// require("dotenv").config({ path: path.resolve(__dirname, ".env") });
-
-// module.exports = defineConfig({
-//   // ... resto do seu código
-//   // projectId: "yc5eka",
-//   // projectId: "uGiAle",
-//   // recordKey: "CzoZoiBdsxqiq8Q5",
-//   reporter: "cypress-mochawesome-reporter",
-//   reporterOptions: {
-//     reportDir: "cypress/reports/",
-//     charts: true,
-//     reportPageTitle: "Relatório de Testes em Produção - ODH/ODP/Giro/Wemobi/UTP",
-//     overwrite: false,
-//     html: false,
-//     json: true,
-//     saveJson: true,
-//     embeddedScreenshots: true,
-//     inlineAssets: true,
-//   },
-//   screenshotOnRunFailure: true,
-//   screenshotsFolder: "cypress/reports/screenshots",
-//   video: false,
-//   chromeWebSecurity: false,
-//   viewportWidth: 1920,
-//   viewportHeight: 1080,
-//   env: {
-//     login1: process.env.LOGIN1,
-//     senha1: process.env.SENHA1,
-//     login: process.env.LOGIN,
-//     senha: process.env.SENHA,
-//     login2: process.env.LOGIN2,
-//     senha2: process.env.SENHA2,
-//     mailUsername: process.env.MAIL_USERNAME,
-//     mailPassword: process.env.MAIL_PASSWORD,
-//     gmailAppPass: process.env.GMAIL_APP_PASS,
-//     gmailMail: process.env.GMAIL_MAIL,
-//     bs_username: process.env.BS_USERNAME,
-//     bs_access_key: process.env.BS_ACCESS_KEY,
-//     cypress_download_mirror: process.env.CYPRESS_DOWNLOAD_MIRROR,
-//     projectId: process.env.PROJECT_ID,
-//     recordKey: process.env.RECORD_KEY,
-//     cypress_r2_access_key: process.env.CYPRESS_R2_ACCESS_KEY_ID,
-//     cypress_r2_secret_access_key_id: process.env.CYPRESS_R2_SECRET_ACCESS_KEY,
-//     cypress_r2_account_id: process.env.CYPRESS_R2_ACCOUNT_ID,
-//   },
-//   e2e: {
-//     retries: {
-//       runMode: 2, // O GitHub Actions vai tentar até 3 vezes se o elemento sumir do DOM
-//       openMode: 0, // No seu PC desenvolvendo, ele falha de primeira para você ver o erro
-//     },
-//     // baseUrl: "https://www.viacaocometa.com.br",
-//     scrollBehavior: "nearest", // Evita que o Cypress role a página automaticamente durante os testes
-//     screenshotsFolder: "cypress/reports/screenshots",
-//     defaultCommandTimeout: 80000, // Aumenta o tempo padrão de espera por elementos
-//     pageLoadTimeout: 90000, // Espera até 60s para a página carregar totalmente
-//     requestTimeout: 20000, // Espera até 15s por respostas de APIs (cy.request)
-//     responseTimeout: 15000, // Espera até 15s por respostas de interceptações
-//     async setupNodeEvents(on, config) {
-//       // if (!config.env.SPEC) {
-//       //   config.env.SPEC = "cypress/e2e/00_smoke/**/*.cy.js";
-//       // }
-//       // cypressSplit(on, config);
-
-//       // on("after:spec", (spec, results) => {
-//       //   if (results && results.video) {
-//       //     // Verifica se houve alguma falha no arquivo de teste atual
-//       //     const teveFalha = results.tests.some((test) => test.state === "failed");
-
-//       //     // Se não houve falha e o arquivo de vídeo existe localmente, apaga ele
-//       //     if (!teveFalha && fs.existsSync(results.video)) {
-//       //       fs.unlinkSync(results.video);
-//       //     }
-//       //   }
-//       // });
-//       require("cypress-mochawesome-reporter/plugin")(on);
-//       // implement node event listeners here
-//       on("before:browser:launch", (browser = {}, launchOptions) => {
-//         if (browser.family === "chromium") {
-//           launchOptions.args.push("--ignore-certificate-errors");
-//           // Sem isso, a janela real do Chrome headless fica menor que o viewport
-//           // configurado (1920x1080), e o Cypress escala o app pra caber ali —
-//           // é o que deixa os prints de falha pequenos e borrados.
-//           launchOptions.args.push("--window-size=1920,1080");
-//           launchOptions.args.push("--force-device-scale-factor=1");
-//         }
-//         return launchOptions;
-//       });
-//       on("task", {
-//         async buscarCodigo2FAGmail() {
-//           console.log("\n===========================================================================================================");
-//           console.log("🚀 [IMAP LOG] Iniciando busca estável do código 2FA...");
-
-//           const senhaRaw = config.env.gmailAppPass || "";
-//           if (!senhaRaw) {
-//             throw new Error("A variável 'gmailAppPass' não foi preenchida.");
-//           }
-
-//           const client = new ImapFlow({
-//             host: "imap.gmail.com",
-//             port: 993,
-//             secure: true,
-//             auth: {
-//               user: config.env.gmailMail,
-//               pass: senhaRaw.replace(/\s/g, ""),
-//             },
-//             connectionTimeout: 30000,
-//             greetingTimeout: 30000,
-//           });
-
-//           let codigoSorteado = null;
-
-//           try {
-//             console.log("🔄 [IMAP LOG] Conectando ao Gmail...");
-//             await client.connect();
-
-//             console.log("📂 [IMAP LOG] Abrindo Inbox...");
-//             let lock = await client.getMailboxLock("INBOX");
-
-//             try {
-//               console.log("🔍 [IMAP LOG] Varrendo e-mails recentes com critério limpo...");
-
-//               // 💡 Buscamos TODOS os e-mails da caixa. O retorno é uma Array de IDs numéricos simples.
-//               const todosIds = await client.search({ all: true });
-
-//               // Pegamos apenas os 3 últimos IDs da lista (as mensagens mais recentes)
-//               const ultimosIds = todosIds.slice(-3);
-//               console.log(`📊 [IMAP LOG] IDs das 3 mensagens mais recentes encontrados: [${ultimosIds.join(", ")}]`);
-
-//               if (ultimosIds.length > 0) {
-//                 // Buscamos o conteúdo cru apenas desses 3 IDs específicos de forma cirúrgica
-//                 let generator = client.fetch(ultimosIds, { source: true });
-
-//                 for await (let message of generator) {
-//                   let parsed = await simpleParser(message.source);
-//                   const corpoTexto = parsed.text || parsed.html || "";
-
-//                   console.log(`📝 [IMAP LOG] Analisando e-mail ID ${message.uid} - Assunto: "${parsed.subject}"`);
-
-//                   // Procura a sequência de 6 dígitos do token 2FA
-//                   const match = corpoTexto.match(/\b(\d{6})\b/);
-//                   if (match) {
-//                     codigoSorteado = match[1];
-//                     console.log(`🎯 [IMAP LOG] Código localizado: ${codigoSorteado}`);
-//                   }
-//                 }
-//               }
-
-//               if (codigoSorteado) {
-//                 console.log(`🎯 [IMAP LOG] Envio com sucesso para o Cypress: ${codigoSorteado}`);
-//               } else {
-//                 console.log("⚠️ [IMAP LOG] Nenhuma mensagem continha um código de 6 dígitos válido.");
-//               }
-//             } finally {
-//               lock.release();
-//             }
-//           } catch (error) {
-//             console.log(`❌ [IMAP LOG] Erro controlado de protocolo: ${error.message}`);
-//           } finally {
-//             try {
-//               await client.logout();
-//               console.log("🔌 [IMAP LOG] Sessão encerrada.");
-//             } catch (e) {}
-//           }
-
-//           console.log("==================================================\n");
-//           return codigoSorteado;
-//         },
-//       });
-//       // return config;
-//     },
-//     allowCypressEnv: true,
-//     trashAssetsBeforeRuns: true, // Evita deletar vídeos e screenshots antigos, útil para análise pós-falha
-//     setupNodeEvents: require("dd-trace/ci/cypress/plugin"),
-//     supportFile: "cypress/support/e2e.js",
-//   },
-// });
 const { defineConfig } = require("cypress");
+// const cypressSplit = require("cypress-split");
 const { ImapFlow } = require("imapflow");
 const { simpleParser } = require("mailparser");
-const path = require("path");
-
+const path = require("path"); // 💡 Importa o módulo de caminhos do Node
+// 🔥 Força o dotenv a carregar o arquivo .env correto usando o diretório atual
 require("dotenv").config({ path: path.resolve(__dirname, ".env") });
 
 module.exports = defineConfig({
+  // ... resto do seu código
+  // projectId: "yc5eka",
+  // projectId: "uGiAle",
+  // recordKey: "CzoZoiBdsxqiq8Q5",
   reporter: "cypress-mochawesome-reporter",
   reporterOptions: {
     reportDir: "cypress/reports/",
@@ -226,33 +51,46 @@ module.exports = defineConfig({
   },
   e2e: {
     // retries: {
-    //   runMode: 2,
-    //   openMode: 0,
+    //   runMode: 2, // O GitHub Actions vai tentar até 3 vezes se o elemento sumir do DOM
+    //   openMode: 0, // No seu PC desenvolvendo, ele falha de primeira para você ver o erro
     // },
-    scrollBehavior: "nearest",
+    // baseUrl: "https://www.viacaocometa.com.br",
+    scrollBehavior: "nearest", // Evita que o Cypress role a página automaticamente durante os testes
     screenshotsFolder: "cypress/reports/screenshots",
-    defaultCommandTimeout: 80000,
-    pageLoadTimeout: 90000,
-    requestTimeout: 20000,
-    responseTimeout: 15000,
-    trashAssetsBeforeRuns: true,
-    supportFile: "cypress/support/e2e.js",
-
+    defaultCommandTimeout: 80000, // Aumenta o tempo padrão de espera por elementos
+    pageLoadTimeout: 90000, // Espera até 60s para a página carregar totalmente
+    requestTimeout: 20000, // Espera até 15s por respostas de APIs (cy.request)
+    responseTimeout: 15000, // Espera até 15s por respostas de interceptações
     async setupNodeEvents(on, config) {
-      // 1. Lógica Original do Mochawesome (Garante a geração do relatório para o seu Dashboard)
-      require("cypress-mochawesome-reporter/plugin")(on);
+      // if (!config.env.SPEC) {
+      //   config.env.SPEC = "cypress/e2e/00_smoke/**/*.cy.js";
+      // }
+      // cypressSplit(on, config);
 
-      // 2. Configurações de Navegador originais
+      // on("after:spec", (spec, results) => {
+      //   if (results && results.video) {
+      //     // Verifica se houve alguma falha no arquivo de teste atual
+      //     const teveFalha = results.tests.some((test) => test.state === "failed");
+
+      //     // Se não houve falha e o arquivo de vídeo existe localmente, apaga ele
+      //     if (!teveFalha && fs.existsSync(results.video)) {
+      //       fs.unlinkSync(results.video);
+      //     }
+      //   }
+      // });
+      require("cypress-mochawesome-reporter/plugin")(on);
+      // implement node event listeners here
       on("before:browser:launch", (browser = {}, launchOptions) => {
         if (browser.family === "chromium") {
           launchOptions.args.push("--ignore-certificate-errors");
+          // Sem isso, a janela real do Chrome headless fica menor que o viewport
+          // configurado (1920x1080), e o Cypress escala o app pra caber ali —
+          // é o que deixa os prints de falha pequenos e borrados.
           launchOptions.args.push("--window-size=1920,1080");
           launchOptions.args.push("--force-device-scale-factor=1");
         }
         return launchOptions;
       });
-
-      // 3. Suas Tasks originais (IMAP / 2FA)
       on("task", {
         async buscarCodigo2FAGmail() {
           console.log("\n===========================================================================================================");
@@ -286,11 +124,16 @@ module.exports = defineConfig({
 
             try {
               console.log("🔍 [IMAP LOG] Varrendo e-mails recentes com critério limpo...");
+
+              // 💡 Buscamos TODOS os e-mails da caixa. O retorno é uma Array de IDs numéricos simples.
               const todosIds = await client.search({ all: true });
+
+              // Pegamos apenas os 3 últimos IDs da lista (as mensagens mais recentes)
               const ultimosIds = todosIds.slice(-3);
               console.log(`📊 [IMAP LOG] IDs das 3 mensagens mais recentes encontrados: [${ultimosIds.join(", ")}]`);
 
               if (ultimosIds.length > 0) {
+                // Buscamos o conteúdo cru apenas desses 3 IDs específicos de forma cirúrgica
                 let generator = client.fetch(ultimosIds, { source: true });
 
                 for await (let message of generator) {
@@ -299,6 +142,7 @@ module.exports = defineConfig({
 
                   console.log(`📝 [IMAP LOG] Analisando e-mail ID ${message.uid} - Assunto: "${parsed.subject}"`);
 
+                  // Procura a sequência de 6 dígitos do token 2FA
                   const match = corpoTexto.match(/\b(\d{6})\b/);
                   if (match) {
                     codigoSorteado = match[1];
@@ -328,15 +172,9 @@ module.exports = defineConfig({
           return codigoSorteado;
         },
       });
-
-      // 4. Injeta o Datadog de forma totalmente isolada no evento sem afetar o Mochawesome
-      try {
-        require("dd-trace/ci/cypress/plugin")(on, config);
-      } catch (err) {
-        console.log("Datadog plugin skipped or running in agentless mode:", err.message);
-      }
-
-      return config;
+      // return config;
     },
+    allowCypressEnv: true,
+    trashAssetsBeforeRuns: true, // Evita deletar vídeos e screenshots antigos, útil para análise pós-falha
   },
 });
