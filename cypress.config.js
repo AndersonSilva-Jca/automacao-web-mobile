@@ -1,9 +1,7 @@
 // const { defineConfig } = require("cypress");
-// // const cypressSplit = require("cypress-split");
 // const { ImapFlow } = require("imapflow");
 // const { simpleParser } = require("mailparser");
 // const path = require("path"); // 💡 Importa o módulo de caminhos do Node
-// // 🔥 Força o dotenv a carregar o arquivo .env correto usando o diretório atual
 // require("dotenv").config({ path: path.resolve(__dirname, ".env") });
 
 // module.exports = defineConfig({
@@ -240,12 +238,14 @@ module.exports = defineConfig({
     trashAssetsBeforeRuns: true,
     supportFile: "cypress/support/e2e.js",
 
-    // 💡 Unificação do Datadog, Mochawesome e Tasks em uma ÚNICA função:
     async setupNodeEvents(on, config) {
-      // 1. Inicializa o plugin do Mochawesome
+      // 1. Inicializa o Datadog PRIMEIRO para permitir interceptação sem sobrescrever
+      require("dd-trace/ci/cypress/plugin")(on, config);
+
+      // 2. Inicializa o plugin do Mochawesome
       require("cypress-mochawesome-reporter/plugin")(on);
 
-      // 2. Eventos de Navegador
+      // 3. Eventos do Navegador
       on("before:browser:launch", (browser = {}, launchOptions) => {
         if (browser.family === "chromium") {
           launchOptions.args.push("--ignore-certificate-errors");
@@ -255,7 +255,7 @@ module.exports = defineConfig({
         return launchOptions;
       });
 
-      // 3. Suas Tasks (ex: Leitura de e-mail IMAP)
+      // 4. Tasks personalizadas (IMAP 2FA)
       on("task", {
         async buscarCodigo2FAGmail() {
           console.log("\n===========================================================================================================");
@@ -331,9 +331,6 @@ module.exports = defineConfig({
           return codigoSorteado;
         },
       });
-
-      // 4. Executa a integração do Datadog ao final repassando 'on' e 'config'
-      require("dd-trace/ci/cypress/plugin")(on, config);
 
       return config;
     },
