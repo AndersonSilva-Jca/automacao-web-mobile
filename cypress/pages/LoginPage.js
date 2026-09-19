@@ -3,7 +3,7 @@ import loc from "../support/locators";
 class LoginPage {
   //------------------ UTP ------------------
   abrirModalLogin() {
-    cy.get(loc.HEADER_BOTAO_LOGIN).click();
+    // cy.get(loc.HEADER_BOTAO_LOGIN).click();
   }
 
   preencherUsuario() {

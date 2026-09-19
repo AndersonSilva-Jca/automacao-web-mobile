@@ -239,13 +239,10 @@ module.exports = defineConfig({
     supportFile: "cypress/support/e2e.js",
 
     async setupNodeEvents(on, config) {
-      // 1. Inicializa o Datadog PRIMEIRO para permitir interceptação sem sobrescrever
-      require("dd-trace/ci/cypress/plugin")(on, config);
-
-      // 2. Inicializa o plugin do Mochawesome
+      // 1. Lógica Original do Mochawesome (Garante a geração do relatório para o seu Dashboard)
       require("cypress-mochawesome-reporter/plugin")(on);
 
-      // 3. Eventos do Navegador
+      // 2. Configurações de Navegador originais
       on("before:browser:launch", (browser = {}, launchOptions) => {
         if (browser.family === "chromium") {
           launchOptions.args.push("--ignore-certificate-errors");
@@ -255,7 +252,7 @@ module.exports = defineConfig({
         return launchOptions;
       });
 
-      // 4. Tasks personalizadas (IMAP 2FA)
+      // 3. Suas Tasks originais (IMAP / 2FA)
       on("task", {
         async buscarCodigo2FAGmail() {
           console.log("\n===========================================================================================================");
@@ -331,6 +328,13 @@ module.exports = defineConfig({
           return codigoSorteado;
         },
       });
+
+      // 4. Injeta o Datadog de forma totalmente isolada no evento sem afetar o Mochawesome
+      try {
+        require("dd-trace/ci/cypress/plugin")(on, config);
+      } catch (err) {
+        console.log("Datadog plugin skipped or running in agentless mode:", err.message);
+      }
 
       return config;
     },
