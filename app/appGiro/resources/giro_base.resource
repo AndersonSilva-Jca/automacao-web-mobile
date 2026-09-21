@@ -59,6 +59,7 @@ Start session
     ...    appium:appWaitDuration=60000
     ...    appium:deviceReadyTimeout=60
     # ...    appium:noReset=${True}
+    ...    appium:disableWindowNotification=${True}
     ...    appium:autoGrantPermissions=${True}
     ...    appium:ensureWebviewsHavePages=${True}
     ...    appium:clearDeviceLogs=${True}

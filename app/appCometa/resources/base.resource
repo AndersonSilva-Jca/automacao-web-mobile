@@ -39,6 +39,7 @@ Start session
     ...    appium:appPackage=br.com.viacaocometa.cometaapp
     ...    appium:appActivity=.MainActivity
     ...    appWaitDuration=60000
+    ...    appium:disableWindowNotification=${True}
     ...    appium:noReset=${False}
     ...    appium:autoGrantPermissions=${True}
     ...    appium:ensureWebviewsHavePages=${True}

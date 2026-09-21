@@ -15,130 +15,135 @@ Library             ../libraries/GmailHelper.py
 *** Test Cases ***
 Deve realizar o fluxo até o checkout de pagamento
     Start session
-    # Login
-       Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="user"]    timeout=240s
-    Log To Console    \nFazendo o Login...
-    Input Text    xpath=//android.widget.EditText[@resource-id="user"]    ${LOGIN2}
-    Input Password    xpath=//android.widget.EditText[@resource-id="password"]    ${SENHA2}
-    Wait Until Element Is Visible
-    ...    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
-    ...    timeout=60s
-    Click Element    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
-    Wait Until Element Is Visible
-    ...    xpath=//android.view.ViewGroup[@content-desc="Buscar"]/android.view.View    timeout=90s
-    Log To Console    \nTela de Busca exibida com sucesso!
+    Login
+    Selecionar origem e destino
+    Selecionar Ida e passageiro
+    Selecionar passagens
+    Selecionar Assento e finalizar
+    # Selecionar Assento e finalizar
+    #    Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="user"]    timeout=240s
+    # Log To Console    \nFazendo o Login...
+    # Input Text    xpath=//android.widget.EditText[@resource-id="user"]    ${LOGIN2}
+    # Input Password    xpath=//android.widget.EditText[@resource-id="password"]    ${SENHA2}
+    # Wait Until Element Is Visible
+    # ...    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
+    # ...    timeout=60s
+    # Click Element    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
+    # Wait Until Element Is Visible
+    # ...    xpath=//android.view.ViewGroup[@content-desc="Buscar"]/android.view.View    timeout=90s
+    # Log To Console    \nTela de Busca exibida com sucesso!
 
-    Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="origin"]    timeout=60s
-    Click Element    xpath=//android.widget.EditText[@resource-id="origin"]
-    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="headerNavContainer"]   timeout=60s
-    log To Console    \nClicando no campo de origem...
-    Sleep    500ms
-    # Aguardar Elemento Com Retry    xpath=//android.widget.EditText[@resource-id="locationSearch"]
-    # Click Element    xpath=//android.widget.EditText[@resource-id="locationSearch"]
-    Log To Console    \nClicando em origem...
+#     Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="origin"]    timeout=60s
+#     Click Element    xpath=//android.widget.EditText[@resource-id="origin"]
+#     Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="headerNavContainer"]   timeout=60s
+#     log To Console    \nClicando no campo de origem...
+#     Sleep    500ms
+#     # Aguardar Elemento Com Retry    xpath=//android.widget.EditText[@resource-id="locationSearch"]
+#     # Click Element    xpath=//android.widget.EditText[@resource-id="locationSearch"]
+#     Log To Console    \nClicando em origem...
 
-    Input Text    android=new UiSelector().className("android.widget.EditText")    Rio de Janeiro - Rodoviária Novo Rio (RJ)
-    Log To Console    \nDigitando destino...
-    Wait Until Element Is Visible   xpath=//android.widget.TextView[@text="Rio De Janeiro - Rodoviária Novo Rio (RJ)"]              
-    Click Element    android=new UiSelector().text("Rio De Janeiro - Rodoviária Novo Rio (RJ)")
-    Click Element    android=new UiSelector().text("Rio De Janeiro - Rodoviária Novo Rio (RJ)")
-    Log To Console    \nDestino digitado com sucesso!
+#     Input Text    android=new UiSelector().className("android.widget.EditText")    Rio de Janeiro - Rodoviária Novo Rio (RJ)
+#     Log To Console    \nDigitando destino...
+#     Wait Until Element Is Visible   xpath=//android.widget.TextView[@text="Rio De Janeiro - Rodoviária Novo Rio (RJ)"]              
+#     Click Element    android=new UiSelector().text("Rio De Janeiro - Rodoviária Novo Rio (RJ)")
+#     Click Element    android=new UiSelector().text("Rio De Janeiro - Rodoviária Novo Rio (RJ)")
+#     Log To Console    \nDestino digitado com sucesso!
 
 
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Destino"]    timeout=45s
-    Input Text    android=new UiSelector().className("android.widget.EditText")    São Paulo - Rodoviária Tietê (SP)
-    Log To Console    \nDigitando origem...
-    Wait Until Element Is Visible   xpath=//android.view.ViewGroup[@content-desc="São Paulo - Rodoviária Tietê (SP), Terminal Rodoviário"]    timeout=60s
-    Click Element    accessibility_id=São Paulo - Rodoviária Tietê (SP), Terminal Rodoviário
-    Log To Console    \nOrigem digitada com sucesso!
+#     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Destino"]    timeout=45s
+#     Input Text    android=new UiSelector().className("android.widget.EditText")    São Paulo - Rodoviária Tietê (SP)
+#     Log To Console    \nDigitando origem...
+#     Wait Until Element Is Visible   xpath=//android.view.ViewGroup[@content-desc="São Paulo - Rodoviária Tietê (SP), Terminal Rodoviário"]    timeout=60s
+#     Click Element    accessibility_id=São Paulo - Rodoviária Tietê (SP), Terminal Rodoviário
+#     Log To Console    \nOrigem digitada com sucesso!
 
-    # Click Element    accessibility_id=São Paulo - Rodoviária Tietê (SP), Terminal Rodoviário
+#     # Click Element    accessibility_id=São Paulo - Rodoviária Tietê (SP), Terminal Rodoviário
  
 
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Data"]    timeout=60s
+#     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Data"]    timeout=60s
 
 
 
-    ${data_ida}=    obter_dia_aleatorio_ida
-    Log To Console    \nData gerada: ${data_ida}
-# retorna: 02/06/2026
+#     ${data_ida}=    obter_dia_aleatorio_ida
+#     Log To Console    \nData gerada: ${data_ida}
+# # retorna: 02/06/2026
 
-    Input Text    android=new UiSelector().className("android.widget.EditText").instance(0)    ${data_ida}
-    log To Console    \nData de ida selecionada com sucesso!
+#     Input Text    android=new UiSelector().className("android.widget.EditText").instance(0)    ${data_ida}
+#     log To Console    \nData de ida selecionada com sucesso!
 
-    Wait Until Element Is Visible
-    ...    xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
-    ...    timeout=60s
+#     Wait Until Element Is Visible
+#     ...    xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
+#     ...    timeout=60s
 
-    Click Element    xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
+#     Click Element    xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
 
-    Wait Until Element Is Visible
-    ...    xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
-    ...    timeout=60s
+#     Wait Until Element Is Visible
+#     ...    xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
+#     ...    timeout=60s
 
-    Click Element    xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
+#     Click Element    xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
 
-    Wait Until Element Is Visible
-    ...    xpath=//android.view.ViewGroup[@content-desc="Buscar"]/android.view.View
-    ...    timeout=60s
-    Click Element    xpath=//android.view.ViewGroup[@content-desc="Buscar"]/android.view.View
-    log To Console    \nClicando em Buscar...
+#     Wait Until Element Is Visible
+#     ...    xpath=//android.view.ViewGroup[@content-desc="Buscar"]/android.view.View
+#     ...    timeout=60s
+#     Click Element    xpath=//android.view.ViewGroup[@content-desc="Buscar"]/android.view.View
+#     log To Console    \nClicando em Buscar...
 
-    Log To Console    \nBusca realizada com sucesso!
+#     Log To Console    \nBusca realizada com sucesso!
 
-    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="routeServiceCardContainer"]    timeout=90s
+#     Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="routeServiceCardContainer"]    timeout=90s
 
-    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="purchaseContainer"]   timeout=60s
+#     Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="purchaseContainer"]   timeout=60s
 
-    Swipe    start_x=562    start_y=1714    end_x=570    end_y=1005    duration=1s
+#     Swipe    start_x=562    start_y=1714    end_x=570    end_y=1005    duration=1s
 
-    Wait Until Element Is Visible
-    ...    xpath=//android.view.ViewGroup[@content-desc="Comprar"]/android.view.View
-    ...    timeout=60s
+#     Wait Until Element Is Visible
+#     ...    xpath=//android.view.ViewGroup[@content-desc="Comprar"]/android.view.View
+#     ...    timeout=60s
 
-    Click Element    xpath=//android.view.ViewGroup[@content-desc="Comprar"]/android.view.View
-    Log To Console    \nClicando em Comprar...
-  Tratar Banner De Madrugada Se Aparecer
+#     Click Element    xpath=//android.view.ViewGroup[@content-desc="Comprar"]/android.view.View
+#     Log To Console    \nClicando em Comprar...
+#   Tratar Banner De Madrugada Se Aparecer
 
-   Wait Until Element Is Visible
-    ...    xpath=//android.widget.TextView[@text="Passageiro 1"]
-    ...    timeout=60s
+#    Wait Until Element Is Visible
+#     ...    xpath=//android.widget.TextView[@text="Passageiro 1"]
+#     ...    timeout=60s
 
-  Click Element    xpath=//android.widget.TextView[@text="Passageiro 1"]
+#   Click Element    xpath=//android.widget.TextView[@text="Passageiro 1"]
 
-  Click Element    xpath=//android.view.ViewGroup[@content-desc="+, Adicione um passageiro salvo"]
+#   Click Element    xpath=//android.view.ViewGroup[@content-desc="+, Adicione um passageiro salvo"]
 
-  Wait Until Element Is Visible   xpath=//android.widget.TextView[@text="Quem é o passageiro?"]    timeout=60s
+#   Wait Until Element Is Visible   xpath=//android.widget.TextView[@text="Quem é o passageiro?"]    timeout=60s
 
-  Click Element    xpath=//android.widget.TextView[@text="Anderson Silva dos Santos"]
+#   Click Element    xpath=//android.widget.TextView[@text="Anderson Silva dos Santos"]
 
-  Swipe    start_x=525    start_y=1395    end_x=522    end_y=802
+#   Swipe    start_x=525    start_y=1395    end_x=522    end_y=802
 
-  Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Avançar"]    timeout=60s
+#   Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Avançar"]    timeout=60s
 
-  Click Element    xpath=//android.widget.TextView[@text="Avançar"]
+#   Click Element    xpath=//android.widget.TextView[@text="Avançar"]
 
-  Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Selecione o assento"]    timeout=60s
+#   Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Selecione o assento"]    timeout=60s
 
-  Click Element    xpath=//android.widget.TextView[@text="Selecione o assento"]
+#   Click Element    xpath=//android.widget.TextView[@text="Selecione o assento"]
 
-  Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Assento aleatório"]    timeout=60s
-  Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Assento aleatório"]    timeout=60s
+#   Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Assento aleatório"]    timeout=60s
+#   Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Assento aleatório"]    timeout=60s
 
-  Click Element    xpath=//android.widget.TextView[@text="Assento aleatório"]
+#   Click Element    xpath=//android.widget.TextView[@text="Assento aleatório"]
 
-   Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Próximo passo"]    timeout=60s
-  # Click Element    xpath=//android.widget.TextView[@text="Próximo passo"]
-  Click Element    xpath=//android.widget.TextView[@text="Próximo passo"]
-  # Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Você possui cupom de desconto?"]    timeout=60s
+#    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Próximo passo"]    timeout=60s
+#   # Click Element    xpath=//android.widget.TextView[@text="Próximo passo"]
+#   Click Element    xpath=//android.widget.TextView[@text="Próximo passo"]
+#   # Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Você possui cupom de desconto?"]    timeout=60s
 
-  #   Swipe    start_x=486    start_y=1635    end_x=488    end_y=664
+#   #   Swipe    start_x=486    start_y=1635    end_x=488    end_y=664
 
-  #   Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="PIX"]    timeout=60s
+#   #   Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="PIX"]    timeout=60s
 
-    Log To Console    \nBusca de passagens realizada com sucesso!
+#     Log To Console    \nBusca de passagens realizada com sucesso!
 
-    Close session
+#     Close session
   
 
 

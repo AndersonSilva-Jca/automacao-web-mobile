@@ -46,6 +46,7 @@ Start session
     ...    appium:ensureWebviewsHavePages=${True}
     ...    appium:clearDeviceLogs=${True}
     ...    appium:nativeWebScreenshot=${True}
+    ...    appium:disableWindowNotification=${True}
     ...    appium:uiautomator2ServerServerInstallTimeout=${60000}
     ...    appium:uiautomator2ServerLaunchTimeout=${120000}
     ...    appium:uiautomator2ServerInstallTimeout=${60000}
@@ -62,6 +63,8 @@ Login
     Input Password    xpath=//android.widget.EditText[@resource-id="password"]    ${SENHA2}
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
     Log To Console    \nTela de Busca exibida com sucesso!
+
+
    
 Close session
     Close Application

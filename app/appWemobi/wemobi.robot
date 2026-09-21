@@ -13,7 +13,7 @@ Deve realizar o login com sucesso
     Start session
     Login
         Click Element
-    ...    android=new UiSelector().className("android.widget.ImageView").instance(1)
+    ...    android=new UiSelector().className("android.widget.ImageView").instance(0)
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="name"]
     Log To Console    \nLogin realizado com sucesso!
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="name"]

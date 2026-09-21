@@ -40,6 +40,7 @@ Start session
     ...    appium:appActivity=.MainActivity
     ...    appWaitDuration=60000
     ...    appium:noReset=${True}
+    ...    appium:disableWindowNotification=${True}
     ...    appium:autoGrantPermissions=${True}
     ...    appium:ensureWebviewsHavePages=${True}
     ...    appium:clearDeviceLogs=${True}

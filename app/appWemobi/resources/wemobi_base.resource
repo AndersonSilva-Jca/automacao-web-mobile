@@ -1,6 +1,8 @@
 *** Settings ***
 Library     AppiumLibrary
 Library     OperatingSystem
+Library             ../resources/GeradorDataIda.py
+Library             ../resources/GeradorDataVolta.py
 
 
 *** Variables ***
@@ -33,7 +35,8 @@ Start session
     ...    appium:appPackage=me.wemobi.wemobiapp
     ...    appium:appActivity=.MainActivity
     ...    appWaitDuration=50000
-    ...    appium:noReset=${True}
+    # ...    appium:noReset=${True}
+    ...    appium:disableWindowNotification=${True}
     ...    appium:autoGrantPermissions=${True}
     ...    appium:ensureWebviewsHavePages=${True}
     ...    appium:clearDeviceLogs=${True}
@@ -59,6 +62,8 @@ Login
     Wait Until Element Is Visible
     ...    xpath=//android.view.ViewGroup[@content-desc="Buscar"]/android.view.View    timeout=90s
     Log To Console    \nTela de Busca exibida com sucesso!
+
+    
     # Click Element
     # ...    android=new UiSelector().className("android.widget.ImageView").instance(1)
     # Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="name"]
@@ -70,6 +75,104 @@ Login
     # Click Element    xpath=//android.widget.TextView[@text="Sair"]
     # Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Viagens"]    timeout=60s
 
+Selecionar origem e destino
+    Wait Until Element Is Visible    locator=android=new UiSelector().resourceId("origin")    timeout=30s
+    Click Element   locator=android=new UiSelector().resourceId("origin")    
+    Wait Until Element Is Visible    locator=xpath=//android.widget.EditText[@resource-id="locationSearch"]    timeout=30s
+    Input Text    locator=xpath=//android.widget.EditText[@resource-id="locationSearch"]    text=Sao Paulo
+    Wait Until Element Is Visible    locator=android=new UiSelector().description("São Paulo - Todos (SP), Localidade de Grupo")    timeout=30s
+    Click Element    locator=android=new UiSelector().description("São Paulo - Todos (SP), Localidade de Grupo")
+
+    Wait Until Element Is Visible    locator=android=new UiSelector().text("Destino")    timeout=30s
+    Input Text    locator=xpath=//android.widget.EditText[@resource-id="locationSearch"]    text=Rio de Janeiro
+    Click Element    locator=android=new UiSelector().description("Rio de Janeiro - Todos (RJ), Localidade de Grupo")
+    
+    # Wait Until Element Is Visible    locator=new UiSelector().className("android.widget.EditText").instance(0)
+    # Click Element    locator=android=new UiSelector().className("android.widget.EditText").instance(0)
+
+Selecionar Ida e passageiro
+    Wait Until Element Is Visible    locator=xpath=//android.widget.TextView[@text="Data"]    timeout=30s
+        ${data_ida}=    obter_dia_aleatorio_ida
+    Log To Console    \nData gerada: ${data_ida}
+
+    Input Text    android=new UiSelector().className("android.widget.EditText").instance(0)    ${data_ida}
+    log To Console    \nData de ida selecionada com sucesso!
+
+    Wait Until Element Is Visible
+    ...    locator=xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
+    ...    timeout=60s
+
+    Click Element    locator=xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
+
+    Wait Until Element Is Visible
+    ...    locator=xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
+    ...    timeout=60s
+
+    Click Element    locator=xpath=//android.view.ViewGroup[@content-desc="Confirmar"]/android.view.View
+
+    Wait Until Element Is Visible
+    ...    locator=xpath=//android.view.ViewGroup[@content-desc="Buscar"]/android.view.View
+    ...    timeout=60s
+    Click Element    locator=xpath=//android.view.ViewGroup[@content-desc="Buscar"]/android.view.View
+    log To Console    \nClicando em Buscar... 1
+
+Selecionar passagens
+
+    #  Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="routeServiceCardContainer"]    timeout=90s
+
+    # Wait Until Element Is Visible    locator=xpath=//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.widget.ScrollView/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup[6]/android.widget.FrameLayout/android.view.ViewGroup/android.view.ViewGroup[24]/android.widget.ScrollView/android.view.ViewGroup/android.view.ViewGroup/android.view.ViewGroup[2]   timeout=60s
+    log To Console    \nClicando em Buscar... 2
+
+    # Swipe    start_x=562    start_y=1714    end_x=570    end_y=1005    duration=1s
+
+    Wait Until Element Is Visible    locator=xpath=//android.view.ViewGroup[@content-desc="Comprar"]/android.view.View    timeout=30s
+    log To Console    \nClicando em Buscar... 3
+
+    Click Element    locator=xpath=//android.view.ViewGroup[@content-desc="Comprar"]/android.view.View
+    Log To Console    \nClicando em Comprar...
+    Tratar Banner De Madrugada Se Aparecer
+
+    Wait Until Element Is Visible
+    ...    xpath=//android.widget.TextView[@text="Passageiro 1"]
+    ...    timeout=60s
+
+    Click Element    xpath=//android.widget.TextView[@text="Passageiro 1"]
+
+    Click Element    xpath=//android.view.ViewGroup[@content-desc="+, Adicione um passageiro salvo"]
+
+    Wait Until Element Is Visible   xpath=//android.widget.TextView[@text="Quem é o passageiro?"]    timeout=60s
+
+    Click Element    xpath=//android.widget.TextView[@text="Anderson Silva dos Santos"]
+
+    Swipe    start_x=525    start_y=1395    end_x=522    end_y=802
+
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Avançar"]    timeout=60s
+
+    Click Element    xpath=//android.widget.TextView[@text="Avançar"]
+
+Selecionar Assento e finalizar
+
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Selecione o assento"]    timeout=60s
+
+    Click Element    xpath=//android.widget.TextView[@text="Selecione o assento"]
+
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Assento aleatório"]    timeout=60s
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Assento aleatório"]    timeout=60s
+
+    Click Element    xpath=//android.widget.TextView[@text="Assento aleatório"]
+
+    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Próximo passo"]    timeout=60s
+    # Click Element    xpath=//android.widget.TextView[@text="Próximo passo"]
+    Click Element    xpath=//android.widget.TextView[@text="Próximo passo"]
+    # Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Você possui cupom de desconto?"]    timeout=60s
+
+    #   Swipe    start_x=486    start_y=1635    end_x=488    end_y=664
+
+    #   Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="PIX"]    timeout=60s
+
+      Log To Console    \nBusca de passagens realizada com sucesso!
+
+  
 Close session
     Close Application
 
@@ -91,7 +194,7 @@ Tratar Banner De Madrugada Se Aparecer
     # 1. Verifica se o elemento aparece na tela em até 5 segundos
     # O Robot guarda True (se achou) ou False (se não achou) na variável
     ${madrugada_visivel}=    Run Keyword And Return Status
-    ...    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="modal"]/android.view.ViewGroup/android.view.ViewGroup[3]    timeout=60s
+    ...    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="modal"]/android.view.ViewGroup/android.view.ViewGroup[3]    timeout=15s
 
     # 2. Se a resposta for True, ele entra no bloco e clica para aceitar
     IF    ${madrugada_visivel}
@@ -153,4 +256,5 @@ Aguardar Elemento Com Retry
         Sleep    1s
     END
     Wait Until Element Is Visible    ${locator}    timeout=${timeout}
+
 
