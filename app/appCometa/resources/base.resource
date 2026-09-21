@@ -2,7 +2,8 @@
 Library     AppiumLibrary
 Library     OperatingSystem
 Library    Collections
-
+Library    ../resources/GeradorDataIda.py
+Library    ../resources/GeradorDataVolta.py
 
 *** Variables ***
 ${LOGIN2}                ${EMPTY}
@@ -40,7 +41,7 @@ Start session
     ...    appium:appActivity=.MainActivity
     ...    appWaitDuration=60000
     ...    appium:disableWindowNotification=${True}
-    ...    appium:noReset=${False}
+    ...    appium:noReset=${True}
     ...    appium:autoGrantPermissions=${True}
     ...    appium:ensureWebviewsHavePages=${True}
     ...    appium:clearDeviceLogs=${True}
@@ -55,13 +56,13 @@ Start session
     ...    appium:androidInstallTimeout= ${120000}
 
 Login
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Acesse sua conta"]    timeout=60s
+    Wait Until Element Is Visible    locator=xpath=//android.widget.TextView[@text="Acesse sua conta"]    timeout=60s
     Log To Console    \n Assert Acesse sua conta
-    Click Element    xpath=//android.widget.EditText[@resource-id="user"]
+    Click Element    locator=xpath=//android.widget.EditText[@resource-id="user"]
     Input Text    xpath=//android.widget.EditText[@resource-id="user"]    ${LOGIN2}
     Input Password    xpath=//android.widget.EditText[@resource-id="password"]    ${SENHA2}
     # Input Password    xpath=//android.widget.EditText[@resource-id="password"]    1
-    Click Element    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
+    Click Element    locator=xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
     Log To Console    \n Usuário logado com sucesso.
     ${cookie_visivel}=    Run Keyword And Return Status
     ...    Wait Until Element Is Visible
@@ -69,24 +70,28 @@ Login
     ...    timeout=15s
     IF    ${cookie_visivel}
         Log To Console    \n[INFO] Banner de cookie detectado. Aceitando...
-        Click Element    xpath=//android.widget.Button[@resource-id="adopt-accept-all-button"]
+        Click Element    locator=xpath=//android.widget.Button[@resource-id="adopt-accept-all-button"]
     ELSE
         Log To Console    \n[INFO] Banner de cookie não apareceu. Seguindo o fluxo...
     END
 Checkout
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Buscar"]    timeout=60s
+    Wait Until Element Is Visible    locator=xpath=//android.widget.EditText[@resource-id="origin"]    timeout=60s
     Log To Console    \n Elemento "Buscar" visível
-    Click Element    xpath=//android.widget.EditText[@resource-id="origin"]
-    Wait Until Element Is Visible    android=new UiSelector().resourceId("locationSearch")    timeout=60s
-    Input Text    android=new UiSelector().resourceId("locationSearch")    Sao Paulo (Rod. Tietê)
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="São Paulo (Rod. Tietê) (SP)"]    timeout=60s
-    Click Element    xpath=//android.widget.TextView[@text="São Paulo (Rod. Tietê) (SP)"]
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Destino"]    timeout=60s
-    Input Text    android=new UiSelector().resourceId("locationSearch")    Rio de Janeiro (Novo Rio) (RJ)
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Rio de Janeiro (Novo Rio) (RJ)"]    timeout=60s
-    Click Element    xpath=//android.widget.TextView[@text="Rio de Janeiro (Novo Rio) (RJ)"]
+    Click Element    locator=xpath=//android.widget.EditText[@resource-id="origin"]
+    Wait Until Element Is Visible    locator=xpath=//android.widget.TextView[@text="Origem"]    timeout=60s
+    Input Text    android=new UiSelector().resourceId("locationSearch")    Sao Paulo (Todos)
+    Wait Until Element Is Visible    locator=xpath=//android.view.ViewGroup[@content-desc="São Paulo (Todos) (SP), Localidade de Grupo"]    timeout=60s
+    Click Element    locator=xpath=//android.view.ViewGroup[@content-desc="São Paulo (Todos) (SP), Localidade de Grupo"]
+    Wait Until Element Is Visible    locator=xpath=//android.widget.TextView[@text="Destino"]    timeout=60s
+    Input Text    android=new UiSelector().resourceId("locationSearch")    Rio de Janeiro (Novo Rio) 
+    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Rio de Janeiro (Novo Rio) (RJ), Terminal Rodoviário"]    timeout=60s
+    Sleep    2s
+    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Rio de Janeiro (Novo Rio) (RJ), Terminal Rodoviário"]    timeout=60s
+    Click Element    xpath=//android.view.ViewGroup[@content-desc="Rio de Janeiro (Novo Rio) (RJ), Terminal Rodoviário"]
+    # Click Element    xpath=//android.view.ViewGroup[@content-desc="Rio de Janeiro (Novo Rio) (RJ), Terminal Rodoviário"]
+    # Click A Point    355    732
 
-    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="calendarComponentContainer"]    timeout=30
+    # Wait Until Element Is Visible    locator=xpath=//android.view.ViewGroup[@resource-id="calendarComponentContainer"]    timeout=30
 
      ${data_ida}=    obter_dia_aleatorio_ida
     Log To Console    \nData gerada: ${data_ida}
@@ -231,5 +236,11 @@ Close session
 
 obter_dia_aleatorio_ida
     # TODO: implement keyword "obter_dia_aleatorio_ida".
+    Fail    Not Implemented
+
+
+Click A Point
+    [Arguments]    ${arg1}    ${arg2}
+    # TODO: implement keyword "Click A Point".
     Fail    Not Implemented
 
