@@ -7,7 +7,7 @@ require("cypress-xpath");
 const opcaofretur = "https://opcaofretur.com.br/";
 const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSn5BGXTn1LeQJ9TS_VLZXNBnEP3N8jd6z7_kowjdmrAxCYscjBwkvefEnuyw8ujULg2VlpF9CjxCpE/pub?gid=1463281397&single=true&output=csv";
 
-describe("Opção Fretur - HealtCheck", () => {
+describe("Opção Fretur - Health Check", () => {
   beforeEach(() => {
     cy.clearCookies();
     cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
