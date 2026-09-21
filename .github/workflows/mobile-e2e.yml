@@ -115,10 +115,12 @@ jobs:
             echo "=== Emulator pronto e bootado automaticamente pela Action ==="
             adb devices
             echo "Instalando os aplicativos..."
+
             adb install-multiple ./app/apks/wemobi/*.apk
             adb install-multiple ./app/apks/cometa/*.apk
             adb install-multiple ./app/apks/1001/*.apk
             adb install-multiple ./app/apks/catarinense/*.apk
+
             echo "Garantindo que as animações do sistema estão desligadas..."
             adb shell settings put global window_animation_scale 0
             adb shell settings put global transition_animation_scale 0
@@ -126,7 +128,7 @@ jobs:
             echo "Criando pastas de resultados..."
             mkdir -p $RESULTS_DIR $ALLURE_DIR
             echo "Iniciando a execução do Robot Framework com Allure..."
-            robot -d ./results --listener allure_robotframework:$ALLURE_DIR --name "Monitoramento Mobile" app/appCometa/cometa.robot app/app1001/1001.robot app/appCatarinense/catarinense.robot
+            robot -d ./results --listener allure_robotframework:$ALLURE_DIR --name "Monitoramento Mobile" app/appWemobi/wemobi.robot app/appCometa/cometa.robot app/app1001/1001.robot app/appCatarinense/catarinense.robot
             # app/appWemobi/wemobi_checkout.robot 
             # app/app1001/1001_checkout.robot 
             # app/appWemobi/wemobi_login.robot app/app1001/1001_login.robot app/appCatarinense/catarinense_login.robot app/appCometa/cometa_login.robot
