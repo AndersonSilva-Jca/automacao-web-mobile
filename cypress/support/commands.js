@@ -448,7 +448,7 @@ Cypress.Commands.add("selecionarPassagemAleatoria", () => {
     });
 });
 
-Cypress.Commands.add("selecionarPassagemAleatoria1", () => {
+Cypress.Commands.add("selecionarPassagemAleatoriaExpressoSul", () => {
   cy.contains("ESCOLHER PASSAGENS", { timeout: 90000 }).should("be.visible");
   cy.log("⏳ Aguardando estabilização da página de ofertas...");
 
@@ -518,6 +518,161 @@ Cypress.Commands.add("selecionarPassagemAleatoria1", () => {
       });
     });
 });
+
+Cypress.Commands.add("selecionarPassagemAleatoria1", () => {
+  cy.contains("ESCOLHER PASSAGENS", { timeout: 90000 }).should("be.visible");
+  cy.log("⏳ Aguardando estabilização da página de ofertas...");
+
+  cy.get('li[data-js^="offer-element-"]', { timeout: 90000 }).should("be.visible");
+
+  cy.wait(1000);
+
+  cy.get('li[data-js^="offer-element-"]:has(.available)', { timeout: 90000 })
+    .should("exist")
+    .invoke("show")
+    .then(($ofertas) => {
+      const ofertasValidas = $ofertas.filter((i, el) => {
+        const $oferta = Cypress.$(el);
+
+        // 1. Tipo da classe (filtra CAMA)
+        const textoClasse = $oferta.find('[data-js^="classtype"]').text().toUpperCase();
+
+        // 2. Botão de compra ativo
+        const temBotaoAtivo = $oferta.find('button[data-js="buy-ticket"]:not([disabled])').length > 0;
+
+        // 3. Validação do Preço Renderizado
+        const $spanPreco = $oferta.find('[data-js="priceLabel"]');
+        const textoPrecoLabel = $spanPreco.length > 0 ? $spanPreco.text() : "";
+        const estaQuebrado = textoPrecoLabel.includes("$price");
+
+        // 4. Validação da Empresa / Operadora (Ignora a Cometa)
+        const $imgEmpresa = $oferta.find('.managed-by img[data-js="imgCompany"]');
+        const altEmpresa = ($imgEmpresa.attr("alt") || "").toLowerCase();
+        const srcEmpresa = ($imgEmpresa.attr("src") || "").toLowerCase();
+
+        // Verifica se a passagem é operada pela Cometa
+        const eCometa = altEmpresa.includes("cometa") || srcEmpresa.includes("cometa");
+
+        // Retorna TRUE apenas se NÃO for Cometa
+        return !textoClasse.includes("CAMA") && temBotaoAtivo && !estaQuebrado && !eCometa;
+      });
+
+      const total = ofertasValidas.length;
+      if (total === 0) throw new Error("Nenhuma passagem válida encontrada (todas as ofertas eram Cometa ou indisponíveis)!");
+
+      const randomIndex = Math.floor(Math.random() * total);
+      const escolha = ofertasValidas[randomIndex];
+      const $btnCompra = Cypress.$(escolha).find('button[data-js="buy-ticket"]', { timeout: 90000 });
+
+      cy.log(`🎰 Sorteada opção ${randomIndex + 1} de ${total} (Excluindo Cometa)`);
+
+      cy.wait(500);
+      cy.wrap($btnCompra)
+        .parents(".available")
+        .invoke("show")
+        .end()
+        .wrap($btnCompra)
+        .invoke("show")
+        .scrollIntoView({ offset: { top: -150 } })
+        .should("exist")
+        .and("not.be.disabled")
+        .click({ force: true });
+
+      cy.wait(3000);
+
+      cy.get("body").then(($body) => {
+        if ($body.find('[data-js="button-agree"]').is(":visible")) {
+          cy.log("⚠️ Confirmando modal de madrugada...");
+          cy.get('[data-js="button-agree"]').click({ force: true });
+
+          cy.wait(3000);
+          cy.url().then((urlAtual) => {
+            if (urlAtual.includes("/disponibilidade")) {
+              cy.wrap($btnCompra).click({ force: true }).parent();
+            }
+          });
+        }
+      });
+    });
+});
+
+Cypress.Commands.add("selecionarPassagemAleatoriaRR", () => {
+  cy.contains("ESCOLHER PASSAGENS", { timeout: 90000 }).should("be.visible");
+  cy.log("⏳ Aguardando estabilização da página de ofertas...");
+
+  cy.get('li[data-js^="offer-element-"]', { timeout: 90000 }).should("be.visible");
+
+  cy.wait(1000);
+
+  cy.get('li[data-js^="offer-element-"]:has(.available)', { timeout: 90000 })
+    .should("exist")
+    .invoke("show")
+    .then(($ofertas) => {
+      const ofertasValidas = $ofertas.filter((i, el) => {
+        const $oferta = Cypress.$(el);
+
+        // 1. Tipo da classe (filtra CAMA)
+        const textoClasse = $oferta.find('[data-js^="classtype"]').text().toUpperCase();
+
+        // 2. Botão de compra ativo
+        const temBotaoAtivo = $oferta.find('button[data-js="buy-ticket"]:not([disabled])').length > 0;
+
+        // 3. Validação do Preço Renderizado
+        const $spanPreco = $oferta.find('[data-js="priceLabel"]');
+        const textoPrecoLabel = $spanPreco.length > 0 ? $spanPreco.text() : "";
+        const estaQuebrado = textoPrecoLabel.includes("$price");
+
+        // 4. Validação da Empresa / Operadora (Ignora a Cometa)
+        const $imgEmpresa = $oferta.find('.managed-by img[data-js="imgCompany"]');
+        const altEmpresa = ($imgEmpresa.attr("alt") || "").toLowerCase();
+        const srcEmpresa = ($imgEmpresa.attr("src") || "").toLowerCase();
+
+        // Verifica se a passagem é operada pela Cometa
+        const eCometa = altEmpresa.includes("cometa") || srcEmpresa.includes("cometa");
+
+        // Retorna TRUE apenas se NÃO for Cometa
+        return !textoClasse.includes("CAMA") && temBotaoAtivo && !estaQuebrado && !eCometa;
+      });
+
+      const total = ofertasValidas.length;
+      if (total === 0) throw new Error("Nenhuma passagem válida encontrada (todas as ofertas eram Cometa ou indisponíveis)!");
+
+      const randomIndex = Math.floor(Math.random() * total);
+      const escolha = ofertasValidas[randomIndex];
+      const $btnCompra = Cypress.$(escolha).find('button[data-js="buy-ticket"]', { timeout: 90000 });
+
+      cy.log(`🎰 Sorteada opção ${randomIndex + 1} de ${total} (Excluindo Cometa)`);
+
+      cy.wait(500);
+      cy.wrap($btnCompra)
+        .parents(".available")
+        .invoke("show")
+        .end()
+        .wrap($btnCompra)
+        .invoke("show")
+        .scrollIntoView({ offset: { top: -150 } })
+        .should("exist")
+        .and("not.be.disabled")
+        .click({ force: true });
+
+      cy.wait(3000);
+
+      cy.get("body").then(($body) => {
+        if ($body.find('[data-js="button-agree"]').is(":visible")) {
+          cy.log("⚠️ Confirmando modal de madrugada...");
+          cy.get('[data-js="button-agree"]').click({ force: true });
+
+          cy.wait(3000);
+          cy.url().then((urlAtual) => {
+            if (urlAtual.includes("/disponibilidade")) {
+              cy.wrap($btnCompra).click({ force: true }).parent();
+            }
+          });
+        }
+      });
+    });
+});
+
 // Cypress.Commands.add("selecionarPassagemAleatoria1", () => {
 //   cy.contains("ESCOLHER PASSAGENS", { timeout: 90000 }).should("be.visible");
 //   cy.log("⏳ Aguardando estabilização da página de ofertas...");

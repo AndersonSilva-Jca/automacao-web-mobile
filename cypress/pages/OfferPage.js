@@ -5,7 +5,13 @@ class OfferPage {
   selecionarPassagemIda() {
     cy.selecionarPassagemAleatoria1({ timeout: 90000 });
   }
+  selecionarPassagemIdaExpressoSul() {
+    cy.selecionarPassagemAleatoriaExpressoSul({ timeout: 90000 });
+  }
 
+  selecionarPassagemIdaRR() {
+    cy.selecionarPassagemAleatoriaRR({ timeout: 90000 });
+  }
   //------------------ OUTLET DE HOTÉIS ------------------
   odhSelecionarHospedagem() {
     cy.contains(loc.ODH_ASSERT_RESULT_HOSPEDAGENS).should("be.visible");

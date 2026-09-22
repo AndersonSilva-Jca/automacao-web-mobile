@@ -30,11 +30,11 @@ describe("Rapido Ribeirão", () => {
       LoginPage.confirmarLogin();
       LoginPage.logadoComSucesso();
     });
-    SearchPage.buscaOrigem();
-    SearchPage.buscaDestino();
+    SearchPage.buscaOrigemRR();
+    SearchPage.buscaDestinoRR();
     SearchPage.dataIda();
     SearchPage.confirmarBusca();
-    OfferPage.selecionarPassagemIda();
+    OfferPage.selecionarPassagemIdaRR();
     PassengerPage.selecionarPassageiro();
     SeatMapPage.selecionarAssento();
     CheckoutPage.resumoDaCompra();

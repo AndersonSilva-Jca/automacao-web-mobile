@@ -6,10 +6,39 @@ class SearchPage {
     cy.get(loc.BUSCAS.DESTINO_IDA).click().type(loc.SP_TIETE, { delay: 100 }).should("exist").invoke("show");
     cy.xpath(loc.XPATH_SP_TIETE).click({ force: true });
   }
+  buscaOrigemRR() {
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().type("Sertãozinho (SP)", { delay: 100 }).should("exist").invoke("show");
+    cy.xpath('//*[@id="Sertãozinho-(SP)"]/p[1]').click({ force: true });
+  }
 
-  buscaDestino() {
-    cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type(loc.RJ_TODOS, { delay: 100 }).should("exist").invoke("show");
+  buscaOrigem1001() {
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().type(loc.RJ_TODOS, { delay: 100 }).should("exist").invoke("show");
     cy.xpath(loc.XPATH_RJ_TODOS).click({ force: true });
+  }
+
+  buscaOrigemExpressoSul() {
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().type("Curitiba (PR)", { delay: 100 }).should("exist").invoke("show");
+    cy.xpath(loc.XPATH_Curitiba_PR).click({ force: true });
+  }
+
+  buscaDestinoRR() {
+    cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type(loc.SP_TIETE, { delay: 100 }).should("exist").invoke("show");
+    cy.xpath(loc.XPATH_SP_TIETE).filter(":visible").first().click({ force: true });
+  }
+
+  buscaDestinoCometa() {
+    cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("Curitiba - PR", { delay: 100 }).should("exist").invoke("show");
+    cy.xpath(loc.XPATH_Curitiba_PR).click({ force: true });
+  }
+  buscaDestino1001() {
+    cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type(loc.SP_TIETE, { delay: 100 }).should("exist").invoke("show");
+    cy.xpath(loc.XPATH_SP_TIETE).click({ force: true });
+  }
+
+  buscaDestinoExpressoSul() {
+    cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("Florianópolis (SC)", { delay: 100 }).should("exist").invoke("show");
+    cy.get('a[id="Florianópolis-(SC)"]', { timeout: 10000 }).filter(":visible").first().click({ force: true });
+    // cy.xpath(loc.XPATH_FLORIPA_SC).click({ force: true });
   }
 
   confirmarBusca() {

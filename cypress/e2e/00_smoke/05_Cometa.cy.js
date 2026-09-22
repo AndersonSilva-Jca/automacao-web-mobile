@@ -31,7 +31,7 @@ describe("Viação Cometa", () => {
       LoginPage.logadoComSucesso();
     });
     SearchPage.buscaOrigem();
-    SearchPage.buscaDestino();
+    SearchPage.buscaDestinoCometa();
     SearchPage.dataIda();
     SearchPage.confirmarBusca();
     OfferPage.selecionarPassagemIda();

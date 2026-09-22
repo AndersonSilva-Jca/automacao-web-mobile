@@ -31,11 +31,11 @@ describe("Expresso do Sul", () => {
       LoginPage.confirmarLogin();
       LoginPage.logadoComSucesso();
     });
-    SearchPage.buscaOrigem();
-    SearchPage.buscaDestino();
+    SearchPage.buscaOrigemExpressoSul();
+    SearchPage.buscaDestinoExpressoSul();
     SearchPage.dataIda();
     SearchPage.confirmarBusca();
-    OfferPage.selecionarPassagemIda();
+    OfferPage.selecionarPassagemIdaExpressoSul();
     PassengerPage.selecionarPassageiro();
     SeatMapPage.selecionarAssento();
     CheckoutPage.resumoDaCompra();
