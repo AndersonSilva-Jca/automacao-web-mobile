@@ -25,6 +25,10 @@ class SearchPage {
     cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type(loc.SP_TIETE, { delay: 100 }).should("exist").invoke("show");
     cy.xpath(loc.XPATH_SP_TIETE).filter(":visible").first().click({ force: true });
   }
+  buscaDestino() {
+    cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type(loc.SP_TIETE, { delay: 100 }).should("exist").invoke("show");
+    cy.xpath(loc.XPATH_SP_TIETE).filter(":visible").first().click({ force: true });
+  }
 
   buscaDestinoCometa() {
     cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("Curitiba - PR", { delay: 100 }).should("exist").invoke("show");
