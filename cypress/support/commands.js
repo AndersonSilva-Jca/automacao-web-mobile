@@ -477,9 +477,12 @@ Cypress.Commands.add("selecionarPassagemAleatoria1", () => {
     .invoke("show")
     .then(($ofertas) => {
       const ofertasValidas = $ofertas.filter((i, el) => {
-        const textoClasse = Cypress.$(el).find('[data-js^="classtype"]').text().toUpperCase();
-        const temBotaoAtivo = Cypress.$(el).find('button[data-js="buy-ticket"]:not([disabled])').length > 0;
-        return !textoClasse.includes("CAMA") && temBotaoAtivo;
+        const $oferta = Cypress.$(el);
+        const textoClasse = $oferta.find('[data-js^="classtype"]').text().toUpperCase();
+        const textoOferta = $oferta.text();
+        const temBotaoAtivo = $oferta.find('button[data-js="buy-ticket"]:not([disabled])').length > 0; // Validação da string de preço que ainda não carregou         const temPrecoInvalido = textoOferta.includes("R$$price$decimal") || textoOferta.includes("$price$decimal");
+
+        return !textoClasse.includes("CAMA") && temBotaoAtivo && !temPrecoInvalido;
       });
 
       const total = ofertasValidas.length;
@@ -502,6 +505,7 @@ Cypress.Commands.add("selecionarPassagemAleatoria1", () => {
         .should("exist")
         .and("not.be.disabled")
         .click({ force: true });
+
       cy.wait(3000);
 
       cy.get("body").then(($body) => {
@@ -519,6 +523,66 @@ Cypress.Commands.add("selecionarPassagemAleatoria1", () => {
       });
     });
 });
+
+// Cypress.Commands.add("selecionarPassagemAleatoria1", () => {
+//   cy.contains("ESCOLHER PASSAGENS", { timeout: 90000 }).should("be.visible");
+//   cy.log("⏳ Aguardando estabilização da página de ofertas...");
+//   cy.wait(1000);
+//   cy.scrollTo("bottom");
+//   cy.wait(1000);
+//   cy.scrollTo("bottom");
+
+//   cy.get('li[data-js^="offer-element-"]', { timeout: 90000 }).should("be.visible");
+
+//   cy.wait(1000);
+
+//   cy.get('li[data-js^="offer-element-"]:has(.available)', { timeout: 90000 })
+//     .should("exist")
+//     .invoke("show")
+//     .then(($ofertas) => {
+//       const ofertasValidas = $ofertas.filter((i, el) => {
+//         const textoClasse = Cypress.$(el).find('[data-js^="classtype"]').text().toUpperCase();
+//         const temBotaoAtivo = Cypress.$(el).find('button[data-js="buy-ticket"]:not([disabled])').length > 0;
+//         return !textoClasse.includes("CAMA") && temBotaoAtivo;
+//       });
+
+//       const total = ofertasValidas.length;
+//       if (total === 0) throw new Error("Nenhuma passagem válida encontrada!");
+
+//       const randomIndex = Math.floor(Math.random() * total);
+//       const escolha = ofertasValidas[randomIndex];
+//       const $btnCompra = Cypress.$(escolha).find('button[data-js="buy-ticket"]', { timeout: 90000 });
+
+//       cy.log(`🎰 Sorteada opção ${randomIndex + 1} de ${total}`);
+
+//       cy.wait(500);
+//       cy.wrap($btnCompra)
+//         .parents(".available")
+//         .invoke("show")
+//         .end()
+//         .wrap($btnCompra)
+//         .invoke("show")
+//         .scrollIntoView({ offset: { top: -150 } })
+//         .should("exist")
+//         .and("not.be.disabled")
+//         .click({ force: true });
+//       cy.wait(3000);
+
+//       cy.get("body").then(($body) => {
+//         if ($body.find('[data-js="button-agree"]').is(":visible")) {
+//           cy.log("⚠️ Confirmando modal de madrugada...");
+//           cy.get('[data-js="button-agree"]').click({ force: true });
+
+//           cy.wait(3000);
+//           cy.url().then((urlAtual) => {
+//             if (urlAtual.includes("/disponibilidade")) {
+//               cy.wrap($btnCompra).click({ force: true }).parent();
+//             }
+//           });
+//         }
+//       });
+//     });
+// });
 
 Cypress.Commands.add("selecionarDataCompra", (range = 1) => {
   cy.get("#input-date-buy").then(($days) => {
