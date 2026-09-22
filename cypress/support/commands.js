@@ -463,10 +463,10 @@ Cypress.Commands.add("selecionarPassagemAleatoria", () => {
 Cypress.Commands.add("selecionarPassagemAleatoria1", () => {
   cy.contains("ESCOLHER PASSAGENS", { timeout: 90000 }).should("be.visible");
   cy.log("⏳ Aguardando estabilização da página de ofertas...");
-  cy.wait(1000);
-  cy.scrollTo("bottom");
-  cy.wait(1000);
-  cy.scrollTo("bottom");
+  // cy.wait(1000);
+  // cy.scrollTo("bottom");
+  // cy.wait(1000);
+  // cy.scrollTo("bottom");
 
   cy.get('li[data-js^="offer-element-"]', { timeout: 90000 }).should("be.visible");
 
@@ -478,9 +478,13 @@ Cypress.Commands.add("selecionarPassagemAleatoria1", () => {
     .then(($ofertas) => {
       const ofertasValidas = $ofertas.filter((i, el) => {
         const $oferta = Cypress.$(el);
+
         const textoClasse = $oferta.find('[data-js^="classtype"]').text().toUpperCase();
+
         const textoOferta = $oferta.text();
-        const temBotaoAtivo = $oferta.find('button[data-js="buy-ticket"]:not([disabled])').length > 0; // Validação da string de preço que ainda não carregou         const temPrecoInvalido = textoOferta.includes("R$$price$decimal") || textoOferta.includes("$price$decimal");
+
+        const temBotaoAtivo = $oferta.find('button[data-js="buy-ticket"]:not([disabled])').length > 0;
+        const temPrecoInvalido = textoOferta.includes("R$$price$decimal");
 
         return !textoClasse.includes("CAMA") && temBotaoAtivo && !temPrecoInvalido;
       });
