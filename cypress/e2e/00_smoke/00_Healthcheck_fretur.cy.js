@@ -24,7 +24,7 @@ describe("Opção Fretur - Health Check", () => {
       timeout: 10000,
     }).then((response) => {
       expect(response.status).to.eq(200);
-      expect(response.duration).to.be.below(10000); // Resposta em menos de 5 segundos
+      expect(response.duration).to.be.below(10000); // Resposta em menos de 10 segundos
     });
   });
 
