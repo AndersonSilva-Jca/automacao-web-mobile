@@ -234,8 +234,7 @@ jobs:
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "🚨[ALERTA SITES] E-Bus/UTP - Monit. Cont."
-          to: anderson.ssantos@jcatlm.com.br
-# ,qa.monitor@odptech.com.br,maysa.marco@jcatlm.com.br,anderson.psilva@jcatlm.com.br,ariane.izac@jcatlm.com.br
+          to: anderson.ssantos@jcatlm.com.br,qa.monitor@odptech.com.br,maysa.marco@jcatlm.com.br,anderson.psilva@jcatlm.com.br,ariane.izac@jcatlm.com.br
           # cc: qa.monitor@odptech.com.br,maysa.marco@jcatlm.com.br,anderson.psilva@jcatlm.com.br
           from: "Monitoramento Contínuo"
           html_body: |
