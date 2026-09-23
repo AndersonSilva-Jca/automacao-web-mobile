@@ -288,6 +288,11 @@ function buscarUrlsPrintFalha(nomeSpecArquivo, nomeCompletoTeste) {
   return urlsPorTentativa;
 }
 
+function buscarUrlVideoFalha(nomeSpecArquivo) {
+  if (!CYPRESS_R2_PUBLIC_URL || !RUN_NUMBER) return "";
+  return `${CYPRESS_R2_PUBLIC_URL}/reports/${RUN_NUMBER}/01_e2e/videos/${encodeURIComponent(nomeSpecArquivo + ".cy.js.mp4")}`;
+}
+
 function enviarParaAppsScript(payload) {
   return new Promise((resolve, reject) => {
     const dados = JSON.stringify(payload);
@@ -331,12 +336,15 @@ function extrairTestesDaSuite(suite, nomeSpecArquivo, caminhoSuites = []) {
     if (falhou === 1) {
       const nomeCompleto = [...caminhoAtual, tituloTeste].join(" -- ");
       const [u1, u2, u3] = buscarUrlsPrintFalha(nomeSpecArquivo, nomeCompleto);
+      const urlVideo = buscarUrlVideoFalha(nomeSpecArquivo);
+
       falhas.push({
         nome_teste: `${marcaFinal} - ${tituloTeste}`,
         mensagem_erro: t.err && t.err.message ? t.err.message : "Erro não especificado",
         url_print_tentativa1: u1,
         url_print_tentativa2: u2,
         url_print_tentativa3: u3,
+        url_video: urlVideo, // Adicionado link do vídeo gravado
       });
     }
 
@@ -375,78 +383,58 @@ async function main() {
 
   const urlRelatorio = `${CYPRESS_R2_PUBLIC_URL}/reports/${RUN_NUMBER}/01_e2e/index.html`;
 
-  let totalTestesRun = 0;
-  let totalPassouRun = 0;
-  let totalFalhouRun = 0;
-  let duracaoTotalSeg = 0;
-  let todasAsFalhas = [];
+  console.log(`📦 Processando ${relatorio.results.length} spec(s)...`);
 
-  console.log(`📦 Consolidando ${relatorio.results.length} spec(s)...`);
-
-  // Percorre todas as specs e acumula os valores globais da suíte
   for (const specResult of relatorio.results) {
     const caminhoSpec = specResult.file || specResult.fullFile || "";
     const nomeSpecArquivo = extrairNomeSpec(caminhoSpec);
 
-    let testesSpec = [];
+    let todosOsTestes = [];
     (specResult.suites || []).forEach((suite) => {
-      testesSpec = testesSpec.concat(extrairTestesDaSuite(suite, nomeSpecArquivo));
+      todosOsTestes = todosOsTestes.concat(extrairTestesDaSuite(suite, nomeSpecArquivo));
     });
 
-    for (const item of testesSpec) {
-      totalTestesRun += item.total || 0;
-      totalPassouRun += item.passou || 0;
-      totalFalhouRun += item.falhou || 0;
-      duracaoTotalSeg += item.duracaoSeg || 0;
+    const dataHoraFormatada = new Date().toLocaleString("pt-BR", {
+      timeZone: "America/Sao_Paulo",
+      day: "2-digit",
+      month: "2-digit",
+      year: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
 
-      if (item.falhas && item.falhas.length > 0) {
-        todasAsFalhas = todasAsFalhas.concat(item.falhas);
+    for (const item of todosOsTestes) {
+      // ⚠️ ALTERAÇÃO PRINCIPAL: Ignora e não gera relatório para testes que passaram 100% com sucesso
+      if (item.falhou === 0) {
+        console.log(`⏭️ [${item.marca}] Teste passou com sucesso. Ignorando envio.`);
+        continue;
+      }
+
+      const payload = {
+        run_id: `${RUN_ID}`,
+        marca: item.marca,
+        plataforma: "web",
+        data_hora: new Date().toISOString(),
+        data_hora_formatada: dataHoraFormatada,
+        total_testes: item.total,
+        total_passou: item.passou,
+        total_falhou: item.falhou,
+        duracao_seg: item.duracaoSeg,
+        branch: BRANCH,
+        url_allure: "",
+        url_mochawesome: urlRelatorio,
+        falhas: item.falhas,
+      };
+
+      try {
+        const resposta = await enviarParaAppsScript(payload);
+        console.log(`⚠️ [FALHA REGISTRADA] [${item.marca}] enviado — falhou:${item.falhou} ->`, resposta);
+      } catch (err) {
+        console.error(`❌ [${item.marca}] falhou ao enviar:`, err.message);
       }
     }
   }
-
-  const dataHoraFormatada = new Date().toLocaleString("pt-BR", {
-    timeZone: "America/Sao_Paulo",
-    day: "2-digit",
-    month: "2-digit",
-    year: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-  });
-
-  // Monta um único payload consolidado para a execução
-  const payload = {
-    run_id: `${RUN_ID}`,
-    marca: item.marca,
-    plataforma: "web",
-    data_hora: new Date().toISOString(),
-    data_hora_formatada: dataHoraFormatada,
-    total_testes: totalTestesRun, // Soma real de todos os testes
-    total_passou: totalPassouRun, // Soma das passagens com sucesso
-    total_falhou: totalFalhouRun, // Soma das falhas
-    duracao_seg: Math.round(duracaoTotalSeg),
-    branch: BRANCH,
-    url_allure: "",
-    url_mochawesome: urlRelatorio,
-    falhas: todasAsFalhas,
-  };
-
-  try {
-    const resposta = await enviarParaAppsScript(payload);
-    console.log(`📊 [REGISTRO ENVIADO - ${item.marca}] ->`, resposta);
-  } catch (err) {
-    console.error(`❌ [${item.marca}] Falha ao enviar registro:`, err.message);
-  }
 }
-
-// try {
-//   console.log(`🚀 Enviando resultado consolidado para o Apps Script:`, payload);
-//   const resposta = await enviarParaAppsScript(payload);
-//   console.log(`📊 [REGISTRO ENVIADO] ->`, resposta);
-// } catch (err) {
-//   console.error(`❌ Falha ao enviar registro consolidado:`, err.message);
-// }
-// }
 
 main();
