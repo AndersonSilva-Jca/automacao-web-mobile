@@ -198,19 +198,19 @@ async function main() {
         falhas: item.falhas,
       };
 
-      // try {
-      //   const resposta = await enviarParaAppsScript(payload);
-      //   console.log(`🚨 [FALHA REGISTRADA - ${item.marca}] enviado com sucesso ->`, resposta);
-      // } catch (err) {
-      //   console.error(`❌ [${item.marca}] falhou ao enviar registro:`, err.message);
-      // }
-
       try {
         const resposta = await enviarParaAppsScript(payload);
-        console.log(`✅ [${item.marca}] enviado — passou:${item.passou} falhou:${item.falhou} ->`, resposta);
+        console.log(`🚨 [FALHA REGISTRADA - ${item.marca}] enviado com sucesso ->`, resposta);
       } catch (err) {
-        console.error(`❌ [${item.marca}] falhou ao enviar:`, err.message);
+        console.error(`❌ [${item.marca}] falhou ao enviar registro:`, err.message);
       }
+
+      // try {
+      //   const resposta = await enviarParaAppsScript(payload);
+      //   console.log(`✅ [${item.marca}] enviado — passou:${item.passou} falhou:${item.falhou} ->`, resposta);
+      // } catch (err) {
+      //   console.error(`❌ [${item.marca}] falhou ao enviar:`, err.message);
+      // }
     }
   }
 }
