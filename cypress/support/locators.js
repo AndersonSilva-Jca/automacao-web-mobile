@@ -44,7 +44,7 @@ const loc = {
   ODP_BOTAO_LOGIN: ".logged-out-section > .btn-outlet",
   ODP_BOTAO_LOGAR: ".button-login",
   ODP_BOTAO_AVANCAR: ".btn-footer",
-  ODP_ABA_PAGAMENTOS: ".payment-type-container > .col-12 > .active",
+  ODP_ABA_PAGAMENTOS: ".payment-selector-wrapper",
   ODP_ASSERT_VALORTOTAL: ":nth-child(5) > .title > .cmp-text > p > b",
   ODP_BOTAO_RESERVAR_ASSENTO: "#reservation-seat-0",
   ODP_BOTAO_ESCOLHER_ASSENTO: '[data-value="choose-seat"] > .option-content',

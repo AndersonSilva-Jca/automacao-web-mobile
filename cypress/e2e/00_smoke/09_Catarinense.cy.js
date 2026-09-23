@@ -31,7 +31,7 @@ describe("Catarinense", () => {
       LoginPage.logadoComSucesso();
     });
     SearchPage.buscaOrigem();
-    SearchPage.buscaDestino();
+    SearchPage.buscaDestinoCatarinense();
     SearchPage.dataIda();
     SearchPage.confirmarBusca();
     OfferPage.selecionarPassagemIda();

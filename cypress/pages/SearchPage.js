@@ -26,8 +26,12 @@ class SearchPage {
     cy.xpath(loc.XPATH_SP_TIETE).filter(":visible").first().click({ force: true });
   }
   buscaDestino() {
-    cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type(loc.SP_TIETE, { delay: 100 }).should("exist").invoke("show");
-    cy.xpath(loc.XPATH_SP_TIETE).filter(":visible").first().click({ force: true });
+    cy.get(loc.BUSCAS.DESTINO_IDA).click().type(loc.SP_TIETE, { delay: 100 }).should("exist").invoke("show");
+    cy.xpath(loc.XPATH_SP_TIETE).click({ force: true });
+  }
+  buscaDestinoCatarinense() {
+    cy.get(loc.BUSCAS.DESTINO_VOLTA).click().type("Florianópolis (SC)", { delay: 25 }).should("exist").invoke("show");
+    cy.get('a[id="Florianópolis-(SC)"]', { timeout: 10000 }).filter(":visible").first().click({ force: true });
   }
 
   buscaDestinoCometa() {

@@ -16,8 +16,9 @@ class CheckoutPage {
     cy.get(loc.ODP_ABA_PAGAMENTOS).should("be.visible").log("Aba de pagamentos visível");
     cy.get(loc.ASSERT_SUBTOTAL).should("contain", "Subtotal dos assentos").log("Subtotal dos assentos");
     cy.get(loc.ASSERT_TAXASERVICO).should("contain", "Taxa de serviço").log("Taxa de serviço");
-    cy.get('[style="display: inline-block; border: none;"]').should("be.visible").log("Aba do Cartões de Crédito");
-    cy.get(".payment-type-container > .col-12 > .active").should("be.visible").log("Aba do PIX");
+    cy.get(".is-selected").should("be.visible").log("Aba do Cartões de Crédito");
+    cy.get('[data-js="tab-nupay"]').should("be.visible").log("Aba da NuPay");
+    cy.get('[data-js="tab-pix"]').should("be.visible").log("Aba do PIX");
   }
 
   //------------------ CLUBE GIRO ------------------
