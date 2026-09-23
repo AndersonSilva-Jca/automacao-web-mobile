@@ -418,7 +418,7 @@ async function main() {
   // Monta um único payload consolidado para a execução
   const payload = {
     run_id: `${RUN_ID}`,
-    marca: "EBus/UTP",
+    marca: item.marca,
     plataforma: "web",
     data_hora: new Date().toISOString(),
     data_hora_formatada: dataHoraFormatada,
@@ -433,12 +433,20 @@ async function main() {
   };
 
   try {
-    console.log(`🚀 Enviando resultado consolidado para o Apps Script:`, payload);
     const resposta = await enviarParaAppsScript(payload);
-    console.log(`📊 [REGISTRO ENVIADO] ->`, resposta);
+    console.log(`📊 [REGISTRO ENVIADO - ${item.marca}] ->`, resposta);
   } catch (err) {
-    console.error(`❌ Falha ao enviar registro consolidado:`, err.message);
+    console.error(`❌ [${item.marca}] Falha ao enviar registro:`, err.message);
   }
 }
+
+// try {
+//   console.log(`🚀 Enviando resultado consolidado para o Apps Script:`, payload);
+//   const resposta = await enviarParaAppsScript(payload);
+//   console.log(`📊 [REGISTRO ENVIADO] ->`, resposta);
+// } catch (err) {
+//   console.error(`❌ Falha ao enviar registro consolidado:`, err.message);
+// }
+// }
 
 main();
