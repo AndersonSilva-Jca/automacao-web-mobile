@@ -1,4 +1,5 @@
 const { defineConfig } = require("cypress");
+const fs = require("fs");
 // const cypressSplit = require("cypress-split");
 const { ImapFlow } = require("imapflow");
 const { simpleParser } = require("mailparser");
