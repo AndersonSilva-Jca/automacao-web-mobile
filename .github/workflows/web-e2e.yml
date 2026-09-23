@@ -56,8 +56,8 @@ jobs:
 
       - name: Testes E2E E-Bus/UTP
         id: cypress
-        continue-on-error: true
-        run: npx cypress run --browser electron --config video=false --spec '${{ matrix.spec }}'
+        # continue-on-error: true
+        run: npx cypress run --browser electron --spec '${{ matrix.spec }}'
         env:
           ELECTRON_EXTRA_LAUNCH_ARGS: "--disable-gpu --disable-dev-shm-usage --no-sandbox"
           APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
@@ -95,12 +95,14 @@ jobs:
         run: |
           mkdir -p status
           echo "${{ steps.cypress.outcome }}" > status/cypress_outcome_${{ env.SPEC_NAME }}.txt
+
       - name: Organizar JSON do relatório para upload
         if: always()
         run: |
           mkdir -p cypress/reports/json
           # Move e renomeia qualquer JSON gerado dentro de reports para uma subpasta única
           find cypress/reports -maxdepth 1 -name "*.json" -exec mv {} cypress/reports/json/${{ env.SPEC_NAME }}.json \;
+
       - name: Upload de Artefatos de Relatório
         if: always()
         uses: actions/upload-artifact@v4
@@ -154,7 +156,7 @@ jobs:
         run: cp cypress/merged-report.json cypress/reports/index.json
 
       - name: Deploy do Relatório para Cloudflare R2
-        if: failure()
+        if: always() && env.CYPRESS_OUTCOME == 'failure'
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.CYPRESS_R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CYPRESS_R2_SECRET_ACCESS_KEY }}

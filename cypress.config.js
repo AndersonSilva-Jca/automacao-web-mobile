@@ -27,6 +27,7 @@ module.exports = defineConfig({
   screenshotsFolder: "cypress/reports/screenshots",
   video: true,
   videoUploadOnPasses: false,
+  videoCompression: 32,
   chromeWebSecurity: false,
   viewportWidth: 1920,
   viewportHeight: 1080,
