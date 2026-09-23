@@ -164,7 +164,7 @@ async function main() {
     });
 
     // 💡 FILTRO: Seleciona APENAS os itens que contêm pelo menos 1 falha
-    const apenasFalhas = todosOsTestes.filter((item) => item.falhou > 0);
+    // const apenasFalhas = todosOsTestes.filter((item) => item.falhou > 0);
 
     if (apenasFalhas.length === 0) {
       console.log(`✅ [${nomeSpecArquivo}] Todos os testes passaram! Ignorando envio deste spec.`);
@@ -188,9 +188,9 @@ async function main() {
         plataforma: "web",
         data_hora: new Date().toISOString(),
         data_hora_formatada: dataHoraFormatada,
-        total_testes: item.total,
-        total_passou: item.passou,
-        total_falhou: item.falhou,
+        total_testes: item.total, // Envia o total real de testes da spec
+        total_passou: item.passou, // Registra as passagens
+        total_falhou: item.falhou, // Registra as falhas
         duracao_seg: item.duracaoSeg,
         branch: BRANCH,
         url_allure: "",
@@ -198,20 +198,28 @@ async function main() {
         falhas: item.falhas,
       };
 
-      // try {
-      //     const resposta = await enviarParaAppsScript(payload);
-      //     console.log(`🚨 [FALHA REGISTRADA - ${item.marca}] enviado com sucesso ->`, resposta);
-      //   } catch (err) {
-      //     console.error(`❌ [${item.marca}] falhou ao enviar registro:`, err.message);
-      //   }
-
       try {
         const resposta = await enviarParaAppsScript(payload);
-        console.log(`✅ [${item.marca}] enviado — passou:${item.passou} falhou:${item.falhou} ->`, resposta);
+        console.log(`📊 [REGISTRO ENVIADO - ${item.marca}] ->`, resposta);
       } catch (err) {
-        console.error(`❌ [${item.marca}] falhou ao enviar:`, err.message);
+        console.error(`❌ [${item.marca}] Falha ao enviar registro:`, err.message);
       }
     }
+
+    // try {
+    //     const resposta = await enviarParaAppsScript(payload);
+    //     console.log(`🚨 [FALHA REGISTRADA - ${item.marca}] enviado com sucesso ->`, resposta);
+    //   } catch (err) {
+    //     console.error(`❌ [${item.marca}] falhou ao enviar registro:`, err.message);
+    //   }
+
+    // try {
+    //   const resposta = await enviarParaAppsScript(payload);
+    //   console.log(`✅ [${item.marca}] enviado — passou:${item.passou} falhou:${item.falhou} ->`, resposta);
+    // } catch (err) {
+    //   console.error(`❌ [${item.marca}] falhou ao enviar:`, err.message);
+    // }
+    // }
   }
 }
 
