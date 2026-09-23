@@ -29,6 +29,7 @@ class CheckoutPage {
     cy.get("#tab-card").should("be.visible").log("Aba do Cartão de Crédito");
     cy.get("#tab-pix").should("be.visible").log("Aba do PIX");
     cy.get("#tab-conta-giro").should("be.visible").log("Aba da Conta Giro");
+    cy.get(".form-container.aem-GridColumn > .payment-page").should("be.visible").log("Aba de Pagamentos");
   }
 
   //------------------ WEMOBI ------------------

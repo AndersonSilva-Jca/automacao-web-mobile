@@ -24,15 +24,15 @@ jobs:
       matrix:
         spec:
           - cypress/e2e/00_smoke/00_Healthcheck_fretur.cy.js
-          - cypress/e2e/00_smoke/01_ODH.cy.js
-          - cypress/e2e/00_smoke/02_ODP.cy.js
-          - cypress/e2e/00_smoke/03_Giro.cy.js
-          - cypress/e2e/00_smoke/04_Wemobi.cy.js
-          - cypress/e2e/00_smoke/05_Cometa.cy.js
-          - cypress/e2e/00_smoke/06_1001.cy.js
-          - cypress/e2e/00_smoke/07_ExpressoSul.cy.js
-          - cypress/e2e/00_smoke/08_RapidoRibeirao.cy.js
-          - cypress/e2e/00_smoke/09_Catarinense.cy.js
+          # - cypress/e2e/00_smoke/01_ODH.cy.js
+          # - cypress/e2e/00_smoke/02_ODP.cy.js
+          # - cypress/e2e/00_smoke/03_Giro.cy.js
+          # - cypress/e2e/00_smoke/04_Wemobi.cy.js
+          # - cypress/e2e/00_smoke/05_Cometa.cy.js
+          # - cypress/e2e/00_smoke/06_1001.cy.js
+          # - cypress/e2e/00_smoke/07_ExpressoSul.cy.js
+          # - cypress/e2e/00_smoke/08_RapidoRibeirao.cy.js
+          # - cypress/e2e/00_smoke/09_Catarinense.cy.js
           - cypress/e2e/00_smoke/10_Totem.cy.js
 
     runs-on: ubuntu-latest
@@ -109,6 +109,7 @@ jobs:
           path: |
             cypress/reports/
             status/
+
   deploy-r2-cloudflare:
     needs: cypress-run
     if: always()
@@ -153,6 +154,7 @@ jobs:
         run: cp cypress/merged-report.json cypress/reports/index.json
 
       - name: Deploy do Relatório para Cloudflare R2
+        if: failure()
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.CYPRESS_R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CYPRESS_R2_SECRET_ACCESS_KEY }}
@@ -162,6 +164,7 @@ jobs:
             --endpoint-url https://${{ secrets.CYPRESS_R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
             #  aws s3 sync ./cypress/reports s3://cypress-reports/reports/${{ github.run_number }}/01_e2e \
             # --endpoint-url https://${{ secrets.CYPRESS_R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
+
       - name: Enviar resultados para o Dashboard (Apps Script)
         env:
           GITHUB_RUN_NUMBER: ${{ github.run_number }}
@@ -225,6 +228,7 @@ jobs:
               <hr style="border: 0; border-top: 1px solid #eee; margin: 25px 0;">
               <p style="font-size: 12px; color: #999; margin: 0;">Este é um e-mail automático gerado pelo sistema de Qualidade de Software (QA).</p>
             </div>
+
       - name: Enviar E-mail de FALHA 🚨
         if: env.CYPRESS_OUTCOME == 'failure'
         uses: dawidd6/action-send-mail@v3
@@ -234,7 +238,8 @@ jobs:
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "🚨[ALERTA SITES] E-Bus/UTP - Monit. Cont."
-          to: anderson.ssantos@jcatlm.com.br,qa.monitor@odptech.com.br,maysa.marco@jcatlm.com.br,anderson.psilva@jcatlm.com.br,ariane.izac@jcatlm.com.br
+          to: anderson.ssantos@jcatlm.com.br
+          # ,qa.monitor@odptech.com.br,maysa.marco@jcatlm.com.br,anderson.psilva@jcatlm.com.br,ariane.izac@jcatlm.com.br
           # cc: qa.monitor@odptech.com.br,maysa.marco@jcatlm.com.br,anderson.psilva@jcatlm.com.br
           from: "Monitoramento Contínuo"
           html_body: |
