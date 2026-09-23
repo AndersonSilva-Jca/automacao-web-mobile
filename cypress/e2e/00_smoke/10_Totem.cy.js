@@ -27,7 +27,7 @@ describe("Totem", () => {
 
     // Digitação do MAC Address otimizada para evitar gastar tempo de sessão
     cy.get("#macAddress").click({ force: true }).clear().type("241c04780308", { delay: 50 });
-    cy.get("#macAddress").click({ force: true }).clear().type("241c04780307", { delay: 50 });
+    // cy.get("#macAddress").click({ force: true }).clear().type("241c04780307", { delay: 50 });
 
     cy.get(".mt-4 > .rounded-lg").should("be.visible").click({ force: true });
     cy.contains("Como podemos te ajudar?").should("be.visible");
