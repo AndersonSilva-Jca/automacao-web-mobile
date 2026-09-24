@@ -405,11 +405,9 @@ async function main() {
     });
 
     for (const item of todosOsTestes) {
-      // ⚠️ ALTERAÇÃO PRINCIPAL: Ignora e não gera relatório para testes que passaram 100% com sucesso
-      if (item.falhou === 0) {
-        console.log(`⏭️ [${item.marca}] Teste passou com sucesso. Ignorando envio.`);
-        continue;
-      }
+      // Se o teste passou, envia a contagem para o Dashboard, mas deixa a URL vazia
+      // para não apontar para relatórios que não foram salvos na Cloudflare R2
+      const urlMochawesomeFinal = item.falhou > 0 ? urlRelatorio : "";
 
       const payload = {
         run_id: `${RUN_ID}`,
@@ -423,13 +421,17 @@ async function main() {
         duracao_seg: item.duracaoSeg,
         branch: BRANCH,
         url_allure: "",
-        url_mochawesome: urlRelatorio,
+        url_mochawesome: urlMochawesomeFinal,
         falhas: item.falhas,
       };
 
       try {
         const resposta = await enviarParaAppsScript(payload);
-        console.log(`⚠️ [FALHA REGISTRADA] [${item.marca}] enviado — falhou:${item.falhou} ->`, resposta);
+        if (item.falhou > 0) {
+          console.log(`⚠️ [FALHA REGISTRADA] [${item.marca}] enviado — falhou:${item.falhou} ->`, resposta);
+        } else {
+          console.log(`✅ [SUCESSO REGISTRADO] [${item.marca}] enviado — passou:${item.passou} ->`, resposta);
+        }
       } catch (err) {
         console.error(`❌ [${item.marca}] falhou ao enviar:`, err.message);
       }
