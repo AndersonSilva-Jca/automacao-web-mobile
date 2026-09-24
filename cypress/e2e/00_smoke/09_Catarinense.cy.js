@@ -12,6 +12,7 @@ import PassengerPage from "../../pages/PassengerPage.js";
 import SeatMapPage from "../../pages/SeatMapPage.js";
 import CheckoutPage from "../../pages/CheckoutPage.js";
 const catarinense = "https://www.catarinense.com.br/?utm_source=synthetic_test&utm_medium=internal&utm_campaign=operacao";
+const teste = "https://www.catarinense.com.br/disponibilidade?at_preview_token=tKUpFyKZSoJprRFcJbm9lpAurlz06aDann09OxAXRqQ&at_preview_index=1_1&at_preview_listed_activities_only=true";
 
 describe("Catarinense", () => {
   beforeEach(() => {
@@ -23,7 +24,8 @@ describe("Catarinense", () => {
 
   it("Catarinense - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
     cy.env(["login", "senha"]).then(() => {
-      cy.visit(catarinense);
+      cy.visit(teste);
+      cy.get(".img-header-logo").click();
       LoginPage.abrirModalLogin();
       LoginPage.preencherUsuario();
       LoginPage.PreencherSenha();
@@ -37,7 +39,7 @@ describe("Catarinense", () => {
     OfferPage.selecionarPassagemIda();
     PassengerPage.selecionarPassageiro();
     SeatMapPage.selecionarAssento();
-    CheckoutPage.resumoDaCompra();
+    CheckoutPage.resumoDaCompraCupom();
     // cy.get(loc.LOADER).should('not.be.visible')
     // cy.url({ timeout: 90000 }).should('include', '/pagamento')
     // Não finalizar a compra para evitar transações reais
