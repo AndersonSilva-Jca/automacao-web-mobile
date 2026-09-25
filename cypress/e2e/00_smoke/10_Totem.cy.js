@@ -68,8 +68,11 @@ describe("Totem", () => {
         const indiceSorteado = Math.floor(Math.random() * quantidadeDeDias);
 
         // Pega o botão correspondente ao índice sorteado e clica
+        cy.wait(1000);
         cy.wrap($diasDisponiveis).eq(indiceSorteado).click();
       });
+
+    cy.wait(1000);
 
     cy.get('div[data-selected="false"][data-disabled="false"]').then(($quantidadeDePassagens) => {
       const passagensDisponiveis = $quantidadeDePassagens.length;
