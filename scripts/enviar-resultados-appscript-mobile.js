@@ -353,24 +353,33 @@ function carregarResultadosAllurePorTeste() {
 // 🟢 Busca a evidência (URL pública + base64) do PRÓPRIO teste que falhou.
 // Nunca reaproveita o print de outra marca: se este teste não tiver um
 // anexo com imagem no Allure, a evidência simplesmente fica vazia.
-function obterEvidenciaDoProprioTeste(mapaResultados, nomeTeste, nomeSuiteOriginal, baseUrlR2, contadorPorNome) {
+// Substitua a função inteira por esta:
+function obterEvidenciaDoProprioTeste(mapaResultados, nomeTeste, marcaFormatada, baseUrlR2, contadorPorNome) {
   const chave = normalizarNomeTeste(nomeTeste);
   const candidatos = mapaResultados.get(chave) || [];
   if (!candidatos.length) return { urlR2: "", base64: "" };
 
-  // Se houver mais de um candidato com o mesmo nome (specs diferentes com
-  // teste homônimo), prioriza o que pertence à mesma suíte do Robot.
-  const suiteAlvo = normalizarNomeTeste(nomeSuiteOriginal);
-  let listaOrdenada = candidatos;
-  if (candidatos.length > 1 && suiteAlvo) {
-    const daMesmaSuite = candidatos.filter((c) => extrairLabelsSuite_(c).includes(suiteAlvo));
-    if (daMesmaSuite.length) listaOrdenada = daMesmaSuite;
-  }
+  // 🟢 NOVO: Filtra os resultados do Allure garantindo que pertencem à marca correta
+  const candidatosDaMarca = candidatos.filter((c) => {
+    const labels = extrairLabelsSuite_(c);
+    let marcaDesteAllure = "";
+    for (const key in MAPA_MARCAS_MOBILE) {
+      if (labels.includes(key)) {
+        marcaDesteAllure = MAPA_MARCAS_MOBILE[key];
+        break;
+      }
+    }
+    return marcaDesteAllure === marcaFormatada;
+  });
 
-  // Quando o mesmo teste roda mais de uma vez na suíte certa (retry), avança
-  // para a próxima ocorrência a cada chamada.
-  const indice = contadorPorNome.get(chave) || 0;
-  contadorPorNome.set(chave, indice + 1);
+  // Usa os candidatos da marca, ou faz fallback se não achar
+  let listaOrdenada = candidatosDaMarca.length > 0 ? candidatosDaMarca : candidatos;
+
+  // 🟢 NOVO: O contador agora separa por marca para não misturar retentativas (tentativa 1, 2, 3)
+  const chaveContador = `${marcaFormatada}_${chave}`;
+  const indice = contadorPorNome.get(chaveContador) || 0;
+  contadorPorNome.set(chaveContador, indice + 1);
+
   const resultado = listaOrdenada[Math.min(indice, listaOrdenada.length - 1)];
 
   // Testa cada anexo do PRÓPRIO teste até achar um que realmente contenha imagem.
@@ -481,16 +490,28 @@ async function main() {
         const nomeTeste = t.$.name || "Teste Mobile";
         const msgErro = t.status && t.status[0] && t.status[0]._ ? t.status[0]._.trim() : "Falha na execução do teste mobile";
 
-        const { urlR2: urlAnexoR2, base64: imagemBase64 } = obterEvidenciaDoProprioTeste(mapaResultadosAllure, nomeTeste, nomeSuiteOriginal, baseUrlR2, contadorPorNome);
+        // 🟢 Passando a marcaFormatada no lugar de nomeSuiteOriginal
+        const { urlR2: urlAnexoR2, base64: imagemBase64 } = obterEvidenciaDoProprioTeste(mapaResultadosAllure, nomeTeste, marcaFormatada, baseUrlR2, contadorPorNome);
 
         falhas.push({
           nome_teste: `${marcaFormatada} - ${nomeTeste}`,
           mensagem_erro: msgErro.replace(/\n/g, " ").replace(/\r/g, "").trim(),
           url_print_tentativa1: urlAnexoR2,
-          url_print_tentativa2: urlAnexoR2,
-          url_print_tentativa3: urlAnexoR2,
-          imagem_base64: imagemBase64, // 🟢 Enviando a string da foto para renderização no HTML/Planilha
+          url_print_tentativa2: "", // Igual à web
+          url_print_tentativa3: "", // Igual à web
+          imagem_base64: imagemBase64,
         });
+
+        // const { urlR2: urlAnexoR2, base64: imagemBase64 } = obterEvidenciaDoProprioTeste(mapaResultadosAllure, nomeTeste, nomeSuiteOriginal, baseUrlR2, contadorPorNome);
+
+        // falhas.push({
+        //   nome_teste: `${marcaFormatada} - ${nomeTeste}`,
+        //   mensagem_erro: msgErro.replace(/\n/g, " ").replace(/\r/g, "").trim(),
+        //   url_print_tentativa1: urlAnexoR2,
+        //   url_print_tentativa2: urlAnexoR2,
+        //   url_print_tentativa3: urlAnexoR2,
+        //   imagem_base64: imagemBase64, // 🟢 Enviando a string da foto para renderização no HTML/Planilha
+        // });
       }
     });
 
