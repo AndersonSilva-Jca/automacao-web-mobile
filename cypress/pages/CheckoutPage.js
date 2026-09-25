@@ -1,8 +1,8 @@
 import loc from "../support/locators";
 
 class CheckoutPage {
-  //------------------ UTP ------------------
   validarCupom() {}
+  //------------------ UTP ------------------
   resumoDaCompra() {
     cy.get(loc.ASSERT_SUBTOTAL).should("contain", "Subtotal dos assentos").log("Subtotal dos assentos");
     cy.get(loc.ASSERT_TAXASERVICO).should("exist").log("Taxa de serviço");
@@ -11,6 +11,7 @@ class CheckoutPage {
     cy.get("#tab-pix").should("be.visible").log("Aba do PIX");
     cy.get("#tab-conta-giro").should("be.visible").log("Aba da Conta Giro");
   }
+
   resumoDaCompraCupom() {
     // cy.get("#discount-code").type("MADRUGADA");
     // cy.get("#button-apply-discount").click({ force: true }).log("Cupom Aplicado");
@@ -23,6 +24,7 @@ class CheckoutPage {
     cy.get("#tab-pix").should("be.visible").log("Aba do PIX");
     cy.get("#tab-conta-giro").should("be.visible").log("Aba da Conta Giro");
   }
+
   //------------------ OUTLET DE PASSAGENS ------------------
   odpResumoDaCompra() {
     cy.get(loc.ODP_ABA_PAGAMENTOS).should("be.visible").log("Aba de pagamentos visível");

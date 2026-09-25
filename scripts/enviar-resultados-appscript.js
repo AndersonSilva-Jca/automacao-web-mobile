@@ -335,7 +335,7 @@ function extrairTestesDaSuite(suite, nomeSpecArquivo, caminhoSuites = []) {
 
     if (falhou === 1) {
       const nomeCompleto = [...caminhoAtual, tituloTeste].join(" -- ");
-      const [u1, u2, u3] = buscarUrlsPrintFalha(nomeSpecArquivo, nomeCompleto);
+      const [u1, u2] = buscarUrlsPrintFalha(nomeSpecArquivo, nomeCompleto); // Só precisamos dos dois primeiros prints
       const urlVideo = buscarUrlVideoFalha(nomeSpecArquivo);
 
       falhas.push({
@@ -343,8 +343,8 @@ function extrairTestesDaSuite(suite, nomeSpecArquivo, caminhoSuites = []) {
         mensagem_erro: t.err && t.err.message ? t.err.message : "Erro não especificado",
         url_print_tentativa1: u1,
         url_print_tentativa2: u2,
-        url_print_tentativa3: u3,
-        url_video: urlVideo, // Adicionado link do vídeo gravado
+        // Substituímos a terceira tentativa de print pelo vídeo
+        url_print_tentativa3: urlVideo,
       });
     }
 
