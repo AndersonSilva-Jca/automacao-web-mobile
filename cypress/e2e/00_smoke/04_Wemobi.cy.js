@@ -21,7 +21,7 @@ describe("Wemobi", () => {
     Cypress.on("uncaught:exception", () => false);
   });
 
-  it.only("Wemobi - exp. Wemobi Lugar Marcado", () => {
+  it("Wemobi - exp. Wemobi Lugar Marcado", () => {
     cy.env(["login", "senha"]).then(() => {
       cy.visit(wemobi);
       LoginPage.wemobiModalLogin();

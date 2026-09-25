@@ -21,7 +21,7 @@ describe("Outlet de Passagens", () => {
     Cypress.on("uncaught:exception", () => false);
   });
 
-  it.only("Outlet de passagens - Hora Marcada", () => {
+  it("Outlet de passagens - Hora Marcada", () => {
     cy.env(["login", "senha"]).then(() => {
       cy.visit(odp);
       LoginPage.odpModalLogin();
