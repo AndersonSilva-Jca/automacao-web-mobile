@@ -56,7 +56,7 @@ class SearchPage {
   dataIda() {
     cy.get(loc.BUSCAS.DATA_IDA).click();
     // cy.selecionarDataIda(4);
-    cy.SelecionarDataParaCupom();
+    cy.selecionarDataIda();
   }
 
   //------------------ OUTLET DE HOTEIS ------------------

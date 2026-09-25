@@ -116,6 +116,7 @@ jobs:
     needs: cypress-run
     if: always()
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     concurrency:
       group: deploy-r2-cloudflare
@@ -142,6 +143,7 @@ jobs:
           else
             echo "CYPRESS_OUTCOME=success" >> $GITHUB_ENV
           fi
+
       - name: Mesclar Relatórios Mochawesome em um único JSON
         run: npx mochawesome-merge "cypress/reports/json/*.json" > cypress/merged-report.json
 
@@ -167,13 +169,15 @@ jobs:
             #  aws s3 sync ./cypress/reports s3://cypress-reports/reports/${{ github.run_number }}/01_e2e \
             # --endpoint-url https://${{ secrets.CYPRESS_R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
 
-      - name: Enviar resultados para o Dashboard (Apps Script)
+      - name: Enviar resultados para o Dashboard
+
         env:
           GITHUB_RUN_NUMBER: ${{ github.run_number }}
           APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
           CYPRESS_R2_PUBLIC_URL: "https://pub-9c4151f873204a7b814dfbcb4e0036bc.r2.dev"
           REPO_OWNER: ${{ github.repository_owner }}
           REPO_NAME: ${{ github.event.repository.name }}
+          timeout-minutes: 5
         run: node scripts/enviar-resultados-appscript.js
 
       - name: Enviar E-mail de SUCESSO ✅
