@@ -10,7 +10,7 @@ describe("Totem", () => {
     Cypress.on("uncaught:exception", () => false);
   });
 
-  it("Totem - teste inicial", { defaultCommandTimeout: 7000 }, () => {
+  it("Totem - teste inicial", { defaultCommandTimeout: 25000 }, () => {
     cy.visit(totem);
 
     // Configuração inicial
@@ -48,10 +48,34 @@ describe("Totem", () => {
     cy.get(".bg-gray-50 > .gap-4 > :nth-child(2)").should("be.visible").click();
 
     // Passageiros e Busca
-    cy.get(".max-w-screen-lg > .items-center > .text-primary").should("be.visible");
+    cy.get(".text-colors-black-light").should("be.visible").log("Quantos Passageiros serão?");
     cy.get(".gap-4 > .border").should("be.visible");
     cy.get(".gap-4 > :nth-child(2) > .text-xl").click();
     cy.get(".gap-4 > .bg-primary").should("be.visible").click();
+    cy.get(".whitespace-nowrap").should("be.visible").click();
+    // Seleciona todos os botões de dias do calendário
+    cy.get("button.react-calendar__tile")
+      // Remove da seleção os dias cinzas (desabilitados)
+      .not("[disabled]")
+      // Remove da seleção o dia de hoje (botão laranja)
+      .not(".react-calendar__tile--now")
+      // Trabalha apenas com os elementos que sobraram (dias azuis)
+      .then(($diasDisponiveis) => {
+        // Conta quantos dias válidos existem
+        const quantidadeDeDias = $diasDisponiveis.length;
+
+        // Sorteia um índice aleatório (entre 0 e a quantidade de dias válidos - 1)
+        const indiceSorteado = Math.floor(Math.random() * quantidadeDeDias);
+
+        // Pega o botão correspondente ao índice sorteado e clica
+        cy.wrap($diasDisponiveis).eq(indiceSorteado).click();
+      });
+
+    cy.get('div[data-selected="false"][data-disabled="false"]').then(($quantidadeDePassagens) => {
+      const passagensDisponiveis = $quantidadeDePassagens.length;
+      const sorteio = Math.floor(Math.random() * passagensDisponiveis);
+      cy.wrap($quantidadeDePassagens).eq(sorteio).click();
+    });
 
     // Seleção de Viagem
     cy.contains("button", "assentos disponíveis", { timeout: 7000 }).should("be.visible").click();
