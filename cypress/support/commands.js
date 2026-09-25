@@ -2,9 +2,9 @@
 import loc from "./locators";
 import LoginPage from "../pages/LoginPage";
 
-Cypress.Commands.add("selecionarDataIda", (range = 5) => {
+Cypress.Commands.add("selecionarDataIda", (range = 7) => {
   cy.get('td[data-handler="selectDay"] a').then(($days) => {
-    const proximosDias = $days.slice(2, range);
+    const proximosDias = $days.slice(3, range);
     const randomIndex = Math.floor(Math.random() * proximosDias.length);
     cy.wrap(proximosDias[randomIndex]).click({ force: true });
   });
@@ -41,26 +41,26 @@ Cypress.Commands.add("selecionarDataWemobi", (range = 8) => {
 
       // Busca os dias do novo mês e seleciona aleatoriamente
       cy.get('td[data-handler="selectDay"] a').then(($newDays) => {
-        const proximosDias = $newDays.slice(6, range);
+        const proximosDias = $newDays.slice(1, range);
         const randomIndex = Math.floor(Math.random() * proximosDias.length);
         cy.wrap(proximosDias[randomIndex]).click({ force: true });
       });
     } else {
       // Mantém o comportamento padrão no mês atual
-      const proximosDias = $days.slice(6, range);
+      const proximosDias = $days.slice(3, range);
       const randomIndex = Math.floor(Math.random() * proximosDias.length);
       cy.wrap(proximosDias[randomIndex]).click({ force: true });
     }
   });
 });
 
-Cypress.Commands.add("selecionarDataIda", (range = 3) => {
-  cy.get('td[data-handler="selectDay"] a').then(($days) => {
-    const proximosDias = $days.slice(0, range);
-    const randomIndex = Math.floor(Math.random() * proximosDias.length);
-    cy.wrap(proximosDias[randomIndex]).click({ force: true });
-  });
-});
+// Cypress.Commands.add("selecionarDataIda", (range = 3) => {
+//   cy.get('td[data-handler="selectDay"] a').then(($days) => {
+//     const proximosDias = $days.slice(0, range);
+//     const randomIndex = Math.floor(Math.random() * proximosDias.length);
+//     cy.wrap(proximosDias[randomIndex]).click({ force: true });
+//   });
+// });
 
 Cypress.Commands.add("selecionarDataIdaTotem", (range = 5) => {
   cy.get(".whitespace-nowrap").click();

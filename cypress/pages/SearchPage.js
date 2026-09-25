@@ -113,7 +113,8 @@ class SearchPage {
   //------------------ CLUBE GIRO ------------------
   giroBuscaOrigem() {
     cy.get(loc.BUSCAS.DESTINO_IDA).clear().click({ force: true });
-    cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Todos (SP)", { delay: 150 });
+    cy.get(loc.BUSCAS.DESTINO_IDA).clear().click().type("São Paulo - Todos (SP)", { delay: 150 });
+    cy.get(loc.BUSCAS.DESTINO_IDA).clear().click().type("São Paulo - Todos (SP)", { delay: 150 });
     cy.get(loc.BUSCAS.DESTINO_IDA).clear().click({ force: true });
     cy.get(loc.BUSCAS.DESTINO_IDA).click().type("São Paulo - Todos (SP)", { delay: 100 });
     cy.contains("São Paulo - Todos (SP)").click({ force: true });
