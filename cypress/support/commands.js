@@ -57,13 +57,13 @@ Cypress.Commands.add("SelecionarDataParaCupom", (range = 15) => {
 Cypress.Commands.add("selecionarDataWemobi", (range = 8) => {
   cy.get('td[data-handler="selectDay"] a').then(($days) => {
     // Se houver menos de 2 dias disponíveis no mês atual
-    if ($days.length < 2) {
+    if ($days.length < 4) {
       // Avança para o próximo mês
       cy.get("[data-handler='next']").click({ force: true });
 
       // Busca os dias do novo mês e seleciona aleatoriamente
       cy.get('td[data-handler="selectDay"] a').then(($newDays) => {
-        const proximosDias = $newDays.slice(1, range);
+        const proximosDias = $newDays.slice(0, range);
         const randomIndex = Math.floor(Math.random() * proximosDias.length);
         cy.wrap(proximosDias[randomIndex]).click({ force: true });
       });
