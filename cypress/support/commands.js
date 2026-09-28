@@ -2,11 +2,33 @@
 import loc from "./locators";
 import LoginPage from "../pages/LoginPage";
 
-Cypress.Commands.add("selecionarDataIda", (range = 7) => {
+// Cypress.Commands.add("selecionarDataIda", (range = 7) => {
+//   cy.get('td[data-handler="selectDay"] a').then(($days) => {
+//     const proximosDias = $days.slice(3, range);
+//     const randomIndex = Math.floor(Math.random() * proximosDias.length);
+//     cy.wrap(proximosDias[randomIndex]).click({ force: true });
+//   });
+// });
+
+Cypress.Commands.add("selecionarDataIda", (range = 8) => {
   cy.get('td[data-handler="selectDay"] a').then(($days) => {
-    const proximosDias = $days.slice(3, range);
-    const randomIndex = Math.floor(Math.random() * proximosDias.length);
-    cy.wrap(proximosDias[randomIndex]).click({ force: true });
+    // Se houver menos de 2 dias disponíveis no mês atual
+    if ($days.length < 4) {
+      // Avança para o próximo mês
+      cy.get("[data-handler='next']").click({ force: true });
+
+      // Busca os dias do novo mês e seleciona aleatoriamente
+      cy.get('td[data-handler="selectDay"] a').then(($newDays) => {
+        const proximosDias = $newDays.slice(1, range);
+        const randomIndex = Math.floor(Math.random() * proximosDias.length);
+        cy.wrap(proximosDias[randomIndex]).click({ force: true });
+      });
+    } else {
+      // Mantém o comportamento padrão no mês atual
+      const proximosDias = $days.slice(3, range);
+      const randomIndex = Math.floor(Math.random() * proximosDias.length);
+      cy.wrap(proximosDias[randomIndex]).click({ force: true });
+    }
   });
 });
 
