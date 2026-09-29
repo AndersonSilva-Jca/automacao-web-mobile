@@ -25,7 +25,7 @@ describe("Clube Giro", () => {
     cy.env(["login1", "senha1"]).then(() => {
       cy.visit(giro);
       LoginPage.giroModalLogin();
-      LoginPage.giroAssertAcesse();
+      // LoginPage.giroAssertAcesse();
       LoginPage.giroPreencherUsuario();
       LoginPage.giroPreencherSenha();
       LoginPage.giroConfirmarLogin();

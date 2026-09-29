@@ -54,7 +54,8 @@ class LoginPage {
   //------------------ CLUBE GIRO ------------------
 
   giroModalLogin() {
-    cy.get(loc.GIRO_BOTAO_LOGIN).should("be.visible").click();
+    // cy.get(loc.GIRO_BOTAO_LOGIN).should("be.visible").click();
+    cy.get(".logged-out-section > .btn-giro--subtle").should("be.visible").click();
   }
 
   giroAssertAcesse() {
