@@ -32,7 +32,6 @@ describe("Outlet de Passagens", () => {
     });
     SearchPage.odpBuscaOrigemHoraMarcada();
     SearchPage.odpBuscaDestino();
-    // cy.get("#input-departure").type("Belo Horizonte - Terminal Rodoviário (MG)").should("have.id", "Belo-Horizonte---Terminal-Rodoviário-(MG)");
     SearchPage.odpDataIda();
     SearchPage.odpConfirmarBusca();
     OfferPage.odpSelecionarPassagemIda();
