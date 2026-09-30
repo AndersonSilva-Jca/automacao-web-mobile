@@ -21,17 +21,18 @@ describe("Outlet de Passagens", () => {
     Cypress.on("uncaught:exception", () => false);
   });
 
-  it("Outlet de passagens - Hora Marcada", () => {
+  it.only("Outlet de passagens - Hora Marcada", () => {
     cy.env(["login", "senha"]).then(() => {
       cy.visit(odp);
-      LoginPage.odpModalLogin();
-      LoginPage.odpPreencherUsuario();
-      LoginPage.odpPreencherSenha();
-      LoginPage.odpConfirmarLogin();
-      LoginPage.odpLogadoComSucesso();
+      // LoginPage.odpModalLogin();
+      // LoginPage.odpPreencherUsuario();
+      // LoginPage.odpPreencherSenha();
+      // LoginPage.odpConfirmarLogin();
+      // LoginPage.odpLogadoComSucesso();
     });
-    SearchPage.odpBuscaOrigemHoraMarcada();
-    SearchPage.odpBuscaDestino();
+    // SearchPage.odpBuscaOrigemHoraMarcada();
+    // SearchPage.odpBuscaDestino();
+    cy.get("#input-departure").type("Belo Horizonte - Terminal Rodoviário (MG)").should("have.id", "Belo-Horizonte---Terminal-Rodoviário-(MG)");
     SearchPage.odpDataIda();
     SearchPage.odpConfirmarBusca();
     OfferPage.odpSelecionarPassagemIda();

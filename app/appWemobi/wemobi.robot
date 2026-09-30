@@ -8,7 +8,7 @@ Library             ../libraries/GmailHelper.py
 
 
 *** Test Cases ***
-Deve realizar o login com sucesso
+Wemobi - Deve realizar o login com sucesso
     
     Start session
     # Login

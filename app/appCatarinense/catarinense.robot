@@ -7,7 +7,7 @@ Library     ../libraries/GmailHelper.py
 
 
 *** Test Cases ***
-Deve realizar o login com sucesso
+Catarinense - Deve realizar o login com sucesso
     Start session
     Login
       Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Buscar"]    timeout=60s

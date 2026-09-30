@@ -7,7 +7,7 @@ Library     ../libraries/GmailHelper.py
 
 
 *** Test Cases ***
-Deve realizar o login com sucesso
+Cometa - Deve realizar o login com sucesso
     Start session
     Login
     Sleep    3s

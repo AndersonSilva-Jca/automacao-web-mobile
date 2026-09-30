@@ -8,7 +8,7 @@ Library     ../libraries/GmailHelper.py
 # robot -d app/logs/testes app/app1001/1001_login.robot
 
 *** Test Cases ***
-Deve realizar o login com sucesso
+1001 - Deve realizar o login com sucesso
     Start session
     Login
      Wait Until Element Is Visible    android=new UiSelector().className("android.view.ViewGroup").instance(13)
