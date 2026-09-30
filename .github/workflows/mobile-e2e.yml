@@ -582,18 +582,19 @@ jobs:
         run: |
           rm -rf app/apks/
 
-      # 🟢 PASSO CRÍTICO: Roda ANTES de compilar/limpar o Allure, enquanto allure-results tem os JSONs e anexos intactos!
-      - name: Enviar resultados para o Dashboard (Apps Script)
-        if: always()
-        env:
-          GITHUB_RUN_NUMBER: ${{ github.run_number }}
-          APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
-          R2_PUBLIC_URL: ${{ env.R2_PUBLIC_URL }}
-          ALLURE_DIR: ${{ env.ALLURE_DIR }}
-        run: |
-          npm install xml2js
-          node scripts/enviar-resultados-appscript-mobile.js
+      # # 🟢 PASSO CRÍTICO: Roda ANTES de compilar/limpar o Allure, enquanto allure-results tem os JSONs e anexos intactos!
+      # - name: Enviar resultados para o Dashboard (Apps Script)
+      #   if: always()
+      #   env:
+      #     GITHUB_RUN_NUMBER: ${{ github.run_number }}
+      #     APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
+      #     R2_PUBLIC_URL: ${{ env.R2_PUBLIC_URL }}
+      #     ALLURE_DIR: ${{ env.ALLURE_DIR }}
+      #   run: |
+      #     npm install xml2js
+      #     node scripts/enviar-resultados-appscript-mobile.js
 
+      # 1º: Gerar o relatório Allure compilado
       - name: Gera relatório Allure
         if: always()
         run: |
@@ -605,6 +606,7 @@ jobs:
               > allure-report/index.html
           fi
 
+      # 2º: Subir para o Cloudflare R2 (igualmente feito no Cypress)
       - name: Deploy do Relatório para Cloudflare R2
         if: always()
         env:
@@ -614,6 +616,18 @@ jobs:
         run: |
           aws s3 sync allure-report/ s3://allure-reports/reports/mobile-run-${{ github.run_number }} \
             --endpoint-url https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
+
+            # 3º: Enviar para o Apps Script com os links do R2 já publicados e funcionais
+      - name: Enviar resultados para o Dashboard (Apps Script)
+        if: always()
+        env:
+          GITHUB_RUN_NUMBER: ${{ github.run_number }}
+          APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
+          R2_PUBLIC_URL: ${{ env.R2_PUBLIC_URL }}
+          ALLURE_DIR: ${{ env.ALLURE_DIR }}
+        run: |
+          npm install xml2js
+          node scripts/enviar-resultados-appscript-mobile.js
 
       - name: Obter Data e Hora Atual (Brasília)
         if: always()
