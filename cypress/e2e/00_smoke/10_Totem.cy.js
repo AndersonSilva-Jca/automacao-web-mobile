@@ -2,6 +2,8 @@
 
 const totem = "https://totem.jcatlm.com.br/";
 
+import loc from "cypress/support/locators";
+
 describe("Totem", () => {
   beforeEach(() => {
     cy.clearCookies();
@@ -14,7 +16,7 @@ describe("Totem", () => {
     cy.visit(totem);
 
     // Configuração inicial
-    cy.get(".text-colors-black").should("be.visible");
+    cy.get(loc.TOTEM_ASSERT_INICIAL).should("be.visible");
     cy.get("#agencyId").should("be.visible").click({ force: true });
     cy.get("#agencyId").should("be.visible").click({ force: true });
 
@@ -26,11 +28,11 @@ describe("Totem", () => {
     });
 
     // Digitação do MAC Address otimizada para evitar gastar tempo de sessão
-    cy.get("#macAddress").click({ force: true }).clear().type("241c04780308", { delay: 50 });
+    cy.get(loc.TOTEM_MACADDRESS).click({ force: true }).clear().type("241c04780308", { delay: 50 });
     // cy.get("#macAddress").click({ force: true }).clear().type("241c04780307", { delay: 50 });
 
-    cy.get(".mt-4 > .rounded-lg").should("be.visible").click({ force: true });
-    cy.contains("Como podemos te ajudar?").should("be.visible");
+    cy.get(loc.TOTEM_CONFIRMAR).should("be.visible").click({ force: true });
+    cy.contains(loc.TOTEM_ASSERT_HELP).should("be.visible");
 
     // Seleção de rota
     cy.get(".bg-primary > .flex-col > .justify-between > .flex").should("be.visible").click();

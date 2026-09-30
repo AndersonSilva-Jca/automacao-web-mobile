@@ -57,6 +57,12 @@ const loc = {
   GIRO_INPUT_VISIBLE: 'input[data-js="modal-input-password-twofa"]:visible',
   GIRO_ASSERT_VALORTOTAL: ":nth-child(6) > .title > .cmp-text > p > b",
 
+  TOTEM_ASSERT_INICIAL: ".text-colors-black",
+  TOTEM_ASSERT_AGENCYID: "#agencyId",
+  TOTEM_MACADDRESS: "#macAddress",
+  TOTEM_CONFIRMAR: "#macAddress",
+  TOTEM_ASSERT_HELP: "Como podemos te ajudar?",
+
   ASSERT_SUBTOTAL: '[data-js="subtotal-seats-container"] > .title-value > .title > .cmp-text > p',
   ASSERT_TAXASERVICO: ".title-tooltip > .title",
   ASSERT_VALORTOTAL: ".title > .cmp-text > p > b",
