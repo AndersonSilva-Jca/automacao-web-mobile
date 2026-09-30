@@ -1,4 +1,4 @@
-name: Mobile E2E - Wemobi/UTP
+name: Mobile E2E
 
 on:
   # schedule:

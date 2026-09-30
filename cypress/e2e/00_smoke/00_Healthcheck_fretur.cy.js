@@ -15,18 +15,18 @@ describe("Opção Fretur - Health Check", () => {
     Cypress.on("uncaught:exception", () => false);
   });
 
-  it("1. Valida se o servidor do site está ONLINE e respondendo (Status 200)", () => {
-    // cy.visit(opcaofretur)
-    cy.request({
-      method: "GET",
-      url: opcaofretur,
-      failOnStatusCode: false,
-      timeout: 10000,
-    }).then((response) => {
-      expect(response.status).to.eq(200);
-      expect(response.duration).to.be.below(10000); // Resposta em menos de 10 segundos
-    });
-  });
+  // it("1. Valida se o servidor do site está ONLINE e respondendo (Status 200)", () => {
+  //   // cy.visit(opcaofretur)
+  //   cy.request({
+  //     method: "GET",
+  //     url: opcaofretur,
+  //     failOnStatusCode: false,
+  //     timeout: 10000,
+  //   }).then((response) => {
+  //     expect(response.status).to.eq(200);
+  //     expect(response.duration).to.be.below(10000); // Resposta em menos de 10 segundos
+  //   });
+  // });
 
   it("2. Valida Elementos Críticos da UI", () => {
     cy.visit(opcaofretur);
@@ -45,6 +45,18 @@ describe("Opção Fretur - Health Check", () => {
     cy.get(".e-con-inner > .elementor-element > .elementor-widget-container > .elementor-heading-title").should("be.visible").log("Orçamento visivel");
   });
 
+  it("1. Valida se o servidor do site está ONLINE e respondendo (Status 200)", () => {
+    // cy.visit(opcaofretur)
+    cy.request({
+      method: "GET",
+      url: opcaofretur,
+      failOnStatusCode: false,
+      timeout: 10000,
+    }).then((response) => {
+      expect(response.status).to.eq(200);
+      expect(response.duration).to.be.below(10000); // Resposta em menos de 10 segundos
+    });
+  });
   // it("3. Valida se a base de dados (Planilha) está respondendo da página ORÇAMENTO (simula exatamente o comportamento do navegador de um cliente real)", () => {
   //   // https://opcaofretur.com.br/orcamento/
   //   cy.request({
