@@ -13,6 +13,6 @@ Library     ../libraries/GmailHelper.py
 *** Test Cases ***
 Deve realizar o fluxo até o checkout de pagamento
     Start session
-    # Login
+    Login
     Checkout
    

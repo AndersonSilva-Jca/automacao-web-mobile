@@ -17,8 +17,11 @@ Deve realizar o fluxo até o checkout de pagamento
     Start session
     Login
     Selecionar origem e destino
+    Sleep    3s
     Selecionar Ida e passageiro
+    Sleep    3s
     Selecionar passagens
+    Sleep    3s
     Selecionar Assento e finalizar
     # Selecionar Assento e finalizar
     #    Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="user"]    timeout=240s

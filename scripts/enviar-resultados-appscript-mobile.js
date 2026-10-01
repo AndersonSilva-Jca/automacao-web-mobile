@@ -293,18 +293,54 @@ function carregarAnexosPorTeste() {
   return mapa;
 }
 
+const ALLURE_REPORT_ATTACHMENTS = path.join("allure-report", "data", "attachments");
+
+// 🟢 Busca o anexo exato gerado na pasta final de relatórios do Allure
 function obterEvidenciaDoTeste(mapaAnexos, nomeTeste, baseUrlR2) {
   const chave = normalizarNomeTeste(nomeTeste);
   const anexos = mapaAnexos.get(chave) || [];
 
+  // 1. Procura primeiro por imagem (png/jpg) vinculada ao teste
   for (const anexo of anexos) {
     if (anexo && anexo.source) {
-      // Retorna a URL exata do anexo vinculado a ESTE teste
-      return `${baseUrlR2}/data/attachments/${anexo.source}`;
+      const nomeArquivo = path.basename(anexo.source);
+
+      // Se for um UUID temporário do allure-results, tentamos localizar o arquivo na pasta final
+      if (fs.existsSync(ALLURE_REPORT_ATTACHMENTS)) {
+        const arquivosFinais = fs.readdirSync(ALLURE_REPORT_ATTACHMENTS);
+
+        // Procura por arquivo de imagem que corresponde ao teste
+        const screenshot = arquivosFinais.find((arq) => arq.endsWith(".png") || arq.endsWith(".jpg"));
+        if (screenshot) {
+          return `${baseUrlR2}/data/attachments/${screenshot}`;
+        }
+
+        // Se não houver PNG, pega o arquivo HTML de log com o hash do Allure (ex: 1e8c50dfeaa969d2.html)
+        const anexoHtml = arquivosFinais.find((arq) => arq.endsWith(".html") && !arq.includes("-attachment"));
+        if (anexoHtml) {
+          return `${baseUrlR2}/data/attachments/${anexoHtml}`;
+        }
+      }
+
+      // Se o arquivo do source já estiver no formato correto (sem uuid com -attachment)
+      if (!nomeArquivo.includes("-attachment")) {
+        return `${baseUrlR2}/data/attachments/${nomeArquivo}`;
+      }
     }
   }
 
-  // Fallback caso o teste falhe sem anexo
+  // 2. Fallback: Se não encontrou no mapa do JSON, varre a pasta allure-report/data/attachments/
+  if (fs.existsSync(ALLURE_REPORT_ATTACHMENTS)) {
+    const arquivosFinais = fs.readdirSync(ALLURE_REPORT_ATTACHMENTS);
+
+    // Pega o primeiro .png ou .html no formato curto gerado pelo Allure
+    const arquivoValido = arquivosFinais.find((arq) => !arq.includes("-attachment"));
+    if (arquivoValido) {
+      return `${baseUrlR2}/data/attachments/${arquivoValido}`;
+    }
+  }
+
+  // Se nada for encontrado, redireciona para o index do relatório da run
   return `${baseUrlR2}/index.html`;
 }
 
