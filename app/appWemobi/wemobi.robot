@@ -11,7 +11,7 @@ Library             ../libraries/GmailHelper.py
 Wemobi - Deve realizar o login com sucesso
     
     Start session
-    # Login
+    Login
         Click Element
     ...    android=new UiSelector().className("android.widget.ImageView").instance(0)
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@resource-id="name"]

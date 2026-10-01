@@ -574,7 +574,7 @@ jobs:
             echo "Criando pastas de resultados..."
             mkdir -p $RESULTS_DIR $ALLURE_DIR
             echo "Iniciando a execução do Robot Framework com Allure..."
-            robot -d ./results --listener allure_robotframework:$ALLURE_DIR --name "Monitoramento Mobile" app/appWemobi/wemobi.robot app/appCometa/cometa.robot app/app1001/1001.robot app/appCatarinense/catarinense.robot || true
+            robot -d ./results --listener allure_robotframework:$ALLURE_DIR --name "Monitoramento Mobile" app/appWemobi/wemobi_checkout.robot app/appCometa/cometa.robot app/app1001/1001.robot app/appCatarinense/catarinense.robot || true
             kill $(cat appium.pid) || true
 
       - name: Limpar APKs do Workspace para liberar espaço
