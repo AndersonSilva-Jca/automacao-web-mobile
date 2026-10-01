@@ -10,8 +10,7 @@
 // const R2_PUBLIC_URL = process.env.R2_PUBLIC_URL || "https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev";
 
 // const OUTPUT_XML = "results/output.xml";
-// const ALLURE_ATTACHMENTS_REPORT = "allure-report/data/attachments";
-// const ALLURE_RESULTS_DIR = process.env.ALLURE_DIR || "allure-results";
+// const ALLURE_REPORT_DIR = "allure-report/data/attachments";
 
 // const MAPA_MARCAS_MOBILE = {
 //   wemobi: "(APP) Wemobi",
@@ -46,126 +45,29 @@
 //   });
 // }
 
-// function normalizarNomeTeste(nome) {
-//   return String(nome || "")
-//     .trim()
-//     .toLowerCase()
-//     .replace(/\s+/g, " ");
-// }
+// // 🟢 Procura os ficheiros de imagem gerados no allure-report/data/attachments e constrói as URLs do R2
+// function obterEvidenciasR2(baseUrlR2) {
+//   const evidencias = [];
 
-// function extrairLabelsSuite_(resultado) {
-//   const labels = resultado.labels || [];
-//   return labels
-//     .filter((l) => ["suite", "parentSuite", "subSuite"].includes(l.name))
-//     .map((l) => normalizarNomeTeste(l.value))
-//     .join(" ");
-// }
+//   if (fs.existsSync(ALLURE_REPORT_DIR)) {
+//     const arquivos = fs.readdirSync(ALLURE_REPORT_DIR);
 
-// function extrairEvidenciaDoAnexo_(anexo) {
-//   if (!anexo || !anexo.source) return null;
-
-//   // Busca na pasta bruta de resultados (onde o nome anexo.source realmente existe)
-//   let caminhoLocal = path.join(ALLURE_RESULTS_DIR, anexo.source);
-//   if (!fs.existsSync(caminhoLocal)) {
-//     const alternativo = path.join(ALLURE_ATTACHMENTS_REPORT, anexo.source);
-//     if (fs.existsSync(alternativo)) {
-//       caminhoLocal = alternativo;
-//     } else {
-//       return null;
-//     }
-//   }
-
-//   const tipo = String(anexo.type || "").toLowerCase();
-//   const nomeArquivo = String(anexo.source || "").toLowerCase();
-
-//   try {
-//     // Caso 1: Imagem pura (.png / .jpg)
-//     if (tipo.startsWith("image/") || /\.(png|jpe?g)$/.test(nomeArquivo)) {
-//       const buffer = fs.readFileSync(caminhoLocal);
-//       return { base64: `data:image/png;base64,${buffer.toString("base64")}` };
-//     }
-
-//     // Caso 2: Padrão do Robot Framework (Print embutido em Base64 dentro de HTML/Text)
-//     if (tipo.startsWith("text/html") || tipo.startsWith("text/plain") || /\.(html|txt)$/.test(nomeArquivo)) {
-//       const conteudo = fs.readFileSync(caminhoLocal, "utf-8");
-//       const match = conteudo.match(/data:image\/[a-zA-Z]+;base64,[^"'\s)]+/);
-//       if (match) {
-//         return { base64: match[0] };
+//     arquivos.forEach((arq) => {
+//       const caminhoCompleto = path.join(ALLURE_REPORT_DIR, arq);
+//       try {
+//         const stats = fs.statSync(caminhoCompleto);
+//         // Filtra anexos relevantes (imagens ou ficheiros de log/html de tamanho razoável)
+//         if (stats.size > 10000) {
+//           const urlAnexoR2 = `${baseUrlR2}/data/attachments/${arq}`;
+//           evidencias.push(urlAnexoR2);
+//         }
+//       } catch (e) {
+//         console.error(`Erro ao processar anexo ${arq}:`, e.message);
 //       }
-//     }
-//   } catch (e) {
-//     console.error(`Erro ao ler anexo "${anexo.source}":`, e.message);
+//     });
 //   }
 
-//   return null;
-// }
-
-// function carregarResultadosAllurePorTeste() {
-//   const mapa = new Map();
-
-//   if (!fs.existsSync(ALLURE_RESULTS_DIR)) return mapa;
-
-//   const arquivos = fs.readdirSync(ALLURE_RESULTS_DIR).filter((a) => a.endsWith("-result.json"));
-
-//   arquivos.forEach((arq) => {
-//     try {
-//       const conteudo = JSON.parse(fs.readFileSync(path.join(ALLURE_RESULTS_DIR, arq), "utf-8"));
-//       const nome = normalizarNomeTeste(conteudo.name || conteudo.fullName);
-//       if (!nome) return;
-//       if (!mapa.has(nome)) mapa.set(nome, []);
-//       mapa.get(nome).push(conteudo);
-//     } catch (e) {
-//       console.error(`Erro ao ler resultado Allure ${arq}:`, e.message);
-//     }
-//   });
-
-//   return mapa;
-// }
-
-// function obterEvidenciaDoProprioTeste(mapaResultados, nomeTeste, marcaFormatada, baseUrlR2, contadorPorNome) {
-//   const chave = normalizarNomeTeste(nomeTeste);
-//   const candidatos = mapaResultados.get(chave) || [];
-//   if (!candidatos.length) return { urlR2: "", base64: "" };
-
-//   const candidatosDaMarca = candidatos.filter((c) => {
-//     const labels = extrairLabelsSuite_(c);
-//     let marcaDesteAllure = "";
-//     for (const key in MAPA_MARCAS_MOBILE) {
-//       if (labels.includes(key)) {
-//         marcaDesteAllure = MAPA_MARCAS_MOBILE[key];
-//         break;
-//       }
-//     }
-//     return marcaDesteAllure === marcaFormatada;
-//   });
-
-//   let listaOrdenada = candidatosDaMarca.length > 0 ? candidatosDaMarca : candidatos;
-
-//   const chaveContador = `${marcaFormatada}_${chave}`;
-//   const indice = contadorPorNome.get(chaveContador) || 0;
-//   contadorPorNome.set(chaveContador, indice + 1);
-
-//   const resultado = listaOrdenada[Math.min(indice, listaOrdenada.length - 1)];
-
-//   const anexos = [];
-//   const coletarAnexos = (obj) => {
-//     if (!obj) return;
-//     if (Array.isArray(obj.attachments)) anexos.push(...obj.attachments);
-//     if (Array.isArray(obj.steps)) obj.steps.forEach(coletarAnexos);
-//   };
-//   coletarAnexos(resultado);
-
-//   for (const anexo of anexos) {
-//     const evidencia = extrairEvidenciaDoAnexo_(anexo);
-//     if (evidencia) {
-//       return {
-//         urlR2: `${baseUrlR2}/index.html`,
-//         base64: evidencia.base64,
-//       };
-//     }
-//   }
-
-//   return { urlR2: "", base64: "" };
+//   return evidencias;
 // }
 
 // function extrairSuitesRecursivo(suiteObj) {
@@ -204,8 +106,8 @@
 //   const robot = result.robot;
 //   const baseUrlR2 = `${R2_PUBLIC_URL}/reports/mobile-run-${RUN_NUMBER}`;
 
-//   const mapaResultadosAllure = carregarResultadosAllurePorTeste();
-//   const contadorPorNome = new Map();
+//   const listaEvidenciasR2 = obterEvidenciasR2(baseUrlR2);
+//   console.log(`📸 Evidências identificadas para URL do R2: ${listaEvidenciasR2.length}`);
 
 //   const todasSuites = extrairSuitesRecursivo(robot.suite);
 
@@ -219,14 +121,14 @@
 //     second: "2-digit",
 //   });
 
+//   let ponteiroEvidencia = 0;
+
 //   for (const st of todasSuites) {
 //     const nomeSuiteOriginal = st.$?.name || "Mobile Test";
 //     const sourceSuite = st.$?.source || "";
-
 //     const contextoMarca = `${nomeSuiteOriginal} ${sourceSuite}`.toLowerCase().trim();
 
 //     let marcaFormatada = "";
-
 //     for (const key in MAPA_MARCAS_MOBILE) {
 //       if (contextoMarca.includes(key)) {
 //         marcaFormatada = MAPA_MARCAS_MOBILE[key];
@@ -235,7 +137,7 @@
 //     }
 
 //     if (!marcaFormatada) {
-//       marcaFormatada = "(APP) Marca não identificada";
+//       marcaFormatada = `(APP) ${nomeSuiteOriginal}`;
 //     }
 
 //     let total = 0,
@@ -256,7 +158,13 @@
 //         const nomeTeste = t.$.name || "Teste Mobile";
 //         const msgErro = t.status && t.status[0] && t.status[0]._ ? t.status[0]._.trim() : "Falha na execução do teste mobile";
 
-//         const { urlR2: urlAnexoR2, base64: imagemBase64 } = obterEvidenciaDoProprioTeste(mapaResultadosAllure, nomeTeste, marcaFormatada, baseUrlR2, contadorPorNome);
+//         let urlAnexoR2 = "";
+//         if (ponteiroEvidencia < listaEvidenciasR2.length) {
+//           urlAnexoR2 = listaEvidenciasR2[ponteiroEvidencia];
+//           ponteiroEvidencia++;
+//         } else {
+//           urlAnexoR2 = `${baseUrlR2}/index.html`;
+//         }
 
 //         falhas.push({
 //           nome_teste: `${marcaFormatada} - ${nomeTeste}`,
@@ -264,10 +172,12 @@
 //           url_print_tentativa1: urlAnexoR2,
 //           url_print_tentativa2: "",
 //           url_print_tentativa3: "",
-//           imagem_base64: imagemBase64,
 //         });
 //       }
 //     });
+
+//     // 🟢 Lógica igual à do Cypress: Envia a URL do Mochawesome/Allure se houver falha, ou vazia se passou
+//     const urlRelatorioFinal = falhou > 0 ? `${baseUrlR2}/index.html` : "";
 
 //     const payload = {
 //       run_id: `${RUN_ID}`,
@@ -280,21 +190,24 @@
 //       total_falhou: falhou,
 //       duracao_seg: 30,
 //       branch: BRANCH,
-//       url_mochawesome: `${baseUrlR2}/index.html`,
+//       url_mochawesome: urlRelatorioFinal,
 //       falhas: falhas,
 //     };
 
 //     try {
 //       const resposta = await enviarParaAppsScript(payload);
-//       console.log(`✅ [${marcaFormatada}] enviado para o Apps Script ->`, resposta);
+//       if (falhou > 0) {
+//         console.log(`⚠️ [FALHA REGISTRADA] [${marcaFormatada}] enviado — falhou:${falhou} ->`, resposta);
+//       } else {
+//         console.log(`✅ [SUCESSO REGISTRADO] [${marcaFormatada}] enviado — passou:${passou} ->`, resposta);
+//       }
 //     } catch (err) {
-//       console.error(`❌ [${marcaFormatada}] erro ao enviar:`, err.message);
+//       console.error(`❌ [${marcaFormatada}] falhou ao enviar:`, err.message);
 //     }
 //   }
 // }
 
 // main();
-
 const fs = require("fs");
 const path = require("path");
 const https = require("https");
@@ -307,7 +220,7 @@ const BRANCH = process.env.GITHUB_REF_NAME || "main";
 const R2_PUBLIC_URL = process.env.R2_PUBLIC_URL || "https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev";
 
 const OUTPUT_XML = "results/output.xml";
-const ALLURE_REPORT_DIR = "allure-report/data/attachments";
+const ALLURE_RESULTS_DIR = process.env.ALLURE_DIR || "allure-results";
 
 const MAPA_MARCAS_MOBILE = {
   wemobi: "(APP) Wemobi",
@@ -342,29 +255,57 @@ function enviarParaAppsScript(payload) {
   });
 }
 
-// 🟢 Procura os ficheiros de imagem gerados no allure-report/data/attachments e constrói as URLs do R2
-function obterEvidenciasR2(baseUrlR2) {
-  const evidencias = [];
+function normalizarNomeTeste(nome) {
+  return String(nome || "")
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, " ");
+}
 
-  if (fs.existsSync(ALLURE_REPORT_DIR)) {
-    const arquivos = fs.readdirSync(ALLURE_REPORT_DIR);
+// 🟢 Mapeia os arquivos JSON de resultados do Allure vinculando anexo -> teste correto
+function carregarAnexosPorTeste() {
+  const mapa = new Map();
+  if (!fs.existsSync(ALLURE_RESULTS_DIR)) return mapa;
 
-    arquivos.forEach((arq) => {
-      const caminhoCompleto = path.join(ALLURE_REPORT_DIR, arq);
-      try {
-        const stats = fs.statSync(caminhoCompleto);
-        // Filtra anexos relevantes (imagens ou ficheiros de log/html de tamanho razoável)
-        if (stats.size > 10000) {
-          const urlAnexoR2 = `${baseUrlR2}/data/attachments/${arq}`;
-          evidencias.push(urlAnexoR2);
-        }
-      } catch (e) {
-        console.error(`Erro ao processar anexo ${arq}:`, e.message);
-      }
-    });
+  const arquivos = fs.readdirSync(ALLURE_RESULTS_DIR).filter((a) => a.endsWith("-result.json"));
+
+  arquivos.forEach((arq) => {
+    try {
+      const conteudo = JSON.parse(fs.readFileSync(path.join(ALLURE_RESULTS_DIR, arq), "utf-8"));
+      const nome = normalizarNomeTeste(conteudo.name || conteudo.fullName);
+      if (!nome) return;
+
+      const anexos = [];
+      const coletarAnexos = (obj) => {
+        if (!obj) return;
+        if (Array.isArray(obj.attachments)) anexos.push(...obj.attachments);
+        if (Array.isArray(obj.steps)) obj.steps.forEach(coletarAnexos);
+      };
+      coletarAnexos(conteudo);
+
+      if (!mapa.has(nome)) mapa.set(nome, []);
+      mapa.get(nome).push(...anexos);
+    } catch (e) {
+      console.error(`Erro ao ler resultado Allure ${arq}:`, e.message);
+    }
+  });
+
+  return mapa;
+}
+
+function obterEvidenciaDoTeste(mapaAnexos, nomeTeste, baseUrlR2) {
+  const chave = normalizarNomeTeste(nomeTeste);
+  const anexos = mapaAnexos.get(chave) || [];
+
+  for (const anexo of anexos) {
+    if (anexo && anexo.source) {
+      // Retorna a URL exata do anexo vinculado a ESTE teste
+      return `${baseUrlR2}/data/attachments/${anexo.source}`;
+    }
   }
 
-  return evidencias;
+  // Fallback caso o teste falhe sem anexo
+  return `${baseUrlR2}/index.html`;
 }
 
 function extrairSuitesRecursivo(suiteObj) {
@@ -403,9 +344,8 @@ async function main() {
   const robot = result.robot;
   const baseUrlR2 = `${R2_PUBLIC_URL}/reports/mobile-run-${RUN_NUMBER}`;
 
-  const listaEvidenciasR2 = obterEvidenciasR2(baseUrlR2);
-  console.log(`📸 Evidências identificadas para URL do R2: ${listaEvidenciasR2.length}`);
-
+  // Carregação exata dos anexos a partir do allure-results
+  const mapaAnexos = carregarAnexosPorTeste();
   const todasSuites = extrairSuitesRecursivo(robot.suite);
 
   const dataHoraFormatada = new Date().toLocaleString("pt-BR", {
@@ -417,8 +357,6 @@ async function main() {
     minute: "2-digit",
     second: "2-digit",
   });
-
-  let ponteiroEvidencia = 0;
 
   for (const st of todasSuites) {
     const nomeSuiteOriginal = st.$?.name || "Mobile Test";
@@ -455,13 +393,8 @@ async function main() {
         const nomeTeste = t.$.name || "Teste Mobile";
         const msgErro = t.status && t.status[0] && t.status[0]._ ? t.status[0]._.trim() : "Falha na execução do teste mobile";
 
-        let urlAnexoR2 = "";
-        if (ponteiroEvidencia < listaEvidenciasR2.length) {
-          urlAnexoR2 = listaEvidenciasR2[ponteiroEvidencia];
-          ponteiroEvidencia++;
-        } else {
-          urlAnexoR2 = `${baseUrlR2}/index.html`;
-        }
+        // Busca a evidência específica DESTE teste no Allure
+        const urlAnexoR2 = obterEvidenciaDoTeste(mapaAnexos, nomeTeste, baseUrlR2);
 
         falhas.push({
           nome_teste: `${marcaFormatada} - ${nomeTeste}`,
@@ -473,7 +406,6 @@ async function main() {
       }
     });
 
-    // 🟢 Lógica igual à do Cypress: Envia a URL do Mochawesome/Allure se houver falha, ou vazia se passou
     const urlRelatorioFinal = falhou > 0 ? `${baseUrlR2}/index.html` : "";
 
     const payload = {
