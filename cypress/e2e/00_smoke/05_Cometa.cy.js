@@ -15,10 +15,10 @@ const cometa = "https://www.viacaocometa.com.br/?utm_source=synthetic_test&utm_m
 
 describe("Viação Cometa", () => {
   beforeEach(() => {
-    // cy.clearCookies();
-    // cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
-    // cy.once("uncaught:exception", () => false);
-    // Cypress.on("uncaught:exception", () => false);
+    cy.limpezaTotal();
+    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
+    cy.once("uncaught:exception", () => false);
+    Cypress.on("uncaught:exception", () => false);
   });
 
   it("Viação Cometa - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
@@ -37,6 +37,12 @@ describe("Viação Cometa", () => {
     OfferPage.selecionarPassagemIda();
     PassengerPage.selecionarPassageiro();
     SeatMapPage.selecionarAssento();
+    // cy.wait(4000);
+    // cy.wait(5000);
+
+    // Tenta clicar forçando (ignora se houver algum elemento transparente por cima)
+    // cy.contains("Cartões de crédito").click({ force: true });
+    // cy.get('[data-js="tab-card"]').click({ force: true });
     CheckoutPage.resumoDaCompra();
 
     // cy.get('[alt="loader"]').should('not.be.visible')

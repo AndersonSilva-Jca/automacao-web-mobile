@@ -53,6 +53,7 @@ module.exports = defineConfig({
     cypress_r2_account_id: process.env.CYPRESS_R2_ACCOUNT_ID,
   },
   e2e: {
+    testIsolation: true,
     retries: {
       runMode: 1, // O GitHub Actions vai tentar até 3 vezes se o elemento sumir do DOM
       openMode: 0, // No seu PC desenvolvendo, ele falha de primeira para você ver o erro

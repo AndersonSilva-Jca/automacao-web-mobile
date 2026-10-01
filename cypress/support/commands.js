@@ -938,3 +938,48 @@ Cypress.Commands.add("selecionarPeriodoEstadia", (diasDeEstadia = 3) => {
     cy.log(`📅 Período Selecionado: Dia ${diaIda} até Dia ${diaVolta} (${diasDeEstadia} noites)`);
   });
 });
+
+Cypress.Commands.add("limpezaTotal", () => {
+  // 1. Limpa a trindade básica
+  cy.clearAllCookies();
+  cy.clearAllLocalStorage();
+  cy.clearAllSessionStorage();
+
+  // 2. Limpa cache de rede via protocolo do Chrome
+  Cypress.automation("remote:debugger:protocol", {
+    command: "Network.clearBrowserCache",
+  });
+
+  // 3. Remove Service Workers apenas se a página permitir
+  cy.window({ log: false }).then((win) => {
+    try {
+      // Evita o erro InvalidStateError ignorando páginas about:blank
+      if ("serviceWorker" in win.navigator && win.location.protocol !== "about:") {
+        win.navigator.serviceWorker
+          .getRegistrations()
+          .then((registrations) => {
+            registrations.forEach((registration) => registration.unregister());
+          })
+          .catch(() => {
+            // Se o navegador bloquear a promessa, ignora silenciosamente
+          });
+      }
+    } catch (e) {
+      // Ignora falhas síncronas de permissão
+    }
+  });
+
+  // 4. Limpa IndexedDB apenas se a página permitir
+  cy.window({ log: false }).then((win) => {
+    try {
+      if (win.indexedDB && win.location.protocol !== "about:") {
+        win.indexedDB
+          .databases()
+          .then((dbs) => {
+            dbs.forEach((db) => win.indexedDB.deleteDatabase(db.name));
+          })
+          .catch(() => {});
+      }
+    } catch (e) {}
+  });
+});
