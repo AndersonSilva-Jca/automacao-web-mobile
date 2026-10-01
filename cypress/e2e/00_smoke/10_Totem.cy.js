@@ -2,7 +2,7 @@
 
 const totem = "https://totem.jcatlm.com.br/";
 
-import loc from "cypress/support/locators";
+import loc from "../../support/locators";
 
 describe("Totem", () => {
   beforeEach(() => {

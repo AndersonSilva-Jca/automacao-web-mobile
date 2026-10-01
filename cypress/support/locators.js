@@ -60,7 +60,7 @@ const loc = {
   TOTEM_ASSERT_INICIAL: ".text-colors-black",
   TOTEM_ASSERT_AGENCYID: "#agencyId",
   TOTEM_MACADDRESS: "#macAddress",
-  TOTEM_CONFIRMAR: "#macAddress",
+  TOTEM_CONFIRMAR: ".mt-4 > .rounded-lg",
   TOTEM_ASSERT_HELP: "Como podemos te ajudar?",
 
   ASSERT_SUBTOTAL: '[data-js="subtotal-seats-container"] > .title-value > .title > .cmp-text > p',
