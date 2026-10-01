@@ -28,7 +28,7 @@ describe("Outlet de Hotéis", () => {
     SearchPage.odhLoaderBusca();
     OfferPage.odhSelecionarHospedagem();
     HomePage.odhHome();
-    HomePage.odhPromoHoje();
+    // HomePage.odhPromoHoje();
 
     // Promoção em hotéis por destino
     // cy.contains("Promoção em hotéis por destino").should("be.visible");

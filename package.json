@@ -29,6 +29,7 @@
     "mochawesome-report-generator": "^6.3.2"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1144.0",
     "@datadog/browser-rum": "^7.13.0",
     "axios": "^1.17.0",
     "dotenv": "^17.4.2",
