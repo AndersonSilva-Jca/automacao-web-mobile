@@ -5,7 +5,8 @@ Library             ../appWemobi/resources/GeradorDataVolta.py
 Resource            ../appWemobi/resources/wemobi_base.resource
 Library             ../libraries/GmailHelper.py
 # Alterado para uma keyword personalizada que fecha a app e guarda o vídeo com segurança
-
+Documentation    Suite da Wemobi
+Test Teardown    Run Keyword If Test Failed    Capture Page Screenshot    filename=wemobi_{index}.png
 
 *** Test Cases ***
 Wemobi - Deve realizar o login com sucesso

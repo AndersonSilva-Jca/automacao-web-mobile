@@ -4,7 +4,8 @@ Library     AppiumLibrary
 # Library    ../appCometa/resources/GeradorDataVolta.py
 Resource    ../appCometa/resources/base.resource
 Library     ../libraries/GmailHelper.py
-
+Documentation    Suite da Cometa
+Test Teardown    Run Keyword If Test Failed    Capture Page Screenshot    filename=cometa_{index}.png
 
 *** Test Cases ***
 Cometa - Deve realizar o login com sucesso

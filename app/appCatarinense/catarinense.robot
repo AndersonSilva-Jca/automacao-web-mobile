@@ -4,7 +4,8 @@ Library    ../appCatarinense/resources/GeradorDataIda.py
 Library    ../appCatarinense/resources/GeradorDataVolta.py
 Resource    ../appCatarinense/resources/base.resource
 Library     ../libraries/GmailHelper.py
-
+Documentation    Suite da Catarinense
+Test Teardown    Run Keyword If Test Failed    Capture Page Screenshot    filename=catarinense_{index}.png
 
 *** Test Cases ***
 Catarinense - Deve realizar o login com sucesso

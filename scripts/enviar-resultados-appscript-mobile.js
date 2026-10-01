@@ -221,6 +221,7 @@ const R2_PUBLIC_URL = process.env.R2_PUBLIC_URL || "https://pub-8f8304dd624445ac
 
 const OUTPUT_XML = "results/output.xml";
 const ALLURE_RESULTS_DIR = process.env.ALLURE_DIR || "allure-results";
+const ALLURE_REPORT_ATTACHMENTS = path.join("allure-report", "data", "attachments");
 
 const MAPA_MARCAS_MOBILE = {
   wemobi: "(APP) Wemobi",
@@ -255,85 +256,79 @@ function enviarParaAppsScript(payload) {
   });
 }
 
-function normalizarNomeTeste(nome) {
-  return String(nome || "")
-    .trim()
+function normalizarTexto(texto) {
+  return String(texto || "")
     .toLowerCase()
-    .replace(/\s+/g, " ");
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
 }
 
-// 🟢 Mapeia os arquivos JSON de resultados do Allure vinculando anexo -> teste correto
-function carregarAnexosPorTeste() {
-  const mapa = new Map();
-  if (!fs.existsSync(ALLURE_RESULTS_DIR)) return mapa;
+/**
+ * Lê os arquivos -result.json do Allure para obter o hash exato dos anexos do teste
+ */
+function obterHashesAnexosDoTeste(nomeTeste, marcaChave) {
+  const hashes = new Set();
+  if (!fs.existsSync(ALLURE_RESULTS_DIR)) return hashes;
 
   const arquivos = fs.readdirSync(ALLURE_RESULTS_DIR).filter((a) => a.endsWith("-result.json"));
+  const nomeNorm = normalizarTexto(nomeTeste);
 
   arquivos.forEach((arq) => {
     try {
       const conteudo = JSON.parse(fs.readFileSync(path.join(ALLURE_RESULTS_DIR, arq), "utf-8"));
-      const nome = normalizarNomeTeste(conteudo.name || conteudo.fullName);
-      if (!nome) return;
+      const testName = normalizarTexto(conteudo.name || conteudo.fullName);
 
-      const anexos = [];
-      const coletarAnexos = (obj) => {
-        if (!obj) return;
-        if (Array.isArray(obj.attachments)) anexos.push(...obj.attachments);
-        if (Array.isArray(obj.steps)) obj.steps.forEach(coletarAnexos);
-      };
-      coletarAnexos(conteudo);
-
-      if (!mapa.has(nome)) mapa.set(nome, []);
-      mapa.get(nome).push(...anexos);
+      // Garante que o JSON pertence ao teste/marca que falhou
+      if (testName.includes(nomeNorm) || normalizarTexto(arq).includes(marcaChave)) {
+        const coletar = (obj) => {
+          if (!obj) return;
+          if (Array.isArray(obj.attachments)) {
+            obj.attachments.forEach((att) => {
+              if (att.source) hashes.add(att.source);
+            });
+          }
+          if (Array.isArray(obj.steps)) obj.steps.forEach(coletar);
+        };
+        coletar(conteudo);
+      }
     } catch (e) {
-      console.error(`Erro ao ler resultado Allure ${arq}:`, e.message);
+      console.error(`Erro ao ler JSON do Allure: ${arq}`, e.message);
     }
   });
 
-  return mapa;
+  return hashes;
 }
 
-const ALLURE_REPORT_ATTACHMENTS = path.join("allure-report", "data", "attachments");
+/**
+ * Localiza a imagem ou anexo da marca que realmente pertence ao teste que falhou
+ */
+function obterEvidenciaDoTeste(nomeTeste, marcaChave, baseUrlR2) {
+  if (!fs.existsSync(ALLURE_REPORT_ATTACHMENTS)) {
+    return `${baseUrlR2}/index.html`;
+  }
 
-// 🟢 Busca especificamente o arquivo de log completo (> 2MB) ou o maior arquivo HTML
-function obterEvidenciaDoTeste(mapaAnexos, nomeTeste, baseUrlR2) {
-  if (fs.existsSync(ALLURE_REPORT_ATTACHMENTS)) {
-    const arquivos = fs.readdirSync(ALLURE_REPORT_ATTACHMENTS);
+  const anexosDoTeste = obterHashesAnexosDoTeste(nomeTeste, marcaChave);
+  const arquivos = fs.readdirSync(ALLURE_REPORT_ATTACHMENTS);
 
-    // 1. Prioridade: Se houver captura de tela em imagem (.png / .jpg)
-    const screenshot = arquivos.find((arq) => arq.endsWith(".png") || arq.endsWith(".jpg"));
-    if (screenshot) {
-      return `${baseUrlR2}/data/attachments/${screenshot}`;
-    }
-
-    // 2. Busca todos os arquivos HTML no formato final do Allure (sem -attachment)
-    const arquivosHtml = arquivos
-      .filter((arq) => arq.endsWith(".html") && !arq.includes("-attachment"))
-      .map((arq) => {
-        const caminhoCompleto = path.join(ALLURE_REPORT_ATTACHMENTS, arq);
-        const stats = fs.statSync(caminhoCompleto);
-        return {
-          nome: arq,
-          tamanho: stats.size, // Tamanho em bytes
-        };
-      });
-
-    // 3. Procura o arquivo que tem mais de 2 MB (2 * 1024 * 1024 bytes)
-    const limiteTamanho = 2 * 1024 * 1024;
-    const logGrande = arquivosHtml.find((item) => item.tamanho >= limiteTamanho);
-
-    if (logGrande) {
-      return `${baseUrlR2}/data/attachments/${logGrande.nome}`;
-    }
-
-    // 4. Fallback: Se não atingir exatos 2MB, pega o maior arquivo HTML encontrado na pasta
-    if (arquivosHtml.length > 0) {
-      arquivosHtml.sort((a, b) => b.tamanho - a.tamanho); // Ordena do maior para o menor
-      return `${baseUrlR2}/data/attachments/${arquivosHtml[0].nome}`;
+  // 1. Procura primeiro entre os anexos explicitamente vinculados no JSON do Allure
+  for (const arq of arquivos) {
+    if (anexosDoTeste.has(arq) && (arq.endsWith(".png") || arq.endsWith(".jpg"))) {
+      return `${baseUrlR2}/data/attachments/${arq}`;
     }
   }
 
-  // Se não encontrar nenhum anexo, abre a página principal do relatório da run
+  // 2. Filtro de contingência por nome da marca no arquivo
+  const printDaMarca = arquivos.find((arq) => {
+    const nomeNorm = normalizarTexto(arq);
+    return (arq.endsWith(".png") || arq.endsWith(".jpg")) && nomeNorm.includes(marcaChave);
+  });
+
+  if (printDaMarca) {
+    return `${baseUrlR2}/data/attachments/${printDaMarca}`;
+  }
+
+  // 3. Caso não encontre print da marca, direciona ao relatório completo
   return `${baseUrlR2}/index.html`;
 }
 
@@ -372,9 +367,6 @@ async function main() {
 
   const robot = result.robot;
   const baseUrlR2 = `${R2_PUBLIC_URL}/reports/mobile-run-${RUN_NUMBER}`;
-
-  // Carregação exata dos anexos a partir do allure-results
-  const mapaAnexos = carregarAnexosPorTeste();
   const todasSuites = extrairSuitesRecursivo(robot.suite);
 
   const dataHoraFormatada = new Date().toLocaleString("pt-BR", {
@@ -393,15 +385,19 @@ async function main() {
     const contextoMarca = `${nomeSuiteOriginal} ${sourceSuite}`.toLowerCase().trim();
 
     let marcaFormatada = "";
+    let marcaChave = "";
+
     for (const key in MAPA_MARCAS_MOBILE) {
       if (contextoMarca.includes(key)) {
         marcaFormatada = MAPA_MARCAS_MOBILE[key];
+        marcaChave = key;
         break;
       }
     }
 
     if (!marcaFormatada) {
       marcaFormatada = `(APP) ${nomeSuiteOriginal}`;
+      marcaChave = normalizarTexto(nomeSuiteOriginal);
     }
 
     let total = 0,
@@ -422,8 +418,8 @@ async function main() {
         const nomeTeste = t.$.name || "Teste Mobile";
         const msgErro = t.status && t.status[0] && t.status[0]._ ? t.status[0]._.trim() : "Falha na execução do teste mobile";
 
-        // Busca a evidência específica DESTE teste no Allure
-        const urlAnexoR2 = obterEvidenciaDoTeste(mapaAnexos, nomeTeste, baseUrlR2);
+        // Busca a evidência isolando pela marca e teste específico
+        const urlAnexoR2 = obterEvidenciaDoTeste(nomeTeste, marcaChave, baseUrlR2);
 
         falhas.push({
           nome_teste: `${marcaFormatada} - ${nomeTeste}`,

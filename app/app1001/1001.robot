@@ -4,7 +4,8 @@ Library    ../app1001/resources/GeradorDataIda.py
 Library    ../app1001/resources/GeradorDataVolta.py
 Resource    ../app1001/resources/base.resource
 Library     ../libraries/GmailHelper.py
-
+Documentation    Suite da 1001
+Test Teardown    Run Keyword If Test Failed    Capture Page Screenshot    filename=1001_{index}.png
 # robot -d app/logs/testes app/app1001/1001_login.robot
 
 *** Test Cases ***
