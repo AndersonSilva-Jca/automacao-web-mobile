@@ -295,52 +295,45 @@ function carregarAnexosPorTeste() {
 
 const ALLURE_REPORT_ATTACHMENTS = path.join("allure-report", "data", "attachments");
 
-// 🟢 Busca o anexo exato gerado na pasta final de relatórios do Allure
+// 🟢 Busca especificamente o arquivo de log completo (> 2MB) ou o maior arquivo HTML
 function obterEvidenciaDoTeste(mapaAnexos, nomeTeste, baseUrlR2) {
-  const chave = normalizarNomeTeste(nomeTeste);
-  const anexos = mapaAnexos.get(chave) || [];
-
-  // 1. Procura primeiro por imagem (png/jpg) vinculada ao teste
-  for (const anexo of anexos) {
-    if (anexo && anexo.source) {
-      const nomeArquivo = path.basename(anexo.source);
-
-      // Se for um UUID temporário do allure-results, tentamos localizar o arquivo na pasta final
-      if (fs.existsSync(ALLURE_REPORT_ATTACHMENTS)) {
-        const arquivosFinais = fs.readdirSync(ALLURE_REPORT_ATTACHMENTS);
-
-        // Procura por arquivo de imagem que corresponde ao teste
-        const screenshot = arquivosFinais.find((arq) => arq.endsWith(".png") || arq.endsWith(".jpg"));
-        if (screenshot) {
-          return `${baseUrlR2}/data/attachments/${screenshot}`;
-        }
-
-        // Se não houver PNG, pega o arquivo HTML de log com o hash do Allure (ex: 1e8c50dfeaa969d2.html)
-        const anexoHtml = arquivosFinais.find((arq) => arq.endsWith(".html") && !arq.includes("-attachment"));
-        if (anexoHtml) {
-          return `${baseUrlR2}/data/attachments/${anexoHtml}`;
-        }
-      }
-
-      // Se o arquivo do source já estiver no formato correto (sem uuid com -attachment)
-      if (!nomeArquivo.includes("-attachment")) {
-        return `${baseUrlR2}/data/attachments/${nomeArquivo}`;
-      }
-    }
-  }
-
-  // 2. Fallback: Se não encontrou no mapa do JSON, varre a pasta allure-report/data/attachments/
   if (fs.existsSync(ALLURE_REPORT_ATTACHMENTS)) {
-    const arquivosFinais = fs.readdirSync(ALLURE_REPORT_ATTACHMENTS);
+    const arquivos = fs.readdirSync(ALLURE_REPORT_ATTACHMENTS);
 
-    // Pega o primeiro .png ou .html no formato curto gerado pelo Allure
-    const arquivoValido = arquivosFinais.find((arq) => !arq.includes("-attachment"));
-    if (arquivoValido) {
-      return `${baseUrlR2}/data/attachments/${arquivoValido}`;
+    // 1. Prioridade: Se houver captura de tela em imagem (.png / .jpg)
+    const screenshot = arquivos.find((arq) => arq.endsWith(".png") || arq.endsWith(".jpg"));
+    if (screenshot) {
+      return `${baseUrlR2}/data/attachments/${screenshot}`;
+    }
+
+    // 2. Busca todos os arquivos HTML no formato final do Allure (sem -attachment)
+    const arquivosHtml = arquivos
+      .filter((arq) => arq.endsWith(".html") && !arq.includes("-attachment"))
+      .map((arq) => {
+        const caminhoCompleto = path.join(ALLURE_REPORT_ATTACHMENTS, arq);
+        const stats = fs.statSync(caminhoCompleto);
+        return {
+          nome: arq,
+          tamanho: stats.size, // Tamanho em bytes
+        };
+      });
+
+    // 3. Procura o arquivo que tem mais de 2 MB (2 * 1024 * 1024 bytes)
+    const limiteTamanho = 2 * 1024 * 1024;
+    const logGrande = arquivosHtml.find((item) => item.tamanho >= limiteTamanho);
+
+    if (logGrande) {
+      return `${baseUrlR2}/data/attachments/${logGrande.nome}`;
+    }
+
+    // 4. Fallback: Se não atingir exatos 2MB, pega o maior arquivo HTML encontrado na pasta
+    if (arquivosHtml.length > 0) {
+      arquivosHtml.sort((a, b) => b.tamanho - a.tamanho); // Ordena do maior para o menor
+      return `${baseUrlR2}/data/attachments/${arquivosHtml[0].nome}`;
     }
   }
 
-  // Se nada for encontrado, redireciona para o index do relatório da run
+  // Se não encontrar nenhum anexo, abre a página principal do relatório da run
   return `${baseUrlR2}/index.html`;
 }
 
