@@ -58,9 +58,9 @@ Login
     Wait Until Element Is Visible
     ...    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
     ...    timeout=60s
-    # Click Element    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
-    # Wait Until Element Is Visible
-    # ...    xpath=//android.view.ViewGroup[@content-desc="Buscar"]/android.view.View    timeout=90s
+    Click Element    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
+    Wait Until Element Is Visible
+    ...    xpath=//android.view.ViewGroup[@content-desc="Buscar"]/android.view.View    timeout=90s
     Log To Console    \nTela de Busca exibida com sucesso!
 
     
