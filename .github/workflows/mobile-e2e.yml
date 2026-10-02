@@ -1184,7 +1184,7 @@ jobs:
                   <div class="card"><span class="n blue">${{ steps.metrics.outputs.total }}</span><div class="l">🔢 Total</div></div>
                 </div>
                 <a class="btn btn-gray" href="https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev/reports/mobile-run-${{ github.run_number }}/log.html">📄 Ver Relatório (Log)</a>
-                <a class="btn btn-gray" href="https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev/reports/mobile-run-${{ github.run_number }}/metrics.html">📊 Dashboard Metrics</a>
+                <a class="btn btn-gray" href="https://script.google.com/macros/s/AKfycby6v2p1_k9ch5st11OeBy7Nermci8fIh0Y9A4RwroXO5HdIsGDF03BUg6hgHVsFou6_1A/exec">📊 Abrir Dashboard</a>
                 <a class="btn btn-gray" href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}">⚙️ Ver Execução no GitHub Actions</a>
               </div>
               <div class="footer">Gerado automaticamente · Não responda este e-mail</div>
@@ -1250,8 +1250,7 @@ jobs:
                     <div class="card"><span class="n blue">${{ steps.metrics.outputs.total }}</span><div class="l">🔢 Total</div></div>
                   </div>
                   <a class="btn btn-gray" href="https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev/reports/mobile-run-${{ github.run_number }}/log.html">📄 Analisar Relatório de Erro (Log)</a>
-                  <a class="btn btn-gray" href="https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev/reports/mobile-run-${{ github.run_number }}/metrics.html">📊 Dashboard Metrics</a>
-                  ${{ steps.evidence.outputs.screenshot_link && format('<a class="btn btn-gray" href="{0}">🖼️ Ver Print da Tela de Erro</a>', steps.evidence.outputs.screenshot_link) }}
+                  <a class="btn btn-gray" href="https://script.google.com/macros/s/AKfycby6v2p1_k9ch5st11OeBy7Nermci8fIh0Y9A4RwroXO5HdIsGDF03BUg6hgHVsFou6_1A/exec">📊 Abrir Dashboard</a>                  ${{ steps.evidence.outputs.screenshot_link && format('<a class="btn btn-gray" href="{0}">🖼️ Ver Print da Tela de Erro</a>', steps.evidence.outputs.screenshot_link) }}
                   <a class="btn btn-gray" href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}">⚙️ Ver Log Completo no GitHub Actions</a>
                 </div>
                 <div class="footer">Gerado automaticamente · Não responda este e-mail</div>
