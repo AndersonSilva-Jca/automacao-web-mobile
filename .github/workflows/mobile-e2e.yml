@@ -1118,10 +1118,8 @@ jobs:
           base_url = f"{os.environ.get('R2_PUBLIC_URL')}/reports/mobile-run-${{ github.run_number }}"
           results_dir = os.environ.get("RESULTS_DIR", "results")
 
-          # Procura pelas imagens de erro guardadas diretamente na pasta de resultados
           png_files = glob.glob(os.path.join(results_dir, "*.png"))
           if png_files:
-              # Ordena para capturar o ficheiro de imagem gerado mais recentemente
               png_files.sort(key=os.path.getmtime, reverse=True)
               filename = os.path.basename(png_files[0])
               screenshot_link = f"{base_url}/{filename}"
@@ -1132,8 +1130,8 @@ jobs:
       - name: GitHub Summary
         if: always()
         run: |
-          REPORT_URL="${{ env.R2_PUBLIC_URL }}/reports/mobile-run-${{ github.run_number }}/metrics.html"
           LOG_URL="${{ env.R2_PUBLIC_URL }}/reports/mobile-run-${{ github.run_number }}/log.html"
+          METRICS_URL="${{ env.R2_PUBLIC_URL }}/reports/mobile-run-${{ github.run_number }}/metrics.html"
           echo "## ${{ steps.metrics.outputs.status }} — Run #${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
           echo "| | Qtd |" >> $GITHUB_STEP_SUMMARY
           echo "|---|---|" >> $GITHUB_STEP_SUMMARY
@@ -1141,7 +1139,7 @@ jobs:
           echo "| ❌ Failed  | ${{ steps.metrics.outputs.failed }}  |" >> $GITHUB_STEP_SUMMARY
           echo "| 🔢 Total   | ${{ steps.metrics.outputs.total }}   |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "🔗 [Dashboard Metrics]($REPORT_URL) | 🔗 [Log Detalhado]($LOG_URL)" >> $GITHUB_STEP_SUMMARY
+          echo "🔗 [Ver Relatório (Log)]($LOG_URL) | 📊 [Dashboard Metrics]($METRICS_URL)" >> $GITHUB_STEP_SUMMARY
 
       - name: Enviar E-mail de Sucesso
         if: always() && steps.metrics.outputs.status_raw == 'success'
@@ -1185,8 +1183,8 @@ jobs:
                   <div class="card"><span class="n red">${{ steps.metrics.outputs.failed }}</span><div class="l">❌ Failed</div></div>
                   <div class="card"><span class="n blue">${{ steps.metrics.outputs.total }}</span><div class="l">🔢 Total</div></div>
                 </div>
+                <a class="btn btn-gray" href="https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev/reports/mobile-run-${{ github.run_number }}/log.html">📄 Ver Relatório (Log)</a>
                 <a class="btn btn-gray" href="https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev/reports/mobile-run-${{ github.run_number }}/metrics.html">📊 Dashboard Metrics</a>
-                <a class="btn btn-gray" href="https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev/reports/mobile-run-${{ github.run_number }}/log.html">📄 Ver Logs Detalhados</a>
                 <a class="btn btn-gray" href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}">⚙️ Ver Execução no GitHub Actions</a>
               </div>
               <div class="footer">Gerado automaticamente · Não responda este e-mail</div>
@@ -1251,8 +1249,8 @@ jobs:
                     <div class="card"><span class="n red">${{ steps.metrics.outputs.failed }}</span><div class="l">❌ Failed</div></div>
                     <div class="card"><span class="n blue">${{ steps.metrics.outputs.total }}</span><div class="l">🔢 Total</div></div>
                   </div>
-                  <a class="btn btn-gray" href="https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev/reports/mobile-run-${{ github.run_number }}/metrics.html">📊 Analisar Dashboard</a>
-                  <a class="btn btn-gray" href="https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev/reports/mobile-run-${{ github.run_number }}/log.html">📄 Ver Detalhes do Erro no Log</a>
+                  <a class="btn btn-gray" href="https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev/reports/mobile-run-${{ github.run_number }}/log.html">📄 Analisar Relatório de Erro (Log)</a>
+                  <a class="btn btn-gray" href="https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev/reports/mobile-run-${{ github.run_number }}/metrics.html">📊 Dashboard Metrics</a>
                   ${{ steps.evidence.outputs.screenshot_link && format('<a class="btn btn-gray" href="{0}">🖼️ Ver Print da Tela de Erro</a>', steps.evidence.outputs.screenshot_link) }}
                   <a class="btn btn-gray" href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}">⚙️ Ver Log Completo no GitHub Actions</a>
                 </div>
