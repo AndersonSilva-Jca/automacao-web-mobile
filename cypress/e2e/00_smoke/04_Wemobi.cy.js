@@ -21,7 +21,7 @@ describe("Wemobi", () => {
     Cypress.on("uncaught:exception", () => false);
   });
 
-  it.only("Wemobi - exp. Wemobi Lugar Marcado", () => {
+  it("Wemobi - exp. Wemobi Lugar Marcado", () => {
     cy.env(["login", "senha"]).then(() => {
       cy.visit(wemobi);
       LoginPage.wemobiModalLogin();
@@ -31,7 +31,7 @@ describe("Wemobi", () => {
       LoginPage.wemobiLogadoComSucesso();
     });
     SearchPage.wemobiBuscaOrigem();
-    // SearchPage.wemobiBuscaDestino();
+    SearchPage.wemobiBuscaDestino();
     SearchPage.wemobiDataIda();
     SearchPage.wemobiConfirmarBusca();
     OfferPage.passagemExperienciaWemobi();

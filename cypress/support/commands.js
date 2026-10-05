@@ -54,7 +54,7 @@ Cypress.Commands.add("SelecionarDataParaCupom", (range = 15) => {
   });
 });
 
-Cypress.Commands.add("selecionarDataWemobi", (range = 8) => {
+Cypress.Commands.add("selecionarDataWemobi", (range = 5) => {
   cy.get('td[data-handler="selectDay"] a').then(($days) => {
     // Se houver menos de 2 dias disponíveis no mês atual
     if ($days.length < 4) {
@@ -1113,12 +1113,12 @@ Cypress.Commands.add("selecionarTopRotaWemobi", () => {
       origem: "São Paulo - Rodoviária Tietê (SP)",
       origemXpath: '//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]',
     },
-    {
-      origem: "São Paulo - Rodoviária Barra Funda (SP)",
-      origemXpath: '//*[@id="São-Paulo---Rodoviária-Barra-Funda-(SP)"]/p[1]',
-      destino: "Maringa (PR)",
-      destinoXpath: '//*[@id="Maringa-(PR)"]/p[1]',
-    },
+    // {
+    //   origem: "São Paulo - Rodoviária Barra Funda (SP)",
+    //   origemXpath: '//*[@id="São-Paulo---Rodoviária-Barra-Funda-(SP)"]/p[1]',
+    //   destino: "Maringa (PR)",
+    //   destinoXpath: '//*[@id="Maringa-(PR)"]/p[1]',
+    // },
   ];
 
   const indiceSorteado = Cypress._.random(0, topRotas.length - 1);

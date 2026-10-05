@@ -144,9 +144,9 @@ class SearchPage {
 
   //------------------ WEMOBI ------------------
   wemobiBuscaOrigem() {
-    cy.selecionarTopRotaWemobi();
-    // cy.get(loc.BUSCAS.ORIGEM).click().type("São Paulo - Todos (SP)", { delay: 100 });
-    // cy.xpath(loc.WEMOBI_XPATH_SP).click({ force: true });
+    // cy.selecionarTopRotaWemobi();
+    cy.get(loc.BUSCAS.ORIGEM).click().type("São Paulo - Todos (SP)", { delay: 100 });
+    cy.xpath(loc.WEMOBI_XPATH_SP).click({ force: true });
   }
 
   wemobiBuscaDestino() {
