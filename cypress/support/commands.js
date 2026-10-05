@@ -1034,3 +1034,106 @@ Cypress.Commands.add("selecionarTopRotaCometa", () => {
   // Retorna o objeto sorteado para o teste caso precise
   // return cy.wrap(rotaEscolhida);
 });
+
+Cypress.Commands.add("selecionarTopRotaODP", () => {
+  const topRotas = [
+    {
+      origem: "Rio De Janeiro - Rodoviária Novo Rio (RJ)",
+      origemXpath: '//*[@id="Rio-De-Janeiro---Rodoviária-Novo-Rio-(RJ)"]/p[1]',
+      destino: "São Paulo - Rodoviária Tietê (SP)",
+      destinoXpath: '//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]',
+    },
+    {
+      origem: "São Paulo - Rodoviária Tietê (SP)",
+      origemXpath: '//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]',
+      destino: "Rio De Janeiro - Rodoviária Novo Rio (RJ)",
+      destinoXpath: '//*[@id="Rio-De-Janeiro---Rodoviária-Novo-Rio-(RJ)"]/p[1]',
+    },
+    {
+      origem: "Rio De Janeiro - Rodoviária Novo Rio (RJ)",
+      origemXpath: '//*[@id="Rio-De-Janeiro---Rodoviária-Novo-Rio-(RJ)"]/p[1]',
+      destino: "Belo Horizonte - Terminal Rodoviário (MG)",
+      destinoXpath: '//*[@id="Belo-Horizonte---Terminal-Rodoviário-(MG)"]/p[1]',
+    },
+    {
+      origem: "Belo Horizonte - Terminal Rodoviário (MG)",
+      origemXpath: '//*[@id="Belo-Horizonte---Terminal-Rodoviário-(MG)"]/p[1]',
+      destino: "Rio De Janeiro - Rodoviária Novo Rio (RJ)",
+      destinoXpath: '//*[@id="Rio-De-Janeiro---Rodoviária-Novo-Rio-(RJ)"]/p[1]',
+    },
+    {
+      origem: "Florianópolis - Rodoviária Rita Maria (SC)",
+      origemXpath: '//*[@id="Florianópolis---Rodoviária-Rita-Maria-(SC)"]/p[1]',
+      destino: "São Paulo - Rodoviária Tietê (SP)",
+      destinoXpath: '//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]',
+    },
+  ];
+
+  const indiceSorteado = Cypress._.random(0, topRotas.length - 1);
+  const rotaEscolhida = topRotas[indiceSorteado];
+
+  cy.log(`🎲 **Rota Sorteada:** ${rotaEscolhida.origem} -> ${rotaEscolhida.destino}`);
+
+  cy.get("#input-departure").click({ force: true, multiple: true }).type(rotaEscolhida.origem, { delay: 100 }).should("exist").invoke("show");
+
+  cy.xpath(rotaEscolhida.origemXpath).click({ force: true, multiple: true });
+
+  cy.get("#input-destination").click({ force: true, multiple: true }).type(rotaEscolhida.destino, { delay: 100 }).should("exist").invoke("show");
+
+  cy.xpath(rotaEscolhida.destinoXpath).click({ force: true, multiple: true });
+
+  // Retorna o objeto sorteado para o teste caso precise
+  // return cy.wrap(rotaEscolhida);
+});
+
+Cypress.Commands.add("selecionarTopRotaWemobi", () => {
+  cy.wait(1000); // Pequena pausa para garantir que a página carregou corretamente
+  const topRotas = [
+    {
+      origem: "Rio De Janeiro - Rodoviária Novo Rio (RJ)",
+      origemXpath: '//*[@id="Rio-De-Janeiro---Rodoviária-Novo-Rio-(RJ)"]/p[1]',
+      destino: "São Paulo - Rodoviária Tietê (SP)",
+      destinoXpath: '//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]',
+    },
+    {
+      origem: "São Paulo - Rodoviária Tietê (SP)",
+      origemXpath: '//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]',
+      destino: "Rio De Janeiro - Rodoviária Novo Rio (RJ)",
+      destinoXpath: '//*[@id="Rio-De-Janeiro---Rodoviária-Novo-Rio-(RJ)"]/p[1]',
+    },
+    {
+      origem: "São Paulo - Rodoviária Tietê (SP)",
+      origemXpath: '//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]',
+      destino: "Belo Horizonte - Terminal Rodoviário (MG)",
+      destinoXpath: '//*[@id="Belo-Horizonte---Terminal-Rodoviário-(MG)"]/p[1]',
+    },
+    {
+      origem: "Belo Horizonte - Terminal Rodoviário (MG)",
+      origemXpath: '//*[@id="Belo-Horizonte---Terminal-Rodoviário-(MG)"]/p[1]',
+      origem: "São Paulo - Rodoviária Tietê (SP)",
+      origemXpath: '//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]',
+    },
+    {
+      origem: "São Paulo - Rodoviária Barra Funda (SP)",
+      origemXpath: '//*[@id="São-Paulo---Rodoviária-Barra-Funda-(SP)"]/p[1]',
+      destino: "Maringa (PR)",
+      destinoXpath: '//*[@id="Maringa-(PR)"]/p[1]',
+    },
+  ];
+
+  const indiceSorteado = Cypress._.random(0, topRotas.length - 1);
+  const rotaEscolhida = topRotas[indiceSorteado];
+
+  cy.log(`🎲 **Rota Sorteada:** ${rotaEscolhida.origem} -> ${rotaEscolhida.destino}`);
+
+  cy.get("#input-departure").click({ force: true }).type(rotaEscolhida.origem, { delay: 100 }).should("exist").invoke("show");
+
+  cy.xpath(rotaEscolhida.origemXpath).click({ force: true });
+
+  cy.get("#input-destination").click({ force: true }).type(rotaEscolhida.destino, { delay: 100 }).should("exist").invoke("show");
+
+  cy.xpath(rotaEscolhida.destinoXpath).click({ force: true });
+
+  // Retorna o objeto sorteado para o teste caso precise
+  // return cy.wrap(rotaEscolhida);
+});

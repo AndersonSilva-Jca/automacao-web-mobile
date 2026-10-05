@@ -10,6 +10,10 @@ class SearchPage {
     cy.selecionarTopRotaCometa();
   }
 
+  buscaTopRotasCometa() {
+    cy.selecionarTopRotaCometa();
+  }
+
   buscaOrigemRR() {
     cy.get(loc.BUSCAS.ORIGEM).click().type("Sertãozinho (SP)", { delay: 100 }).should("exist").invoke("show");
     cy.xpath('//*[@id="Sertãozinho-(SP)"]/p[1]').click({ force: true });
@@ -88,16 +92,13 @@ class SearchPage {
 
   //------------------ OUTLET DE PASSAGENS ------------------
   odpBuscaOrigemHoraMarcada() {
-    cy.wait(15000);
-    cy.get('[data-js="btn-select-flow-top-store"] > div.btn-select-flow > [data-js="search-agency-flow"]').should("be.visible").click();
-    cy.get(loc.BUSCAS.ORIGEM).click().type("São Paulo - Rodoviária Tietê (SP)", { delay: 100 });
-    cy.xpath(loc.ODP_XPATH_SP_TIETE).click({ force: true });
+    // cy.wait(15000);
+    cy.selecionarTopRotaODP();
   }
 
   odpBuscaOrigemMelhorPreco() {
     cy.wait(15000);
-    cy.get(loc.BUSCAS.ORIGEM).click().type("São Paulo - Rodoviária Tietê (SP)", { delay: 100 });
-    cy.xpath(loc.ODP_XPATH_SP_TIETE).click({ force: true });
+    cy.selecionarTopRotaODP();
   }
 
   odpBuscaDestino() {
@@ -143,8 +144,9 @@ class SearchPage {
 
   //------------------ WEMOBI ------------------
   wemobiBuscaOrigem() {
-    cy.get(loc.BUSCAS.ORIGEM).click().type("São Paulo - Todos (SP)", { delay: 100 });
-    cy.xpath(loc.WEMOBI_XPATH_SP).click({ force: true });
+    cy.selecionarTopRotaWemobi();
+    // cy.get(loc.BUSCAS.ORIGEM).click().type("São Paulo - Todos (SP)", { delay: 100 });
+    // cy.xpath(loc.WEMOBI_XPATH_SP).click({ force: true });
   }
 
   wemobiBuscaDestino() {

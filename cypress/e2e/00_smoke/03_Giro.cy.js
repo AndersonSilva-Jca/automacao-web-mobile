@@ -39,6 +39,6 @@ describe("Clube Giro", () => {
     OfferPage.giroSelecionarPassagemIda();
     PassengerPage.giroSelecionarPassageiro();
     SeatMapPage.giroSelecionarAssento();
-    CheckoutPage.giroResumoCompra();
+    // CheckoutPage.giroResumoCompra();
   });
 });

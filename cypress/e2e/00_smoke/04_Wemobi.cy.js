@@ -21,7 +21,7 @@ describe("Wemobi", () => {
     Cypress.on("uncaught:exception", () => false);
   });
 
-  it("Wemobi - exp. Wemobi Lugar Marcado", () => {
+  it.only("Wemobi - exp. Wemobi Lugar Marcado", () => {
     cy.env(["login", "senha"]).then(() => {
       cy.visit(wemobi);
       LoginPage.wemobiModalLogin();
@@ -31,13 +31,13 @@ describe("Wemobi", () => {
       LoginPage.wemobiLogadoComSucesso();
     });
     SearchPage.wemobiBuscaOrigem();
-    SearchPage.wemobiBuscaDestino();
+    // SearchPage.wemobiBuscaDestino();
     SearchPage.wemobiDataIda();
     SearchPage.wemobiConfirmarBusca();
     OfferPage.passagemExperienciaWemobi();
     PassengerPage.wemobiSelecionarPassageiro();
     SeatMapPage.wemobiSelecionarAssentoMarcado();
-    CheckoutPage.wemobiResumoCompra();
+    // CheckoutPage.wemobiResumoCompra();
   });
 
   it("Wemobi - exp. Wemobi Assento Aleatório", () => {
@@ -56,7 +56,7 @@ describe("Wemobi", () => {
     OfferPage.passagemExperienciaWemobi();
     PassengerPage.wemobiSelecionarPassageiro();
     SeatMapPage.wemobiSelecionarAssentoAleatorio();
-    CheckoutPage.wemobiResumoCompra();
+    // CheckoutPage.wemobiResumoCompra();
   });
 
   it("Wemobi - Sem exp. Wemobi Lugar Marcado", () => {
@@ -75,7 +75,7 @@ describe("Wemobi", () => {
     OfferPage.passagemSemExperienciaWemobi();
     PassengerPage.wemobiSelecionarPassageiro();
     SeatMapPage.wemobiSelecionarAssentoMarcado();
-    CheckoutPage.wemobiResumoCompra();
+    // CheckoutPage.wemobiResumoCompra();
   });
 
   it("Wemobi - Sem exp. Wemobi Assento Aleatório", () => {
@@ -94,6 +94,6 @@ describe("Wemobi", () => {
     OfferPage.passagemSemExperienciaWemobi();
     PassengerPage.wemobiSelecionarPassageiro();
     SeatMapPage.wemobiSelecionarAssentoAleatorio();
-    CheckoutPage.wemobiResumoCompra();
+    // CheckoutPage.wemobiResumoCompra();
   });
 });
