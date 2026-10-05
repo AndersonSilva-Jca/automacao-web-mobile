@@ -129,8 +129,8 @@ describe("Viação Cometa", () => {
     OfferPage.selecionarPassagemIda();
     PassengerPage.selecionarPassageiro();
     SeatMapPage.selecionarAssento();
-    cy.wait(5000);
+    // cy.wait(5000);
 
-    // CheckoutPage.resumoDaCompra();
+    CheckoutPage.resumoDaCompra();
   });
 });
