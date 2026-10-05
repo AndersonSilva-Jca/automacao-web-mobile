@@ -893,9 +893,9 @@ Cypress.Commands.add("fecharModalGiro", () => {
 Cypress.Commands.add("fecharModalUpgradePoltrona", () => {
   cy.wait(3000);
   cy.get("body").then(($body) => {
-    if ($body.find(".col-lg-8 > .label-offer > .cmp-text > :nth-child(2)").length > 0 && $body.find(".col-lg-8 > .label-offer > .cmp-text > :nth-child(2)").is(":visible")) {
+    if ($body.find(".modal-upsell-v2-header").length > 0 && $body.find(".modal-upsell-v2-header").is(":visible")) {
       cy.log("⚠️ Modal de upgrade detectado — fechando...");
-      cy.get("#modal-upsell-buy-ticket-button").click({ force: true });
+      cy.get(".modal-upsell-v2-actions__secondary").click({ force: true });
     } else {
       cy.log("✅ Sem modal de upgrade");
     }
@@ -982,4 +982,55 @@ Cypress.Commands.add("limpezaTotal", () => {
       }
     } catch (e) {}
   });
+});
+
+Cypress.Commands.add("selecionarTopRotaCometa", () => {
+  const topRotas = [
+    {
+      origem: "São Paulo (Rod. Tietê) (SP)",
+      origemXpath: '//*[@id="São-Paulo-(Rod.-Tietê)-(SP)"]/p[1]',
+      destino: "Belo Horizonte - Terminal Rodoviário (MG)",
+      destinoXpath: '//*[@id="Belo-Horizonte---Terminal-Rodoviário-(MG)"]/p[1]',
+    },
+    {
+      origem: "Belo Horizonte - Terminal Rodoviário (MG)",
+      origemXpath: '//*[@id="Belo-Horizonte---Terminal-Rodoviário-(MG)"]/p[1]',
+      destino: "São Paulo (Rod. Tietê) (SP)",
+      destinoXpath: '//*[@id="São-Paulo-(Rod.-Tietê)-(SP)"]/p[1]',
+    },
+    {
+      origem: "São Paulo (Rod. Barra Funda) (SP)",
+      origemXpath: '//*[@id="São-Paulo-(Rod.-Barra-Funda)-(SP)"]/p[1]',
+      destino: "São José do Rio Preto (Rodoviária) (SP)",
+      destinoXpath: '//*[@id="São-José-do-Rio-Preto-(Rodoviária)-(SP)"]/p[1]',
+    },
+    {
+      origem: "São José do Rio Preto (Rodoviária) (SP)",
+      origemXpath: '//*[@id="São-José-do-Rio-Preto-(Rodoviária)-(SP)"]/p[1]',
+      destino: "São Paulo (Rod. Barra Funda) (SP)",
+      destinoXpath: '//*[@id="São-Paulo-(Rod.-Barra-Funda)-(SP)"]/p[1]',
+    },
+    {
+      origem: "Curitiba (PR)",
+      origemXpath: '//*[@id="Curitiba-(PR)"]/p[1]',
+      destino: "São Paulo (Rod. Tietê) (SP)",
+      destinoXpath: '//*[@id="São-Paulo-(Rod.-Tietê)-(SP)"]/p[1]',
+    },
+  ];
+
+  const indiceSorteado = Cypress._.random(0, topRotas.length - 1);
+  const rotaEscolhida = topRotas[indiceSorteado];
+
+  cy.log(`🎲 **Rota Sorteada:** ${rotaEscolhida.origem} -> ${rotaEscolhida.destino}`);
+
+  cy.get("#input-departure").click().type(rotaEscolhida.origem, { delay: 100 }).should("exist").invoke("show");
+
+  cy.xpath(rotaEscolhida.origemXpath).click({ force: true });
+
+  cy.get("#input-destination").click().type(rotaEscolhida.destino, { delay: 100 }).should("exist").invoke("show");
+
+  cy.xpath(rotaEscolhida.destinoXpath).click({ force: true });
+
+  // Retorna o objeto sorteado para o teste caso precise
+  // return cy.wrap(rotaEscolhida);
 });

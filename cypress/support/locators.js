@@ -144,8 +144,8 @@ const loc = {
   CLICK_PASSAGEIROS: ".passenger-footer",
 
   BUSCAS: {
-    DESTINO_IDA: "#input-departure",
-    DESTINO_VOLTA: "#input-destination",
+    ORIGEM: "#input-departure",
+    DESTINO: "#input-destination",
     DATA_IDA: "#input-date",
     DATA_VOLTA: "#input-date-return",
     BOTAO_PASSAGEIROS: "#input-passengers",
