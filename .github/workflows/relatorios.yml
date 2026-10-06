@@ -1,0 +1,174 @@
+name: Reprocessar Retroativo (R2 -> Apps Script)
+
+on:
+  workflow_dispatch:
+    inputs:
+      web_start_run:
+        description: "RUN Web (Cypress) INICIAL"
+        required: false
+        default: "1868"
+      web_end_run:
+        description: "RUN Web (Cypress) FINAL"
+        required: false
+        default: "1987"
+      mobile_start_run:
+        description: "RUN Mobile (Robot) INICIAL"
+        required: false
+        default: "1994"
+      mobile_end_run:
+        description: "RUN Mobile (Robot) FINAL"
+        required: false
+        default: "2114"
+
+jobs:
+  reprocessar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do Código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Instalar dependências (xml2js)
+        run: npm install xml2js
+
+      - name: Executar Processamento Retroativo
+        env:
+          APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
+          CYPRESS_R2_PUBLIC_URL: ${{ secrets.CYPRESS_R2_PUBLIC_URL }}
+          R2_PUBLIC_URL: ${{ secrets.R2_PUBLIC_URL }}
+          WEB_START: ${{ github.event.inputs.web_start_run }}
+          WEB_END: ${{ github.event.inputs.web_end_run }}
+          MOBILE_START: ${{ github.event.inputs.mobile_start_run }}
+          MOBILE_END: ${{ github.event.inputs.mobile_end_run }}
+        run: |
+          node -e '
+          const https = require("https");
+          const { execSync } = require("child_process");
+          const fs = require("fs");
+          const path = require("path");
+
+          const APPS_SCRIPT_URL = process.env.APPS_SCRIPT_URL || "https://script.google.com/macros/s/AKfycby6v2p1_k9ch5st11OeBy7Nermci8fIh0Y9A4RwroXO5HdIsGDF03BUg6hgHVsFou6_1A/exec";
+          const R2_BASE_WEB = process.env.CYPRESS_R2_PUBLIC_URL || "https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev";
+          const R2_BASE_MOBILE = process.env.R2_PUBLIC_URL || "https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev";
+
+          function baixarArquivo(url, destino) {
+            return new Promise((resolve) => {
+              const file = fs.createWriteStream(destino);
+              https.get(url, (res) => {
+                if (res.statusCode === 200) {
+                  res.pipe(file);
+                  file.on("finish", () => { file.close(); resolve(true); });
+                } else {
+                  file.close();
+                  if (fs.existsSync(destino)) fs.unlinkSync(destino);
+                  resolve(false);
+                }
+              }).on("error", () => {
+                if (fs.existsSync(destino)) fs.unlinkSync(destino);
+                resolve(false);
+              });
+            });
+          }
+
+          async function processarWeb() {
+            const start = parseInt(process.env.WEB_START, 10);
+            const end = parseInt(process.env.WEB_END, 10);
+
+            if (isNaN(start) || isNaN(end) || start > end) return;
+
+            console.log(`\n==================================================`);
+            console.log(`🌐 INICIANDO PROCESSAMENTO WEB (RUNS #${start} até #${end})`);
+            console.log(`==================================================`);
+
+            for (let run = start; run <= end; run++) {
+              console.log(`\n🔍 Verificando Web Run #${run}...`);
+              const pastaTemp = "./cypress/reports";
+              fs.mkdirSync(pastaTemp, { recursive: true });
+
+              // Tenta estrutura com subpasta 01_e2e e sem ela
+              let urlJson = `${R2_BASE_WEB}/reports/${run}/01_e2e/index.json`;
+              let ok = await baixarArquivo(urlJson, path.join(pastaTemp, "index.json"));
+
+              if (!ok) {
+                urlJson = `${R2_BASE_WEB}/reports/${run}/index.json`;
+                ok = await baixarArquivo(urlJson, path.join(pastaTemp, "index.json"));
+              }
+
+              if (ok) {
+                console.log(`📦 Relatório Web da Run #${run} baixado do R2. Reenviando...`);
+                try {
+                  execSync("node enviar-resultados-appscript.js", {
+                    env: {
+                      ...process.env,
+                      APPS_SCRIPT_URL,
+                      GITHUB_RUN_NUMBER: String(run),
+                      CYPRESS_R2_PUBLIC_URL: R2_BASE_WEB,
+                      REPORTS_DIR: pastaTemp
+                    },
+                    stdio: "inherit"
+                  });
+                } catch (e) {
+                  console.error(`❌ Erro ao enviar Web Run #${run}:`, e.message);
+                }
+              } else {
+                console.log(`⚠️ Web Run #${run} não encontrada no R2.`);
+              }
+
+              fs.rmSync(pastaTemp, { recursive: true, force: true });
+            }
+          }
+
+          async function processarMobile() {
+            const start = parseInt(process.env.MOBILE_START, 10);
+            const end = parseInt(process.env.MOBILE_END, 10);
+
+            if (isNaN(start) || isNaN(end) || start > end) return;
+
+            console.log(`\n==================================================`);
+            console.log(`📱 INICIANDO PROCESSAMENTO MOBILE (RUNS #${start} até #${end})`);
+            console.log(`==================================================`);
+
+            for (let run = start; run <= end; run++) {
+              console.log(`\n🔍 Verificando Mobile Run #${run}...`);
+              const pastaTemp = "./results";
+              fs.mkdirSync(pastaTemp, { recursive: true });
+
+              const urlXml = `${R2_BASE_MOBILE}/reports/mobile-run-${run}/output.xml`;
+              const ok = await baixarArquivo(urlXml, path.join(pastaTemp, "output.xml"));
+
+              if (ok) {
+                console.log(`📱 Relatório Mobile da Run #${run} baixado do R2. Reenviando...`);
+                try {
+                  execSync("node enviar-resultados-appscript-mobile.js", {
+                    env: {
+                      ...process.env,
+                      APPS_SCRIPT_URL,
+                      GITHUB_RUN_NUMBER: String(run),
+                      R2_PUBLIC_URL: R2_BASE_MOBILE,
+                      OUTPUT_XML: path.join(pastaTemp, "output.xml")
+                    },
+                    stdio: "inherit"
+                  });
+                } catch (e) {
+                  console.error(`❌ Erro ao enviar Mobile Run #${run}:`, e.message);
+                }
+              } else {
+                console.log(`⚠️ Mobile Run #${run} não encontrada no R2.`);
+              }
+
+              fs.rmSync(pastaTemp, { recursive: true, force: true });
+            }
+          }
+
+          async function main() {
+            await processarWeb();
+            await processarMobile();
+            console.log(`\n🎉 Processamento retroativo Web & Mobile concluído!`);
+          }
+
+          main();
+          '
