@@ -97,14 +97,12 @@ jobs:
               console.log(`\n🔍 Processando Web Run #${run}...`);
               const pastaTemp = "./cypress/reports";
               fs.mkdirSync(pastaTemp, { recursive: true });
-              
-              // Guarda como index.json para bater com a estrutura do bucket
-              const jsonPath = path.join(pastaTemp, "index.json"); 
+              const jsonPath = path.join(pastaTemp, "index.json");
 
-              // URLs candidatas baseadas na imagem do R2 que enviou
+              // URLs limpas baseadas no link oficial do seu R2
               const candidatasUrl = [
-                `${R2_BASE_WEB}/cypress-reports/reports/${run}/01_e2e/index.json`,
-                `${R2_BASE_WEB}/reports/${run}/01_e2e/index.json`
+                `${R2_BASE_WEB}/reports/${run}/01_e2e/index.json`,
+                `${R2_BASE_WEB}/reports/${run}/index.json`
               ];
 
               let ok = false;
@@ -124,8 +122,7 @@ jobs:
                 console.log(`🕒 Data Original da Run #${run}: ${dataOriginal || "Data do sistema"}`);
 
                 try {
-                  // Executa o ficheiro JS que processa apenas a Web
-                  execSync("node enviar-resultados-appscript.js", {
+                  execSync("node scripts/enviar-resultados-appscript.js", {
                     env: {
                       ...process.env,
                       APPS_SCRIPT_URL,
