@@ -103,13 +103,17 @@ jobs:
               const parser = new xml2js.Parser();
               const result = await parser.parseStringPromise(xmlData);
               const generated = result.robot?.$?.generated;
+              
               if (generated) {
-                const partes = generated.split(" ");
-                const d = partes[0];
-                const t = partes[1] || "00:00:00";
-                return `${d.substring(0,4)}-${d.substring(4,6)}-${d.substring(6,8)}T${t}Z`;
+                // Procura um padrão de ano, mês e dia juntos (ex: 20241006) ou separados (2024-10-06)
+                const match = generated.match(/(\d{4})-?(\d{2})-?(\d{2})/);
+                if (match) {
+                  // Retorna uma data válida garantida (ex: 2024-10-06T12:00:00Z)
+                  return `${match[1]}-${match[2]}-${match[3]}T12:00:00Z`;
+                }
               }
             } catch (e) {}
+            // Se falhar ou vier corrompido, retorna null para o script usar a data atual
             return null;
           }
 
