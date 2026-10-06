@@ -35,7 +35,7 @@ jobs:
       - name: Instalar dependências (xml2js)
         run: npm install xml2js
 
-      - name: Executar Processamento Retroativo
+      - name: Executar Processamento Retroativo Com Datas Originais
         env:
           APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
           CYPRESS_R2_PUBLIC_URL: ${{ secrets.CYPRESS_R2_PUBLIC_URL }}
@@ -60,8 +60,8 @@ jobs:
           function baixarArquivo(url, destino) {
             return new Promise((resolve) => {
               const client = url.startsWith("https") ? https : http;
-              const req = client.get(url, (res) => {
-                if (res.statusCode === 301 || res.statusCode === 302) {
+              const req = client.get(url, { headers: { "User-Agent": "GitHub-Actions-Retro" } }, (res) => {
+                if (res.statusCode === 301 || res.statusCode === 302 || res.statusCode === 308) {
                   return baixarArquivo(res.headers.location, destino).then(resolve);
                 }
                 if (res.statusCode === 200) {
@@ -70,7 +70,7 @@ jobs:
                   file.on("finish", () => {
                     file.close();
                     const stats = fs.statSync(destino);
-                    // Garante que não é um HTML de erro vazio ou página 404
+                    // Relatórios JSON costumam ser grandes. Menos de 50 bytes pode ser um 404 mascarado.
                     if (stats.size > 50) {
                       resolve(true);
                     } else {
@@ -83,7 +83,7 @@ jobs:
                 }
               });
               req.on("error", () => resolve(false));
-              req.setTimeout(10000, () => { req.destroy(); resolve(false); });
+              req.setTimeout(15000, () => { req.destroy(); resolve(false); });
             });
           }
 
@@ -127,15 +127,17 @@ jobs:
               console.log(`\n🔍 Processando Web Run #${run}...`);
               const pastaTemp = "./cypress/reports";
               fs.mkdirSync(pastaTemp, { recursive: true });
-              const jsonPath = path.join(pastaTemp, "index.json");
+              const jsonPath = path.join(pastaTemp, "mochawesome.json"); // Usamos mochawesome por padrão
 
-              // Lista de URLs/estruturas possíveis que o R2 pode estar utilizando
+              // Expansão drástica das candidatas baseada na imagem enviada
               const candidatasUrl = [
+                `${R2_BASE_WEB}/cypress-reports/reports/${run}/01_e2e/index.json`,
+                `${R2_BASE_WEB}/cypress-reports/reports/${run}/01_e2e/mochawesome.json`,
+                `${R2_BASE_WEB}/cypress-reports/reports/${run}/01_e2e/report.json`,
                 `${R2_BASE_WEB}/reports/${run}/01_e2e/index.json`,
-                `${R2_BASE_WEB}/reports/${run}/index.json`,
                 `${R2_BASE_WEB}/reports/${run}/01_e2e/mochawesome.json`,
-                `${R2_BASE_WEB}/reports/${run}/mochawesome.json`,
-                `${R2_BASE_WEB}/reports/${run}/01_e2e/report.json`
+                `${R2_BASE_WEB}/reports/${run}/index.json`,
+                `${R2_BASE_WEB}/reports/${run}/mochawesome.json`
               ];
 
               let ok = false;
@@ -155,6 +157,7 @@ jobs:
                 console.log(`🕒 Data Original da Run #${run}: ${dataOriginal || "Data do sistema"}`);
 
                 try {
+                  // O script de ingestão precisa saber onde o arquivo está
                   execSync("node enviar-resultados-appscript.js", {
                     env: {
                       ...process.env,
@@ -193,8 +196,11 @@ jobs:
               fs.mkdirSync(pastaTemp, { recursive: true });
               const xmlPath = path.join(pastaTemp, "output.xml");
 
+              // Candidatas baseadas na imagem do allure-reports
               const candidatasUrl = [
+                `${R2_BASE_MOBILE}/allure-reports/reports/mobile-run-${run}/output.xml`,
                 `${R2_BASE_MOBILE}/reports/mobile-run-${run}/output.xml`,
+                `${R2_BASE_MOBILE}/allure-reports/reports/${run}/output.xml`,
                 `${R2_BASE_MOBILE}/reports/${run}/output.xml`
               ];
 
