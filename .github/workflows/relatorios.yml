@@ -35,7 +35,7 @@ jobs:
       - name: Instalar dependências (xml2js)
         run: npm install xml2js
 
-      - name: Executar Processamento Retroativo Com Datas Originais
+      - name: Executar Processamento Retroativo
         env:
           APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
           CYPRESS_R2_PUBLIC_URL: ${{ secrets.CYPRESS_R2_PUBLIC_URL }}
@@ -47,31 +47,43 @@ jobs:
         run: |
           node -e '
           const https = require("https");
+          const http = require("http");
           const { execSync } = require("child_process");
           const fs = require("fs");
           const path = require("path");
           const xml2js = require("xml2js");
 
           const APPS_SCRIPT_URL = process.env.APPS_SCRIPT_URL || "https://script.google.com/macros/s/AKfycby6v2p1_k9ch5st11OeBy7Nermci8fIh0Y9A4RwroXO5HdIsGDF03BUg6hgHVsFou6_1A/exec";
-          const R2_BASE_WEB = process.env.CYPRESS_R2_PUBLIC_URL || "https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev";
-          const R2_BASE_MOBILE = process.env.R2_PUBLIC_URL || "https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev";
+          const R2_BASE_WEB = (process.env.CYPRESS_R2_PUBLIC_URL || "https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev").replace(/\/$/, "");
+          const R2_BASE_MOBILE = (process.env.R2_PUBLIC_URL || "https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev").replace(/\/$/, "");
 
           function baixarArquivo(url, destino) {
             return new Promise((resolve) => {
-              const file = fs.createWriteStream(destino);
-              https.get(url, (res) => {
+              const client = url.startsWith("https") ? https : http;
+              const req = client.get(url, (res) => {
+                if (res.statusCode === 301 || res.statusCode === 302) {
+                  return baixarArquivo(res.headers.location, destino).then(resolve);
+                }
                 if (res.statusCode === 200) {
+                  const file = fs.createWriteStream(destino);
                   res.pipe(file);
-                  file.on("finish", () => { file.close(); resolve(true); });
+                  file.on("finish", () => {
+                    file.close();
+                    const stats = fs.statSync(destino);
+                    // Garante que não é um HTML de erro vazio ou página 404
+                    if (stats.size > 50) {
+                      resolve(true);
+                    } else {
+                      fs.unlinkSync(destino);
+                      resolve(false);
+                    }
+                  });
                 } else {
-                  file.close();
-                  if (fs.existsSync(destino)) fs.unlinkSync(destino);
                   resolve(false);
                 }
-              }).on("error", () => {
-                if (fs.existsSync(destino)) fs.unlinkSync(destino);
-                resolve(false);
               });
+              req.on("error", () => resolve(false));
+              req.setTimeout(10000, () => { req.destroy(); resolve(false); });
             });
           }
 
@@ -115,19 +127,32 @@ jobs:
               console.log(`\n🔍 Processando Web Run #${run}...`);
               const pastaTemp = "./cypress/reports";
               fs.mkdirSync(pastaTemp, { recursive: true });
-
               const jsonPath = path.join(pastaTemp, "index.json");
-              let urlJson = `${R2_BASE_WEB}/reports/${run}/01_e2e/index.json`;
-              let ok = await baixarArquivo(urlJson, jsonPath);
 
-              if (!ok) {
-                urlJson = `${R2_BASE_WEB}/reports/${run}/index.json`;
-                ok = await baixarArquivo(urlJson, jsonPath);
+              // Lista de URLs/estruturas possíveis que o R2 pode estar utilizando
+              const candidatasUrl = [
+                `${R2_BASE_WEB}/reports/${run}/01_e2e/index.json`,
+                `${R2_BASE_WEB}/reports/${run}/index.json`,
+                `${R2_BASE_WEB}/reports/${run}/01_e2e/mochawesome.json`,
+                `${R2_BASE_WEB}/reports/${run}/mochawesome.json`,
+                `${R2_BASE_WEB}/reports/${run}/01_e2e/report.json`
+              ];
+
+              let ok = false;
+              let urlSucesso = "";
+
+              for (const url of candidatasUrl) {
+                ok = await baixarArquivo(url, jsonPath);
+                if (ok) {
+                  urlSucesso = url;
+                  break;
+                }
               }
 
               if (ok) {
                 const dataOriginal = extrairDataJsonWeb(jsonPath);
-                console.log(`📦 Relatório baixado! Data Original da Run #${run}: ${dataOriginal || "Data do sistema"}`);
+                console.log(`📦 Relatório baixado de: ${urlSucesso}`);
+                console.log(`🕒 Data Original da Run #${run}: ${dataOriginal || "Data do sistema"}`);
 
                 try {
                   execSync("node enviar-resultados-appscript.js", {
@@ -145,7 +170,7 @@ jobs:
                   console.error(`❌ Erro ao reenviar Web Run #${run}:`, e.message);
                 }
               } else {
-                console.log(`⚠️ Web Run #${run} não encontrada no R2.`);
+                console.log(`⚠️ Web Run #${run} não encontrada em nenhum dos caminhos no R2.`);
               }
 
               fs.rmSync(pastaTemp, { recursive: true, force: true });
@@ -166,14 +191,28 @@ jobs:
               console.log(`\n🔍 Processando Mobile Run #${run}...`);
               const pastaTemp = "./results";
               fs.mkdirSync(pastaTemp, { recursive: true });
-
               const xmlPath = path.join(pastaTemp, "output.xml");
-              const urlXml = `${R2_BASE_MOBILE}/reports/mobile-run-${run}/output.xml`;
-              const ok = await baixarArquivo(urlXml, xmlPath);
+
+              const candidatasUrl = [
+                `${R2_BASE_MOBILE}/reports/mobile-run-${run}/output.xml`,
+                `${R2_BASE_MOBILE}/reports/${run}/output.xml`
+              ];
+
+              let ok = false;
+              let urlSucesso = "";
+
+              for (const url of candidatasUrl) {
+                ok = await baixarArquivo(url, xmlPath);
+                if (ok) {
+                  urlSucesso = url;
+                  break;
+                }
+              }
 
               if (ok) {
                 const dataOriginal = await extrairDataXmlMobile(xmlPath);
-                console.log(`📱 Relatório baixado! Data Original da Run #${run}: ${dataOriginal || "Data do sistema"}`);
+                console.log(`📱 Relatório baixado de: ${urlSucesso}`);
+                console.log(`🕒 Data Original da Run #${run}: ${dataOriginal || "Data do sistema"}`);
 
                 try {
                   execSync("node enviar-resultados-appscript-mobile.js", {
@@ -201,7 +240,7 @@ jobs:
           async function main() {
             await processarWeb();
             await processarMobile();
-            console.log(`\n🎉 Processamento retroativo concluído com sucesso!`);
+            console.log(`\n🎉 Processamento retroativo concluído!`);
           }
 
           main();
