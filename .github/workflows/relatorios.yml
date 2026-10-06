@@ -11,14 +11,6 @@ on:
         description: "RUN Web (Cypress) FINAL"
         required: false
         default: "1987"
-      mobile_start_run:
-        description: "RUN Mobile (Robot) INICIAL"
-        required: false
-        default: "1994"
-      mobile_end_run:
-        description: "RUN Mobile (Robot) FINAL"
-        required: false
-        default: "2114"
 
 jobs:
   reprocessar:
@@ -32,18 +24,14 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Instalar dependências (xml2js)
-        run: npm install xml2js
+      # A dependência xml2js foi removida porque era exclusiva do Mobile
 
-      - name: Executar Processamento Retroativo Com Datas Originais
+      - name: Executar Processamento Retroativo WEB
         env:
           APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
           CYPRESS_R2_PUBLIC_URL: ${{ secrets.CYPRESS_R2_PUBLIC_URL }}
-          R2_PUBLIC_URL: ${{ secrets.R2_PUBLIC_URL }}
           WEB_START: ${{ github.event.inputs.web_start_run }}
           WEB_END: ${{ github.event.inputs.web_end_run }}
-          MOBILE_START: ${{ github.event.inputs.mobile_start_run }}
-          MOBILE_END: ${{ github.event.inputs.mobile_end_run }}
         run: |
           node -e '
           const https = require("https");
@@ -51,11 +39,9 @@ jobs:
           const { execSync } = require("child_process");
           const fs = require("fs");
           const path = require("path");
-          const xml2js = require("xml2js");
 
           const APPS_SCRIPT_URL = process.env.APPS_SCRIPT_URL || "https://script.google.com/macros/s/AKfycby6v2p1_k9ch5st11OeBy7Nermci8fIh0Y9A4RwroXO5HdIsGDF03BUg6hgHVsFou6_1A/exec";
           const R2_BASE_WEB = (process.env.CYPRESS_R2_PUBLIC_URL || "https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev").replace(/\/$/, "");
-          const R2_BASE_MOBILE = (process.env.R2_PUBLIC_URL || "https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev").replace(/\/$/, "");
 
           function baixarArquivo(url, destino) {
             return new Promise((resolve) => {
@@ -70,7 +56,7 @@ jobs:
                   file.on("finish", () => {
                     file.close();
                     const stats = fs.statSync(destino);
-                    // Relatórios JSON costumam ser grandes. Menos de 50 bytes pode ser um 404 mascarado.
+                    // Garante que não é uma página de erro 404 vazia
                     if (stats.size > 50) {
                       resolve(true);
                     } else {
@@ -97,26 +83,6 @@ jobs:
             return null;
           }
 
-          async function extrairDataXmlMobile(caminhoXml) {
-            try {
-              const xmlData = fs.readFileSync(caminhoXml, "utf-8");
-              const parser = new xml2js.Parser();
-              const result = await parser.parseStringPromise(xmlData);
-              const generated = result.robot?.$?.generated;
-              
-              if (generated) {
-                // Procura um padrão de ano, mês e dia juntos (ex: 20241006) ou separados (2024-10-06)
-                const match = generated.match(/(\d{4})-?(\d{2})-?(\d{2})/);
-                if (match) {
-                  // Retorna uma data válida garantida (ex: 2024-10-06T12:00:00Z)
-                  return `${match[1]}-${match[2]}-${match[3]}T12:00:00Z`;
-                }
-              }
-            } catch (e) {}
-            // Se falhar ou vier corrompido, retorna null para o script usar a data atual
-            return null;
-          }
-
           async function processarWeb() {
             const start = parseInt(process.env.WEB_START, 10);
             const end = parseInt(process.env.WEB_END, 10);
@@ -131,17 +97,14 @@ jobs:
               console.log(`\n🔍 Processando Web Run #${run}...`);
               const pastaTemp = "./cypress/reports";
               fs.mkdirSync(pastaTemp, { recursive: true });
-              const jsonPath = path.join(pastaTemp, "mochawesome.json"); // Usamos mochawesome por padrão
+              
+              // Guarda como index.json para bater com a estrutura do bucket
+              const jsonPath = path.join(pastaTemp, "index.json"); 
 
-              // Expansão drástica das candidatas baseada na imagem enviada
+              // URLs candidatas baseadas na imagem do R2 que enviou
               const candidatasUrl = [
                 `${R2_BASE_WEB}/cypress-reports/reports/${run}/01_e2e/index.json`,
-                `${R2_BASE_WEB}/cypress-reports/reports/${run}/01_e2e/mochawesome.json`,
-                `${R2_BASE_WEB}/cypress-reports/reports/${run}/01_e2e/report.json`,
-                `${R2_BASE_WEB}/reports/${run}/01_e2e/index.json`,
-                `${R2_BASE_WEB}/reports/${run}/01_e2e/mochawesome.json`,
-                `${R2_BASE_WEB}/reports/${run}/index.json`,
-                `${R2_BASE_WEB}/reports/${run}/mochawesome.json`
+                `${R2_BASE_WEB}/reports/${run}/01_e2e/index.json`
               ];
 
               let ok = false;
@@ -161,8 +124,8 @@ jobs:
                 console.log(`🕒 Data Original da Run #${run}: ${dataOriginal || "Data do sistema"}`);
 
                 try {
-                  // O script de ingestão precisa saber onde o arquivo está
-                  execSync("node scripts/enviar-resultados-appscript.js", {
+                  // Executa o ficheiro JS que processa apenas a Web
+                  execSync("node enviar-resultados-appscript.js", {
                     env: {
                       ...process.env,
                       APPS_SCRIPT_URL,
@@ -184,73 +147,9 @@ jobs:
             }
           }
 
-          async function processarMobile() {
-            const start = parseInt(process.env.MOBILE_START, 10);
-            const end = parseInt(process.env.MOBILE_END, 10);
-
-            if (isNaN(start) || isNaN(end) || start > end) return;
-
-            console.log(`\n==================================================`);
-            console.log(`📱 INICIANDO PROCESSAMENTO MOBILE RETROATIVO (#${start} até #${end})`);
-            console.log(`==================================================`);
-
-            for (let run = start; run <= end; run++) {
-              console.log(`\n🔍 Processando Mobile Run #${run}...`);
-              const pastaTemp = "./results";
-              fs.mkdirSync(pastaTemp, { recursive: true });
-              const xmlPath = path.join(pastaTemp, "output.xml");
-
-              // Candidatas baseadas na imagem do allure-reports
-              const candidatasUrl = [
-                `${R2_BASE_MOBILE}/allure-reports/reports/mobile-run-${run}/output.xml`,
-                `${R2_BASE_MOBILE}/reports/mobile-run-${run}/output.xml`,
-                `${R2_BASE_MOBILE}/allure-reports/reports/${run}/output.xml`,
-                `${R2_BASE_MOBILE}/reports/${run}/output.xml`
-              ];
-
-              let ok = false;
-              let urlSucesso = "";
-
-              for (const url of candidatasUrl) {
-                ok = await baixarArquivo(url, xmlPath);
-                if (ok) {
-                  urlSucesso = url;
-                  break;
-                }
-              }
-
-              if (ok) {
-                const dataOriginal = await extrairDataXmlMobile(xmlPath);
-                console.log(`📱 Relatório baixado de: ${urlSucesso}`);
-                console.log(`🕒 Data Original da Run #${run}: ${dataOriginal || "Data do sistema"}`);
-
-                try {
-                  execSync("node scripts/enviar-resultados-appscript-mobile.js", {
-                    env: {
-                      ...process.env,
-                      APPS_SCRIPT_URL,
-                      GITHUB_RUN_NUMBER: String(run),
-                      R2_PUBLIC_URL: R2_BASE_MOBILE,
-                      OUTPUT_XML: xmlPath,
-                      RETRO_DATA: dataOriginal || ""
-                    },
-                    stdio: "inherit"
-                  });
-                } catch (e) {
-                  console.error(`❌ Erro ao reenviar Mobile Run #${run}:`, e.message);
-                }
-              } else {
-                console.log(`⚠️ Mobile Run #${run} não encontrada no R2.`);
-              }
-
-              fs.rmSync(pastaTemp, { recursive: true, force: true });
-            }
-          }
-
           async function main() {
             await processarWeb();
-            await processarMobile();
-            console.log(`\n🎉 Processamento retroativo concluído!`);
+            console.log(`\n🎉 Processamento retroativo WEB concluído!`);
           }
 
           main();
