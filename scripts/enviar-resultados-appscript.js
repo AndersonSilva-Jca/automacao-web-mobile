@@ -249,13 +249,19 @@ const MAPA_MARCAS = {
 };
 
 function encontrarJsonMochawesome(dir) {
-  const caminhoIndex = path.join(dir, "index.json");
-  if (!fs.existsSync(caminhoIndex)) return null;
+  let caminhoJson = path.join(dir, "mochawesome.json");
+
+  if (!fs.existsSync(caminhoJson)) {
+    caminhoJson = path.join(dir, "index.json");
+  }
+
+  if (!fs.existsSync(caminhoJson)) return null;
+
   try {
-    const conteudo = JSON.parse(fs.readFileSync(caminhoIndex, "utf-8"));
+    const conteudo = JSON.parse(fs.readFileSync(caminhoJson, "utf-8"));
     if (Array.isArray(conteudo.results)) return conteudo;
   } catch (e) {
-    console.error(`❌ Erro ao ler/parsear ${caminhoIndex}:`, e.message);
+    console.error(`❌ Erro ao ler/parsear ${caminhoJson}:`, e.message);
   }
   return null;
 }
@@ -394,7 +400,10 @@ async function main() {
       todosOsTestes = todosOsTestes.concat(extrairTestesDaSuite(suite, nomeSpecArquivo));
     });
 
-    const dataHoraFormatada = new Date().toLocaleString("pt-BR", {
+    // Lógica para capturar a data original da Run retroativa ou a data atual se for execução normal
+    const dataBase = process.env.RETRO_DATA ? new Date(process.env.RETRO_DATA) : new Date();
+
+    const dataHoraFormatada = dataBase.toLocaleString("pt-BR", {
       timeZone: "America/Sao_Paulo",
       day: "2-digit",
       month: "2-digit",
@@ -413,8 +422,7 @@ async function main() {
         run_id: `${RUN_ID}`,
         marca: item.marca,
         plataforma: "web",
-        data_hora: new Date().toISOString(),
-        data_hora_formatada: dataHoraFormatada,
+        data_hora: dataBase.toISOString(), // <-- AQUI! Substitui o new Date().toISOString()        data_hora_formatada: dataHoraFormatada,
         total_testes: item.total,
         total_passou: item.passou,
         total_falhou: item.falhou,

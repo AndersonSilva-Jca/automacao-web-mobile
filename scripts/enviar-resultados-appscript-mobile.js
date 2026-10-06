@@ -587,7 +587,10 @@ async function main() {
   const baseUrlR2 = `${R2_PUBLIC_URL}/reports/mobile-run-${RUN_NUMBER}`;
   const todasSuites = extrairSuitesRecursivo(robot.suite);
 
-  const dataHoraFormatada = new Date().toLocaleString("pt-BR", {
+  // Lógica para capturar a data original da Run retroativa ou a data atual se for execução normal
+  const dataBase = process.env.RETRO_DATA ? new Date(process.env.RETRO_DATA) : new Date();
+
+  const dataHoraFormatada = dataBase.toLocaleString("pt-BR", {
     timeZone: "America/Sao_Paulo",
     day: "2-digit",
     month: "2-digit",
@@ -656,8 +659,7 @@ async function main() {
       run_id: `${RUN_ID}`,
       marca: marcaFormatada,
       plataforma: "mobile",
-      data_hora: new Date().toISOString(),
-      data_hora_formatada: dataHoraFormatada,
+      data_hora: dataBase.toISOString(), // <-- AQUI! Substitui o new Date().toISOString()      data_hora_formatada: dataHoraFormatada,
       total_testes: total,
       total_passou: passou,
       total_falhou: falhou,
