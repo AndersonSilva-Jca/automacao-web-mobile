@@ -99,10 +99,9 @@ jobs:
               fs.mkdirSync(pastaTemp, { recursive: true });
               const jsonPath = path.join(pastaTemp, "index.json");
 
-              // URLs limpas baseadas no link oficial do seu R2
+              // Caminho exato validado nas suas capturas de tela do R2
               const candidatasUrl = [
-                `${R2_BASE_WEB}/reports/${run}/01_e2e/index.json`,
-                `${R2_BASE_WEB}/reports/${run}/index.json`
+                `${R2_BASE_WEB}/cypress-reports/reports/${run}/01_e2e/index.json`
               ];
 
               let ok = false;
@@ -137,7 +136,7 @@ jobs:
                   console.error(`❌ Erro ao reenviar Web Run #${run}:`, e.message);
                 }
               } else {
-                console.log(`⚠️ Web Run #${run} não encontrada em nenhum dos caminhos no R2.`);
+                console.log(`⚠️ Web Run #${run} não encontrada no R2.`);
               }
 
               fs.rmSync(pastaTemp, { recursive: true, force: true });
