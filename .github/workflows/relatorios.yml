@@ -158,7 +158,7 @@ jobs:
 
                 try {
                   // O script de ingestão precisa saber onde o arquivo está
-                  execSync("node enviar-resultados-appscript.js", {
+                  execSync("node scripts/enviar-resultados-appscript.js", {
                     env: {
                       ...process.env,
                       APPS_SCRIPT_URL,
@@ -221,7 +221,7 @@ jobs:
                 console.log(`🕒 Data Original da Run #${run}: ${dataOriginal || "Data do sistema"}`);
 
                 try {
-                  execSync("node enviar-resultados-appscript-mobile.js", {
+                  execSync("node scripts/enviar-resultados-appscript-mobile.js", {
                     env: {
                       ...process.env,
                       APPS_SCRIPT_URL,
