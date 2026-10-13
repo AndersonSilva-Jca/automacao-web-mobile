@@ -30,8 +30,8 @@ describe("Rapido Ribeirão", () => {
       LoginPage.confirmarLogin();
       LoginPage.logadoComSucesso();
     });
-    SearchPage.buscaOrigemRR();
-    SearchPage.buscaDestinoRR();
+    SearchPage.buscaTopRotasRapidoRibeirao();
+    // SearchPage.buscaDestinoRR();
     SearchPage.dataIda();
     SearchPage.confirmarBusca();
     OfferPage.selecionarPassagemIdaRR();

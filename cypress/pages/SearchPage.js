@@ -14,19 +14,22 @@ class SearchPage {
     cy.selecionarTopRotaCometa();
   }
 
-  buscaOrigemRR() {
-    cy.get(loc.BUSCAS.ORIGEM).click().type("Sertãozinho (SP)", { delay: 100 }).should("exist").invoke("show");
-    cy.xpath('//*[@id="Sertãozinho-(SP)"]/p[1]').click({ force: true });
+  buscaTopRotasRapidoRibeirao() {
+    cy.selecionarTopRotasRapidoRibeirao();
+    // cy.get(loc.BUSCAS.ORIGEM).click().type("Sertãozinho (SP)", { delay: 100 }).should("exist").invoke("show");
+    // cy.xpath('//*[@id="Sertãozinho-(SP)"]/p[1]').click({ force: true });
   }
 
-  buscaOrigem1001() {
-    cy.get(loc.BUSCAS.ORIGEM).click().type(loc.RJ_TODOS, { delay: 100 }).should("exist").invoke("show");
-    cy.xpath(loc.XPATH_RJ_TODOS).click({ force: true });
+  buscaTopRotas1001() {
+    cy.selecionarTopRotas1001();
+    // cy.get(loc.BUSCAS.ORIGEM).click().type(loc.RJ_TODOS, { delay: 100 }).should("exist").invoke("show");
+    // cy.xpath(loc.XPATH_RJ_TODOS).click({ force: true });
   }
 
   buscaOrigemExpressoSul() {
-    cy.get(loc.BUSCAS.ORIGEM).click().type("Curitiba (PR)", { delay: 100 }).should("exist").invoke("show");
-    cy.xpath(loc.XPATH_Curitiba_PR).click({ force: true });
+    cy.selecionarTopRotasExpressoSul();
+    // cy.get(loc.BUSCAS.ORIGEM).click().type("Curitiba (PR)", { delay: 100 }).should("exist").invoke("show");
+    // cy.xpath(loc.XPATH_Curitiba_PR).click({ force: true });
   }
 
   buscaDestinoRR() {
@@ -37,9 +40,10 @@ class SearchPage {
     cy.get(loc.BUSCAS.ORIGEM).click().type(loc.SP_TIETE, { delay: 100 }).should("exist").invoke("show");
     cy.xpath(loc.XPATH_SP_TIETE).click({ force: true });
   }
-  buscaDestinoCatarinense() {
-    cy.get(loc.BUSCAS.DESTINO).click().type("Florianópolis (SC)", { delay: 25 }).should("exist").invoke("show");
-    cy.get('a[id="Florianópolis-(SC)"]', { timeout: 10000 }).filter(":visible").first().click({ force: true });
+  buscaTopRotasCatarinense() {
+    cy.selecionarTopRotasCatarinense();
+    // cy.get(loc.BUSCAS.DESTINO).click().type("Florianópolis (SC)", { delay: 25 }).should("exist").invoke("show");
+    // cy.get('a[id="Florianópolis-(SC)"]', { timeout: 10000 }).filter(":visible").first().click({ force: true });
   }
 
   buscaDestinoCometa() {
@@ -92,7 +96,8 @@ class SearchPage {
 
   //------------------ OUTLET DE PASSAGENS ------------------
   odpBuscaOrigemHoraMarcada() {
-    // cy.wait(15000);
+    cy.wait(15000);
+    cy.get('[data-js="search-agency-flow"]').should("be.visible").eq(0).click({ force: true });
     cy.selecionarTopRotaODP();
   }
 
@@ -116,13 +121,14 @@ class SearchPage {
   }
 
   //------------------ CLUBE GIRO ------------------
-  giroBuscaOrigem() {
-    cy.get(loc.BUSCAS.ORIGEM).clear().click({ force: true });
-    cy.get(loc.BUSCAS.ORIGEM).clear().click().type("São Paulo - Todos (SP)", { delay: 150 });
-    cy.get(loc.BUSCAS.ORIGEM).clear().click().type("São Paulo - Todos (SP)", { delay: 150 });
-    cy.get(loc.BUSCAS.ORIGEM).clear().click({ force: true });
-    cy.get(loc.BUSCAS.ORIGEM).click().type("São Paulo - Todos (SP)", { delay: 100 });
-    cy.contains("São Paulo - Todos (SP)").click({ force: true });
+  giroBuscaTopRotasGiro() {
+    cy.selecionarTopRotasGiro();
+    // cy.get(loc.BUSCAS.ORIGEM).clear().click({ force: true });
+    // cy.get(loc.BUSCAS.ORIGEM).clear().click().type("São Paulo - Todos (SP)", { delay: 150 });
+    // cy.get(loc.BUSCAS.ORIGEM).clear().click().type("São Paulo - Todos (SP)", { delay: 150 });
+    // cy.get(loc.BUSCAS.ORIGEM).clear().click({ force: true });
+    // cy.get(loc.BUSCAS.ORIGEM).click().type("São Paulo - Todos (SP)", { delay: 100 });
+    // cy.contains("São Paulo - Todos (SP)").click({ force: true });
   }
 
   giroBuscaDestino() {
@@ -143,15 +149,16 @@ class SearchPage {
   }
 
   //------------------ WEMOBI ------------------
-  wemobiBuscaOrigem() {
-    // cy.selecionarTopRotaWemobi();
-    cy.get(loc.BUSCAS.ORIGEM).click().type("São Paulo - Todos (SP)", { delay: 100 });
-    cy.xpath(loc.WEMOBI_XPATH_SP).click({ force: true });
+  wemobiBuscaRotasExp() {
+    cy.selecionarTopRotaWemobiExp();
+    // cy.get(loc.BUSCAS.ORIGEM).click().type("São Paulo - Todos (SP)", { delay: 100 });
+    // cy.xpath(loc.WEMOBI_XPATH_SP).click({ force: true });
   }
 
-  wemobiBuscaDestino() {
-    cy.get(loc.BUSCAS.DESTINO).click().type("Rio De Janeiro - Todos (RJ)", { delay: 100 });
-    cy.xpath(loc.WEMOBI_XPATH_RJ).click({ force: true });
+  wemobiBuscaRotas() {
+    cy.selecionarTopRotaWemobi();
+    // cy.get(loc.BUSCAS.DESTINO).click().type("Rio De Janeiro - Todos (RJ)", { delay: 100 });
+    // cy.xpath(loc.WEMOBI_XPATH_RJ).click({ force: true });
   }
 
   wemobiDataIda() {

@@ -1,4 +1,3 @@
-// 06/06/2026 - incio com github actions
 /// <reference types="cypress" />
 /// <reference types="@cypress/xpath" />
 

@@ -65,7 +65,8 @@ const loc = {
 
   ASSERT_SUBTOTAL: '[data-js="subtotal-seats-container"] > .title-value > .title > .cmp-text > p',
   ASSERT_TAXASERVICO: ".title-tooltip > .title",
-  ASSERT_VALORTOTAL: '[data-js="total-container"]',
+  ASSERT_VALORTOTAL: "[data-js='total-container'] > .title > .total-title-main",
+  ASSERT_WEMOBI_VALORTOTAL: ".title > .cmp-text > p > b",
   LOADER: '[alt="loader"]',
 
   LINK_INFO_VIAGEM_UTP: ".at-element-marker > :nth-child(1)",

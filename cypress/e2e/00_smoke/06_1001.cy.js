@@ -30,8 +30,7 @@ describe("Auto Viação 1001", () => {
       LoginPage.confirmarLogin();
       LoginPage.logadoComSucesso();
     });
-    SearchPage.buscaOrigem1001();
-    SearchPage.buscaDestino1001();
+    SearchPage.buscaTopRotas1001();
     SearchPage.dataIda();
     SearchPage.confirmarBusca();
     OfferPage.selecionarPassagemIda();

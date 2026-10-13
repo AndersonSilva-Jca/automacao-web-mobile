@@ -1,4 +1,3 @@
-// 06/06/2026 - incio com github actions
 /// <reference types="cypress" />
 /// <reference types="@cypress/xpath" />
 
@@ -21,17 +20,16 @@ describe("Outlet de Passagens", () => {
     Cypress.on("uncaught:exception", () => false);
   });
 
-  it.only("Outlet de passagens - Hora Marcada", () => {
-    // cy.env(["login", "senha"]).then(() => {
-    cy.visit(odp);
-    // LoginPage.odpModalLogin();
-    // LoginPage.odpPreencherUsuario();
-    // LoginPage.odpPreencherSenha();
-    // LoginPage.odpConfirmarLogin();
-    // LoginPage.odpLogadoComSucesso();
-    // });
+  it("Outlet de passagens - Hora Marcada", () => {
+    cy.env(["login", "senha"]).then(() => {
+      cy.visit(odp);
+      LoginPage.odpModalLogin();
+      LoginPage.odpPreencherUsuario();
+      LoginPage.odpPreencherSenha();
+      LoginPage.odpConfirmarLogin();
+      LoginPage.odpLogadoComSucesso();
+    });
     SearchPage.odpBuscaOrigemHoraMarcada();
-    // SearchPage.odpBuscaDestino();
     SearchPage.odpDataIda();
     SearchPage.odpConfirmarBusca();
     OfferPage.odpSelecionarPassagemIda();
@@ -50,7 +48,6 @@ describe("Outlet de Passagens", () => {
       LoginPage.odpLogadoComSucesso();
     });
     SearchPage.odpBuscaOrigemMelhorPreco();
-    SearchPage.odpBuscaDestino();
     SearchPage.odpDataIda();
     SearchPage.odpConfirmarBusca();
     OfferPage.odpSelecionarPassagemIda();

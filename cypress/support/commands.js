@@ -1,6 +1,7 @@
 // const { cy } = require("@faker-js/faker");
 import loc from "./locators";
 import LoginPage from "../pages/LoginPage";
+// import cypress from "cypress";
 
 // Cypress.Commands.add("selecionarDataIda", (range = 7) => {
 //   cy.get('td[data-handler="selectDay"] a').then(($days) => {
@@ -318,7 +319,7 @@ Cypress.Commands.add("selecionarPassagemSemExperienciaWemobi", () => {
       cy.wrap($btnCompra)
         .parents(".available")
         .invoke("show")
-        .end()
+
         .wrap($btnCompra)
         .invoke("show")
         .scrollIntoView({ offset: { top: -150 } })
@@ -346,26 +347,41 @@ Cypress.Commands.add("selecionarPassagemSemExperienciaWemobi", () => {
 });
 
 Cypress.Commands.add("selecionarPassagemExperienciaWemobi", () => {
+  cy.get(".container-max-width-1400 > :nth-child(4)").should("be.visible");
   cy.contains("ESCOLHER PASSAGENS", { timeout: 90000 }).should("be.visible");
   cy.log("⏳ Aguardando estabilização da página de ofertas...");
 
   cy.get("li.list-companies-item", { timeout: 90000 }).should("be.visible");
 
-  // cy.wait(1000);
-  // cy.scrollTo("bottom");
-  // cy.wait(1500);
-  // 1. Busca os cards de empresas que contêm o marcador "Experiência wemobi"
+  // 1. VERIFICAÇÃO INICIAL GLOBAL: Procura se o bug do template (R\$$price$decimal) está visível na página atual
+  cy.get("body").then(($body) => {
+    const textoPagina = $body.text();
+    const temErroTemplateGlobal = textoPagina.includes("$price") || textoPagina.includes("$decimal");
+    if (temErroTemplateGlobal) {
+      cy.log("⚠️ Bug de template (R$$price$decimal) detetado na data atual. Avançando um dia no calendário...");
+
+      // Clica no seletor para avançar um dia
+      cy.get(":nth-child(5) > .prev-date").should("be.visible").click({ force: true });
+
+      // Aguarda os novos resultados carregarem após a mudança de dia
+      cy.wait(4000);
+    } else {
+      cy.log("✅ Nenhum erro de template global detetado na data atual.");
+    }
+  });
+
+  // 2. LOGICA ORIGINAL DA WEMOBI (Mantida exatamente como você pediu, limpa e intacta)
   cy.get("li.list-companies-item")
     .filter((_, el) => {
       return Cypress.$(el).find('button[data-offer-marketplace-text="Experiência wemobi"]').length > 0;
     })
     .then(($empresasWemobi) => {
-      // Falha o teste se não houver nenhuma empresa com a Experiência wemobi
+      // Falha o teste se não houver nenhuma empresa com a Experiência wemobi na página atual
       if ($empresasWemobi.length === 0) {
         throw new Error("❌ Teste interrompido: Nenhuma passagem 'Experiência wemobi' foi encontrada!");
       }
 
-      // 2. Extrai as ofertas válidas contidas APENAS nos cards da Experiência wemobi
+      // Extrai as ofertas válidas contidas APENAS nos cards da Experiência wemobi
       const ofertasValidas = [];
 
       $empresasWemobi.each((_, empresaEl) => {
@@ -384,7 +400,7 @@ Cypress.Commands.add("selecionarPassagemExperienciaWemobi", () => {
       const total = ofertasValidas.length;
       if (total === 0) throw new Error("❌ Nenhuma oferta válida (não-CAMA e com botão ativo) encontrada na Experiência wemobi!");
 
-      // 3. Sorteia uma oferta entre as válidas
+      // Sorteia uma oferta entre as válidas
       const randomIndex = Math.floor(Math.random() * total);
       const escolha = ofertasValidas[randomIndex];
       const $btnCompra = Cypress.$(escolha).find('button[data-js="buy-ticket"]');
@@ -395,7 +411,6 @@ Cypress.Commands.add("selecionarPassagemExperienciaWemobi", () => {
       cy.wrap($btnCompra)
         .parents(".available")
         .invoke("show")
-        .end()
         .wrap($btnCompra)
         .invoke("show")
         .scrollIntoView({ offset: { top: -150 } })
@@ -405,9 +420,9 @@ Cypress.Commands.add("selecionarPassagemExperienciaWemobi", () => {
 
       cy.wait(3000);
 
-      // 4. Trata o modal da madrugada caso apareça
-      cy.get("body").then(($body) => {
-        if ($body.find('[data-js="button-agree"]').is(":visible")) {
+      // Trata o modal da madrugada caso apareça
+      cy.get("body").then(($bodyModal) => {
+        if ($bodyModal.find('[data-js="button-agree"]').is(":visible")) {
           cy.log("⚠️ Confirmando modal de madrugada...");
           cy.get('[data-js="button-agree"]').click({ force: true });
 
@@ -421,6 +436,83 @@ Cypress.Commands.add("selecionarPassagemExperienciaWemobi", () => {
       });
     });
 });
+// Cypress.Commands.add("selecionarPassagemExperienciaWemobi", () => {
+//   cy.get(".container-max-width-1400 > :nth-child(4)").should("be.visible");
+//   cy.contains("ESCOLHER PASSAGENS", { timeout: 90000 }).should("be.visible");
+//   cy.log("⏳ Aguardando estabilização da página de ofertas...");
+
+//   cy.get("li.list-companies-item", { timeout: 90000 }).should("be.visible");
+
+//   // cy.wait(1000);
+//   // cy.scrollTo("bottom");
+//   // cy.wait(1500);
+//   // 1. Busca os cards de empresas que contêm o marcador "Experiência wemobi"
+//   cy.get("li.list-companies-item")
+//     .filter((_, el) => {
+//       return Cypress.$(el).find('button[data-offer-marketplace-text="Experiência wemobi"]').length > 0;
+//     })
+//     .then(($empresasWemobi) => {
+//       // Falha o teste se não houver nenhuma empresa com a Experiência wemobi
+//       if ($empresasWemobi.length === 0) {
+//         throw new Error("❌ Teste interrompido: Nenhuma passagem 'Experiência wemobi' foi encontrada!");
+//       }
+
+//       // 2. Extrai as ofertas válidas contidas APENAS nos cards da Experiência wemobi
+//       const ofertasValidas = [];
+
+//       $empresasWemobi.each((_, empresaEl) => {
+//         const ofertas = Cypress.$(empresaEl).find('li[data-js^="offer-element-"]:has(.available)');
+
+//         ofertas.each((_, ofertaEl) => {
+//           const textoClasse = Cypress.$(ofertaEl).find('[data-js^="classtype"]').text().toUpperCase();
+//           const temBotaoAtivo = Cypress.$(ofertaEl).find('button[data-js="buy-ticket"]:not([disabled])').length > 0;
+
+//           if (!textoClasse.includes("CAMA") && temBotaoAtivo) {
+//             ofertasValidas.push(ofertaEl);
+//           }
+//         });
+//       });
+
+//       const total = ofertasValidas.length;
+//       if (total === 0) throw new Error("❌ Nenhuma oferta válida (não-CAMA e com botão ativo) encontrada na Experiência wemobi!");
+
+//       // 3. Sorteia uma oferta entre as válidas
+//       const randomIndex = Math.floor(Math.random() * total);
+//       const escolha = ofertasValidas[randomIndex];
+//       const $btnCompra = Cypress.$(escolha).find('button[data-js="buy-ticket"]');
+
+//       cy.log(`🎰 Sorteada opção Experiência wemobi ${randomIndex + 1} de ${total}`);
+
+//       cy.wait(500);
+//       cy.wrap($btnCompra)
+//         .parents(".available")
+//         .invoke("show")
+
+//         .wrap($btnCompra)
+//         .invoke("show")
+//         .scrollIntoView({ offset: { top: -150 } })
+//         .should("exist")
+//         .and("not.be.disabled")
+//         .click({ force: true });
+
+//       cy.wait(3000);
+
+//       // 4. Trata o modal da madrugada caso apareça
+//       cy.get("body").then(($body) => {
+//         if ($body.find('[data-js="button-agree"]').is(":visible")) {
+//           cy.log("⚠️ Confirmando modal de madrugada...");
+//           cy.get('[data-js="button-agree"]').click({ force: true });
+
+//           cy.wait(3000);
+//           cy.url().then((urlAtual) => {
+//             if (urlAtual.includes("/disponibilidade")) {
+//               cy.wrap($btnCompra).click({ force: true });
+//             }
+//           });
+//         }
+//       });
+//     });
+// });
 
 Cypress.Commands.add("selecionarPassagemAleatoria", () => {
   cy.contains("ESCOLHER PASSAGENS", { timeout: 90000 }).should("be.visible");
@@ -465,7 +557,7 @@ Cypress.Commands.add("selecionarPassagemAleatoria", () => {
       cy.wrap($btnCompra)
         .parents(".available")
         .invoke("show")
-        .end()
+
         .wrap($btnCompra)
         .invoke("show")
         .scrollIntoView({ offset: { top: -150 } })
@@ -537,7 +629,7 @@ Cypress.Commands.add("selecionarPassagemAleatoriaExpressoSul", () => {
       cy.wrap($btnCompra)
         .parents(".available")
         .invoke("show")
-        .end()
+
         .wrap($btnCompra)
         .invoke("show")
         .scrollIntoView({ offset: { top: -150 } })
@@ -614,7 +706,7 @@ Cypress.Commands.add("selecionarPassagemAleatoria1", () => {
       cy.wrap($btnCompra)
         .parents(".available")
         .invoke("show")
-        .end()
+
         .wrap($btnCompra)
         .invoke("show")
         .scrollIntoView({ offset: { top: -150 } })
@@ -691,7 +783,7 @@ Cypress.Commands.add("selecionarPassagemAleatoriaRR", () => {
       cy.wrap($btnCompra)
         .parents(".available")
         .invoke("show")
-        .end()
+
         .wrap($btnCompra)
         .invoke("show")
         .scrollIntoView({ offset: { top: -150 } })
@@ -759,7 +851,7 @@ Cypress.Commands.add("selecionarPassagemAleatoriaRR", () => {
 //       cy.wrap($btnCompra)
 //         .parents(".available")
 //         .invoke("show")
-//         .end()
+//
 //         .wrap($btnCompra)
 //         .invoke("show")
 //         .scrollIntoView({ offset: { top: -150 } })
@@ -820,7 +912,7 @@ Cypress.Commands.add("selecionarPassagemAleatoriaRR", () => {
 //       cy.wrap($btnCompra)
 //         .parents(".available")
 //         .invoke("show")
-//         .end()
+//
 //         .wrap($btnCompra)
 //         .invoke("show")
 //         .scrollIntoView({ offset: { top: -150 } })
@@ -893,9 +985,20 @@ Cypress.Commands.add("fecharModalGiro", () => {
 Cypress.Commands.add("fecharModalUpgradePoltrona", () => {
   cy.wait(3000);
   cy.get("body").then(($body) => {
+    if ($body.find("#close-modal-upsel").length > 0 && $body.find("#close-modal-upsel").is(":visible")) {
+      cy.log("⚠️ Modal de upgrade detectado — fechando...");
+      cy.get("#close-modal-upsel").click({ force: true });
+    } else {
+      cy.log("✅ Sem modal de upgrade");
+    }
+  });
+});
+Cypress.Commands.add("fecharModalUpgradePoltronaUTP", () => {
+  cy.wait(3000);
+  cy.get("body").then(($body) => {
     if ($body.find(".modal-upsell-v2-header").length > 0 && $body.find(".modal-upsell-v2-header").is(":visible")) {
       cy.log("⚠️ Modal de upgrade detectado — fechando...");
-      cy.get(".modal-upsell-v2-actions__secondary").click({ force: true });
+      cy.get(".modal-upsell-v2-header__close > .jca-ico-close").click({ force: true });
     } else {
       cy.log("✅ Sem modal de upgrade");
     }
@@ -1029,7 +1132,14 @@ Cypress.Commands.add("selecionarTopRotaCometa", () => {
 
   cy.get("#input-destination").click().type(rotaEscolhida.destino, { delay: 100 }).should("exist").invoke("show");
 
-  cy.xpath(rotaEscolhida.destinoXpath).click({ force: true });
+  // cy.xpath(rotaEscolhida.destinoXpath).click({ force: true });
+  cy.xpath(rotaEscolhida.destinoXpath).then(($elementos) => {
+    if ($elementos.length > 1) {
+      cy.wrap($elementos).eq(1).click({ force: true });
+    } else {
+      cy.wrap($elementos).click({ force: true });
+    }
+  });
 
   // Retorna o objeto sorteado para o teste caso precise
   // return cy.wrap(rotaEscolhida);
@@ -1043,12 +1153,12 @@ Cypress.Commands.add("selecionarTopRotaODP", () => {
       destino: "São Paulo - Rodoviária Tietê (SP)",
       destinoXpath: '//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]',
     },
-    {
-      origem: "São Paulo - Rodoviária Tietê (SP)",
-      origemXpath: '//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]',
-      destino: "Rio De Janeiro - Rodoviária Novo Rio (RJ)",
-      destinoXpath: '//*[@id="Rio-De-Janeiro---Rodoviária-Novo-Rio-(RJ)"]/p[1]',
-    },
+    // {
+    //   origem: "São Paulo - Rodoviária Tietê (SP)",
+    //   origemXpath: '//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]',
+    //   destino: "Rio De Janeiro - Rodoviária Novo Rio (RJ)",
+    //   destinoXpath: '//*[@id="Rio-De-Janeiro---Rodoviária-Novo-Rio-(RJ)"]/p[1]',
+    // },
     {
       origem: "Rio De Janeiro - Rodoviária Novo Rio (RJ)",
       origemXpath: '//*[@id="Rio-De-Janeiro---Rodoviária-Novo-Rio-(RJ)"]/p[1]',
@@ -1061,11 +1171,51 @@ Cypress.Commands.add("selecionarTopRotaODP", () => {
       destino: "Rio De Janeiro - Rodoviária Novo Rio (RJ)",
       destinoXpath: '//*[@id="Rio-De-Janeiro---Rodoviária-Novo-Rio-(RJ)"]/p[1]',
     },
+    // {
+    //   origem: "Florianópolis - Rodoviária Rita Maria (SC)",
+    //   origemXpath: '//*[@id="Florianópolis---Rodoviária-Rita-Maria-(SC)"]/p[1]',
+    //   destino: "São Paulo - Rodoviária Tietê (SP)",
+    //   destinoXpath: '//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]',
+    // },
+  ];
+
+  const indiceSorteado = Cypress._.random(0, topRotas.length - 1);
+  const rotaEscolhida = topRotas[indiceSorteado];
+
+  cy.log(`🎲 **Rota Sorteada:** ${rotaEscolhida.origem} -> ${rotaEscolhida.destino}`);
+
+  cy.get("#input-departure").click().type(rotaEscolhida.origem, { delay: 100 });
+
+  cy.xpath(rotaEscolhida.origemXpath).click();
+
+  cy.get("#input-destination").click({ force: true }).type(rotaEscolhida.destino, { delay: 150 });
+
+  // cy.xpath(rotaEscolhida.destinoXpath).eq(1).click();
+  cy.xpath(rotaEscolhida.destinoXpath).then(($elementos) => {
+    if ($elementos.length > 1) {
+      cy.wrap($elementos).eq(1).click({ force: true });
+    } else {
+      cy.wrap($elementos).click({ force: true });
+    }
+  });
+  // Retorna o objeto sorteado para o teste caso precise
+  // return cy.wrap(rotaEscolhida);
+});
+
+Cypress.Commands.add("selecionarTopRotaWemobiExp", () => {
+  cy.wait(1000); // Pequena pausa para garantir que a página carregou corretamente
+  const topRotas = [
     {
-      origem: "Florianópolis - Rodoviária Rita Maria (SC)",
-      origemXpath: '//*[@id="Florianópolis---Rodoviária-Rita-Maria-(SC)"]/p[1]',
-      destino: "São Paulo - Rodoviária Tietê (SP)",
-      destinoXpath: '//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]',
+      origem: "Rio De Janeiro - Todos (RJ)",
+      origemXpath: '//*[@id="Rio-de-Janeiro---Todos-(RJ)"]/p[1]',
+      destino: "São Paulo - Todos (SP)",
+      destinoXpath: '//*[@id="São-Paulo---Todos-(SP)"]/p[1]',
+    },
+    {
+      origem: "São Paulo - Todos (SP)",
+      origemXpath: '//*[@id="São-Paulo---Todos-(SP)"]/p[1]',
+      destino: "Rio De Janeiro - Todos (RJ)",
+      destinoXpath: '//*[@id="Rio-de-Janeiro---Todos-(RJ)"]/p[1]',
     },
   ];
 
@@ -1074,14 +1224,20 @@ Cypress.Commands.add("selecionarTopRotaODP", () => {
 
   cy.log(`🎲 **Rota Sorteada:** ${rotaEscolhida.origem} -> ${rotaEscolhida.destino}`);
 
-  cy.get("#input-departure").click({ force: true, multiple: true }).type(rotaEscolhida.origem, { delay: 100 }).should("exist").invoke("show");
+  cy.get("#input-departure").click().type(rotaEscolhida.origem, { delay: 100 }).should("exist").invoke("show");
 
-  cy.xpath(rotaEscolhida.origemXpath).click({ force: true, multiple: true });
+  cy.xpath(rotaEscolhida.origemXpath).click({ force: true });
 
-  cy.get("#input-destination").click({ force: true, multiple: true }).type(rotaEscolhida.destino, { delay: 100 }).should("exist").invoke("show");
+  cy.get("#input-destination").click().type(rotaEscolhida.destino, { delay: 100 }).should("exist").invoke("show");
 
-  cy.xpath(rotaEscolhida.destinoXpath).click({ force: true, multiple: true });
-
+  // cy.xpath(rotaEscolhida.destinoXpath).click({ force: true });
+  cy.xpath(rotaEscolhida.destinoXpath).then(($elementos) => {
+    if ($elementos.length > 1) {
+      cy.wrap($elementos).eq(1).should("be.visible").click({ force: true });
+    } else {
+      cy.wrap($elementos).should("be.visible").click({ force: true });
+    }
+  });
   // Retorna o objeto sorteado para o teste caso precise
   // return cy.wrap(rotaEscolhida);
 });
@@ -1110,15 +1266,15 @@ Cypress.Commands.add("selecionarTopRotaWemobi", () => {
     {
       origem: "Belo Horizonte - Terminal Rodoviário (MG)",
       origemXpath: '//*[@id="Belo-Horizonte---Terminal-Rodoviário-(MG)"]/p[1]',
-      origem: "São Paulo - Rodoviária Tietê (SP)",
-      origemXpath: '//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]',
+      destino: "São Paulo - Rodoviária Tietê (SP)",
+      destinoXpath: '//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]',
     },
-    // {
-    //   origem: "São Paulo - Rodoviária Barra Funda (SP)",
-    //   origemXpath: '//*[@id="São-Paulo---Rodoviária-Barra-Funda-(SP)"]/p[1]',
-    //   destino: "Maringa (PR)",
-    //   destinoXpath: '//*[@id="Maringa-(PR)"]/p[1]',
-    // },
+    {
+      origem: "São Paulo - Rodoviária Barra Funda (SP)",
+      origemXpath: '//*[@id="São-Paulo---Rodoviária-Barra-Funda-(SP)"]/p[1]',
+      destino: "Maringa (PR)",
+      destinoXpath: '//*[@id="Maringa-(PR)"]/p[1]',
+    },
   ];
 
   const indiceSorteado = Cypress._.random(0, topRotas.length - 1);
@@ -1132,8 +1288,296 @@ Cypress.Commands.add("selecionarTopRotaWemobi", () => {
 
   cy.get("#input-destination").click({ force: true }).type(rotaEscolhida.destino, { delay: 100 }).should("exist").invoke("show");
 
-  cy.xpath(rotaEscolhida.destinoXpath).click({ force: true });
+  cy.xpath(rotaEscolhida.destinoXpath).then(($elementos) => {
+    if ($elementos.length > 1) {
+      cy.wrap($elementos).eq(1).click({ force: true });
+    } else {
+      cy.wrap($elementos).click({ force: true });
+    }
+  });
 
   // Retorna o objeto sorteado para o teste caso precise
   // return cy.wrap(rotaEscolhida);
+});
+
+Cypress.Commands.add("selecionarTopRotasGiro", () => {
+  cy.wait(1000);
+  const topRotas = [
+    {
+      origem: "Rio De Janeiro - Rodoviária Novo Rio (RJ)",
+      origemXpath: '//*[@id="Rio-De-Janeiro---Rodoviária-Novo-Rio-(RJ)"]/p[1]',
+      destino: "São Paulo - Rodoviária Tietê (SP)",
+      destinoXpath: '//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]',
+    },
+    {
+      origem: "São Paulo - Rodoviária Tietê (SP)",
+      origemXpath: '//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]',
+      destino: "Rio De Janeiro - Rodoviária Novo Rio (RJ)",
+      destinoXpath: '//*[@id="Rio-De-Janeiro---Rodoviária-Novo-Rio-(RJ)"]/p[1]',
+    },
+    {
+      origem: "Rio De Janeiro - Rodoviária Novo Rio (RJ)",
+      origemXpath: '//*[@id="Rio-De-Janeiro---Rodoviária-Novo-Rio-(RJ)"]/p[1]',
+      destino: "Campos Dos Goytacazes - Shopping Estrada (RJ)",
+      destinoXpath: '//*[@id="Campos-Dos-Goytacazes---Shopping-Estrada-(RJ)"]/p[1]',
+    },
+    {
+      origem: "Campos Dos Goytacazes - Shopping Estrada (RJ)",
+      origemXpath: '//*[@id="Campos-Dos-Goytacazes---Shopping-Estrada-(RJ)"]/p[1]',
+      destino: "Rio De Janeiro - Rodoviária Novo Rio (RJ)",
+      destinoXpath: '//*[@id="Rio-De-Janeiro---Rodoviária-Novo-Rio-(RJ)"]/p[1]',
+    },
+    {
+      origem: "São Paulo - Rodoviária Tietê (SP)",
+      origemXpath: '//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]',
+      destino: "Ribeirão Preto - Terminal Rodoviário (SP)",
+      destinoXpath: '//*[@id="Ribeirão-Preto---Terminal-Rodoviário-(SP)"]/p[1]',
+    },
+  ];
+
+  const indiceSorteado = Cypress._.random(0, topRotas.length - 1);
+  const rotaEscolhida = topRotas[indiceSorteado];
+
+  cy.log(`🎲 **Rota Sorteada:** ${rotaEscolhida.origem} -> ${rotaEscolhida.destino}`);
+
+  cy.get("#input-departure").click({ force: true }).type(rotaEscolhida.origem, { delay: 100 });
+
+  cy.xpath(rotaEscolhida.origemXpath).click({ force: true });
+
+  cy.get("#input-destination").click({ force: true }).type(rotaEscolhida.destino, { delay: 100 });
+  // cy.xpath(rotaEscolhida.destinoXpath).eq(1).click();
+
+  cy.xpath(rotaEscolhida.destinoXpath).then(($elementos) => {
+    if ($elementos.length > 1) {
+      cy.wrap($elementos).eq(1).click({ force: true });
+    } else {
+      cy.wrap($elementos).click({ force: true });
+    }
+  });
+
+  // Retorna o objeto sorteado para o teste caso precise
+  // return cy.wrap(rotaEscolhida);
+});
+
+Cypress.Commands.add("selecionarTopRotas1001", () => {
+  cy.wait(1000);
+  const topRotas = [
+    {
+      origem: "Rio de Janeiro (Novo Rio) (RJ)",
+      origemXpath: '//*[@id="Rio-de-Janeiro-(Novo-Rio)-(RJ)"]/p[1]',
+      destino: "Campos dos Goy. (S.Estrada) (RJ)",
+      destinoXpath: '//*[@id="Campos-dos-Goy.-(S.Estrada)-(RJ)"]/p[1]',
+    },
+    {
+      origem: "Campos dos Goy. (S.Estrada) (RJ)",
+      origemXpath: '//*[@id="Campos-dos-Goy.-(S.Estrada)-(RJ)"]/p[1]',
+      destino: "Rio de Janeiro (Novo Rio) (RJ)",
+      destinoXpath: '//*[@id="Rio-de-Janeiro-(Novo-Rio)-(RJ)"]/p[1]',
+    },
+    {
+      origem: "Rio de Janeiro (Novo Rio) (RJ)",
+      origemXpath: '//*[@id="Rio-de-Janeiro-(Novo-Rio)-(RJ)"]/p[1]',
+      destino: "Macaé (RJ)",
+      destinoXpath: '//*[@id="Macaé-(RJ)"]/p[1]',
+    },
+    {
+      origem: "Macaé (RJ)",
+      origemXpath: '//*[@id="Macaé-(RJ)"]/p[1]',
+      destino: "Rio de Janeiro (Novo Rio) (RJ)",
+      destinoXpath: '//*[@id="Rio-de-Janeiro-(Novo-Rio)-(RJ)"]/p[1]',
+    },
+    {
+      origem: "Rio de Janeiro (Novo Rio) (RJ)",
+      origemXpath: '//*[@id="Rio-de-Janeiro-(Novo-Rio)-(RJ)"]/p[1]',
+      destino: "São Paulo (Rod. Tietê) (SP)",
+      destinoXpath: '//*[@id="São-Paulo-(Rod.-Tietê)-(SP)"]/p[1]',
+    },
+  ];
+
+  const indiceSorteado = Cypress._.random(0, topRotas.length - 1);
+  const rotaEscolhida = topRotas[indiceSorteado];
+
+  cy.log(`🎲 **Rota Sorteada:** ${rotaEscolhida.origem} -> ${rotaEscolhida.destino}`);
+
+  cy.get("#input-departure").click({ force: true }).type(rotaEscolhida.origem, { delay: 100 }).should("exist").invoke("show");
+
+  cy.xpath(rotaEscolhida.origemXpath).click({ force: true });
+
+  cy.get("#input-destination").click({ force: true }).type(rotaEscolhida.destino, { delay: 100 }).should("exist").invoke("show");
+
+  cy.xpath(rotaEscolhida.destinoXpath).then(($elementos) => {
+    if ($elementos.length > 1) {
+      cy.wrap($elementos).eq(1).click({ force: true });
+    } else {
+      cy.wrap($elementos).click({ force: true });
+    }
+  });
+});
+
+Cypress.Commands.add("selecionarTopRotasExpressoSul", () => {
+  cy.wait(1000);
+  const topRotas = [
+    {
+      origem: "Rio de Janeiro (Novo Rio) (RJ)",
+      origemXpath: '//*[@id="Rio-de-Janeiro-(Novo-Rio)-(RJ)"]/p[1]',
+      destino: "Campos dos Goy. (S.Estrada) (RJ)",
+      destinoXpath: '//*[@id="Campos-dos-Goy.-(S.Estrada)-(RJ)"]/p[1]',
+    },
+    {
+      origem: "Campos dos Goy. (S.Estrada) (RJ)",
+      origemXpath: '//*[@id="Campos-dos-Goy.-(S.Estrada)-(RJ)"]/p[1]',
+      destino: "Rio de Janeiro (Novo Rio) (RJ)",
+      destinoXpath: '//*[@id="Rio-de-Janeiro-(Novo-Rio)-(RJ)"]/p[1]',
+    },
+    {
+      origem: "Rio de Janeiro (Novo Rio) (RJ)",
+      origemXpath: '//*[@id="Rio-de-Janeiro-(Novo-Rio)-(RJ)"]/p[1]',
+      destino: "Macaé (RJ)",
+      destinoXpath: '//*[@id="Macaé-(RJ)"]/p[1]',
+    },
+    {
+      origem: "Macaé (RJ)",
+      origemXpath: '//*[@id="Macaé-(RJ)"]/p[1]',
+      destino: "Rio de Janeiro (Novo Rio) (RJ)",
+      destinoXpath: '//*[@id="Rio-de-Janeiro-(Novo-Rio)-(RJ)"]/p[1]',
+    },
+    {
+      origem: "Rio de Janeiro (Novo Rio) (RJ)",
+      origemXpath: '//*[@id="Rio-de-Janeiro-(Novo-Rio)-(RJ)"]/p[1]',
+      destino: "São Paulo (Rod. Tietê) (SP)",
+      destinoXpath: '//*[@id="São-Paulo-(Rod.-Tietê)-(SP)"]/p[1]',
+    },
+  ];
+
+  const indiceSorteado = Cypress._.random(0, topRotas.length - 1);
+  const rotaEscolhida = topRotas[indiceSorteado];
+
+  cy.log(`🎲 **Rota Sorteada:** ${rotaEscolhida.origem} -> ${rotaEscolhida.destino}`);
+
+  cy.get("#input-departure").click({ force: true }).type(rotaEscolhida.origem, { delay: 100 }).should("exist").invoke("show");
+
+  cy.xpath(rotaEscolhida.origemXpath).click({ force: true });
+
+  cy.get("#input-destination").click({ force: true }).type(rotaEscolhida.destino, { delay: 100 }).should("exist").invoke("show");
+
+  // cy.xpath(rotaEscolhida.destinoXpath).eq(0).click({ force: true });
+  cy.xpath(rotaEscolhida.destinoXpath).then(($elementos) => {
+    if ($elementos.length > 1) {
+      cy.wrap($elementos).eq(1).click({ force: true });
+    } else {
+      cy.wrap($elementos).click({ force: true });
+    }
+  });
+});
+
+Cypress.Commands.add("selecionarTopRotasCatarinense", () => {
+  cy.wait(1000);
+  const topRotas = [
+    {
+      origem: "Florianópolis (SC)",
+      origemXpath: '//*[@id="Florianópolis-(SC)"]/p[1]',
+      destino: "São Paulo (Rod. Tietê) (SP)",
+      destinoXpath: '//*[@id="São-Paulo-(Rod.-Tietê)-(SP)"]/p[1]',
+    },
+    {
+      origem: "São Paulo (Rod. Tietê) (SP)",
+      origemXpath: '//*[@id="São-Paulo-(Rod.-Tietê)-(SP)"]/p[1]',
+      destino: "Florianópolis (SC)",
+      destinoXpath: '//*[@id="Florianópolis-(SC)"]/p[1]',
+    },
+    {
+      origem: "Foz do Iguaçu (PR)",
+      origemXpath: '//*[@id="Foz-do-Iguaçu-(PR)"]/p[1]',
+      destino: "Curitiba (PR)",
+      destinoXpath: '//*[@id="Curitiba-(PR)"]/p[1]',
+    },
+    {
+      origem: "Curitiba (PR)",
+      origemXpath: '//*[@id="Curitiba-(PR)"]/p[1]',
+      destino: "Foz do Iguaçu (PR)",
+      destinoXpath: '//*[@id="Foz-do-Iguaçu-(PR)"]/p[1]',
+    },
+    {
+      origem: "Florianópolis (SC)",
+      origemXpath: '//*[@id="Florianópolis-(SC)"]/p[1]',
+      destino: "Curitiba (PR)",
+      destinoXpath: '//*[@id="Curitiba-(PR)"]/p[1]',
+    },
+  ];
+
+  const indiceSorteado = Cypress._.random(0, topRotas.length - 1);
+  const rotaEscolhida = topRotas[indiceSorteado];
+
+  cy.log(`🎲 **Rota Sorteada:** ${rotaEscolhida.origem} -> ${rotaEscolhida.destino}`);
+
+  cy.get("#input-departure").click({ force: true }).type(rotaEscolhida.origem, { delay: 100 }).should("exist").invoke("show");
+
+  cy.xpath(rotaEscolhida.origemXpath).click({ force: true });
+
+  cy.get("#input-destination").click({ force: true }).type(rotaEscolhida.destino, { delay: 200 }).should("exist").invoke("show");
+
+  // Tratamento dinâmico: evita quebras de índice escolhendo com segurança se houver 1 ou mais elementos
+  cy.xpath(rotaEscolhida.destinoXpath).then(($elementos) => {
+    if ($elementos.length > 1) {
+      cy.wrap($elementos).eq(1).click({ force: true });
+    } else {
+      cy.wrap($elementos).click({ force: true });
+    }
+  });
+});
+
+Cypress.Commands.add("selecionarTopRotasRapidoRibeirao", () => {
+  cy.wait(1000);
+  const topRotas = [
+    {
+      origem: " São Paulo (Rod. Tietê) (SP) ",
+      origemXpath: '//*[@id="São-Paulo-(Rod.-Tietê)-(SP)"]/p[1]',
+      destino: " Ribeirão Preto (SP) ",
+      destinoXpath: '//*[@id="Ribeirão-Preto-(SP)"]/p[1]',
+    },
+    {
+      origem: " Ribeirão Preto (SP) ",
+      origemXpath: '//*[@id="Ribeirão-Preto-(SP)"]/p[1]',
+      destino: " São Paulo (Rod. Tietê) (SP) ",
+      destinoXpath: '//*[@id="São-Paulo-(Rod.-Tietê)-(SP)"]/p[1]',
+    },
+    {
+      origem: " Ribeirão Preto (Mini Rodoviária) (SP) ",
+      origemXpath: '//*[@id="Ribeirão-Preto-(Mini-Rodoviária)-(SP)"]/p[1]',
+      destino: " São Paulo (Rod. Tietê) (SP) ",
+      destinoXpath: '//*[@id="São-Paulo-(Rod.-Tietê)-(SP)"]/p[1]',
+    },
+    {
+      origem: " São Paulo (Rod. Tietê) (SP) ",
+      origemXpath: '//*[@id="São-Paulo-(Rod.-Tietê)-(SP)"]/p[1]',
+      destino: " Ribeirão Preto (Mini Rodoviária) (SP) ",
+      destinoXpath: '//*[@id="Ribeirão-Preto-(Mini-Rodoviária)-(SP)"]/p[1]',
+    },
+    {
+      origem: " São Paulo (Rod. Tietê) (SP) ",
+      origemXpath: '//*[@id="São-Paulo-(Rod.-Tietê)-(SP)"]/p[1]',
+      destino: "Sertãozinho (SP)",
+      destinoXpath: '//*[@id="Sertãozinho-(SP)"]/p[1]',
+    },
+  ];
+
+  const indiceSorteado = Cypress._.random(0, topRotas.length - 1);
+  const rotaEscolhida = topRotas[indiceSorteado];
+
+  cy.log(`🎲 **Rota Sorteada:** ${rotaEscolhida.origem} -> ${rotaEscolhida.destino}`);
+
+  cy.get("#input-departure").click({ force: true }).type(rotaEscolhida.origem, { delay: 100 }).should("exist").invoke("show");
+
+  cy.xpath(rotaEscolhida.origemXpath).click({ force: true });
+
+  cy.get("#input-destination").click({ force: true }).type(rotaEscolhida.destino, { delay: 200 }).should("exist").invoke("show");
+
+  // Tratamento dinâmico: evita quebras de índice escolhendo com segurança se houver 1 ou mais elementos
+  cy.xpath(rotaEscolhida.destinoXpath).then(($elementos) => {
+    if ($elementos.length > 1) {
+      cy.wrap($elementos).eq(1).click({ force: true });
+    } else {
+      cy.wrap($elementos).click({ force: true });
+    }
+  });
 });

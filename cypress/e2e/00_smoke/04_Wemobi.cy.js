@@ -1,4 +1,3 @@
-// 06/06/2026 - incio com github actions
 /// <reference types="cypress" />
 /// <reference types="@cypress/xpath" />
 
@@ -30,14 +29,14 @@ describe("Wemobi", () => {
       LoginPage.wemobiConfirmarLogin();
       LoginPage.wemobiLogadoComSucesso();
     });
-    SearchPage.wemobiBuscaOrigem();
-    SearchPage.wemobiBuscaDestino();
+    SearchPage.wemobiBuscaRotasExp();
     SearchPage.wemobiDataIda();
     SearchPage.wemobiConfirmarBusca();
+    cy.wait(3000);
     OfferPage.passagemExperienciaWemobi();
     PassengerPage.wemobiSelecionarPassageiro();
     SeatMapPage.wemobiSelecionarAssentoMarcado();
-    // CheckoutPage.wemobiResumoCompra();
+    CheckoutPage.wemobiResumoCompra();
   });
 
   it("Wemobi - exp. Wemobi Assento Aleatório", () => {
@@ -49,14 +48,14 @@ describe("Wemobi", () => {
       LoginPage.wemobiConfirmarLogin();
       LoginPage.wemobiLogadoComSucesso();
     });
-    SearchPage.wemobiBuscaOrigem();
-    SearchPage.wemobiBuscaDestino();
+    SearchPage.wemobiBuscaRotasExp();
     SearchPage.wemobiDataIda();
     SearchPage.wemobiConfirmarBusca();
+    cy.wait(3000);
     OfferPage.passagemExperienciaWemobi();
     PassengerPage.wemobiSelecionarPassageiro();
     SeatMapPage.wemobiSelecionarAssentoAleatorio();
-    // CheckoutPage.wemobiResumoCompra();
+    CheckoutPage.wemobiResumoCompra();
   });
 
   it("Wemobi - Sem exp. Wemobi Lugar Marcado", () => {
@@ -68,14 +67,14 @@ describe("Wemobi", () => {
       LoginPage.wemobiConfirmarLogin();
       LoginPage.wemobiLogadoComSucesso();
     });
-    SearchPage.wemobiBuscaOrigem();
-    SearchPage.wemobiBuscaDestino();
+    SearchPage.wemobiBuscaRotas();
     SearchPage.wemobiDataIda();
     SearchPage.wemobiConfirmarBusca();
+    cy.wait(3000);
     OfferPage.passagemSemExperienciaWemobi();
     PassengerPage.wemobiSelecionarPassageiro();
     SeatMapPage.wemobiSelecionarAssentoMarcado();
-    // CheckoutPage.wemobiResumoCompra();
+    CheckoutPage.wemobiResumoCompra();
   });
 
   it("Wemobi - Sem exp. Wemobi Assento Aleatório", () => {
@@ -87,13 +86,13 @@ describe("Wemobi", () => {
       LoginPage.wemobiConfirmarLogin();
       LoginPage.wemobiLogadoComSucesso();
     });
-    SearchPage.wemobiBuscaOrigem();
-    SearchPage.wemobiBuscaDestino();
+    SearchPage.wemobiBuscaRotas();
     SearchPage.wemobiDataIda();
     SearchPage.wemobiConfirmarBusca();
+    cy.wait(3000);
     OfferPage.passagemSemExperienciaWemobi();
     PassengerPage.wemobiSelecionarPassageiro();
     SeatMapPage.wemobiSelecionarAssentoAleatorio();
-    // CheckoutPage.wemobiResumoCompra();
+    CheckoutPage.wemobiResumoCompra();
   });
 });

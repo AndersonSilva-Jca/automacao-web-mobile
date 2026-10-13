@@ -1,4 +1,3 @@
-// 06/06/2026 - incio com github actions
 /// <reference types="cypress" />
 /// <reference types="@cypress/xpath" />
 
@@ -32,13 +31,13 @@ describe("Clube Giro", () => {
     });
     LoginPage.preencher2FA();
     LoginPage.giroLogadoComSucesso();
-    SearchPage.giroBuscaOrigem();
-    SearchPage.giroBuscaDestino();
+    SearchPage.giroBuscaTopRotasGiro();
+    // SearchPage.giroBuscaDestino();
     SearchPage.giroDataIda();
     SearchPage.giroConfirmarBusca();
     OfferPage.giroSelecionarPassagemIda();
     PassengerPage.giroSelecionarPassageiro();
     SeatMapPage.giroSelecionarAssento();
-    // CheckoutPage.giroResumoCompra();
+    CheckoutPage.giroResumoCompra();
   });
 });
