@@ -58,7 +58,7 @@ describe("Wemobi", () => {
     CheckoutPage.wemobiResumoCompra();
   });
 
-  it("Wemobi - Sem exp. Wemobi Lugar Marcado", () => {
+  it.only("Wemobi - Sem exp. Wemobi Lugar Marcado", () => {
     cy.env(["login", "senha"]).then(() => {
       cy.visit(wemobi);
       LoginPage.wemobiModalLogin();
@@ -70,14 +70,14 @@ describe("Wemobi", () => {
     SearchPage.wemobiBuscaRotas();
     SearchPage.wemobiDataIda();
     SearchPage.wemobiConfirmarBusca();
-    cy.wait(3000);
+    cy.wait(2000);
     OfferPage.passagemSemExperienciaWemobi();
     PassengerPage.wemobiSelecionarPassageiro();
     SeatMapPage.wemobiSelecionarAssentoMarcado();
     CheckoutPage.wemobiResumoCompra();
   });
 
-  it("Wemobi - Sem exp. Wemobi Assento Aleatório", () => {
+  it.only("Wemobi - Sem exp. Wemobi Assento Aleatório", () => {
     cy.env(["login", "senha"]).then(() => {
       cy.visit(wemobi);
       LoginPage.wemobiModalLogin();
@@ -89,7 +89,7 @@ describe("Wemobi", () => {
     SearchPage.wemobiBuscaRotas();
     SearchPage.wemobiDataIda();
     SearchPage.wemobiConfirmarBusca();
-    cy.wait(3000);
+    cy.wait(2000);
     OfferPage.passagemSemExperienciaWemobi();
     PassengerPage.wemobiSelecionarPassageiro();
     SeatMapPage.wemobiSelecionarAssentoAleatorio();

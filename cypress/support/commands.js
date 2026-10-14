@@ -335,7 +335,7 @@ Cypress.Commands.add("selecionarPassagemSemExperienciaWemobi", () => {
           cy.log("⚠️ Confirmando modal de madrugada...");
           cy.get('[data-js="button-agree"]').click({ force: true });
 
-          cy.wait(3000);
+          cy.wait(2000);
           cy.url().then((urlAtual) => {
             if (urlAtual.includes("/disponibilidade")) {
               cy.wrap($btnCompra).click({ force: true });
@@ -985,14 +985,16 @@ Cypress.Commands.add("fecharModalGiro", () => {
 Cypress.Commands.add("fecharModalUpgradePoltrona", () => {
   cy.wait(3000);
   cy.get("body").then(($body) => {
-    if ($body.find("#close-modal-upsel").length > 0 && $body.find("#close-modal-upsel").is(":visible")) {
+    if ($body.find("#modal-upsel").length > 0 && $body.find("#modal-upsel").is(":visible")) {
       cy.log("⚠️ Modal de upgrade detectado — fechando...");
+      cy.wait(1000);
       cy.get("#close-modal-upsel").click({ force: true });
     } else {
       cy.log("✅ Sem modal de upgrade");
     }
   });
 });
+
 Cypress.Commands.add("fecharModalUpgradePoltronaUTP", () => {
   cy.wait(3000);
   cy.get("body").then(($body) => {
