@@ -6,9 +6,11 @@ class HomePage {
     cy.contains(loc.ODH_ASSERT_MINHAS_VIAGENS).should("be.visible");
     cy.contains(loc.ODH_ASSERT_CARRINHO).should("be.visible");
   }
+
   odhHome() {
     cy.get(loc.ODH_HOME).click();
   }
+
   odhPromoHoje() {
     cy.contains(loc.ODH_ASSERT_PROMO_HOJE).should("be.visible");
     cy.get(loc.ODH_PROMO_HOJE_1).click();

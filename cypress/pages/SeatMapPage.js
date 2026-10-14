@@ -15,7 +15,6 @@ class SeatMapPage {
   }
 
   //ODP
-
   odpSelecionarAssentoMarcado() {
     cy.get(loc.ODP_BOTAO_RESERVAR_ASSENTO).click().log("Selecionando assento");
     cy.get(loc.ODP_BOTAO_ESCOLHER_ASSENTO).click();
@@ -30,6 +29,7 @@ class SeatMapPage {
     cy.get(loc.WEMOBI_BOTAO_ESCOLHER_ASSENTO).click();
     cy.selecionarAssentoAleatorioWemobi();
   }
+
   wemobiSelecionarAssentoAleatorio() {
     cy.fecharModalUpgradePoltrona();
     cy.get(loc.WEMOBI_BOTAO_RESERVAR_ASSENTO).click().log("Selecionando assento");

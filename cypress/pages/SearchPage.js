@@ -6,6 +6,7 @@ class SearchPage {
     cy.get(loc.BUSCAS.ORIGEM).click().type(loc.SP_TIETE, { delay: 100 }).should("exist").invoke("show");
     cy.xpath(loc.XPATH_SP_TIETE).click({ force: true });
   }
+
   buscaTopRotasCometa() {
     cy.selecionarTopRotaCometa();
   }
@@ -16,40 +17,35 @@ class SearchPage {
 
   buscaTopRotasRapidoRibeirao() {
     cy.selecionarTopRotasRapidoRibeirao();
-    // cy.get(loc.BUSCAS.ORIGEM).click().type("Sertãozinho (SP)", { delay: 100 }).should("exist").invoke("show");
-    // cy.xpath('//*[@id="Sertãozinho-(SP)"]/p[1]').click({ force: true });
   }
 
   buscaTopRotas1001() {
     cy.selecionarTopRotas1001();
-    // cy.get(loc.BUSCAS.ORIGEM).click().type(loc.RJ_TODOS, { delay: 100 }).should("exist").invoke("show");
-    // cy.xpath(loc.XPATH_RJ_TODOS).click({ force: true });
   }
 
   buscaOrigemExpressoSul() {
     cy.selecionarTopRotasExpressoSul();
-    // cy.get(loc.BUSCAS.ORIGEM).click().type("Curitiba (PR)", { delay: 100 }).should("exist").invoke("show");
-    // cy.xpath(loc.XPATH_Curitiba_PR).click({ force: true });
   }
 
   buscaDestinoRR() {
     cy.get(loc.BUSCAS.DESTINO).click().type(loc.SP_TIETE, { delay: 100 }).should("exist").invoke("show");
     cy.xpath(loc.XPATH_SP_TIETE).filter(":visible").first().click({ force: true });
   }
+
   buscaDestino() {
     cy.get(loc.BUSCAS.ORIGEM).click().type(loc.SP_TIETE, { delay: 100 }).should("exist").invoke("show");
     cy.xpath(loc.XPATH_SP_TIETE).click({ force: true });
   }
+
   buscaTopRotasCatarinense() {
     cy.selecionarTopRotasCatarinense();
-    // cy.get(loc.BUSCAS.DESTINO).click().type("Florianópolis (SC)", { delay: 25 }).should("exist").invoke("show");
-    // cy.get('a[id="Florianópolis-(SC)"]', { timeout: 10000 }).filter(":visible").first().click({ force: true });
   }
 
   buscaDestinoCometa() {
     cy.get(loc.BUSCAS.DESTINO).click().type("Curitiba - PR", { delay: 100 }).should("exist").invoke("show");
     cy.xpath(loc.XPATH_Curitiba_PR).click({ force: true });
   }
+
   buscaDestino1001() {
     cy.get(loc.BUSCAS.DESTINO).click().type(loc.SP_TIETE, { delay: 100 }).should("exist").invoke("show");
     cy.xpath(loc.XPATH_SP_TIETE).click({ force: true });
@@ -58,7 +54,6 @@ class SearchPage {
   buscaDestinoExpressoSul() {
     cy.get(loc.BUSCAS.DESTINO).click().type("Florianópolis (SC)", { delay: 100 }).should("exist").invoke("show");
     cy.get('a[id="Florianópolis-(SC)"]', { timeout: 10000 }).filter(":visible").first().click({ force: true });
-    // cy.xpath(loc.XPATH_FLORIPA_SC).click({ force: true });
   }
 
   confirmarBusca() {
@@ -67,7 +62,6 @@ class SearchPage {
 
   dataIda() {
     cy.get(loc.BUSCAS.DATA_IDA).click();
-    // cy.selecionarDataIda(4);
     cy.selecionarDataIda();
   }
 
@@ -123,12 +117,6 @@ class SearchPage {
   //------------------ CLUBE GIRO ------------------
   giroBuscaTopRotasGiro() {
     cy.selecionarTopRotasGiro();
-    // cy.get(loc.BUSCAS.ORIGEM).clear().click({ force: true });
-    // cy.get(loc.BUSCAS.ORIGEM).clear().click().type("São Paulo - Todos (SP)", { delay: 150 });
-    // cy.get(loc.BUSCAS.ORIGEM).clear().click().type("São Paulo - Todos (SP)", { delay: 150 });
-    // cy.get(loc.BUSCAS.ORIGEM).clear().click({ force: true });
-    // cy.get(loc.BUSCAS.ORIGEM).click().type("São Paulo - Todos (SP)", { delay: 100 });
-    // cy.contains("São Paulo - Todos (SP)").click({ force: true });
   }
 
   giroBuscaDestino() {
@@ -138,7 +126,6 @@ class SearchPage {
 
   giroDataIda() {
     cy.get(loc.BUSCAS.DATA_IDA).click();
-    // cy.get(loc.LOADER).should("not.exist");
     cy.selecionarDataIda(5);
     cy.fecharModalGiro();
   }
@@ -151,14 +138,10 @@ class SearchPage {
   //------------------ WEMOBI ------------------
   wemobiBuscaRotasExp() {
     cy.selecionarTopRotaWemobiExp();
-    // cy.get(loc.BUSCAS.ORIGEM).click().type("São Paulo - Todos (SP)", { delay: 100 });
-    // cy.xpath(loc.WEMOBI_XPATH_SP).click({ force: true });
   }
 
   wemobiBuscaRotas() {
     cy.selecionarTopRotaWemobi();
-    // cy.get(loc.BUSCAS.DESTINO).click().type("Rio De Janeiro - Todos (RJ)", { delay: 100 });
-    // cy.xpath(loc.WEMOBI_XPATH_RJ).click({ force: true });
   }
 
   wemobiDataIda() {
