@@ -32,7 +32,6 @@ describe("Expresso do Sul", () => {
       LoginPage.logadoComSucesso();
     });
     SearchPage.buscaOrigemExpressoSul();
-    // SearchPage.buscaDestinoExpressoSul();
     SearchPage.dataIda();
     SearchPage.confirmarBusca();
     OfferPage.selecionarPassagemIdaExpressoSul();

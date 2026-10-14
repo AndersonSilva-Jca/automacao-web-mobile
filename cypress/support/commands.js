@@ -1247,18 +1247,18 @@ Cypress.Commands.add("selecionarTopRotaWemobiExp", () => {
 Cypress.Commands.add("selecionarTopRotaWemobi", () => {
   cy.wait(1000); // Pequena pausa para garantir que a página carregou corretamente
   const topRotas = [
-    {
-      origem: "Rio De Janeiro - Rodoviária Novo Rio (RJ)",
-      origemXpath: '//*[@id="Rio-De-Janeiro---Rodoviária-Novo-Rio-(RJ)"]/p[1]',
-      destino: "São Paulo - Rodoviária Tietê (SP)",
-      destinoXpath: '//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]',
-    },
-    {
-      origem: "São Paulo - Rodoviária Tietê (SP)",
-      origemXpath: '//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]',
-      destino: "Rio De Janeiro - Rodoviária Novo Rio (RJ)",
-      destinoXpath: '//*[@id="Rio-De-Janeiro---Rodoviária-Novo-Rio-(RJ)"]/p[1]',
-    },
+    // {
+    //   origem: "Rio De Janeiro - Rodoviária Novo Rio (RJ)",
+    //   origemXpath: '//*[@id="Rio-De-Janeiro---Rodoviária-Novo-Rio-(RJ)"]/p[1]',
+    //   destino: "São Paulo - Rodoviária Tietê (SP)",
+    //   destinoXpath: '//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]',
+    // },
+    // {
+    //   origem: "São Paulo - Rodoviária Tietê (SP)",
+    //   origemXpath: '//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]',
+    //   destino: "Rio De Janeiro - Rodoviária Novo Rio (RJ)",
+    //   destinoXpath: '//*[@id="Rio-De-Janeiro---Rodoviária-Novo-Rio-(RJ)"]/p[1]',
+    // },
     {
       origem: "São Paulo - Rodoviária Tietê (SP)",
       origemXpath: '//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]',

@@ -33,7 +33,6 @@ describe("Catarinense", () => {
       LoginPage.logadoComSucesso();
     });
     SearchPage.buscaTopRotasCatarinense();
-    // SearchPage.buscaDestinoCatarinense();
     SearchPage.dataIda();
     SearchPage.confirmarBusca();
     OfferPage.selecionarPassagemIda();
