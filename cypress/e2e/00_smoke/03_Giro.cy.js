@@ -32,7 +32,6 @@ describe("Clube Giro", () => {
     LoginPage.preencher2FA();
     LoginPage.giroLogadoComSucesso();
     SearchPage.giroBuscaTopRotasGiro();
-    // SearchPage.giroBuscaDestino();
     SearchPage.giroDataIda();
     SearchPage.giroConfirmarBusca();
     OfferPage.giroSelecionarPassagemIda();

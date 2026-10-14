@@ -987,7 +987,7 @@ Cypress.Commands.add("fecharModalUpgradePoltrona", () => {
   cy.get("body").then(($body) => {
     if ($body.find("#modal-upsel").length > 0 && $body.find("#modal-upsel").is(":visible")) {
       cy.log("⚠️ Modal de upgrade detectado — fechando...");
-      cy.wait(1000);
+      cy.wait(2000);
       cy.get("#close-modal-upsel").click({ force: true });
     } else {
       cy.log("✅ Sem modal de upgrade");

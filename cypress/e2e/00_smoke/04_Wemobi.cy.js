@@ -58,7 +58,7 @@ describe("Wemobi", () => {
     CheckoutPage.wemobiResumoCompra();
   });
 
-  it.only("Wemobi - Sem exp. Wemobi Lugar Marcado", () => {
+  it("Wemobi - Sem exp. Wemobi Lugar Marcado", () => {
     cy.env(["login", "senha"]).then(() => {
       cy.visit(wemobi);
       LoginPage.wemobiModalLogin();
@@ -77,7 +77,7 @@ describe("Wemobi", () => {
     CheckoutPage.wemobiResumoCompra();
   });
 
-  it.only("Wemobi - Sem exp. Wemobi Assento Aleatório", () => {
+  it("Wemobi - Sem exp. Wemobi Assento Aleatório", () => {
     cy.env(["login", "senha"]).then(() => {
       cy.visit(wemobi);
       LoginPage.wemobiModalLogin();
