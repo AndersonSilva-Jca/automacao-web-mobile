@@ -53,6 +53,7 @@ module.exports = defineConfig({
     cypress_r2_account_id: process.env.CYPRESS_R2_ACCOUNT_ID,
   },
   e2e: {
+    userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
     testIsolation: true,
     retries: {
       runMode: 1, // O GitHub Actions vai tentar até 3 vezes se o elemento sumir do DOM
