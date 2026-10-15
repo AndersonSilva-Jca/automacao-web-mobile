@@ -73,6 +73,7 @@ describe("Wemobi", () => {
     cy.wait(2000);
     OfferPage.passagemSemExperienciaWemobi();
     PassengerPage.wemobiSelecionarPassageiro();
+    cy.wait(6000);
     SeatMapPage.wemobiSelecionarAssentoMarcado();
     CheckoutPage.wemobiResumoCompra();
   });
@@ -92,6 +93,7 @@ describe("Wemobi", () => {
     cy.wait(2000);
     OfferPage.passagemSemExperienciaWemobi();
     PassengerPage.wemobiSelecionarPassageiro();
+    cy.wait(6000);
     SeatMapPage.wemobiSelecionarAssentoAleatorio();
     CheckoutPage.wemobiResumoCompra();
   });

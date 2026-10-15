@@ -11,6 +11,7 @@ import SeatMapPage from "../../pages/SeatMapPage";
 import CheckoutPage from "../../pages/CheckoutPage";
 
 const cometa = "https://www.viacaocometa.com.br/?utm_source=synthetic_test&utm_medium=internal&utm_campaign=operacao";
+// const cometaDev = "https://jca-dev65.adobecqms.net/cometa";
 
 describe("Viação Cometa", () => {
   beforeEach(() => {

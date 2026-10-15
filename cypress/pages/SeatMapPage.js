@@ -23,8 +23,8 @@ class SeatMapPage {
 
   // WEMOBI
   wemobiSelecionarAssentoMarcado() {
+    cy.wait(6000);
     cy.get(loc.WEMOBI_BOTAO_RESERVAR_ASSENTO).click().log("Selecionando assento");
-    cy.wait(2000);
     cy.fecharModalUpgradePoltrona();
 
     cy.get(loc.WEMOBI_BOTAO_ESCOLHER_ASSENTO).click();
@@ -32,7 +32,7 @@ class SeatMapPage {
   }
 
   wemobiSelecionarAssentoAleatorio() {
-    cy.wait(3000);
+    cy.wait(6000);
     cy.url("/poltrona");
     cy.fecharModalUpgradePoltrona();
     cy.get(loc.WEMOBI_BOTAO_RESERVAR_ASSENTO).click().log("Selecionando assento");
