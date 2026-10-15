@@ -23,17 +23,17 @@ class SeatMapPage {
 
   // WEMOBI
   wemobiSelecionarAssentoMarcado() {
+    cy.url("/poltrona", { timeout: 20000 });
     cy.wait(6000);
-    cy.get(loc.WEMOBI_BOTAO_RESERVAR_ASSENTO).click().log("Selecionando assento");
     cy.fecharModalUpgradePoltrona();
-
+    cy.get(loc.WEMOBI_BOTAO_RESERVAR_ASSENTO).click().log("Selecionando assento");
     cy.get(loc.WEMOBI_BOTAO_ESCOLHER_ASSENTO).click();
     cy.selecionarAssentoAleatorioWemobi();
   }
 
   wemobiSelecionarAssentoAleatorio() {
+    cy.url("/poltrona", { timeout: 20000 });
     cy.wait(6000);
-    cy.url("/poltrona");
     cy.fecharModalUpgradePoltrona();
     cy.get(loc.WEMOBI_BOTAO_RESERVAR_ASSENTO).click().log("Selecionando assento");
     cy.get('[data-value="random-seat"]').click();
