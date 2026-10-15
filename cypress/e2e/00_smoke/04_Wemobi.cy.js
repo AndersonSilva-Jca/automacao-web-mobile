@@ -12,7 +12,7 @@ import SeatMapPage from "../../pages/SeatMapPage.js";
 import CheckoutPage from "../../pages/CheckoutPage.js";
 const wemobi = "https://www.wemobi.me/?utm_source=synthetic_test&utm_medium=internal&utm_campaign=operacao";
 
-describe("Wemobi", () => {
+describe("Wemobi - sem experiencia", () => {
   beforeEach(() => {
     cy.clearCookies();
     cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
