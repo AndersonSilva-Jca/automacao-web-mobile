@@ -16,7 +16,7 @@ const viacao1001 = "https://www.autoviacao1001.com.br/?utm_source=synthetic_test
 describe("Auto Viação 1001", () => {
   beforeEach(() => {
     cy.clearCookies();
-    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
+    // cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.once("uncaught:exception", () => false);
     Cypress.on("uncaught:exception", () => false);
   });

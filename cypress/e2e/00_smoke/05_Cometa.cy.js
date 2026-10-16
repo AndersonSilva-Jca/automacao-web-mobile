@@ -16,7 +16,7 @@ const cometa = "https://www.viacaocometa.com.br/?utm_source=synthetic_test&utm_m
 describe("Viação Cometa", () => {
   beforeEach(() => {
     cy.limpezaTotal();
-    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
+    // cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.once("uncaught:exception", () => false);
     Cypress.on("uncaught:exception", () => false);
   });

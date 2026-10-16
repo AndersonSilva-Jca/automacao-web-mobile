@@ -15,7 +15,7 @@ const odp = "https://www.outletdepassagens.com.br/?utm_source=synthetic_test&utm
 describe("Outlet de Passagens", () => {
   beforeEach(() => {
     cy.clearCookies();
-    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
+    // cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.once("uncaught:exception", () => false);
     Cypress.on("uncaught:exception", () => false);
   });

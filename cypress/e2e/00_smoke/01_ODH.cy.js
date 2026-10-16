@@ -12,7 +12,7 @@ const odh = "https://www.outletdehoteis.com.br/?utm_source=synthetic_test&utm_me
 describe("Outlet de Hotéis", () => {
   beforeEach(() => {
     cy.clearCookies();
-    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
+    // cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.once("uncaught:exception", () => false);
     Cypress.on("uncaught:exception", () => false);
   });

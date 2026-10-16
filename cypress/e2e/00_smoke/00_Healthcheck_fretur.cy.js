@@ -10,7 +10,7 @@ const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSn5BGXTn1LeQJ9
 describe("Opção Fretur - Health Check", () => {
   beforeEach(() => {
     cy.clearCookies();
-    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
+    // cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.once("uncaught:exception", () => false);
     Cypress.on("uncaught:exception", () => false);
   });

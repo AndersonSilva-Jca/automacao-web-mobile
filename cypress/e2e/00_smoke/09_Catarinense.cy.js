@@ -17,7 +17,7 @@ const teste = "https://www.catarinense.com.br/disponibilidade?at_preview_token=t
 describe("Catarinense", () => {
   beforeEach(() => {
     cy.clearCookies();
-    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
+    // cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.once("uncaught:exception", () => false);
     Cypress.on("uncaught:exception", () => false);
   });

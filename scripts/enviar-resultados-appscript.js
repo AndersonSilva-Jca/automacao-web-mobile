@@ -327,7 +327,7 @@ function extrairTestesDaSuite(suite, nomeSpecArquivo, caminhoSuites = []) {
   (suite.tests || []).forEach((t) => {
     const tituloTeste = t.title ? t.title.trim() : "";
 
-    const marcaFinal = nomeSpecArquivo === "02_ODP" || nomeSpecArquivo === "04_Wemobi" ? tituloTeste : MAPA_MARCAS[nomeSpecArquivo] || tituloSuite || nomeSpecArquivo;
+    const marcaFinal = nomeSpecArquivo === "02_ODP" || nomeSpecArquivo === "04_Wemobi" || nomeSpecArquivo === "04_WemobiExp" ? tituloTeste : MAPA_MARCAS[nomeSpecArquivo] || tituloSuite || nomeSpecArquivo;
 
     const passou = t.state === "passed" ? 1 : 0;
     const falhou = t.state === "failed" ? 1 : 0;

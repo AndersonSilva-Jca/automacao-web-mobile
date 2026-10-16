@@ -15,7 +15,7 @@ const giro = "https://www.clubegiro.com.br/?utm_source=synthetic_test&utm_medium
 describe("Clube Giro", () => {
   beforeEach(() => {
     cy.clearCookies();
-    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
+    // cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.once("uncaught:exception", () => false);
     Cypress.on("uncaught:exception", () => false);
   });

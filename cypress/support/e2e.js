@@ -32,6 +32,7 @@ import "cypress-mochawesome-reporter/register";
 import "@cypress/xpath";
 import "./commands";
 import "cypress-if";
+
 // import "cypress-cloud/support";
 Cypress.Screenshot.defaults({ capture: "viewport" });
 
@@ -76,6 +77,46 @@ Cypress.on("test:after:run", (test, runnable) => {
           console.log(base64Image);
         });
       },
+    });
+  }
+});
+
+let networkLog = [];
+
+beforeEach(() => {
+  networkLog = [];
+
+  cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
+
+  cy.intercept({ resourceType: /xhr|fetch/ }, (req) => {
+    req.on("response", (res) => {
+      networkLog.push({
+        url: req.url,
+        method: req.method,
+        status: res.statusCode,
+        requestBody: req.body,
+        responseBody: res.body,
+        timestamp: new Date().toISOString(),
+      });
+    });
+    // ❌ removido: req.on('error', ...) não existe nessa versão
+  });
+});
+
+afterEach(function () {
+  const comErro = networkLog.filter((c) => c.status >= 400);
+
+  if (comErro.length > 0) {
+    cy.addTestContext({
+      title: `🚨 ${comErro.length} chamada(s) de API com erro`,
+      value: JSON.stringify(comErro, null, 2),
+    });
+  }
+
+  if (this.currentTest.state === "failed" && networkLog.length > 0) {
+    cy.addTestContext({
+      title: `Todas as chamadas de API deste teste (${networkLog.length})`,
+      value: JSON.stringify(networkLog, null, 2),
     });
   }
 });

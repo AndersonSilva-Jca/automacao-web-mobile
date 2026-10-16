@@ -12,10 +12,10 @@ import SeatMapPage from "../../pages/SeatMapPage.js";
 import CheckoutPage from "../../pages/CheckoutPage.js";
 const wemobi = "https://www.wemobi.me/?utm_source=synthetic_test&utm_medium=internal&utm_campaign=operacao";
 
-describe("Wemobi - sem experiencia", () => {
+describe("Wemobi", () => {
   beforeEach(() => {
     cy.clearCookies();
-    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
+    // cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.once("uncaught:exception", () => false);
     Cypress.on("uncaught:exception", () => false);
   });
@@ -58,7 +58,7 @@ describe("Wemobi - sem experiencia", () => {
   //   CheckoutPage.wemobiResumoCompra();
   // });
 
-  it("Wemobi - Sem exp. Wemobi Lugar Marcado", () => {
+  it("Wemobi - Sem exp. Lugar Marcado", () => {
     cy.env(["login", "senha"]).then(() => {
       cy.visit(wemobi);
       LoginPage.wemobiModalLogin();
@@ -78,8 +78,9 @@ describe("Wemobi - sem experiencia", () => {
     SeatMapPage.wemobiSelecionarAssentoMarcado();
     CheckoutPage.wemobiResumoCompra();
   });
+  p;
 
-  it("Wemobi - Sem exp. Wemobi Assento Aleatório", () => {
+  it("Wemobi - Sem exp. Assento Aleatório", () => {
     cy.env(["login", "senha"]).then(() => {
       cy.visit(wemobi);
       LoginPage.wemobiModalLogin();

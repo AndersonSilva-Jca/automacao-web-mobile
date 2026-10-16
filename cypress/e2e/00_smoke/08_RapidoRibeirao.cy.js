@@ -16,7 +16,7 @@ const rapidoRibeirao = "https://www.rapidoribeiraopreto.com.br/?utm_source=synth
 describe("Rapido Ribeirão", () => {
   beforeEach(() => {
     cy.clearCookies();
-    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
+    // cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.once("uncaught:exception", () => false);
     Cypress.on("uncaught:exception", () => false);
   });
