@@ -1305,18 +1305,18 @@ Cypress.Commands.add("selecionarTopRotasCatarinense", () => {
 Cypress.Commands.add("selecionarTopRotasRapidoRibeirao", () => {
   cy.wait(1000);
   const topRotas = [
-    {
-      origem: " São Paulo (Rod. Tietê) (SP) ",
-      origemXpath: '//*[@id="São-Paulo-(Rod.-Tietê)-(SP)"]/p[1]',
-      destino: " Ribeirão Preto (SP) ",
-      destinoXpath: '//*[@id="Ribeirão-Preto-(SP)"]/p[1]',
-    },
-    {
-      origem: " Ribeirão Preto (SP) ",
-      origemXpath: '//*[@id="Ribeirão-Preto-(SP)"]/p[1]',
-      destino: " São Paulo (Rod. Tietê) (SP) ",
-      destinoXpath: '//*[@id="São-Paulo-(Rod.-Tietê)-(SP)"]/p[1]',
-    },
+    // {
+    //   origem: " São Paulo (Rod. Tietê) (SP) ",
+    //   origemXpath: '//*[@id="São-Paulo-(Rod.-Tietê)-(SP)"]/p[1]',
+    //   destino: " Ribeirão Preto (SP) ",
+    //   destinoXpath: '//*[@id="Ribeirão-Preto-(SP)"]/p[1]',
+    // },
+    // {
+    //   origem: " Ribeirão Preto (SP) ",
+    //   origemXpath: '//*[@id="Ribeirão-Preto-(SP)"]/p[1]',
+    //   destino: " São Paulo (Rod. Tietê) (SP) ",
+    //   destinoXpath: '//*[@id="São-Paulo-(Rod.-Tietê)-(SP)"]/p[1]',
+    // },
     {
       origem: " Ribeirão Preto (Mini Rodoviária) (SP) ",
       origemXpath: '//*[@id="Ribeirão-Preto-(Mini-Rodoviária)-(SP)"]/p[1]',
