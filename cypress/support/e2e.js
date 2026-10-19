@@ -106,11 +106,14 @@ beforeEach(() => {
 });
 
 afterEach(function () {
-  if (networkLog.length > 0) {
+  const comErro = networkLog.filter((c) => c.status >= 400);
+
+  if (comErro.length > 0) {
     cy.addTestContext({
-      title: `🚨 ${networkLog.length} chamada(s) de API com erro`,
-      value: JSON.stringify(networkLog, null, 2),
+      title: `🚨 ${comErro.length} chamada(s) de API com erro`,
+      value: JSON.stringify(comErro, null, 2),
     });
   }
+
   // ❌ removido: o bloco que anexava TODAS as chamadas do teste, com erro ou não
 });
