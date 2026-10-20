@@ -85,12 +85,9 @@ let networkLog = [];
 
 beforeEach(() => {
   networkLog = [];
-
   cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
-
   cy.intercept({ resourceType: /xhr|fetch/ }, (req) => {
     req.on("response", (res) => {
-      // Só guarda se já for erro -- não acumula as chamadas "saudáveis"
       if (res.statusCode >= 400) {
         networkLog.push({
           url: req.url,
@@ -103,6 +100,11 @@ beforeEach(() => {
       }
     });
   });
+});
+
+// NOVO: comando pra registrar erro manualmente (usado em cy.request)
+Cypress.Commands.add("registrarErroApi", (dados) => {
+  networkLog.push({ ...dados, timestamp: new Date().toISOString() });
 });
 
 afterEach(function () {

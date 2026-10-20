@@ -53,8 +53,17 @@ describe("Opção Fretur - Health Check", () => {
       failOnStatusCode: false,
       timeout: 10000,
     }).then((response) => {
+      if (!response || response.status !== 200) {
+        cy.registrarErroApi({
+          url: opcaofretur,
+          method: "GET",
+          status: response ? response.status : "SEM RESPOSTA",
+          requestBody: null,
+          responseBody: response ? response.body : null,
+        });
+      }
       expect(response.status).to.eq(200);
-      expect(response.duration).to.be.below(10000); // Resposta em menos de 10 segundos
+      expect(response.duration).to.be.below(10000);
     });
   });
   // it("3. Valida se a base de dados (Planilha) está respondendo da página ORÇAMENTO (simula exatamente o comportamento do navegador de um cliente real)", () => {
