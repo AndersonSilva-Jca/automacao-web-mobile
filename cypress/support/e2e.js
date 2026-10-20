@@ -81,39 +81,35 @@ Cypress.on("test:after:run", (test, runnable) => {
   }
 });
 
-// let networkLog = [];
+let networkLog = [];
 
-// beforeEach(() => {
-//   networkLog = [];
+beforeEach(() => {
+  networkLog = [];
 
-//   cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
+  cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
 
-//   cy.intercept({ resourceType: /xhr|fetch/ }, (req) => {
-//     req.on("response", (res) => {
-//       // Só guarda se já for erro — não acumula o tráfego "saudável"
-//       if (res.statusCode >= 400) {
-//         networkLog.push({
-//           url: req.url,
-//           method: req.method,
-//           status: res.statusCode,
-//           requestBody: req.body,
-//           responseBody: res.body,
-//           timestamp: new Date().toISOString(),
-//         });
-//       }
-//     });
-//   });
-// });
+  cy.intercept({ resourceType: /xhr|fetch/ }, (req) => {
+    req.on("response", (res) => {
+      // Só guarda se já for erro -- não acumula as chamadas "saudáveis"
+      if (res.statusCode >= 400) {
+        networkLog.push({
+          url: req.url,
+          method: req.method,
+          status: res.statusCode,
+          requestBody: req.body,
+          responseBody: res.body,
+          timestamp: new Date().toISOString(),
+        });
+      }
+    });
+  });
+});
 
-// afterEach(function () {
-//   const comErro = networkLog.filter((c) => c.status >= 400);
-
-//   if (comErro.length > 0) {
-//     cy.addTestContext({
-//       title: `🚨 ${comErro.length} chamada(s) de API com erro`,
-//       value: JSON.stringify(comErro, null, 2),
-//     });
-//   }
-
-//   // ❌ removido: o bloco que anexava TODAS as chamadas do teste, com erro ou não
-// });
+afterEach(function () {
+  if (networkLog.length > 0) {
+    cy.addTestContext({
+      title: `🚨 ${networkLog.length} chamada(s) de API com erro`,
+      value: JSON.stringify(networkLog, null, 2),
+    });
+  }
+});
