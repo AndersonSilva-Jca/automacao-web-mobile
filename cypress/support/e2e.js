@@ -81,6 +81,7 @@ Cypress.on("test:after:run", (test, runnable) => {
   }
 });
 
+// Declaramos a variável global do log no arquivo de suporte
 let networkLog = [];
 
 beforeEach(() => {
@@ -88,13 +89,22 @@ beforeEach(() => {
   cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
   cy.intercept({ resourceType: /xhr|fetch/ }, (req) => {
     req.on("response", (res) => {
-      if (res.statusCode >= 400) {
+      const ehApiRelevante = req.url.includes("jcatlm") || req.url.includes("vendasjca.com.br");
+
+      if (res.statusCode >= 400 && ehApiRelevante) {
+        let responseBodyTratado = res.body;
+        if (typeof responseBodyTratado === "string") {
+          try {
+            responseBodyTratado = JSON.parse(responseBodyTratado);
+          } catch (e) {}
+        }
+
         networkLog.push({
           url: req.url,
           method: req.method,
           status: res.statusCode,
           requestBody: req.body,
-          responseBody: res.body,
+          responseBody: responseBodyTratado,
           timestamp: new Date().toISOString(),
         });
       }
@@ -102,11 +112,15 @@ beforeEach(() => {
   });
 });
 
-// NOVO: comando pra registrar erro manualmente (usado em cy.request)
+// 1. O comando customizado para registrar erros manualmente
 Cypress.Commands.add("registrarErroApi", (dados) => {
-  networkLog.push({ ...dados, timestamp: new Date().toISOString() });
+  networkLog.push({
+    ...dados,
+    timestamp: new Date().toISOString(),
+  });
 });
 
+// 2. O afterEach que injeta o relatório (ex: mochawesome / addTestContext)
 afterEach(function () {
   if (networkLog.length > 0) {
     cy.addTestContext({
