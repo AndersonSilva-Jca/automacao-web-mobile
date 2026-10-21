@@ -64,49 +64,51 @@ async function processarEmLote(itens, tamanhoLote, funcaoProcessamento) {
 }
 
 async function main() {
-  console.log("🚀 Iniciando exclusão no Cloudflare R2 usando credenciais do .env...\n");
+  console.log("🚀 Retornando a exclusão no Cloudflare R2 (continuando de onde parou)...\n");
 
-  // 1️⃣ BUCKET: allure-reports (mobile-run-1 a mobile-run-1800)
-  console.log("📦 [Bucket: allure-reports] Apagando pastas de mobile-run-1 a 1800...");
+  // 1️⃣ BUCKET: allure-reports (Continua de mobile-run-1801 até 2100)
+  console.log("📦 [Bucket: allure-reports] Apagando pastas de mobile-run-1801 a 2100...");
   const pastasMobile = [];
-  for (let i = 1801; i <= 2200; i++) {
+  for (let i = 1801; i <= 2100; i++) {
     pastasMobile.push(`reports/mobile-run-${i}/`);
   }
 
   let progressoMobile = 0;
+  const totalMobile = pastasMobile.length;
   await processarEmLote(pastasMobile, 20, async (prefixo) => {
     const qtd = await deletarPasta("allure-reports", prefixo);
     progressoMobile++;
     if (qtd > 0) {
       console.log(`  └─ [OK] ${prefixo} (${qtd} arquivos deletados)`);
     }
-    if (progressoMobile % 200 === 0) {
-      console.log(`  ⏳ Progresso Allure: ${progressoMobile}/1800 pastas verificadas...`);
+    if (progressoMobile % 50 === 0 || progressoMobile === totalMobile) {
+      console.log(`  ⏳ Progresso Allure: ${progressoMobile}/${totalMobile} pastas verificadas...`);
     }
   });
-  console.log("✅ Concluída a exclusão no allure-reports!\n");
+  console.log("✅ Concluída a exclusão restante no allure-reports!\n");
 
-  // 2️⃣ BUCKET: cypress-reports (1 a 1500)
-  console.log("📦 [Bucket: cypress-reports] Apagando pastas de 1 a 1500...");
+  // 2️⃣ BUCKET: cypress-reports (Continua de 1501 até 2000)
+  console.log("📦 [Bucket: cypress-reports] Apagando pastas de 1501 a 2000...");
   const pastasCypress = [];
   for (let i = 1501; i <= 2000; i++) {
     pastasCypress.push(`reports/${i}/`);
   }
 
   let progressoCypress = 0;
+  const totalCypress = pastasCypress.length;
   await processarEmLote(pastasCypress, 20, async (prefixo) => {
     const qtd = await deletarPasta("cypress-reports", prefixo);
     progressoCypress++;
     if (qtd > 0) {
       console.log(`  └─ [OK] ${prefixo} (${qtd} arquivos deletados)`);
     }
-    if (progressoCypress % 200 === 0) {
-      console.log(`  ⏳ Progresso Cypress: ${progressoCypress}/1500 pastas verificadas...`);
+    if (progressoCypress % 50 === 0 || progressoCypress === totalCypress) {
+      console.log(`  ⏳ Progresso Cypress: ${progressoCypress}/${totalCypress} pastas verificadas...`);
     }
   });
-  console.log("✅ Concluída a exclusão no cypress-reports!\n");
+  console.log("✅ Concluída a exclusão restante no cypress-reports!\n");
 
-  console.log("🎉 Limpeza concluída com sucesso!");
+  console.log("🎉 Limpeza total (até 2100/2000) concluída com sucesso!");
 }
 
 main().catch(console.error);

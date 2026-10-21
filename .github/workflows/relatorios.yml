@@ -1,79 +1,12 @@
-# name: Reprocessar Retroativo WEB (Artifacts -> Apps Script)
-
-# on:
-#   workflow_dispatch:
-#     inputs:
-#       desde:
-#         description: "Início (UTC, ISO). 02/21 11:35 BRT = 2026-10-21T11:35:00Z"
-#         required: true
-#         default: "2026-10-21T11:35:00Z"
-#       workflow_arquivo:
-#         description: "Arquivo do workflow web"
-#         required: true
-#         default: "web-e2e.yml"
-#       dry_run:
-#         description: "Só listar, sem enviar (true/false)"
-#         required: true
-#         default: "false"
-
-# permissions:
-#   contents: read
-#   actions: read
-
-# jobs:
-#   reprocessar:
-#     runs-on: ubuntu-latest
-#     timeout-minutes: 120
-#     steps:
-#       - uses: actions/checkout@v4
-#       - uses: actions/setup-node@v4
-#         with:
-#           node-version: "20"
-
-#       - name: Reprocessar runs Web a partir dos artifacts
-#         env:
-#           GH_TOKEN: ${{ github.token }}
-#           APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
-#           CYPRESS_R2_PUBLIC_URL: ${{ secrets.CYPRESS_R2_PUBLIC_URL }}
-#           DESDE: ${{ github.event.inputs.desde }}
-#           WF: ${{ github.event.inputs.workflow_arquivo }}
-#           DRY_RUN: ${{ github.event.inputs.dry_run }}
-#         run: |
-#           set -u
-#           npm i --no-save mochawesome-merge >/dev/null 2>&1
-#           gh run list --workflow "$WF" --created ">=$DESDE" --limit 500 \
-#             --json databaseId,number,updatedAt,conclusion,status > runs.json
-#           jq -r '.[] | select(.status=="completed") | "\(.databaseId) \(.number) \(.updatedAt)"' runs.json | sort -k2 -n > lista.txt
-#           echo "Runs concluídas encontradas: $(wc -l < lista.txt)"
-#           FALHAS=0
-#           while read -r ID NUM QUANDO; do
-#             echo "=== Run #$NUM (id $ID, $QUANDO) ==="
-#             rm -rf tmp rep; mkdir -p tmp rep
-#             if ! gh run download "$ID" -p "cypress-reports-*" -D tmp 2>/dev/null; then
-#               echo "⚠️ sem artifacts (expirou ou run cancelada) - ignorando"; continue
-#             fi
-#             JSONS=$(find tmp -path "*json*" -name "*.json" ! -name "index.json" | tr '\n' ' ')
-#             if [ -z "$JSONS" ]; then echo "⚠️ sem JSONs mochawesome"; continue; fi
-#             npx mochawesome-merge $JSONS > rep/index.json
-#             # screenshots (para links de falhas)
-#             mkdir -p rep/screenshots
-#             for d in $(find tmp -type d -name screenshots); do cp -r "$d"/. rep/screenshots/ 2>/dev/null || true; done
-#             if [ "$DRY_RUN" = "true" ]; then echo "(dry-run) pronto p/ enviar"; continue; fi
-#             GITHUB_RUN_ID="$ID" GITHUB_RUN_NUMBER="$NUM" RETRO_DATA="$QUANDO" \
-#             REPORTS_DIR="rep" GITHUB_REF_NAME="main" \
-#               node scripts/enviar-resultados-appscript.js || FALHAS=$((FALHAS+1))
-#           done < lista.txt
-#           echo "Runs com erro de envio: $FALHAS"
-#           [ "$FALHAS" -eq 0 ]
-name: Reprocessar Retroativo (Web <= 2000 | Mobile >= 2100)
+name: Reprocessar Retroativo (Web <= 2000 | Mobile <= 2100)
 
 on:
   workflow_dispatch:
     inputs:
       desde:
-        description: "Início (UTC, ISO). Ex: 2026-10-21T11:35:00Z"
+        description: "Início (UTC, ISO). Ex: 2026-10-02T19:10:00Z"
         required: true
-        default: "2026-10-21T11:35:00Z"
+        default: "2026-10-02T19:10:00Z"
       tipo_ambiente:
         description: "Tipo de ambiente: web ou mobile"
         required: true
@@ -101,7 +34,7 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Reprocessar runs com filtro Web (<= 2000) e Mobile (>= 2100)
+      - name: Reprocessar runs Web (<= 2000) ou Mobile (<= 2100) a partir dos artifacts
         env:
           GH_TOKEN: ${{ github.token }}
           APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
@@ -117,13 +50,11 @@ jobs:
           gh run list --workflow "$WF" --created ">=$DESDE" --limit 500 \
             --json databaseId,number,updatedAt,conclusion,status > runs.json
 
-          # Aplica a regra de negócio para filtrar os números das runs:
-          # Se tipo for 'web', pega apenas números <= 2000
-          # Se tipo for 'mobile', pega apenas números >= 2100
-          if [ "$TIPO" = "web" ]; then
-            jq -r '.[] | select(.status=="completed" and .number <= 2000) | "\(.databaseId) \(.number) \(.updatedAt)"' runs.json | sort -k2 -n > lista.txt
+          # Aplica a regra de limite por ambiente selecionado
+          if [ "$TIPO" = "mobile" ]; then
+            jq -r '.[] | select(.status=="completed" and .number <= 2100) | "\(.databaseId) \(.number) \(.updatedAt)"' runs.json | sort -k2 -n > lista.txt
           else
-            jq -r '.[] | select(.status=="completed" and .number >= 2100) | "\(.databaseId) \(.number) \(.updatedAt)"' runs.json | sort -k2 -n > lista.txt
+            jq -r '.[] | select(.status=="completed" and .number <= 2000) | "\(.databaseId) \(.number) \(.updatedAt)"' runs.json | sort -k2 -n > lista.txt
           fi
 
           echo "Runs concluídas encontradas para '$TIPO': $(wc -l < lista.txt)"
@@ -134,10 +65,10 @@ jobs:
             echo "=== Run #$NUM (id $ID, $QUANDO) ==="
             rm -rf tmp rep; mkdir -p tmp rep
             
-            # Ajusta o nome do artefato dependendo se é web ou mobile
+            # Ajusta dinamicamente o padrão do artefato baixado
             ARTIFACT_PATTERN="cypress-reports-*"
             if [ "$TIPO" = "mobile" ]; then
-              ARTIFACT_PATTERN="mobile-reports-*" # Altere se o padrão do mobile for diferente
+              ARTIFACT_PATTERN="mobile-reports-*"
             fi
 
             if ! gh run download "$ID" -p "$ARTIFACT_PATTERN" -D tmp 2>/dev/null; then
@@ -148,6 +79,7 @@ jobs:
             if [ -z "$JSONS" ]; then echo "⚠️ sem JSONs mochawesome"; continue; fi
             
             npx mochawesome-merge $JSONS > rep/index.json
+            # screenshots (para links de falhas)
             mkdir -p rep/screenshots
             for d in $(find tmp -type d -name screenshots); do cp -r "$d"/. rep/screenshots/ 2>/dev/null || true; done
             
