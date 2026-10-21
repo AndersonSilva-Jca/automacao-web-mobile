@@ -1,12 +1,12 @@
-name: Limpar Relatorios WEB & Mobile
+name: Reprocessar Retroativo WEB (Artifacts -> Apps Script)
 
 on:
   workflow_dispatch:
     inputs:
       desde:
-        description: "Início (UTC, ISO). 21/10 10:50 BRT "
+        description: "Início (UTC, ISO). 02/10 16:10 BRT = 2026-10-02T19:10:00Z"
         required: true
-        default: "21/10 10:50 BRT "
+        default: "2026-10-02T19:10:00Z"
       workflow_arquivo:
         description: "Arquivo do workflow web"
         required: true

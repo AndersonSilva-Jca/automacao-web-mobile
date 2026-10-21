@@ -69,7 +69,7 @@ async function main() {
   // 1️⃣ BUCKET: allure-reports (mobile-run-1 a mobile-run-1800)
   console.log("📦 [Bucket: allure-reports] Apagando pastas de mobile-run-1 a 1800...");
   const pastasMobile = [];
-  for (let i = 1; i <= 2200; i++) {
+  for (let i = 1801; i <= 2200; i++) {
     pastasMobile.push(`reports/mobile-run-${i}/`);
   }
 
@@ -89,7 +89,7 @@ async function main() {
   // 2️⃣ BUCKET: cypress-reports (1 a 1500)
   console.log("📦 [Bucket: cypress-reports] Apagando pastas de 1 a 1500...");
   const pastasCypress = [];
-  for (let i = 1; i <= 2000; i++) {
+  for (let i = 1501; i <= 2000; i++) {
     pastasCypress.push(`reports/${i}/`);
   }
 
