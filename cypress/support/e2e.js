@@ -81,22 +81,27 @@ Cypress.on("test:after:run", (test, runnable) => {
   }
 });
 
-// Declaramos a variável global do log no arquivo de suporte
+// Arquivo de suporte (ex: e2e.js ou support/commands.js)
+
 let networkLog = [];
 
 beforeEach(() => {
   networkLog = [];
-  cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
-  cy.intercept({ resourceType: /xhr|fetch/ }, (req) => {
+
+  // Intercepta requisições XHR/Fetch, desliga o log poluidor do runner e monitora respostas
+  cy.intercept({ resourceType: /xhr|fetch/, log: false }, (req) => {
     req.on("response", (res) => {
       const ehApiRelevante = req.url.includes("jcatlm") || req.url.includes("vendasjca.com.br");
 
       if (res.statusCode >= 400 && ehApiRelevante) {
         let responseBodyTratado = res.body;
+
         if (typeof responseBodyTratado === "string") {
           try {
             responseBodyTratado = JSON.parse(responseBodyTratado);
-          } catch (e) {}
+          } catch (_e) {
+            // Mantém como string caso o parse falhe
+          }
         }
 
         networkLog.push({
@@ -112,7 +117,7 @@ beforeEach(() => {
   });
 });
 
-// 1. O comando customizado para registrar erros manualmente
+// 1. Comando customizado para registrar erros de API manualmente, se necessário
 Cypress.Commands.add("registrarErroApi", (dados) => {
   networkLog.push({
     ...dados,
@@ -120,11 +125,11 @@ Cypress.Commands.add("registrarErroApi", (dados) => {
   });
 });
 
-// 2. O afterEach que injeta o relatório (ex: mochawesome / addTestContext)
-afterEach(function () {
+// 2. Hook afterEach para injetar instabilidades capturadas no relatório de testes
+afterEach(() => {
   if (networkLog.length > 0) {
     cy.addTestContext({
-      title: `🚨 ${networkLog.length} chamada(s) de API com erro`,
+      title: `🚨 ${networkLog.length} instabilidade(s) de API detectada(s)`,
       value: JSON.stringify(networkLog, null, 2),
     });
   }
