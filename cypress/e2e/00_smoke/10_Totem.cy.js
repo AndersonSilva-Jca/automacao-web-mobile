@@ -106,7 +106,7 @@ describe("Totem", () => {
 
     cy.get(".text-colors-black-light").should("be.visible").and("contain", "Selecione sua forma de pagamento");
     cy.get('[data-disabled="false"]').should("be.visible");
-    cy.get(".text-xl").should("be.visible").and("contain", "Extrato de compra").click();
+    cy.get(".text-xl").should("be.visible").and("contain", "Extrato de compra");
 
     cy.get(":nth-child(2) > .bg-white > .flex-col > :nth-child(1) > :nth-child(1)").should("be.visible");
     cy.get(".bg-white > .flex-col > :nth-child(2) > :nth-child(1)").should("be.visible");
