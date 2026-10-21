@@ -4,8 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       desde:
-        description: "Início (UTC, formato ISO 8601)"
+        description: "Início (UTC, ISO). 21/10 10:50 BRT "
         required: true
+        default: "21/10 10:50 BRT "
       workflow_arquivo:
         description: "Arquivo do workflow web"
         required: true
@@ -28,12 +29,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-
-      - name: Obter Data e Hora Atual (Brasília)
-        if: always()
-        run: |
-          echo "DATA_ALERTA=$(TZ='America/Sao_Paulo' date +'%d/%m/%Y')" >> "$GITHUB_ENV"
-          echo "HORA_ALERTA=$(TZ='America/Sao_Paulo' date +'%H:%M:%S')" >> "$GITHUB_ENV"
 
       - name: Reprocessar runs Web a partir dos artifacts
         env:
