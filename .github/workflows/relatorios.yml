@@ -1,4 +1,4 @@
-name: Reprocessar Retroativo WEB (Artifacts -> Apps Script)
+name: Limpar Relatorios WEB & Mobile
 
 on:
   workflow_dispatch:
