@@ -34,3 +34,4 @@ log
 browserstack.json
 npm_install_debug.log
 # currents.config.js
+results
