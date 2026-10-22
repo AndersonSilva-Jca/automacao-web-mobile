@@ -12,6 +12,15 @@
  *   node deletar-relatorios.js --bucket=all --yes              # sem pedir confirmação (útil p/ automação)
  *
  * Sem --ate, apaga TUDO que for >= --de (não existe mais limite fixo).
+ * 
+ * # Allure: apaga da mobile-run-1801 até a mobile-run-1950 (a 1951 em diante fica)
+node deletar-relatorios.js --bucket=allure --de=1801 --ate=1950
+
+# Cypress: apaga da 1501 até a 1800
+node deletar-relatorios.js --bucket=cypress --de=1501 --ate=1800
+
+# Os dois buckets com o mesmo intervalo
+node deletar-relatorios.js --bucket=all --de=1501 --ate=1800
  */
 const { S3Client, ListObjectsV2Command, DeleteObjectsCommand } = require("@aws-sdk/client-s3");
 const readline = require("readline");
