@@ -180,6 +180,53 @@ Cypress.Commands.add("selecionarAssentoTotem", (limiteMaximo) => {
     });
 });
 
+Cypress.Commands.add("validarPrecoSaidaResumo", () => {
+  const precoEntradaPix = Cypress.env("precoEntradaPix");
+  const precoEntradaCartao = Cypress.env("precoEntradaCartao");
+
+  if (precoEntradaPix === undefined || precoEntradaCartao === undefined) {
+    throw new Error("❌ ERRO: Os preços de entrada (Pix/Cartão) não foram capturados corretamente nas etapas anteriores!");
+  }
+
+  // Captura os valores de saída na tela final de resumo/pagamento
+  cy.get(".cart-price-int")
+    .eq(0)
+    .invoke("text")
+    .then((intPixSaida) => {
+      cy.get(".cart-price-dec")
+        .eq(0)
+        .invoke("text")
+        .then((decPixSaida) => {
+          const precoSaidaPix = parseFloat(`${intPixSaida.trim()}${decPixSaida.trim()}`.replace(",", "."));
+
+          cy.get(".cart-price-int")
+            .eq(1)
+            .invoke("text")
+            .then((intCardSaida) => {
+              cy.get(".cart-price-dec")
+                .eq(1)
+                .invoke("text")
+                .then((decCardSaida) => {
+                  const precoSaidaCartao = parseFloat(`${intCardSaida.trim()}${decCardSaida.trim()}`.replace(",", "."));
+
+                  // Logs no Terminal e Painel
+                  console.log(`[TERMINAL] 🏁 SAÍDA PIX: R$ ${precoSaidaPix} | ENTRADA PIX: R$ ${precoEntradaPix}`);
+                  console.log(`[TERMINAL] 🏁 SAÍDA CARTÃO: R$ ${precoSaidaCartao} | ENTRADA CARTÃO: R$ ${precoEntradaCartao}`);
+
+                  cy.log(`🏁 [SAÍDA PIX] R$ ${precoSaidaPix} | [ENTRADA PIX] R$ ${precoEntradaPix}`);
+                  cy.log(`🏁 [SAÍDA CARTÃO] R$ ${precoSaidaCartao} | [ENTRADA CARTÃO] R$ ${precoEntradaCartao}`);
+
+                  // Validações independentes para Pix e Cartão
+                  expect(precoSaidaPix, `Divergência no preço PIX! Entrada: ${precoEntradaPix} vs Saída: ${precoSaidaPix}`).to.eq(precoEntradaPix);
+                  expect(precoSaidaCartao, `Divergência no preço Cartão! Entrada: ${precoEntradaCartao} vs Saída: ${precoSaidaCartao}`).to.eq(precoEntradaCartao);
+
+                  cy.log(`✅ Preços de PIX e Cartão conferidos e idênticos com sucesso!`);
+                });
+            });
+        });
+    });
+});
+
 Cypress.Commands.add("selecionarAssentoAleatorio", () => {
   cy.get('button.outer-seat[id^="seat-"]:not(:has(.occupied-seat))', { timeout: 90000 })
     .should("be.visible")
@@ -189,12 +236,118 @@ Cypress.Commands.add("selecionarAssentoAleatorio", () => {
 
       cy.wrap(randomId).as("idSorteado");
     });
+
   cy.get("@idSorteado").then((id) => {
     cy.get(`#${id}`).scrollIntoView().should("be.visible").click({ force: true });
   });
 
   cy.get("#btn-proceed", { timeout: 90000 }).should("be.visible").and("not.be.disabled");
+
+  // Clica para expandir os detalhes se necessário
+  cy.get('[style="background: #FFFFFF;; box-shadow: undefined;-webkit-box-shadow: undefined;-moz-box-shadow: undefined;; border-radius: undefinedpx;"] > .origin-destination > .show-more-details-container > .trip-details-container > .trip-details-show-passenger > .passenger-division > .passenger-division__toggle').should("be.visible").click({ force: true });
+
+  // 💰 CAPTURA DO PREÇO NO PIX E NO CARTÃO NA TELA DE ASSENTOS (Resumo lateral)
+  // Usamos os seletores específicos baseados na estrutura do PIX e Cartão da sua sidebar
+  cy.get('.passenger-card__price-pix, [data-bind="pricePix"], .cart-passenger-list')
+    .first()
+    .within(() => {
+      // Captura valor Pix
+      cy.get(".cart-price-int")
+        .first()
+        .invoke("text")
+        .then((intPix) => {
+          cy.get(".cart-price-dec")
+            .first()
+            .invoke("text")
+            .then((decPix) => {
+              const precoPix = parseFloat(`${intPix.trim()}${decPix.trim()}`.replace(",", "."));
+              Cypress.env("precoEntradaPix", precoPix);
+              console.log(`[TERMINAL CYPRESS] 🎯 PREÇO ENTRADA PIX: R$ ${precoPix}`);
+              cy.log(`🎯 [PREÇO ENTRADA PIX] R$ ${precoPix}`);
+            });
+        });
+
+      // Captura valor Cartão (geralmente logo abaixo do Pix)
+      cy.get(".cart-price-int")
+        .eq(1)
+        .invoke("text")
+        .then((intCard) => {
+          cy.get(".cart-price-dec")
+            .eq(1)
+            .invoke("text")
+            .then((decCard) => {
+              const precoCard = parseFloat(`${intCard.trim()}${decCard.trim()}`.replace(",", "."));
+              Cypress.env("precoEntradaCartao", precoCard);
+              console.log(`[TERMINAL CYPRESS] 🎯 PREÇO ENTRADA CARTÃO: R$ ${precoCard}`);
+              cy.log(`🎯 [PREÇO ENTRADA CARTÃO] R$ ${precoCard}`);
+            });
+        });
+    });
+
+  // Clica para avançar
+  cy.get("#btn-proceed").click({ force: true });
 });
+
+// Cypress.Commands.add("selecionarAssentoAleatorio", () => {
+//   cy.get('button.outer-seat[id^="seat-"]:not(:has(.occupied-seat))', { timeout: 90000 })
+//     .should("be.visible")
+//     .then(($seats) => {
+//       const ids = $seats.map((i, el) => el.id).get();
+//       const randomId = ids[Math.floor(Math.random() * ids.length)];
+
+//       cy.wrap(randomId).as("idSorteado");
+//     });
+
+//   cy.get("@idSorteado").then((id) => {
+//     cy.get(`#${id}`).scrollIntoView().should("be.visible").click({ force: true });
+//   });
+
+//   cy.get("#btn-proceed", { timeout: 90000 }).should("be.visible").and("not.be.disabled");
+
+//   // Clica para expandir os detalhes do passageiro no resumo da tela de assentos
+//   cy.get('[style="background: #FFFFFF;; box-shadow: undefined;-webkit-box-shadow: undefined;-moz-box-shadow: undefined;; border-radius: undefinedpx;"] > .origin-destination > .show-more-details-container > .trip-details-container > .trip-details-show-passenger > .passenger-division').click();
+
+//   // Valida e captura o preço inicial direto do card do passageiro expandido
+//   cy.get('[style="background: #FFFFFF;; box-shadow: undefined;-webkit-box-shadow: undefined;-moz-box-shadow: undefined;; border-radius: undefinedpx;"] > .origin-destination > .show-more-details-container > .trip-details-container > .trip-details-show-passenger > .cart-passenger-list > ul > .passenger-card')
+//     .should("be.visible")
+//     .within(() => {
+//       cy.get(".cart-price-int")
+//         .invoke("text")
+//         .then((intText) => {
+//           cy.get(".cart-price-dec")
+//             .invoke("text")
+//             .then((decText) => {
+//               const precoEntradaStr = `${intText.trim()}${decText.trim()}`.replace(",", ".");
+//               const precoEntrada = parseFloat(precoEntradaStr);
+
+//               // Salva globalmente para comparar no checkout/saída
+//               Cypress.env("precoEntradaPassagem", precoEntrada);
+
+//               // Logs exibidos no painel do Cypress e no terminal Node.js
+//               console.log(`[TERMINAL CYPRESS] 🎯 PREÇO DE ENTRADA (NO ASSENTO): R$ ${precoEntrada}`);
+//               cy.log(`🎯 [PREÇO ENTRADA] R$ ${precoEntrada}`);
+//             });
+//         });
+//     });
+// });
+
+// Cypress.Commands.add("selecionarAssentoAleatorio", () => {
+//   cy.get('button.outer-seat[id^="seat-"]:not(:has(.occupied-seat))', { timeout: 90000 })
+//     .should("be.visible")
+//     .then(($seats) => {
+//       const ids = $seats.map((i, el) => el.id).get();
+//       const randomId = ids[Math.floor(Math.random() * ids.length)];
+
+//       cy.wrap(randomId).as("idSorteado");
+//     });
+//   cy.get("@idSorteado").then((id) => {
+//     cy.get(`#${id}`).scrollIntoView().should("be.visible").click({ force: true });
+//   });
+
+//   cy.get("#btn-proceed", { timeout: 90000 }).should("be.visible").and("not.be.disabled");
+//   cy.get('[style="background: #FFFFFF;; box-shadow: undefined;-webkit-box-shadow: undefined;-moz-box-shadow: undefined;; border-radius: undefinedpx;"] > .origin-destination > .show-more-details-container > .trip-details-container > .trip-details-show-passenger > .passenger-division').click();
+//   cy.get('[style="background: #FFFFFF;; box-shadow: undefined;-webkit-box-shadow: undefined;-moz-box-shadow: undefined;; border-radius: undefinedpx;"] > .origin-destination > .show-more-details-container > .trip-details-container > .trip-details-show-passenger > .cart-passenger-list > ul > .passenger-card > .passenger-card__row > .passenger-card__price > .passenger-card__price-pix').should("be.visible");
+// });
 
 Cypress.Commands.add("selecionarDoisAssentosAleatorios", () => {
   const selecionar = (tentativas = 0) => {

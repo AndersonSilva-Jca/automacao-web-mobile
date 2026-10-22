@@ -3,6 +3,7 @@ import loc from "../support/locators";
 class OfferPage {
   //------------------ UTP ------------------
   selecionarPassagemIda() {
+    // cy.selecionarPassagemAleatoriaTeste({ timeout: 90000 });
     cy.selecionarPassagemAleatoria1({ timeout: 90000 });
   }
 

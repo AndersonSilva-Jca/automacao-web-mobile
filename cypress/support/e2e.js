@@ -82,50 +82,50 @@ Cypress.on("test:after:run", (test, runnable) => {
 });
 
 // Declaramos a variável global do log no arquivo de suporte
-let networkLog = [];
+// let networkLog = [];
 
-beforeEach(() => {
-  networkLog = [];
-  cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
-  cy.intercept({ resourceType: /xhr|fetch/ }, (req) => {
-    req.on("response", (res) => {
-      const ehApiRelevante = req.url.includes("jcatlm") || req.url.includes("vendasjca.com.br");
+// beforeEach(() => {
+//   networkLog = [];
+//   cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
+//   cy.intercept({ resourceType: /xhr|fetch/ }, (req) => {
+//     req.on("response", (res) => {
+//       const ehApiRelevante = req.url.includes("jcatlm") || req.url.includes("vendasjca.com.br");
 
-      if (res.statusCode >= 400 && ehApiRelevante) {
-        let responseBodyTratado = res.body;
-        if (typeof responseBodyTratado === "string") {
-          try {
-            responseBodyTratado = JSON.parse(responseBodyTratado);
-          } catch (e) {}
-        }
+//       if (res.statusCode >= 400 && ehApiRelevante) {
+//         let responseBodyTratado = res.body;
+//         if (typeof responseBodyTratado === "string") {
+//           try {
+//             responseBodyTratado = JSON.parse(responseBodyTratado);
+//           } catch (e) {}
+//         }
 
-        networkLog.push({
-          url: req.url,
-          method: req.method,
-          status: res.statusCode,
-          requestBody: req.body,
-          responseBody: responseBodyTratado,
-          timestamp: new Date().toISOString(),
-        });
-      }
-    });
-  });
-});
+//         networkLog.push({
+//           url: req.url,
+//           method: req.method,
+//           status: res.statusCode,
+//           requestBody: req.body,
+//           responseBody: responseBodyTratado,
+//           timestamp: new Date().toISOString(),
+//         });
+//       }
+//     });
+//   });
+// });
 
-// 1. O comando customizado para registrar erros manualmente
-Cypress.Commands.add("registrarErroApi", (dados) => {
-  networkLog.push({
-    ...dados,
-    timestamp: new Date().toISOString(),
-  });
-});
+// // 1. O comando customizado para registrar erros manualmente
+// Cypress.Commands.add("registrarErroApi", (dados) => {
+//   networkLog.push({
+//     ...dados,
+//     timestamp: new Date().toISOString(),
+//   });
+// });
 
-// 2. O afterEach que injeta o relatório (ex: mochawesome / addTestContext)
-afterEach(function () {
-  if (networkLog.length > 0) {
-    cy.addTestContext({
-      title: `🚨 ${networkLog.length} chamada(s) de API com erro`,
-      value: JSON.stringify(networkLog, null, 2),
-    });
-  }
-});
+// // 2. O afterEach que injeta o relatório (ex: mochawesome / addTestContext)
+// afterEach(function () {
+//   if (networkLog.length > 0) {
+//     cy.addTestContext({
+//       title: `🚨 ${networkLog.length} chamada(s) de API com erro`,
+//       value: JSON.stringify(networkLog, null, 2),
+//     });
+//   }
+// });

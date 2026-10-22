@@ -27,7 +27,8 @@ module.exports = defineConfig({
   screenshotOnRunFailure: true,
   screenshotsFolder: "cypress/reports/screenshots",
   video: true,
-  videoUploadOnPasses: false,
+  // videoUploadOnPasses: false,
+  videoUploadOnPasses: true,
   videoCompression: 32,
   chromeWebSecurity: false,
   viewportWidth: 1920,
@@ -177,15 +178,15 @@ module.exports = defineConfig({
           return codigoSorteado;
         },
       });
-      // Deleta o vídeo da spec se nenhum teste tiver falhado
-      on("after:spec", (spec, results) => {
-        if (results && results.video) {
-          const failures = results.tests.some((test) => test.attempts.some((attempt) => attempt.state === "failed"));
-          if (!failures) {
-            fs.unlinkSync(results.video);
-          }
-        }
-      });
+      // Deleta o vídeo da spec se nenhum teste tiver falhado //descomentar esse bloco para ficar apenas videos que os testes falham
+      // on("after:spec", (spec, results) => {
+      //   if (results && results.video) {
+      //     const failures = results.tests.some((test) => test.attempts.some((attempt) => attempt.state === "failed"));
+      //     if (!failures) {
+      //       fs.unlinkSync(results.video);
+      //     }
+      //   }
+      // });
       // return config;
     },
     allowCypressEnv: true,
