@@ -4,7 +4,7 @@ class SeatMapPage {
   // UTP
   selecionarAssento() {
     cy.contains("Escolha o seu assento", { timeout: 90000 }).should("be.visible");
-    cy.selecionarAssentoAleatorio({ timeout: 90000 });
+    cy.selecionarAssentoAleatorioCometa({ timeout: 90000 });
     // cy.get(loc.BOTAO_AVANCAR).should("be.visible").click();
   }
 

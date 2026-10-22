@@ -227,7 +227,7 @@ Cypress.Commands.add("validarPrecoSaidaResumo", () => {
     });
 });
 
-Cypress.Commands.add("selecionarAssentoAleatorio", () => {
+Cypress.Commands.add("selecionarAssentoAleatorioCometa", () => {
   cy.get('button.outer-seat[id^="seat-"]:not(:has(.occupied-seat))', { timeout: 90000 })
     .should("be.visible")
     .then(($seats) => {
@@ -331,23 +331,23 @@ Cypress.Commands.add("selecionarAssentoAleatorio", () => {
 //     });
 // });
 
-// Cypress.Commands.add("selecionarAssentoAleatorio", () => {
-//   cy.get('button.outer-seat[id^="seat-"]:not(:has(.occupied-seat))', { timeout: 90000 })
-//     .should("be.visible")
-//     .then(($seats) => {
-//       const ids = $seats.map((i, el) => el.id).get();
-//       const randomId = ids[Math.floor(Math.random() * ids.length)];
+Cypress.Commands.add("selecionarAssentoAleatorio", () => {
+  cy.get('button.outer-seat[id^="seat-"]:not(:has(.occupied-seat))', { timeout: 90000 })
+    .should("be.visible")
+    .then(($seats) => {
+      const ids = $seats.map((i, el) => el.id).get();
+      const randomId = ids[Math.floor(Math.random() * ids.length)];
 
-//       cy.wrap(randomId).as("idSorteado");
-//     });
-//   cy.get("@idSorteado").then((id) => {
-//     cy.get(`#${id}`).scrollIntoView().should("be.visible").click({ force: true });
-//   });
+      cy.wrap(randomId).as("idSorteado");
+    });
+  cy.get("@idSorteado").then((id) => {
+    cy.get(`#${id}`).scrollIntoView().should("be.visible").click({ force: true });
+  });
 
-//   cy.get("#btn-proceed", { timeout: 90000 }).should("be.visible").and("not.be.disabled");
-//   cy.get('[style="background: #FFFFFF;; box-shadow: undefined;-webkit-box-shadow: undefined;-moz-box-shadow: undefined;; border-radius: undefinedpx;"] > .origin-destination > .show-more-details-container > .trip-details-container > .trip-details-show-passenger > .passenger-division').click();
-//   cy.get('[style="background: #FFFFFF;; box-shadow: undefined;-webkit-box-shadow: undefined;-moz-box-shadow: undefined;; border-radius: undefinedpx;"] > .origin-destination > .show-more-details-container > .trip-details-container > .trip-details-show-passenger > .cart-passenger-list > ul > .passenger-card > .passenger-card__row > .passenger-card__price > .passenger-card__price-pix').should("be.visible");
-// });
+  cy.get("#btn-proceed", { timeout: 90000 }).should("be.visible").and("not.be.disabled");
+  cy.get('[style="background: #FFFFFF;; box-shadow: undefined;-webkit-box-shadow: undefined;-moz-box-shadow: undefined;; border-radius: undefinedpx;"] > .origin-destination > .show-more-details-container > .trip-details-container > .trip-details-show-passenger > .passenger-division').click();
+  cy.get('[style="background: #FFFFFF;; box-shadow: undefined;-webkit-box-shadow: undefined;-moz-box-shadow: undefined;; border-radius: undefinedpx;"] > .origin-destination > .show-more-details-container > .trip-details-container > .trip-details-show-passenger > .cart-passenger-list > ul > .passenger-card > .passenger-card__row > .passenger-card__price > .passenger-card__price-pix').should("be.visible");
+});
 
 Cypress.Commands.add("selecionarDoisAssentosAleatorios", () => {
   const selecionar = (tentativas = 0) => {
