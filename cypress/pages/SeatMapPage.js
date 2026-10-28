@@ -17,8 +17,8 @@ class SeatMapPage {
 
   selecionarAssentoCatarinense() {
     cy.contains("Escolha o seu assento", { timeout: 90000 }).should("be.visible");
-    // cy.selecionarAssentoAleatorioCatarinense({ timeout: 90000 });
-    cy.selecionarAssentoAleatorio({ timeout: 90000 });
+    cy.selecionarAssentoAleatorioCatarinense({ timeout: 90000 });
+    // cy.selecionarAssentoAleatorio({ timeout: 90000 });
     cy.get(loc.BOTAO_AVANCAR).should("be.visible").click();
   }
 

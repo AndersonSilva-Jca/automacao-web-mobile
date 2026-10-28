@@ -36,7 +36,7 @@ describe("Rapido Ribeirão", () => {
     OfferPage.selecionarPassagemIdaRR();
     PassengerPage.selecionarPassageiro();
     SeatMapPage.selecionarAssentoRR();
-    CheckoutPage.resumoDaCompra();
+    CheckoutPage.resumoDaCompraRR();
     // cy.url({ timeout: 90000 }).should('include', '/pagamento')
     // Não finalizar a compra para evitar transações reais
     // cy.get(loc.LOADER).should('not.exist')

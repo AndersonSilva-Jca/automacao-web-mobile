@@ -36,7 +36,7 @@ describe("Auto Viação 1001", () => {
     OfferPage.selecionarPassagemIda();
     PassengerPage.selecionarPassageiro();
     SeatMapPage.selecionarAssento1001();
-    CheckoutPage.resumoDaCompra();
+    CheckoutPage.resumoDaCompra1001();
     // cy.get('[alt="loader"]').should('not.be.visible')
     // cy.url({ timeout: 90000 }).should('include', '/pagamento')
     // Não finalizar a compra para evitar transações reais

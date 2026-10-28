@@ -4,7 +4,7 @@ class CheckoutPage {
   validarCupom() {}
   //------------------ UTP ------------------
   resumoDaCompraCometa() {
-    cy.validarPrecoSaidaResumo();
+    cy.validarPrecoSaidaResumoCometa();
     cy.get(loc.ASSERT_SUBTOTAL).should("contain", "Subtotal dos assentos").log("Subtotal dos assentos");
     cy.get(loc.ASSERT_TAXASERVICO).should("exist").log("Taxa de serviço");
     cy.get(loc.ASSERT_VALORTOTAL).should("contain", "Valor total").log("Valor total das passagens");
@@ -15,8 +15,32 @@ class CheckoutPage {
     cy.get('[data-js="tab-conta-giro"]').should("be.visible").log("Aba da Conta Giro");
   }
 
-  resumoDaCompra() {
-    cy.validarPrecoSaidaResumo();
+  resumoDaCompra1001() {
+    cy.validarPrecoSaidaResumo1001();
+    cy.get(loc.ASSERT_SUBTOTAL).should("contain", "Subtotal dos assentos").log("Subtotal dos assentos");
+    cy.get(loc.ASSERT_TAXASERVICO).should("exist").log("Taxa de serviço");
+    cy.get(loc.ASSERT_VALORTOTAL).should("contain", "Valor total").log("Valor total das passagens");
+    cy.get(".payment-selector-wrapper").should("be.visible").log("Aba de Pagamentos");
+    cy.get('[data-js="tab-nupay"]').should("be.visible").log("Aba da NuPay");
+    cy.get('[data-js="tab-card"]').should("be.visible").log("Aba do Cartão de Crédito");
+    cy.get(".payment-selector__grid > .active").should("be.visible").log("Aba do PIX");
+    cy.get('[data-js="tab-conta-giro"]').should("be.visible").log("Aba da Conta Giro");
+  }
+
+  resumoDaCompraExpressoDoSul() {
+    cy.validarPrecoSaidaResumoExpressoDoSul();
+    cy.get(loc.ASSERT_SUBTOTAL).should("contain", "Subtotal dos assentos").log("Subtotal dos assentos");
+    cy.get(loc.ASSERT_TAXASERVICO).should("exist").log("Taxa de serviço");
+    cy.get(loc.ASSERT_VALORTOTAL).should("contain", "Valor total").log("Valor total das passagens");
+    cy.get(".payment-selector-wrapper").should("be.visible").log("Aba de Pagamentos");
+    cy.get('[data-js="tab-nupay"]').should("be.visible").log("Aba da NuPay");
+    cy.get('[data-js="tab-card"]').should("be.visible").log("Aba do Cartão de Crédito");
+    cy.get(".payment-selector__grid > .active").should("be.visible").log("Aba do PIX");
+    cy.get('[data-js="tab-conta-giro"]').should("be.visible").log("Aba da Conta Giro");
+  }
+
+  resumoDaCompraRR() {
+    cy.validarPrecoSaidaResumoRR();
     cy.get(loc.ASSERT_SUBTOTAL).should("contain", "Subtotal dos assentos").log("Subtotal dos assentos");
     cy.get(loc.ASSERT_TAXASERVICO).should("exist").log("Taxa de serviço");
     cy.get(loc.ASSERT_VALORTOTAL).should("contain", "Valor total").log("Valor total das passagens");
@@ -28,6 +52,7 @@ class CheckoutPage {
   }
 
   resumoDaCompraCatarinense() {
+    cy.validarPrecoSaidaResumoCatarinense();
     cy.get(loc.ASSERT_SUBTOTAL).should("contain", "Subtotal dos assentos").log("Subtotal dos assentos");
     cy.get(loc.ASSERT_TAXASERVICO).should("exist").log("Taxa de serviço");
     cy.get(loc.ASSERT_VALORTOTAL).should("contain", "Valor total").log("Valor total das passagens");
