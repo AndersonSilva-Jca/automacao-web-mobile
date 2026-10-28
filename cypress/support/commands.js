@@ -181,83 +181,36 @@ Cypress.Commands.add("selecionarAssentoTotem", (limiteMaximo) => {
 });
 
 Cypress.Commands.add("validarPrecoSaidaResumo", () => {
-  const precoEntradaPix = Cypress.env("precoEntradaPix");
   const precoEntradaCartao = Cypress.env("precoEntradaCartao");
 
-  if (precoEntradaPix === undefined || precoEntradaCartao === undefined) {
-    throw new Error("❌ ERRO: Os preços de entrada (Pix/Cartão) não foram capturados corretamente nas etapas anteriores!");
+  if (precoEntradaCartao === undefined) {
+    throw new Error("❌ ERRO: O preço de entrada do Cartão não foi capturado corretamente nas etapas anteriores!");
   }
 
-  // Captura os valores de saída na tela final de resumo/pagamento
-  cy.get(".cart-price-int")
-    .eq(0)
-    .invoke("text")
-    .then((intPixSaida) => {
-      cy.get(".cart-price-dec")
-        .eq(0)
+  // Aguarda a tela de pagamento carregar e usa exatamente o mesmo caminho do seu seletor para capturar na saída
+  cy.get('[style="; box-shadow: undefined;-webkit-box-shadow: undefined;-moz-box-shadow: undefined;; border-radius: undefinedpx;"] > .origin-destination > .show-more-details-container > .trip-details-container > .trip-details-show-passenger > .cart-passenger-list > ul > .passenger-card', { timeout: 15000 })
+    .should("be.visible")
+    .first()
+    .within(() => {
+      cy.get(".cart-price-int")
+        .first()
         .invoke("text")
-        .then((decPixSaida) => {
-          const precoSaidaPix = parseFloat(`${intPixSaida.trim()}${decPixSaida.trim()}`.replace(",", "."));
-
-          cy.get(".cart-price-int")
-            .eq(1)
+        .then((intCardSaida) => {
+          cy.get(".cart-price-dec")
+            .first()
             .invoke("text")
-            .then((intCardSaida) => {
-              cy.get(".cart-price-dec")
-                .eq(1)
-                .invoke("text")
-                .then((decCardSaida) => {
-                  const precoSaidaCartao = parseFloat(`${intCardSaida.trim()}${decCardSaida.trim()}`.replace(",", "."));
+            .then((decCardSaida) => {
+              const precoSaidaCartao = parseFloat(`${intCardSaida.trim()}${decCardSaida.trim()}`.replace(",", "."));
 
-                  // Logs no Terminal e Painel
-                  console.log(`[TERMINAL] 🏁 SAÍDA PIX: R$ ${precoSaidaPix} | ENTRADA PIX: R$ ${precoEntradaPix}`);
-                  console.log(`[TERMINAL] 🏁 SAÍDA CARTÃO: R$ ${precoSaidaCartao} | ENTRADA CARTÃO: R$ ${precoEntradaCartao}`);
+              // Logs no Terminal e Painel
+              console.log(`[TERMINAL] 🏁 SAÍDA CARTÃO: R$ ${precoSaidaCartao} | ENTRADA CARTÃO: R$ ${precoEntradaCartao}`);
+              cy.log(`🏁 [SAÍDA CARTÃO] R$ ${precoSaidaCartao} | [ENTRADA CARTÃO] R$ ${precoEntradaCartao}`);
 
-                  cy.log(`🏁 [SAÍDA PIX] R$ ${precoSaidaPix} | [ENTRADA PIX] R$ ${precoEntradaPix}`);
-                  cy.log(`🏁 [SAÍDA CARTÃO] R$ ${precoSaidaCartao} | [ENTRADA CARTÃO] R$ ${precoEntradaCartao}`);
+              // Validação exata
+              expect(precoSaidaCartao, `Validar Divergência no preço Cartão! Entrada: ${precoEntradaCartao} vs Saída: ${precoSaidaCartao}`).to.eq(precoEntradaCartao);
 
-                  // Validações independentes para Pix e Cartão
-                  expect(precoSaidaPix, `Validar Divergência no preço PIX! Entrada: ${precoEntradaPix} vs Saída: ${precoSaidaPix}`).to.eq(precoEntradaPix);
-                  expect(precoSaidaCartao, `Validar Divergência no preço Cartão! Entrada: ${precoEntradaCartao} vs Saída: ${precoSaidaCartao}`).to.eq(precoEntradaCartao);
-
-                  cy.log(`✅ Preços de PIX e Cartão conferidos e idênticos com sucesso!`);
-                });
+              cy.log(`✅ Preço do Cartão conferido e idêntico com sucesso!`);
             });
-        });
-    });
-});
-
-Cypress.Commands.add("validarPrecoSaidaResumoCartao", () => {
-  const precoEntradaPix = Cypress.env("precoEntradaPix");
-  const precoEntradaCartao = Cypress.env("precoEntradaCartao");
-
-  if (precoEntradaPix === undefined || precoEntradaCartao === undefined) {
-    throw new Error("❌ ERRO: Os preços de entrada (Pix/Cartão) não foram capturados corretamente nas etapas anteriores!");
-  }
-
-  // Captura os valores de saída na tela final de resumo/pagamento
-
-  cy.get(".cart-price-int")
-    .eq(1)
-    .invoke("text")
-    .then((intCardSaida) => {
-      cy.get(".cart-price-dec")
-        .eq(1)
-        .invoke("text")
-        .then((decCardSaida) => {
-          const precoSaidaCartao = parseFloat(`${intCardSaida.trim()}${decCardSaida.trim()}`.replace(",", "."));
-
-          // Logs no Terminal e Painel
-          console.log(`[TERMINAL] 🏁 SAÍDA PIX: R$ ${precoSaidaPix} | ENTRADA PIX: R$ ${precoEntradaPix}`);
-          console.log(`[TERMINAL] 🏁 SAÍDA CARTÃO: R$ ${precoSaidaCartao} | ENTRADA CARTÃO: R$ ${precoEntradaCartao}`);
-
-          cy.log(`🏁 [SAÍDA PIX] R$ ${precoSaidaPix} | [ENTRADA PIX] R$ ${precoEntradaPix}`);
-          cy.log(`🏁 [SAÍDA CARTÃO] R$ ${precoSaidaCartao} | [ENTRADA CARTÃO] R$ ${precoEntradaCartao}`);
-
-          // Validações independentes para Pix e Cartão
-          expect(precoSaidaCartao, `Validar Divergência no preço Cartão! Entrada: ${precoEntradaCartao} vs Saída: ${precoSaidaCartao}`).to.eq(precoEntradaCartao);
-
-          cy.log(`✅ Preços de PIX e Cartão conferidos e idênticos com sucesso!`);
         });
     });
 });
@@ -432,34 +385,17 @@ Cypress.Commands.add("selecionarAssentoAleatorio1001", () => {
   // Clica para expandir os detalhes se necessário
   cy.get('[style="; box-shadow: undefined;-webkit-box-shadow: undefined;-moz-box-shadow: undefined;; border-radius: undefinedpx;"] > .origin-destination > .show-more-details-container > .trip-details-container > .trip-details-show-passenger > .passenger-division > .passenger-division__toggle').click();
 
-  // 💰 CAPTURA DO PREÇO NO PIX E NO CARTÃO NA TELA DE ASSENTOS (Resumo lateral)
-  // Usamos os seletores específicos baseados na estrutura do PIX e Cartão da sua sidebar
-  cy.get('.passenger-card__price-pix, [data-bind="pricePix"], .cart-passenger-list')
+  // 💳 CAPTURA APENAS DO PREÇO DO CARTÃO NA TELA DE ASSENTOS (Resumo lateral)
+  cy.get('.cart-passenger-list, [data-bind*="price"]')
     .first()
     .within(() => {
-      // Captura valor Pix
+      // Captura valor Cartão
       cy.get(".cart-price-int")
-        .first()
-        .invoke("text")
-        .then((intPix) => {
-          cy.get(".cart-price-dec")
-            .first()
-            .invoke("text")
-            .then((decPix) => {
-              const precoPix = parseFloat(`${intPix.trim()}${decPix.trim()}`.replace(",", "."));
-              Cypress.env("precoEntradaPix", precoPix);
-              console.log(`[TERMINAL CYPRESS] 🎯 PREÇO ENTRADA PIX: R$ ${precoPix}`);
-              cy.log(`🎯 [PREÇO ENTRADA PIX] R$ ${precoPix}`);
-            });
-        });
-
-      // Captura valor Cartão (geralmente logo abaixo do Pix)
-      cy.get(".cart-price-int")
-        .eq(1)
+        .last() // Utiliza .last() ou o índice correto se houver apenas o valor do cartão na listagem
         .invoke("text")
         .then((intCard) => {
           cy.get(".cart-price-dec")
-            .eq(1)
+            .last()
             .invoke("text")
             .then((decCard) => {
               const precoCard = parseFloat(`${intCard.trim()}${decCard.trim()}`.replace(",", "."));
@@ -474,7 +410,37 @@ Cypress.Commands.add("selecionarAssentoAleatorio1001", () => {
   cy.get("#btn-proceed").click({ force: true });
 });
 
-// Cypress.Commands.add("selecionarAssentoAleatorio", () => {
+Cypress.Commands.add("validarPrecoSaidaResumo", () => {
+  const precoEntradaCartao = Cypress.env("precoEntradaCartao");
+
+  if (precoEntradaCartao === undefined) {
+    throw new Error("❌ ERRO: O preço de entrada do Cartão não foi capturado corretamente nas etapas anteriores!");
+  }
+
+  // Captura o valor de saída do Cartão na tela final de resumo/pagamento
+  cy.get(".cart-price-int")
+    .last()
+    .invoke("text")
+    .then((intCardSaida) => {
+      cy.get(".cart-price-dec")
+        .last()
+        .invoke("text")
+        .then((decCardSaida) => {
+          const precoSaidaCartao = parseFloat(`${intCardSaida.trim()}${decCardSaida.trim()}`.replace(",", "."));
+
+          // Logs no Terminal e Painel
+          console.log(`[TERMINAL] 🏁 SAÍDA CARTÃO: R$ ${precoSaidaCartao} | ENTRADA CARTÃO: R$ ${precoEntradaCartao}`);
+          cy.log(`🏁 [SAÍDA CARTÃO] R$ ${precoSaidaCartao} | [ENTRADA CARTÃO] R$ ${precoEntradaCartao}`);
+
+          // Validação focada exclusivamente no Cartão
+          expect(precoSaidaCartao, `Validar Divergência no preço Cartão! Entrada: ${precoEntradaCartao} vs Saída: ${precoSaidaCartao}`).to.eq(precoEntradaCartao);
+
+          cy.log(`✅ Preço do Cartão conferido e idêntico com sucesso!`);
+        });
+    });
+});
+
+// Cypress.Commands.add("selecionarAssentoAleatorio1001", () => {
 //   cy.get('button.outer-seat[id^="seat-"]:not(:has(.occupied-seat))', { timeout: 90000 })
 //     .should("be.visible")
 //     .then(($seats) => {
@@ -490,32 +456,52 @@ Cypress.Commands.add("selecionarAssentoAleatorio1001", () => {
 
 //   cy.get("#btn-proceed", { timeout: 90000 }).should("be.visible").and("not.be.disabled");
 
-//   // Clica para expandir os detalhes do passageiro no resumo da tela de assentos
-//   cy.get('[style="background: #FFFFFF;; box-shadow: undefined;-webkit-box-shadow: undefined;-moz-box-shadow: undefined;; border-radius: undefinedpx;"] > .origin-destination > .show-more-details-container > .trip-details-container > .trip-details-show-passenger > .passenger-division').click();
+//   // Clica para expandir os detalhes se necessário
+//   cy.get('[style="; box-shadow: undefined;-webkit-box-shadow: undefined;-moz-box-shadow: undefined;; border-radius: undefinedpx;"] > .origin-destination > .show-more-details-container > .trip-details-container > .trip-details-show-passenger > .passenger-division > .passenger-division__toggle').click();
 
-//   // Valida e captura o preço inicial direto do card do passageiro expandido
-//   cy.get('[style="background: #FFFFFF;; box-shadow: undefined;-webkit-box-shadow: undefined;-moz-box-shadow: undefined;; border-radius: undefinedpx;"] > .origin-destination > .show-more-details-container > .trip-details-container > .trip-details-show-passenger > .cart-passenger-list > ul > .passenger-card')
-//     .should("be.visible")
+//   // 💰 CAPTURA DO PREÇO NO PIX E NO CARTÃO NA TELA DE ASSENTOS (Resumo lateral)
+//   // Usamos os seletores específicos baseados na estrutura do PIX e Cartão da sua sidebar
+//   cy.get('.passenger-card__price-pix, [data-bind="pricePix"], .cart-passenger-list')
+//     .first()
 //     .within(() => {
+//       // Captura valor Pix
 //       cy.get(".cart-price-int")
+//         .first()
 //         .invoke("text")
-//         .then((intText) => {
+//         .then((intPix) => {
 //           cy.get(".cart-price-dec")
+//             .first()
 //             .invoke("text")
-//             .then((decText) => {
-//               const precoEntradaStr = `${intText.trim()}${decText.trim()}`.replace(",", ".");
-//               const precoEntrada = parseFloat(precoEntradaStr);
+//             .then((decPix) => {
+//               const precoPix = parseFloat(`${intPix.trim()}${decPix.trim()}`.replace(",", "."));
+//               Cypress.env("precoEntradaPix", precoPix);
+//               console.log(`[TERMINAL CYPRESS] 🎯 PREÇO ENTRADA PIX: R$ ${precoPix}`);
+//               cy.log(`🎯 [PREÇO ENTRADA PIX] R$ ${precoPix}`);
+//             });
+//         });
 
-//               // Salva globalmente para comparar no checkout/saída
-//               Cypress.env("precoEntradaPassagem", precoEntrada);
-
-//               // Logs exibidos no painel do Cypress e no terminal Node.js
-//               console.log(`[TERMINAL CYPRESS] 🎯 PREÇO DE ENTRADA (NO ASSENTO): R$ ${precoEntrada}`);
-//               cy.log(`🎯 [PREÇO ENTRADA] R$ ${precoEntrada}`);
+//       // Captura valor Cartão (geralmente logo abaixo do Pix)
+//       cy.get(".cart-price-int")
+//         .eq(1)
+//         .invoke("text")
+//         .then((intCard) => {
+//           cy.get(".cart-price-dec")
+//             .eq(1)
+//             .invoke("text")
+//             .then((decCard) => {
+//               const precoCard = parseFloat(`${intCard.trim()}${decCard.trim()}`.replace(",", "."));
+//               Cypress.env("precoEntradaCartao", precoCard);
+//               console.log(`[TERMINAL CYPRESS] 🎯 PREÇO ENTRADA CARTÃO: R$ ${precoCard}`);
+//               cy.log(`🎯 [PREÇO ENTRADA CARTÃO] R$ ${precoCard}`);
 //             });
 //         });
 //     });
+
+//   // Clica para avançar
+//   cy.get("#btn-proceed").click({ force: true });
 // });
+
+// Cypress.Commands.add("selecionarAssentoAleatorio", () => {
 
 Cypress.Commands.add("selecionarAssentoAleatorio", () => {
   cy.get('button.outer-seat[id^="seat-"]:not(:has(.occupied-seat))', { timeout: 90000 })

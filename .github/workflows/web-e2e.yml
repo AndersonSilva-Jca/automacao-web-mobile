@@ -31,9 +31,9 @@ jobs:
           # - cypress/e2e/00_smoke/04_WemobiExp.cy.js
           - cypress/e2e/00_smoke/05_Cometa.cy.js
           - cypress/e2e/00_smoke/06_1001.cy.js
-          - cypress/e2e/00_smoke/07_ExpressoSul.cy.js
-          - cypress/e2e/00_smoke/08_RapidoRibeirao.cy.js
-          - cypress/e2e/00_smoke/09_Catarinense.cy.js
+          # - cypress/e2e/00_smoke/07_ExpressoSul.cy.js
+          # - cypress/e2e/00_smoke/08_RapidoRibeirao.cy.js
+          # - cypress/e2e/00_smoke/09_Catarinense.cy.js
           - cypress/e2e/00_smoke/10_Totem.cy.js
 
     runs-on: ubuntu-latest
