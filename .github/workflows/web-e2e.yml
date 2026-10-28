@@ -23,17 +23,17 @@ jobs:
       fail-fast: false
       matrix:
         spec:
-          # - cypress/e2e/00_smoke/00_Healthcheck_fretur.cy.js
+          - cypress/e2e/00_smoke/00_Healthcheck_fretur.cy.js
           - cypress/e2e/00_smoke/01_ODH.cy.js
           - cypress/e2e/00_smoke/02_ODP.cy.js
           - cypress/e2e/00_smoke/03_Giro.cy.js
           - cypress/e2e/00_smoke/04_Wemobi.cy.js
-          # - cypress/e2e/00_smoke/04_WemobiExp.cy.js
+          - cypress/e2e/00_smoke/04_WemobiExp.cy.js
           - cypress/e2e/00_smoke/05_Cometa.cy.js
           - cypress/e2e/00_smoke/06_1001.cy.js
-          # - cypress/e2e/00_smoke/07_ExpressoSul.cy.js
-          # - cypress/e2e/00_smoke/08_RapidoRibeirao.cy.js
-          # - cypress/e2e/00_smoke/09_Catarinense.cy.js
+          - cypress/e2e/00_smoke/07_ExpressoSul.cy.js
+          - cypress/e2e/00_smoke/08_RapidoRibeirao.cy.js
+          - cypress/e2e/00_smoke/09_Catarinense.cy.js
           - cypress/e2e/00_smoke/10_Totem.cy.js
 
     runs-on: ubuntu-latest
@@ -252,8 +252,7 @@ jobs:
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "🚨[ALERTA SITES] E-Bus/UTP - Monit. Cont."
-          to: anderson.ssantos@jcatlm.com.br
-          # ,qa.monitor@odptech.com.br,maysa.marco@jcatlm.com.br,anderson.psilva@jcatlm.com.br,ariane.izac@jcatlm.com.br,ana.soliveira@jcatlm.com.br
+          to: anderson.ssantos@jcatlm.com.br,qa.monitor@odptech.com.br,maysa.marco@jcatlm.com.br,anderson.psilva@jcatlm.com.br,ariane.izac@jcatlm.com.br,ana.soliveira@jcatlm.com.br
           # cc: qa.monitor@odptech.com.br,maysa.marco@jcatlm.com.br,anderson.psilva@jcatlm.com.br
           from: "Monitoramento Contínuo"
           html_body: |

@@ -1,4 +1,4 @@
-name: Web E2E - UTP
+name: Web E2E - Teste UTP
 
 on:
   # push:
@@ -23,10 +23,12 @@ jobs:
       fail-fast: false
       matrix:
         spec:
+          # - cypress/e2e/00_smoke/00_Healthcheck_fretur.cy.js
           # - cypress/e2e/00_smoke/01_ODH.cy.js
           # - cypress/e2e/00_smoke/02_ODP.cy.js
           # - cypress/e2e/00_smoke/03_Giro.cy.js
           # - cypress/e2e/00_smoke/04_Wemobi.cy.js
+          # - cypress/e2e/00_smoke/04_WemobiExp.cy.js
           - cypress/e2e/00_smoke/05_Cometa.cy.js
           - cypress/e2e/00_smoke/06_1001.cy.js
           - cypress/e2e/00_smoke/07_ExpressoSul.cy.js
@@ -50,14 +52,13 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-
       - name: Instalar Dependências do Projeto
         run: npm ci --prefer-offline --no-audit --no-fund
 
       - name: Testes E2E E-Bus/UTP
         id: cypress
-        continue-on-error: true
-        run: npx cypress run --browser electron --config video=false --spec '${{ matrix.spec }}'
+        # continue-on-error: true
+        run: npx cypress run --browser electron --spec '${{ matrix.spec }}'
         env:
           ELECTRON_EXTRA_LAUNCH_ARGS: "--disable-gpu --disable-dev-shm-usage --no-sandbox"
           APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
@@ -117,6 +118,7 @@ jobs:
     needs: cypress-run
     if: always()
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     concurrency:
       group: deploy-r2-cloudflare
@@ -125,6 +127,12 @@ jobs:
     steps:
       - name: Checkout do Código
         uses: actions/checkout@v4
+
+      - name: Obter Data e Hora Atual (Brasília)
+        if: always()
+        run: |
+          echo "DATA_ALERTA=$(TZ='America/Sao_Paulo' date +'%d/%m/%Y')" >> "$GITHUB_ENV"
+          echo "HORA_ALERTA=$(TZ='America/Sao_Paulo' date +'%H:%M:%S')" >> "$GITHUB_ENV"
 
       - name: Instalar Dependências do Node
         run: npm ci
@@ -154,11 +162,11 @@ jobs:
             --reportFilename index \
             --inline \
             --reportTitle "Monitoramento E2E - Run #${{ github.run_number }}"
-
       - name: Copiar JSON consolidado para dentro do relatório
         run: cp cypress/merged-report.json cypress/reports/index.json
 
       - name: Deploy do Relatório para Cloudflare R2
+        if: always() && env.CYPRESS_OUTCOME == 'failure'
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.CYPRESS_R2_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.CYPRESS_R2_SECRET_ACCESS_KEY }}
@@ -166,17 +174,18 @@ jobs:
         run: |
           aws s3 sync ./cypress/reports s3://cypress-reports/reports/${{ github.run_number }}/01_e2e \
             --endpoint-url https://${{ secrets.CYPRESS_R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
-
             #  aws s3 sync ./cypress/reports s3://cypress-reports/reports/${{ github.run_number }}/01_e2e \
             # --endpoint-url https://${{ secrets.CYPRESS_R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
 
-      - name: Enviar resultados para o Dashboard (Apps Script)
+      - name: Enviar resultados para o Dashboard
+
         env:
           GITHUB_RUN_NUMBER: ${{ github.run_number }}
           APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
           CYPRESS_R2_PUBLIC_URL: "https://pub-9c4151f873204a7b814dfbcb4e0036bc.r2.dev"
           REPO_OWNER: ${{ github.repository_owner }}
           REPO_NAME: ${{ github.event.repository.name }}
+          timeout-minutes: 5
         run: node scripts/enviar-resultados-appscript.js
 
       - name: Enviar E-mail de SUCESSO ✅
@@ -187,7 +196,7 @@ jobs:
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "✅[SITES] UTP - Monit. Cont."
+          subject: "✅[TESTE SITES] UTP - Monit. Cont."
           to: anderson.ssantos@jcatlm.com.br
           from: "Monitoramento Contínuo"
           html_body: |
@@ -233,6 +242,7 @@ jobs:
               <hr style="border: 0; border-top: 1px solid #eee; margin: 25px 0;">
               <p style="font-size: 12px; color: #999; margin: 0;">Este é um e-mail automático gerado pelo sistema de Qualidade de Software (QA).</p>
             </div>
+
       - name: Enviar E-mail de FALHA 🚨
         if: env.CYPRESS_OUTCOME == 'failure'
         uses: dawidd6/action-send-mail@v3
@@ -241,10 +251,8 @@ jobs:
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "🚨[ALERTA SITES] UTP - Monit. Cont."
+          subject: "🚨[TESTE ALERTA SITES] UTP - Monit. Cont."
           to: anderson.ssantos@jcatlm.com.br
-          # ,qa.monitor@odptech.com.br,maysa.marco@jcatlm.com.br,anderson.psilva@jcatlm.com.br
-          # cc: qa.monitor@odptech.com.br,maysa.marco@jcatlm.com.br,anderson.psilva@jcatlm.com.br
           from: "Monitoramento Contínuo"
           html_body: |
             <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6; max-width: 850px; margin: 0 auto; padding: 10px 0;">
