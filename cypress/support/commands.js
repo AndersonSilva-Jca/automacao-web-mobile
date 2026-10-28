@@ -227,6 +227,41 @@ Cypress.Commands.add("validarPrecoSaidaResumo", () => {
     });
 });
 
+Cypress.Commands.add("validarPrecoSaidaResumoCartao", () => {
+  const precoEntradaPix = Cypress.env("precoEntradaPix");
+  const precoEntradaCartao = Cypress.env("precoEntradaCartao");
+
+  if (precoEntradaPix === undefined || precoEntradaCartao === undefined) {
+    throw new Error("❌ ERRO: Os preços de entrada (Pix/Cartão) não foram capturados corretamente nas etapas anteriores!");
+  }
+
+  // Captura os valores de saída na tela final de resumo/pagamento
+
+  cy.get(".cart-price-int")
+    .eq(1)
+    .invoke("text")
+    .then((intCardSaida) => {
+      cy.get(".cart-price-dec")
+        .eq(1)
+        .invoke("text")
+        .then((decCardSaida) => {
+          const precoSaidaCartao = parseFloat(`${intCardSaida.trim()}${decCardSaida.trim()}`.replace(",", "."));
+
+          // Logs no Terminal e Painel
+          console.log(`[TERMINAL] 🏁 SAÍDA PIX: R$ ${precoSaidaPix} | ENTRADA PIX: R$ ${precoEntradaPix}`);
+          console.log(`[TERMINAL] 🏁 SAÍDA CARTÃO: R$ ${precoSaidaCartao} | ENTRADA CARTÃO: R$ ${precoEntradaCartao}`);
+
+          cy.log(`🏁 [SAÍDA PIX] R$ ${precoSaidaPix} | [ENTRADA PIX] R$ ${precoEntradaPix}`);
+          cy.log(`🏁 [SAÍDA CARTÃO] R$ ${precoSaidaCartao} | [ENTRADA CARTÃO] R$ ${precoEntradaCartao}`);
+
+          // Validações independentes para Pix e Cartão
+          expect(precoSaidaCartao, `Validar Divergência no preço Cartão! Entrada: ${precoEntradaCartao} vs Saída: ${precoSaidaCartao}`).to.eq(precoEntradaCartao);
+
+          cy.log(`✅ Preços de PIX e Cartão conferidos e idênticos com sucesso!`);
+        });
+    });
+});
+
 Cypress.Commands.add("selecionarAssentoAleatorioCometa", () => {
   cy.get('button.outer-seat[id^="seat-"]:not(:has(.occupied-seat))', { timeout: 90000 })
     .should("be.visible")
@@ -309,25 +344,9 @@ Cypress.Commands.add("selecionarAssentoAleatorioCatarinense", () => {
 
   // 💰 CAPTURA DO PREÇO NO PIX E NO CARTÃO NA TELA DE ASSENTOS (Resumo lateral)
   // Usamos os seletores específicos baseados na estrutura do PIX e Cartão da sua sidebar
-  cy.get('.passenger-card__price-pix, [data-bind="pricePix"], .cart-passenger-list')
+  cy.get(".passenger-card__price-pix, .cart-passenger-list")
     .first()
     .within(() => {
-      // Captura valor Pix
-      cy.get(".cart-price-int")
-        .first()
-        .invoke("text")
-        .then((intPix) => {
-          cy.get(".cart-price-dec")
-            .first()
-            .invoke("text")
-            .then((decPix) => {
-              const precoPix = parseFloat(`${intPix.trim()}${decPix.trim()}`.replace(",", "."));
-              Cypress.env("precoEntradaPix", precoPix);
-              console.log(`[TERMINAL CYPRESS] 🎯 PREÇO ENTRADA PIX: R$ ${precoPix}`);
-              cy.log(`🎯 [PREÇO ENTRADA PIX] R$ ${precoPix}`);
-            });
-        });
-
       // Captura valor Cartão (geralmente logo abaixo do Pix)
       cy.get(".cart-price-int")
         .eq(1)
@@ -370,25 +389,9 @@ Cypress.Commands.add("selecionarAssentoAleatorioRR", () => {
 
   // 💰 CAPTURA DO PREÇO NO PIX E NO CARTÃO NA TELA DE ASSENTOS (Resumo lateral)
   // Usamos os seletores específicos baseados na estrutura do PIX e Cartão da sua sidebar
-  cy.get('.passenger-card__price-pix, [data-bind="pricePix"], .cart-passenger-list')
+  cy.get(".passenger-card__price-pix, .cart-passenger-list")
     .first()
     .within(() => {
-      // Captura valor Pix
-      cy.get(".cart-price-int")
-        .first()
-        .invoke("text")
-        .then((intPix) => {
-          cy.get(".cart-price-dec")
-            .first()
-            .invoke("text")
-            .then((decPix) => {
-              const precoPix = parseFloat(`${intPix.trim()}${decPix.trim()}`.replace(",", "."));
-              Cypress.env("precoEntradaPix", precoPix);
-              console.log(`[TERMINAL CYPRESS] 🎯 PREÇO ENTRADA PIX: R$ ${precoPix}`);
-              cy.log(`🎯 [PREÇO ENTRADA PIX] R$ ${precoPix}`);
-            });
-        });
-
       // Captura valor Cartão (geralmente logo abaixo do Pix)
       cy.get(".cart-price-int")
         .eq(1)
