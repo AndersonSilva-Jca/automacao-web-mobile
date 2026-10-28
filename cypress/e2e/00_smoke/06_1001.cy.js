@@ -35,7 +35,7 @@ describe("Auto Viação 1001", () => {
     SearchPage.confirmarBusca();
     OfferPage.selecionarPassagemIda();
     PassengerPage.selecionarPassageiro();
-    SeatMapPage.selecionarAssento();
+    SeatMapPage.selecionarAssento1001();
     CheckoutPage.resumoDaCompra();
     // cy.get('[alt="loader"]').should('not.be.visible')
     // cy.url({ timeout: 90000 }).should('include', '/pagamento')

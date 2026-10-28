@@ -217,8 +217,8 @@ Cypress.Commands.add("validarPrecoSaidaResumo", () => {
                   cy.log(`🏁 [SAÍDA CARTÃO] R$ ${precoSaidaCartao} | [ENTRADA CARTÃO] R$ ${precoEntradaCartao}`);
 
                   // Validações independentes para Pix e Cartão
-                  expect(precoSaidaPix, `Divergência no preço PIX! Entrada: ${precoEntradaPix} vs Saída: ${precoSaidaPix}`).to.eq(precoEntradaPix);
-                  expect(precoSaidaCartao, `Divergência no preço Cartão! Entrada: ${precoEntradaCartao} vs Saída: ${precoSaidaCartao}`).to.eq(precoEntradaCartao);
+                  expect(precoSaidaPix, `Validar Divergência no preço PIX! Entrada: ${precoEntradaPix} vs Saída: ${precoSaidaPix}`).to.eq(precoEntradaPix);
+                  expect(precoSaidaCartao, `Validar Divergência no preço Cartão! Entrada: ${precoEntradaCartao} vs Saída: ${precoSaidaCartao}`).to.eq(precoEntradaCartao);
 
                   cy.log(`✅ Preços de PIX e Cartão conferidos e idênticos com sucesso!`);
                 });
@@ -245,6 +245,67 @@ Cypress.Commands.add("selecionarAssentoAleatorioCometa", () => {
 
   // Clica para expandir os detalhes se necessário
   cy.get('[style="background: #FFFFFF;; box-shadow: undefined;-webkit-box-shadow: undefined;-moz-box-shadow: undefined;; border-radius: undefinedpx;"] > .origin-destination > .show-more-details-container > .trip-details-container > .trip-details-show-passenger > .passenger-division > .passenger-division__toggle').should("be.visible").click({ force: true });
+
+  // 💰 CAPTURA DO PREÇO NO PIX E NO CARTÃO NA TELA DE ASSENTOS (Resumo lateral)
+  // Usamos os seletores específicos baseados na estrutura do PIX e Cartão da sua sidebar
+  cy.get('.passenger-card__price-pix, [data-bind="pricePix"], .cart-passenger-list')
+    .first()
+    .within(() => {
+      // Captura valor Pix
+      cy.get(".cart-price-int")
+        .first()
+        .invoke("text")
+        .then((intPix) => {
+          cy.get(".cart-price-dec")
+            .first()
+            .invoke("text")
+            .then((decPix) => {
+              const precoPix = parseFloat(`${intPix.trim()}${decPix.trim()}`.replace(",", "."));
+              Cypress.env("precoEntradaPix", precoPix);
+              console.log(`[TERMINAL CYPRESS] 🎯 PREÇO ENTRADA PIX: R$ ${precoPix}`);
+              cy.log(`🎯 [PREÇO ENTRADA PIX] R$ ${precoPix}`);
+            });
+        });
+
+      // Captura valor Cartão (geralmente logo abaixo do Pix)
+      cy.get(".cart-price-int")
+        .eq(1)
+        .invoke("text")
+        .then((intCard) => {
+          cy.get(".cart-price-dec")
+            .eq(1)
+            .invoke("text")
+            .then((decCard) => {
+              const precoCard = parseFloat(`${intCard.trim()}${decCard.trim()}`.replace(",", "."));
+              Cypress.env("precoEntradaCartao", precoCard);
+              console.log(`[TERMINAL CYPRESS] 🎯 PREÇO ENTRADA CARTÃO: R$ ${precoCard}`);
+              cy.log(`🎯 [PREÇO ENTRADA CARTÃO] R$ ${precoCard}`);
+            });
+        });
+    });
+
+  // Clica para avançar
+  cy.get("#btn-proceed").click({ force: true });
+});
+
+Cypress.Commands.add("selecionarAssentoAleatorio1001", () => {
+  cy.get('button.outer-seat[id^="seat-"]:not(:has(.occupied-seat))', { timeout: 90000 })
+    .should("be.visible")
+    .then(($seats) => {
+      const ids = $seats.map((i, el) => el.id).get();
+      const randomId = ids[Math.floor(Math.random() * ids.length)];
+
+      cy.wrap(randomId).as("idSorteado");
+    });
+
+  cy.get("@idSorteado").then((id) => {
+    cy.get(`#${id}`).scrollIntoView().should("be.visible").click({ force: true });
+  });
+
+  cy.get("#btn-proceed", { timeout: 90000 }).should("be.visible").and("not.be.disabled");
+
+  // Clica para expandir os detalhes se necessário
+  cy.get('[style="; box-shadow: undefined;-webkit-box-shadow: undefined;-moz-box-shadow: undefined;; border-radius: undefinedpx;"] > .origin-destination > .show-more-details-container > .trip-details-container > .trip-details-show-passenger > .passenger-division > .passenger-division__toggle').click();
 
   // 💰 CAPTURA DO PREÇO NO PIX E NO CARTÃO NA TELA DE ASSENTOS (Resumo lateral)
   // Usamos os seletores específicos baseados na estrutura do PIX e Cartão da sua sidebar

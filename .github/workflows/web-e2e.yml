@@ -23,7 +23,7 @@ jobs:
       fail-fast: false
       matrix:
         spec:
-          # - cypress/e2e/00_smoke/00_Healthcheck_fretur.cy.js
+          - cypress/e2e/00_smoke/00_Healthcheck_fretur.cy.js
           - cypress/e2e/00_smoke/01_ODH.cy.js
           - cypress/e2e/00_smoke/02_ODP.cy.js
           - cypress/e2e/00_smoke/03_Giro.cy.js
@@ -252,8 +252,7 @@ jobs:
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "🚨[ALERTA SITES] E-Bus/UTP - Monit. Cont."
-          to: anderson.ssantos@jcatlm.com.br
-          # ,qa.monitor@odptech.com.br,maysa.marco@jcatlm.com.br,anderson.psilva@jcatlm.com.br,ariane.izac@jcatlm.com.br
+          to: anderson.ssantos@jcatlm.com.br,qa.monitor@odptech.com.br,maysa.marco@jcatlm.com.br,anderson.psilva@jcatlm.com.br,ariane.izac@jcatlm.com.br
           # cc: qa.monitor@odptech.com.br,maysa.marco@jcatlm.com.br,anderson.psilva@jcatlm.com.br
           from: "Monitoramento Contínuo"
           html_body: |

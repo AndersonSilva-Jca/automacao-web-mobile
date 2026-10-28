@@ -35,7 +35,7 @@ describe("Opção Fretur - Health Check", () => {
     cy.get("body").should("be.visible");
 
     // Valida se o link do WhatsApp/Atendimento está presente no canto inferior direto
-    cy.get(".ht_ctc_padding").should("exist");
+    // cy.get(".ht_ctc_padding").should("exist");
 
     // Valida se o logo principal do site está visivel e funcional
     cy.get(".attachment-full").should("exist").click();

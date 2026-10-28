@@ -6,7 +6,7 @@ import "./00_smoke/02_ODP.cy.js";
 import "./00_smoke/03_Giro.cy.js";
 import "./00_smoke/04_Wemobi.cy.js";
 
-// UTP
+// UTP;
 import "./00_smoke/05_Cometa.cy.js";
 import "./00_smoke/06_1001.cy.js";
 import "./00_smoke/07_ExpressoSul.cy.js";

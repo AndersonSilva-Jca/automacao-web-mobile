@@ -1,4 +1,10 @@
 /**
+ *  # Allure: 
+ * node deletar-relatorios.js --bucket=allure --de=2000 --ate=2549
+
+* # Cypress: 
+* node deletar-relatorios.js --bucket=cypress --de=2000 --ate=2430
+
  * Backup (download) dos relatórios do Cloudflare R2 para o PC / microSD
  *
  * Uso:
@@ -12,9 +18,10 @@
  * - Pode ser interrompido e rodado de novo: arquivos já baixados (mesmo tamanho) são pulados.
  * - Mantém a mesma estrutura do bucket: <destino>/<bucket>/reports/<run>/...
  * - NÃO apaga nada no R2.
- * node baixar-relatorios.js --bucket=cypress --destino=C:\historico-r2 --de=2007 --ate=2020
+ * node baixar-relatorios.js --bucket=cypress --destino=D:\06-ate-20-Out-2026-r2 --de=2256 --ate=2430
+ * node baixar-relatorios.js --bucket=allure --destino=D:\03-ate-20-Out-2026-r2 --de=2209 --ate=2549
 
-
+/
 Isso aconteceu porque você rodou no Git Bash, onde a barra invertida (\) é caractere de escape. O Bash comeu a barra e o script recebeu C:historico-r2, como aparece na linha “BACKUP para” do seu print. No Windows, isso é um caminho relativo ao diretório atual no drive C:, então a pasta foi criada dentro do projeto, em /c/automacao-web-mobile/historico-r2.
 
 1) Apague a pasta criada na raiz do projeto

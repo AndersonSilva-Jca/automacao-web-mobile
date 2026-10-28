@@ -20,44 +20,6 @@ describe("Wemobi", () => {
     Cypress.on("uncaught:exception", () => false);
   });
 
-  // it("Wemobi - exp. Wemobi Lugar Marcado", () => {
-  //   cy.env(["login", "senha"]).then(() => {
-  //     cy.visit(wemobi);
-  //     LoginPage.wemobiModalLogin();
-  //     LoginPage.wemobiPreencherUsuario();
-  //     LoginPage.wemobiPreencherSenha();
-  //     LoginPage.wemobiConfirmarLogin();
-  //     LoginPage.wemobiLogadoComSucesso();
-  //   });
-  //   SearchPage.wemobiBuscaRotasExp();
-  //   SearchPage.wemobiDataIda();
-  //   SearchPage.wemobiConfirmarBusca();
-  //   cy.wait(2000);
-  //   OfferPage.passagemExperienciaWemobi();
-  //   PassengerPage.wemobiSelecionarPassageiro();
-  //   SeatMapPage.wemobiSelecionarAssentoMarcado();
-  //   CheckoutPage.wemobiResumoCompra();
-  // });
-
-  // it("Wemobi - exp. Wemobi Assento Aleatório", () => {
-  //   cy.env(["login", "senha"]).then(() => {
-  //     cy.visit(wemobi);
-  //     LoginPage.wemobiModalLogin();
-  //     LoginPage.wemobiPreencherUsuario();
-  //     LoginPage.wemobiPreencherSenha();
-  //     LoginPage.wemobiConfirmarLogin();
-  //     LoginPage.wemobiLogadoComSucesso();
-  //   });
-  //   SearchPage.wemobiBuscaRotasExp();
-  //   SearchPage.wemobiDataIda();
-  //   SearchPage.wemobiConfirmarBusca();
-  //   cy.wait(2000);
-  //   OfferPage.passagemExperienciaWemobi();
-  //   PassengerPage.wemobiSelecionarPassageiro();
-  //   SeatMapPage.wemobiSelecionarAssentoAleatorio();
-  //   CheckoutPage.wemobiResumoCompra();
-  // });
-
   it("Wemobi - Sem exp. Lugar Marcado", () => {
     cy.env(["login", "senha"]).then(() => {
       cy.visit(wemobi);

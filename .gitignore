@@ -35,3 +35,6 @@ browserstack.json
 npm_install_debug.log
 # currents.config.js
 results
+
+baixar-relatorios.js
+deletar-relatorios.js
