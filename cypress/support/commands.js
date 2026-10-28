@@ -288,6 +288,127 @@ Cypress.Commands.add("selecionarAssentoAleatorioCometa", () => {
   cy.get("#btn-proceed").click({ force: true });
 });
 
+Cypress.Commands.add("selecionarAssentoAleatorioCatarinense", () => {
+  cy.get('button.outer-seat[id^="seat-"]:not(:has(.occupied-seat))', { timeout: 90000 })
+    .should("be.visible")
+    .then(($seats) => {
+      const ids = $seats.map((i, el) => el.id).get();
+      const randomId = ids[Math.floor(Math.random() * ids.length)];
+
+      cy.wrap(randomId).as("idSorteado");
+    });
+
+  cy.get("@idSorteado").then((id) => {
+    cy.get(`#${id}`).scrollIntoView().should("be.visible").click({ force: true });
+  });
+
+  cy.get("#btn-proceed", { timeout: 90000 }).should("be.visible").and("not.be.disabled");
+
+  // Clica para expandir os detalhes se necessário
+  cy.get('[style="; box-shadow: undefined;-webkit-box-shadow: undefined;-moz-box-shadow: undefined;; border-radius: undefinedpx;"] > .origin-destination > .show-more-details-container > .trip-details-container > .trip-details-show-passenger > .passenger-division > .passenger-division__toggle').should("be.visible").click({ force: true });
+
+  // 💰 CAPTURA DO PREÇO NO PIX E NO CARTÃO NA TELA DE ASSENTOS (Resumo lateral)
+  // Usamos os seletores específicos baseados na estrutura do PIX e Cartão da sua sidebar
+  cy.get('.passenger-card__price-pix, [data-bind="pricePix"], .cart-passenger-list')
+    .first()
+    .within(() => {
+      // Captura valor Pix
+      cy.get(".cart-price-int")
+        .first()
+        .invoke("text")
+        .then((intPix) => {
+          cy.get(".cart-price-dec")
+            .first()
+            .invoke("text")
+            .then((decPix) => {
+              const precoPix = parseFloat(`${intPix.trim()}${decPix.trim()}`.replace(",", "."));
+              Cypress.env("precoEntradaPix", precoPix);
+              console.log(`[TERMINAL CYPRESS] 🎯 PREÇO ENTRADA PIX: R$ ${precoPix}`);
+              cy.log(`🎯 [PREÇO ENTRADA PIX] R$ ${precoPix}`);
+            });
+        });
+
+      // Captura valor Cartão (geralmente logo abaixo do Pix)
+      cy.get(".cart-price-int")
+        .eq(1)
+        .invoke("text")
+        .then((intCard) => {
+          cy.get(".cart-price-dec")
+            .eq(1)
+            .invoke("text")
+            .then((decCard) => {
+              const precoCard = parseFloat(`${intCard.trim()}${decCard.trim()}`.replace(",", "."));
+              Cypress.env("precoEntradaCartao", precoCard);
+              console.log(`[TERMINAL CYPRESS] 🎯 PREÇO ENTRADA CARTÃO: R$ ${precoCard}`);
+              cy.log(`🎯 [PREÇO ENTRADA CARTÃO] R$ ${precoCard}`);
+            });
+        });
+    });
+
+  // Clica para avançar
+  cy.get("#btn-proceed").click({ force: true });
+});
+Cypress.Commands.add("selecionarAssentoAleatorioRR", () => {
+  cy.get('button.outer-seat[id^="seat-"]:not(:has(.occupied-seat))', { timeout: 90000 })
+    .should("be.visible")
+    .then(($seats) => {
+      const ids = $seats.map((i, el) => el.id).get();
+      const randomId = ids[Math.floor(Math.random() * ids.length)];
+
+      cy.wrap(randomId).as("idSorteado");
+    });
+
+  cy.get("@idSorteado").then((id) => {
+    cy.get(`#${id}`).scrollIntoView().should("be.visible").click({ force: true });
+  });
+
+  cy.get("#btn-proceed", { timeout: 90000 }).should("be.visible").and("not.be.disabled");
+
+  // Clica para expandir os detalhes se necessário
+  cy.get('[style="; box-shadow: undefined;-webkit-box-shadow: undefined;-moz-box-shadow: undefined;; border-radius: undefinedpx;"] > .origin-destination > .show-more-details-container > .trip-details-container > .trip-details-show-passenger > .passenger-division > .passenger-division__toggle').should("be.visible").click({ force: true });
+
+  // 💰 CAPTURA DO PREÇO NO PIX E NO CARTÃO NA TELA DE ASSENTOS (Resumo lateral)
+  // Usamos os seletores específicos baseados na estrutura do PIX e Cartão da sua sidebar
+  cy.get('.passenger-card__price-pix, [data-bind="pricePix"], .cart-passenger-list')
+    .first()
+    .within(() => {
+      // Captura valor Pix
+      cy.get(".cart-price-int")
+        .first()
+        .invoke("text")
+        .then((intPix) => {
+          cy.get(".cart-price-dec")
+            .first()
+            .invoke("text")
+            .then((decPix) => {
+              const precoPix = parseFloat(`${intPix.trim()}${decPix.trim()}`.replace(",", "."));
+              Cypress.env("precoEntradaPix", precoPix);
+              console.log(`[TERMINAL CYPRESS] 🎯 PREÇO ENTRADA PIX: R$ ${precoPix}`);
+              cy.log(`🎯 [PREÇO ENTRADA PIX] R$ ${precoPix}`);
+            });
+        });
+
+      // Captura valor Cartão (geralmente logo abaixo do Pix)
+      cy.get(".cart-price-int")
+        .eq(1)
+        .invoke("text")
+        .then((intCard) => {
+          cy.get(".cart-price-dec")
+            .eq(1)
+            .invoke("text")
+            .then((decCard) => {
+              const precoCard = parseFloat(`${intCard.trim()}${decCard.trim()}`.replace(",", "."));
+              Cypress.env("precoEntradaCartao", precoCard);
+              console.log(`[TERMINAL CYPRESS] 🎯 PREÇO ENTRADA CARTÃO: R$ ${precoCard}`);
+              cy.log(`🎯 [PREÇO ENTRADA CARTÃO] R$ ${precoCard}`);
+            });
+        });
+    });
+
+  // Clica para avançar
+  cy.get("#btn-proceed").click({ force: true });
+});
+
 Cypress.Commands.add("selecionarAssentoAleatorio1001", () => {
   cy.get('button.outer-seat[id^="seat-"]:not(:has(.occupied-seat))', { timeout: 90000 })
     .should("be.visible")
@@ -638,6 +759,124 @@ Cypress.Commands.add("selecionarPassagemExperienciaWemobi", () => {
       });
     });
 });
+
+// Cypress.Commands.add("selecionarPassagemExperienciaWemobi", () => {
+//   const tentarBuscarOuAvancar = (tentativa = 1, maxTentativas = 5) => {
+//     if (tentativa > maxTentativas) {
+//       throw new Error(`❌ Teste interrompido: Nenhuma passagem 'Experiência wemobi' válida foi encontrada após ${maxTentativas} tentativas de mudança de data!`);
+//     }
+
+//     cy.log(`🔄 [Tentativa ${tentativa}/${maxTentativas}] Verificando disponibilidade da Experiência wemobi...`);
+
+//     cy.get(".container-max-width-1400 > :nth-child(4)").should("be.visible");
+//     cy.contains("ESCOLHER PASSAGENS", { timeout: 90000 }).should("be.visible");
+//     cy.log("⏳ Aguardando estabilização da página de ofertas...");
+
+//     cy.get("li.list-companies-item", { timeout: 90000 }).should("be.visible");
+
+//     // 1. VERIFICAÇÃO INICIAL GLOBAL: Procura se o bug do template (R\$$price$decimal) está visível na página atual
+//     cy.get("body").then(($body) => {
+//       const textoPagina = $body.text();
+//       const temErroTemplateGlobal = textoPagina.includes("$price") || textoPagina.includes("$decimal");
+
+//       if (temErroTemplateGlobal) {
+//         cy.log("⚠️ Bug de template (R$$price$decimal) detetado na data atual. Avançando um dia no calendário...");
+
+//         // Clica no seletor para avançar um dia
+//         cy.get(":nth-child(5) > .prev-date").should("be.visible").click({ force: true });
+
+//         // Aguarda os novos resultados carregarem após a mudança de dia
+//         cy.wait(4000);
+//         return tentarBuscarOuAvancar(tentativa + 1, maxTentativas);
+//       } else {
+//         cy.log("✅ Nenhum erro de template global detetado na data atual.");
+//       }
+
+//       // 2. LOGICA ORIGINAL DA WEMOBI COM TRATATIVA DE AVANÇAR CASO NÃO ENCONTRE
+//       cy.get("li.list-companies-item")
+//         .filter((_, el) => {
+//           return Cypress.$(el).find('button[data-offer-marketplace-text="Experiência wemobi"]').length > 0;
+//         })
+//         .then(($empresasWemobi) => {
+//           // Se não houver nenhuma empresa com a Experiência wemobi, avança o dia em vez de quebrar
+//           if ($empresasWemobi.length === 0) {
+//             cy.log("⚠️ Nenhuma passagem 'Experiência wemobi' encontrada na data atual. Avançando um dia...");
+
+//             cy.get(".nearby-cards > :nth-child(4) > .focusable").should("be.visible").click({ force: true });
+
+//             cy.wait(4000);
+//             return tentarBuscarOuAvancar(tentativa + 1, maxTentativas);
+//           }
+
+//           // Extrai as ofertas válidas contidas APENAS nos cards da Experiência wemobi
+//           const ofertasValidas = [];
+
+//           $empresasWemobi.each((_, empresaEl) => {
+//             const ofertas = Cypress.$(empresaEl).find('li[data-js^="offer-element-"]:has(.available)');
+
+//             ofertas.each((_, ofertaEl) => {
+//               const textoClasse = Cypress.$(ofertaEl).find('[data-js^="classtype"]').text().toUpperCase();
+//               const temBotaoAtivo = Cypress.$(ofertaEl).find('button[data-js="buy-ticket"]:not([disabled])').length > 0;
+
+//               if (!textoClasse.includes("CAMA") && temBotaoAtivo) {
+//                 ofertasValidas.push(ofertaEl);
+//               }
+//             });
+//           });
+
+//           const total = ofertasValidas.length;
+
+//           // Se encontrou o bloco da Wemobi mas nenhuma oferta é válida, avança o dia
+//           if (total === 0) {
+//             cy.log("⚠️ Encontrou a Experiência wemobi, mas nenhuma oferta válida (não-CAMA e com botão ativo). Avançando um dia...");
+
+//             cy.get(".nearby-cards > :nth-child(4) > .focusable").should("be.visible").click({ force: true });
+
+//             cy.wait(4000);
+//             return tentarBuscarOuAvancar(tentativa + 1, maxTentativas);
+//           }
+
+//           // Sorteia uma oferta entre as válidas (FLUXO ORIGINAL PRESERVADO)
+//           const randomIndex = Math.floor(Math.random() * total);
+//           const escolha = ofertasValidas[randomIndex];
+//           const $btnCompra = Cypress.$(escolha).find('button[data-js="buy-ticket"]');
+
+//           cy.log(`🎰 Sorteada opção Experiência wemobi ${randomIndex + 1} de ${total}`);
+
+//           cy.wait(500);
+//           cy.wrap($btnCompra)
+//             .parents(".available")
+//             .invoke("show")
+//             .wrap($btnCompra)
+//             .invoke("show")
+//             .scrollIntoView({ offset: { top: -150 } })
+//             .should("exist")
+//             .and("not.be.disabled")
+//             .click({ force: true });
+
+//           cy.wait(3000);
+
+//           // Trata o modal da madrugada caso apareça
+//           cy.get("body").then(($bodyModal) => {
+//             if ($bodyModal.find('[data-js="button-agree"]').is(":visible")) {
+//               cy.log("⚠️ Confirmando modal de madrugada...");
+//               cy.get('[data-js="button-agree"]').click({ force: true });
+
+//               cy.wait(3000);
+//               cy.url().then((urlAtual) => {
+//                 if (urlAtual.includes("/disponibilidade")) {
+//                   cy.wrap($btnCompra).click({ force: true });
+//                 }
+//               });
+//             }
+//           });
+//         });
+//     });
+//   };
+
+//   // Inicia o processo
+//   tentarBuscarOuAvancar();
+// });
 
 Cypress.Commands.add("selecionarPassagemAleatoria", () => {
   cy.contains("ESCOLHER PASSAGENS", { timeout: 90000 }).should("be.visible");

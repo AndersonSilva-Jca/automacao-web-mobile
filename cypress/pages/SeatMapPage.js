@@ -17,7 +17,7 @@ class SeatMapPage {
 
   selecionarAssentoCatarinense() {
     cy.contains("Escolha o seu assento", { timeout: 90000 }).should("be.visible");
-    cy.selecionarAssentoCatarinense({ timeout: 90000 });
+    cy.selecionarAssentoAleatorioCatarinense({ timeout: 90000 });
     // cy.selecionarAssentoAleatorio({ timeout: 90000 });
     cy.get(loc.BOTAO_AVANCAR).should("be.visible").click();
   }
@@ -26,6 +26,11 @@ class SeatMapPage {
     cy.contains("Escolha o seu assento", { timeout: 90000 }).should("be.visible");
     cy.selecionarAssentoAleatorioCometa({ timeout: 90000 });
     // cy.selecionarAssentoAleatorio({ timeout: 90000 });
+    cy.get(loc.BOTAO_AVANCAR).should("be.visible").click();
+  }
+  selecionarAssentoRR() {
+    cy.contains("Escolha o seu assento", { timeout: 90000 }).should("be.visible");
+    cy.selecionarAssentoAleatorioRR({ timeout: 90000 });
     cy.get(loc.BOTAO_AVANCAR).should("be.visible").click();
   }
 

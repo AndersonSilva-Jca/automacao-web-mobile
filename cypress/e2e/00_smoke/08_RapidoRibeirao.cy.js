@@ -35,7 +35,7 @@ describe("Rapido Ribeirão", () => {
     SearchPage.confirmarBusca();
     OfferPage.selecionarPassagemIdaRR();
     PassengerPage.selecionarPassageiro();
-    SeatMapPage.selecionarAssento();
+    SeatMapPage.selecionarAssentoRR();
     CheckoutPage.resumoDaCompra();
     // cy.url({ timeout: 90000 }).should('include', '/pagamento')
     // Não finalizar a compra para evitar transações reais
