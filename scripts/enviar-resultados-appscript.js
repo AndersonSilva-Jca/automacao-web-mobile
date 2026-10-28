@@ -240,8 +240,8 @@ const SCREENSHOTS_DIR = "cypress/reports/screenshots";
 const MAPA_MARCAS = {
   "01_ODH": "Outlet de Hotéis",
   "03_Giro": "Clube Giro",
-  "05_Cometa": "Viação Cometa",
-  "06_1001": "Auto Viação 1001",
+  "05_Cometa": "Cometa",
+  "06_1001": "1001",
   "07_ExpressoSul": "Expresso Sul",
   "08_RapidoRibeirao": "Rápido Ribeirão",
   "09_Catarinense": "Catarinense",
