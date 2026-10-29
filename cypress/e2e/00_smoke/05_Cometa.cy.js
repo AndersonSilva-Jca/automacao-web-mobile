@@ -36,6 +36,7 @@ describe("Viação Cometa", () => {
     OfferPage.selecionarPassagemIda();
     PassengerPage.selecionarPassageiro();
     SeatMapPage.selecionarAssentoCometa();
-    CheckoutPage.resumoDaCompraCometa();
+    // CheckoutPage.resumoDaCompraCometa();
+    CheckoutPage.resumoDaCompra();
   });
 });

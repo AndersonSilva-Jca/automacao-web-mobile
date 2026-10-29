@@ -38,7 +38,8 @@ describe("Catarinense", () => {
     OfferPage.selecionarPassagemIda();
     PassengerPage.selecionarPassageiro();
     SeatMapPage.selecionarAssentoCatarinense();
-    CheckoutPage.resumoDaCompraCatarinense();
+    // CheckoutPage.resumoDaCompraCatarinense();
+    CheckoutPage.resumoDaCompra();
     // cy.get(loc.LOADER).should('not.be.visible')
     // cy.url({ timeout: 90000 }).should('include', '/pagamento')
     // Não finalizar a compra para evitar transações reais

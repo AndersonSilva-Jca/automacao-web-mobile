@@ -4,13 +4,16 @@ class SeatMapPage {
   // UTP
   selecionarAssentoCometa() {
     cy.contains("Escolha o seu assento", { timeout: 90000 }).should("be.visible");
-    cy.selecionarAssentoAleatorioCometa({ timeout: 90000 });
-    // cy.get(loc.BOTAO_AVANCAR).should("be.visible").click();
+    // cy.selecionarAssentoAleatorioCometa({ timeout: 90000 });
+    cy.selecionarAssentoAleatorio({ timeout: 90000 });
+    cy.get(loc.BOTAO_AVANCAR).should("be.visible").click();
   }
 
   selecionarAssento1001() {
     cy.contains("Escolha o seu assento", { timeout: 90000 }).should("be.visible");
-    cy.selecionarAssentoAleatorio1001({ timeout: 90000 });
+    // cy.selecionarAssentoAleatorio1001({ timeout: 90000 });
+    cy.selecionarAssentoAleatorio({ timeout: 90000 });
+    // cy.selecionarAssentoAleatorio({ timeout: 90000 });
     // cy.selecionarAssentoAleatorio({ timeout: 90000 });
     cy.get(loc.BOTAO_AVANCAR).should("be.visible").click();
   }
@@ -18,19 +21,22 @@ class SeatMapPage {
   selecionarAssentoCatarinense() {
     cy.contains("Escolha o seu assento", { timeout: 90000 }).should("be.visible");
     // cy.selecionarAssentoAleatorioCatarinense({ timeout: 90000 });
+    // cy.selecionarAssentoAleatorio({ timeout: 90000 });
     cy.selecionarAssentoAleatorio({ timeout: 90000 });
     cy.get(loc.BOTAO_AVANCAR).should("be.visible").click();
   }
 
   selecionarAssento() {
     cy.contains("Escolha o seu assento", { timeout: 90000 }).should("be.visible");
-    cy.selecionarAssentoAleatorioCometa({ timeout: 90000 });
-    // cy.selecionarAssentoAleatorio({ timeout: 90000 });
+    // cy.selecionarAssentoAleatorioCometa({ timeout: 90000 });
+    cy.selecionarAssentoAleatorio({ timeout: 90000 });
     cy.get(loc.BOTAO_AVANCAR).should("be.visible").click();
   }
   selecionarAssentoRR() {
     cy.contains("Escolha o seu assento", { timeout: 90000 }).should("be.visible");
-    cy.selecionarAssentoAleatorioRR({ timeout: 90000 });
+    // cy.selecionarAssentoAleatorioRR({ timeout: 90000 });
+    cy.selecionarAssentoAleatorio({ timeout: 90000 });
+
     cy.get(loc.BOTAO_AVANCAR).should("be.visible").click();
   }
 

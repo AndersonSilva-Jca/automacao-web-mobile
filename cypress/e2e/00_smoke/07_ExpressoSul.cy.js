@@ -37,7 +37,8 @@ describe("Expresso do Sul", () => {
     OfferPage.selecionarPassagemIdaExpressoSul();
     PassengerPage.selecionarPassageiro();
     SeatMapPage.selecionarAssento();
-    CheckoutPage.resumoDaCompraExpressoDoSul();
+    // CheckoutPage.resumoDaCompraExpressoDoSul();
+    CheckoutPage.resumoDaCompra();
     // cy.get(loc.LOADER).should('not.be.visible')
     // cy.url({ timeout: 90000 }).should('include', '/pagamento')
     // Não finalizar a compra para evitar transações reais

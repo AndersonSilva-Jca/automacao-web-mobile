@@ -3,6 +3,16 @@ import loc from "../support/locators";
 class CheckoutPage {
   validarCupom() {}
   //------------------ UTP ------------------
+  resumoDaCompra() {
+    cy.get(loc.ASSERT_SUBTOTAL).should("contain", "Subtotal dos assentos").log("Subtotal dos assentos");
+    cy.get(loc.ASSERT_TAXASERVICO).should("exist").log("Taxa de serviço");
+    cy.get(loc.ASSERT_VALORTOTAL).should("contain", "Valor total").log("Valor total das passagens");
+    cy.get('[data-js="tab-nupay"]').should("be.visible").log("Aba da NuPay");
+    cy.get('[data-js="tab-card"]').should("be.visible").log("Aba do Cartão de Crédito");
+    cy.get(".payment-selector__grid > .active").should("be.visible").log("Aba do PIX");
+    cy.get('[data-js="tab-conta-giro"]').should("be.visible").log("Aba da Conta Giro");
+  }
+
   resumoDaCompraCometa() {
     cy.validarPrecoSaidaResumoCometa();
     cy.get(loc.ASSERT_SUBTOTAL).should("contain", "Subtotal dos assentos").log("Subtotal dos assentos");
