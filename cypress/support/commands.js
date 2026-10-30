@@ -47,10 +47,10 @@ Cypress.Commands.add("SelecionarDataParaCupom", (range = 15) => {
   });
 });
 
-Cypress.Commands.add("selecionarDataWemobi", (range = 3) => {
+Cypress.Commands.add("selecionarDataWemobi", (range = 5) => {
   cy.get('td[data-handler="selectDay"] a').then(($days) => {
     // Se houver menos de 2 dias disponíveis no mês atual
-    if ($days.length < 2) {
+    if ($days.length < 4) {
       // Avança para o próximo mês
       cy.get("[data-handler='next']").click({ force: true });
 
@@ -62,7 +62,7 @@ Cypress.Commands.add("selecionarDataWemobi", (range = 3) => {
       });
     } else {
       // Mantém o comportamento padrão no mês atual
-      const proximosDias = $days.slice(2, range);
+      const proximosDias = $days.slice(4, range);
       const randomIndex = Math.floor(Math.random() * proximosDias.length);
       cy.wrap(proximosDias[randomIndex]).click({ force: true });
     }
