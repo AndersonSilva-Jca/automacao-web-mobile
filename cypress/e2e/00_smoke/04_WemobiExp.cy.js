@@ -51,7 +51,6 @@ describe("Wemobi", () => {
     SearchPage.wemobiBuscaRotasExp();
     SearchPage.wemobiDataIda();
     SearchPage.wemobiConfirmarBusca();
-    cy.wait(3000);
     OfferPage.passagemExperienciaWemobi();
     PassengerPage.wemobiSelecionarPassageiro();
     SeatMapPage.wemobiSelecionarAssentoAleatorio();

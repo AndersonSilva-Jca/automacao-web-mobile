@@ -47,7 +47,7 @@ Cypress.Commands.add("SelecionarDataParaCupom", (range = 15) => {
   });
 });
 
-Cypress.Commands.add("selecionarDataWemobi", (range = 3) => {
+Cypress.Commands.add("selecionarDataWemobi", (range = 5) => {
   cy.get('td[data-handler="selectDay"] a').then(($days) => {
     // Se houver menos de 2 dias disponíveis no mês atual
     if ($days.length < 2) {
@@ -56,13 +56,13 @@ Cypress.Commands.add("selecionarDataWemobi", (range = 3) => {
 
       // Busca os dias do novo mês e seleciona aleatoriamente
       cy.get('td[data-handler="selectDay"] a').then(($newDays) => {
-        const proximosDias = $newDays.slice(0, range);
+        const proximosDias = $newDays.slice(2, range);
         const randomIndex = Math.floor(Math.random() * proximosDias.length);
         cy.wrap(proximosDias[randomIndex]).click({ force: true });
       });
     } else {
       // Mantém o comportamento padrão no mês atual
-      const proximosDias = $days.slice(2, range);
+      const proximosDias = $days.slice(0, range);
       const randomIndex = Math.floor(Math.random() * proximosDias.length);
       cy.wrap(proximosDias[randomIndex]).click({ force: true });
     }
@@ -848,23 +848,24 @@ Cypress.Commands.add("selecionarPassagemExperienciaWemobi", () => {
   cy.log("⏳ Aguardando estabilização da página de ofertas...");
 
   cy.get("li.list-companies-item", { timeout: 90000 }).should("be.visible");
+  cy.wait(5000);
 
   // 1. VERIFICAÇÃO INICIAL GLOBAL: Procura se o bug do template (R\$$price$decimal) está visível na página atual
-  cy.get("body").then(($body) => {
-    const textoPagina = $body.text();
-    const temErroTemplateGlobal = textoPagina.includes("$price") || textoPagina.includes("$decimal");
-    if (temErroTemplateGlobal) {
-      cy.log("⚠️ Bug de template (R$$price$decimal) detetado na data atual. Avançando um dia no calendário...");
+  // cy.get("body").then(($body) => {
+  //   const textoPagina = $body.text();
+  //   const temErroTemplateGlobal = textoPagina.includes("$price") || textoPagina.includes("$decimal");
+  //   if (temErroTemplateGlobal) {
+  //     cy.log("⚠️ Bug de template (R$$price$decimal) detetado na data atual. Avançando um dia no calendário...");
 
-      // Clica no seletor para avançar um dia
-      cy.get(":nth-child(5) > .prev-date").should("be.visible").click({ force: true });
+  //     // Clica no seletor para avançar um dia
+  //     cy.get(":nth-child(5) > .prev-date").should("be.visible").click({ force: true });
 
-      // Aguarda os novos resultados carregarem após a mudança de dia
-      cy.wait(4000);
-    } else {
-      cy.log("✅ Nenhum erro de template global detetado na data atual.");
-    }
-  });
+  //     // Aguarda os novos resultados carregarem após a mudança de dia
+  //     cy.wait(4000);
+  //   } else {
+  //     cy.log("✅ Nenhum erro de template global detetado na data atual.");
+  //   }
+  // });
 
   // 2. LOGICA ORIGINAL DA WEMOBI (Mantida exatamente como você pediu, limpa e intacta)
   cy.get("li.list-companies-item")
