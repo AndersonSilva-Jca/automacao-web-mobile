@@ -40,6 +40,7 @@ describe("Wemobi", () => {
     SeatMapPage.wemobiSelecionarAssentoMarcado();
     CheckoutPage.wemobiResumoCompra();
   });
+
   it("Wemobi - Sem exp. Assento Aleatório", () => {
     cy.env(["login", "senha"]).then(() => {
       cy.visit(wemobi);
