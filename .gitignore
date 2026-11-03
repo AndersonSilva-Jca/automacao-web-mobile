@@ -35,6 +35,6 @@ browserstack.json
 npm_install_debug.log
 # currents.config.js
 results
-
+app\apks_hml
 baixar-relatorios.js
 deletar-relatorios.js
