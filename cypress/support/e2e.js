@@ -82,9 +82,9 @@ Cypress.on("test:after:run", (test, runnable) => {
 });
 
 // Desativa a captura automática de printscreen do Cypress em caso de falhas
-Cypress.Screenshot.defaults({
-  screenshotOnRunFailure: false,
-});
+// Cypress.Screenshot.defaults({
+//   screenshotOnRunFailure: false,
+// });
 
 // Declaramos a variável global do log no arquivo de suporte
 let networkLog = [];
