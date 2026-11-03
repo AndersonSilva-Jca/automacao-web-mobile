@@ -227,7 +227,7 @@ jobs:
                 <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
                   <tr style="background-color: #f8f9fa;">
                     <td style="padding: 12px; border: 1px solid #00ffa2; font-weight: bold; width: 25%;">Ambientes:</td>
-                    <td style="padding: 12px; border: 1px solid #00ffa2;">ODH / ODP /Clube Giro / Wemobi / UTP</td>
+                    <td style="padding: 12px; border: 1px solid #00ffa2;">EBUS / UTP</td>
                   </tr>
                   <tr>
                     <td style="padding: 12px; border: 1px solid #00ffa2; font-weight: bold;">Escopo Validado:</td>
@@ -257,7 +257,7 @@ jobs:
           from: "Monitoramento Contínuo"
           html_body: |
             <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6; max-width: 850px; margin: 0 auto; padding: 10px 0;">
-              <h2 style="color: #c62828; border-bottom: 2px solid #c62828; padding-bottom: 12px; margin-top: 0;">🚨 Alerta: ODH/ODP/Giro/Wemobi/UTP</h2>
+              <h2 style="color: #c62828; border-bottom: 2px solid #c62828; padding-bottom: 12px; margin-top: 0;">🚨 Alerta: E-Bus/UTP</h2>
               <h4 style="color: #000000; text-align: center; border-bottom: 2px solid #c62828; padding-bottom: 12px; margin-top: 0;">Run #${{ github.run_number }} . ${{ env.DATA_ALERTA }} às ${{ env.HORA_ALERTA }}</h4>
               <p>Identificamos uma quebra no fluxo operacional durante a execução dos testes automatizados. O problema requer uma investigação para avaliar o impacto nos sites produtivos.</p>
               <div style="border: 1px solid #ff0000; margin: 25px 0; border-radius: 6px; overflow: hidden; background-color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
@@ -294,3 +294,42 @@ jobs:
               <hr style="border: 0; border-top: 1px solid #eee; margin: 25px 0;">
               <p style="font-size: 12px; color: #999; margin: 0;">Este é um alerta automático gerado pelo sistema de Qualidade de Software (QA).</p>
             </div>
+
+      - name: Enviar Alerta no WhatsApp Privado Anderson
+        if: env.CYPRESS_OUTCOME == 'failure'
+        run: |
+          # 1. URLs Atualizadas (Relatório R2, Pipeline do GitHub e Dashboard)
+          LINK_RELATORIO="https://pub-9c4151f873204a7b814dfbcb4e0036bc.r2.dev/reports/${{ github.run_number }}/01_e2e/index.html"
+          LINK_GITHUB="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          LINK_DASHBOARD="https://script.google.com/macros/s/AKfycby6v2p1_k9ch5st11OeBy7Nermci8fIh0Y9A4RwroXO5HdIsGDF03BUg6hgHVsFou6_1A/exec"
+
+          # 2. Constrói o texto do WhatsApp garantindo que multilinhas funcionem corretamente no Shell
+          TEXTO_BRUTO=$(cat <<EOF
+          🚨 *[ALERTA WEB] EBus/UTP*
+
+          Os testes E2E do Cypress falharam no ambiente de Operação.
+
+          *📊 INFORMAÇÕES DA EXECUÇÃO:*
+          • *ID da Run:* #${{ github.run_number }}
+          • *Data:* ${{ env.DATA_ALERTA }}
+          • *Hora:* ${{ env.HORA_ALERTA }} (Brasília)
+          • *Ferramenta:* Cypress Web
+
+          *🔗 LINKS DE ACESSO:*
+          📄 *Relatório HTML:*
+          $LINK_RELATORIO
+
+          📈 *Dashboard:*
+          $LINK_DASHBOARD
+
+          🛠️ *Execução no GitHub:*
+          $LINK_GITHUB
+          EOF
+          )
+
+          # 3. Faz o URL Encode usando Python para evitar quebras no curl
+          TEXTO_CODIFICADO=$(python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))" "$TEXTO_BRUTO")
+
+          # 4. Dispara o curl para o WhatsApp do Anderson
+          echo "📱 Disparando alerta para Anderson..."
+          curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ANDERSON }}&text=${TEXTO_CODIFICADO}&apikey=7972786"
