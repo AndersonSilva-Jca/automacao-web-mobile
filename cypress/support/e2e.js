@@ -86,15 +86,17 @@ Cypress.on("test:after:run", (test, runnable) => {
 //   screenshotOnRunFailure: false,
 // });
 
-// Declaramos a variável global do log no arquivo de suporte
+// Variável global para armazenar os logs de erro das APIs
 let networkLog = [];
 
 beforeEach(() => {
   networkLog = [];
-  cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
+
+  // Removemos o cy.intercept com { log: false } que estava mockando as requisições da aplicação.
+  // Mantemos apenas a interceptação para escutar e registrar os erros reais:
   cy.intercept({ resourceType: /xhr|fetch/ }, (req) => {
     req.on("response", (res) => {
-      const ehApiRelevante = req.url.includes("jcatlm") || req.url.includes("vendasjca.com.br");
+      const ehApiRelevante = req.url.includes("jcatlm") || req.url.includes("vendasjca.com.br") || req.url.includes("outletdehoteis") || req.url.includes("api-gateway");
 
       if (res.statusCode >= 400 && ehApiRelevante) {
         let responseBodyTratado = res.body;
@@ -115,22 +117,4 @@ beforeEach(() => {
       }
     });
   });
-});
-
-// 1. O comando customizado para registrar erros manualmente
-Cypress.Commands.add("registrarErroApi", (dados) => {
-  networkLog.push({
-    ...dados,
-    timestamp: new Date().toISOString(),
-  });
-});
-
-// 2. O afterEach que injeta apenas os logs de API no relatório, sem os printscreens
-afterEach(function () {
-  if (networkLog.length > 0) {
-    cy.addTestContext({
-      title: `🚨 ${networkLog.length} chamada(s) de API com erro`,
-      value: JSON.stringify(networkLog, null, 2),
-    });
-  }
 });
