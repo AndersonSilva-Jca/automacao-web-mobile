@@ -38,7 +38,7 @@ class LoginPage {
   }
 
   odpPreencherSenha() {
-    cy.env(["senha"]).then((env) => {
+    cy.env(["senha2"]).then((env) => {
       cy.get(loc.SENHA).type(env.senha, { log: false });
     });
   }
