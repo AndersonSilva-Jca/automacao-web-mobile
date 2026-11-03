@@ -81,93 +81,56 @@ Cypress.on("test:after:run", (test, runnable) => {
   }
 });
 
-import addContext from "mochawesome/addContext";
+// Desativa a captura automática de printscreen do Cypress em caso de falhas
+Cypress.Screenshot.defaults({
+  screenshotOnRunFailure: false,
+});
 
-// Monitora todas as requisições da aplicação automaticamente
+// Declaramos a variável global do log no arquivo de suporte
+let networkLog = [];
+
 beforeEach(() => {
-  // Limpa o erro anterior no começo de cada teste
-  Cypress.env("apiErrorLog", null);
+  networkLog = [];
+  cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
+  cy.intercept({ resourceType: /xhr|fetch/ }, (req) => {
+    req.on("response", (res) => {
+      const ehApiRelevante = req.url.includes("jcatlm") || req.url.includes("vendasjca.com.br");
 
-  cy.intercept("**/api-gateway/**", (req) => {
-    req.continue((res) => {
-      // Se a API retornar erro (4xx ou 5xx)
-      if (res.statusCode >= 400) {
-        Cypress.env("apiErrorLog", {
+      if (res.statusCode >= 400 && ehApiRelevante) {
+        let responseBodyTratado = res.body;
+        if (typeof responseBodyTratado === "string") {
+          try {
+            responseBodyTratado = JSON.parse(responseBodyTratado);
+          } catch (e) {}
+        }
+
+        networkLog.push({
           url: req.url,
+          method: req.method,
           status: res.statusCode,
-          responseBody: res.body,
+          requestBody: req.body,
+          responseBody: responseBodyTratado,
+          timestamp: new Date().toISOString(),
         });
       }
     });
   });
 });
 
-// Se o teste falhar, adiciona o resumo do erro e da API direto no relatório Mochawesome
-afterEach(function () {
-  if (this.currentTest.state === "failed") {
-    const errorLog = Cypress.env("apiErrorLog");
-
-    if (errorLog) {
-      // Adiciona o link/URL da API que falhou
-      addContext(this, {
-        title: `❌ API com Falha [Status ${errorLog.status}]`,
-        value: errorLog.url,
-      });
-
-      // Adiciona apenas o corpo do erro (response body) retornado pela API
-      addContext(this, {
-        title: `📄 Response Body do Erro`,
-        value: errorLog.responseBody,
-      });
-    }
-  }
+// 1. O comando customizado para registrar erros manualmente
+Cypress.Commands.add("registrarErroApi", (dados) => {
+  networkLog.push({
+    ...dados,
+    timestamp: new Date().toISOString(),
+  });
 });
 
-// Declaramos a variável global do log no arquivo de suporte
-// let networkLog = [];
-
-// beforeEach(() => {
-//   networkLog = [];
-//   cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
-//   cy.intercept({ resourceType: /xhr|fetch/ }, (req) => {
-//     req.on("response", (res) => {
-//       const ehApiRelevante = req.url.includes("jcatlm") || req.url.includes("vendasjca.com.br");
-
-//       if (res.statusCode >= 400 && ehApiRelevante) {
-//         let responseBodyTratado = res.body;
-//         if (typeof responseBodyTratado === "string") {
-//           try {
-//             responseBodyTratado = JSON.parse(responseBodyTratado);
-//           } catch (e) {}
-//         }
-
-//         networkLog.push({
-//           url: req.url,
-//           method: req.method,
-//           status: res.statusCode,
-//           requestBody: req.body,
-//           responseBody: responseBodyTratado,
-//           timestamp: new Date().toISOString(),
-//         });
-//       }
-//     });
-//   });
-// });
-
-// // 1. O comando customizado para registrar erros manualmente
-// Cypress.Commands.add("registrarErroApi", (dados) => {
-//   networkLog.push({
-//     ...dados,
-//     timestamp: new Date().toISOString(),
-//   });
-// });
-
-// // 2. O afterEach que injeta o relatório (ex: mochawesome / addTestContext)
-// afterEach(function () {
-//   if (networkLog.length > 0) {
-//     cy.addTestContext({
-//       title: `🚨 ${networkLog.length} chamada(s) de API com erro`,
-//       value: JSON.stringify(networkLog, null, 2),
-//     });
-//   }
-// });
+// 2. O afterEach que injeta apenas os logs de API no relatório, sem os printscreens
+afterEach(function () {
+  if (networkLog.length > 0) {
+    cy.addTestContext({
+      title: `🚨 ${networkLog.length} chamada(s) de API com erro`,
+      value: JSON.stringify(networkLog, null, 2),
+    });
+  }
+});
