@@ -21,7 +21,7 @@ describe("Outlet de Passagens", () => {
   });
 
   it("Outlet de passagens - Hora Marcada", () => {
-    cy.env(["login", "senha"]).then(() => {
+    cy.env(["login", "senha1"]).then(() => {
       cy.visit(odp);
       LoginPage.odpModalLogin();
       LoginPage.odpPreencherUsuario();
@@ -39,7 +39,7 @@ describe("Outlet de Passagens", () => {
   });
 
   it("Outlet de passagens - Melhor Preço", () => {
-    cy.env(["login", "senha"]).then(() => {
+    cy.env(["login1", "senha"]).then(() => {
       cy.visit(odp);
       LoginPage.odpModalLogin();
       LoginPage.odpPreencherUsuario();

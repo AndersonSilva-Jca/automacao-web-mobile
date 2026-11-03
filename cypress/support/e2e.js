@@ -81,6 +81,48 @@ Cypress.on("test:after:run", (test, runnable) => {
   }
 });
 
+import addContext from "mochawesome/addContext";
+
+// Monitora todas as requisições da aplicação automaticamente
+beforeEach(() => {
+  // Limpa o erro anterior no começo de cada teste
+  Cypress.env("apiErrorLog", null);
+
+  cy.intercept("**/api-gateway/**", (req) => {
+    req.continue((res) => {
+      // Se a API retornar erro (4xx ou 5xx)
+      if (res.statusCode >= 400) {
+        Cypress.env("apiErrorLog", {
+          url: req.url,
+          status: res.statusCode,
+          responseBody: res.body,
+        });
+      }
+    });
+  });
+});
+
+// Se o teste falhar, adiciona o resumo do erro e da API direto no relatório Mochawesome
+afterEach(function () {
+  if (this.currentTest.state === "failed") {
+    const errorLog = Cypress.env("apiErrorLog");
+
+    if (errorLog) {
+      // Adiciona o link/URL da API que falhou
+      addContext(this, {
+        title: `❌ API com Falha [Status ${errorLog.status}]`,
+        value: errorLog.url,
+      });
+
+      // Adiciona apenas o corpo do erro (response body) retornado pela API
+      addContext(this, {
+        title: `📄 Response Body do Erro`,
+        value: errorLog.responseBody,
+      });
+    }
+  }
+});
+
 // Declaramos a variável global do log no arquivo de suporte
 // let networkLog = [];
 
