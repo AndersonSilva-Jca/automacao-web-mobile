@@ -1,4 +1,4 @@
-name: Web -Teste Wemobi
+name: Web -Teste Wemobi S/ Exp.
 
 on:
   # push:
@@ -56,7 +56,7 @@ jobs:
       - name: Instalar Dependências do Projeto
         run: npm ci --prefer-offline --no-audit --no-fund
 
-      - name: Testes E2E E-Bus/UTP
+      - name: Testes Wemobi S/ Exp
         id: cypress
         continue-on-error: true
         run: npx cypress run --browser electron --config video=false --spec '${{ matrix.spec }}'
@@ -220,7 +220,7 @@ jobs:
                 <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
                   <tr style="background-color: #f8f9fa;">
                     <td style="padding: 12px; border: 1px solid #00ffa2; font-weight: bold; width: 25%;">Ambientes:</td>
-                    <td style="padding: 12px; border: 1px solid #00ffa2;">ODH / ODP /Clube Giro / Wemobi / UTP</td>
+                    <td style="padding: 12px; border: 1px solid #00ffa2;">Wemobi Sem Experiência</td>
                   </tr>
                   <tr>
                     <td style="padding: 12px; border: 1px solid #00ffa2; font-weight: bold;">Escopo Validado:</td>
@@ -250,7 +250,7 @@ jobs:
           from: "Monitoramento Contínuo"
           html_body: |
             <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6; max-width: 850px; margin: 0 auto; padding: 10px 0;">
-              <h2 style="color: #c62828; border-bottom: 2px solid #c62828; padding-bottom: 12px; margin-top: 0;">🚨 Alerta: ODH/ODP/Giro/Wemobi/UTP</h2>
+              <h2 style="color: #c62828; border-bottom: 2px solid #c62828; padding-bottom: 12px; margin-top: 0;">🚨 Alerta: Wemobi Sem Experiência</h2>
               <h4 style="color: #000000; text-align: center; border-bottom: 2px solid #c62828; padding-bottom: 12px; margin-top: 0;">Run #${{ github.run_number }} . ${{ env.DATA_ALERTA }} às ${{ env.HORA_ALERTA }}</h4>
               <p>Identificamos uma quebra no fluxo operacional durante a execução dos testes automatizados. O problema requer uma investigação para avaliar o impacto nos sites produtivos.</p>
               <div style="border: 1px solid #ff0000; margin: 25px 0; border-radius: 6px; overflow: hidden; background-color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
