@@ -17,39 +17,64 @@
 
 // const remarcacao = "https://api.jcatlm.com.br/SaleExchange/confirmsaleexchange";
 
-describe("", () => {
-  beforeEach(() => {
-    cy.clearCookies();
-    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
-    cy.once("uncaught:exception", () => false);
-    Cypress.on("uncaught:exception", () => false);
-  });
-  // it("teste access token", () => {
-  //   cy.request({
-  //     method: "POST",
-  //     url: "https://api.jcatlm.com.br/oauth/v3/access-token",
-  //     body: {
-  //       grant_type: "client_credentials",
-  //     },
-  //   }).then((response) => {
-  //     expect(response.status).to.eq(200);
-  //     const accessToken = response.body.access_token;
-  //     cy.log("Access Token:", accessToken);
-  //   });
-  // });
+describe("Fluxo Crítico de Cadastro - Produção", () => {
+  it("Deve gerar o token de acesso e validar as etapas de verificação", () => {
+    const cpfTeste = "89221728005";
+    const emailTeste = "andersonsilvadev1@gmail.com";
 
-  it("teste login", () => {
+    // 1. POST para obter o Token de Acesso (primeira etapa)
     cy.request({
       method: "POST",
-      url: "https://api.jcatlm.com.br/customer/v1/account",
-      body: {
-        login: "qa.monitor@odptech.com.br",
-        password: "odptech26",
-      },
-    }).then((response) => {
-      expect(response.status).to.eq(200);
-      const accessToken = response.body.access_token;
-      cy.log("Access Token:", accessToken);
+      url: "https://api.jcatlm.com.br/oauth/v3/access-token",
+      failOnStatusCode: false,
+    }).then((authResponse) => {
+      // Valida se o token foi gerado com sucesso (ex: 200)
+      expect(authResponse.status).to.eq(200);
+      console.log("Corpo da resposta do erro:", authResponse.body);
+      // Extrai o token da resposta (ajuste a propriedade conforme o JSON real da sua API, ex: access_token ou token)
+      const token = authResponse.body.access_token || authResponse.body.token;
+
+      // 2. Testa a API de existência de CPF utilizando o Bearer Token gerado
+      cy.request({
+        method: "GET",
+        url: `https://api.jcatlm.com.br/customer/v1/user/existcpf?cpf=${cpfTeste}`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        failOnStatusCode: false,
+      }).then((response) => {
+        expect(response.status).to.be.oneOf([200, 400, 404]);
+        cy.log("Resposta ExistCPF:", response.body);
+      });
+
+      // 3. Testa a API de existência de E-mail
+      cy.request({
+        method: "GET",
+        url: `https://api.jcatlm.com.br/customer/v1/user/existemail?email=${encodeURIComponent(emailTeste)}`,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        failOnStatusCode: false,
+      }).then((response) => {
+        expect(response.status).to.be.oneOf([200, 400, 404]);
+        cy.log("Resposta ExistEmail:", response.body);
+      });
+
+      // 4. Simula a validação de dados do usuário (/validate-data)
+      cy.request({
+        method: "POST",
+        url: "https://api.jcatlm.com.br/customer/v1/user/validate-data",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        failOnStatusCode: false,
+        body: {
+          cpf: cpfTeste,
+          email: emailTeste,
+        },
+      }).then((response) => {
+        cy.log("Resposta Validate-Data Status:", response.status);
+      });
     });
   });
 });

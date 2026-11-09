@@ -37,7 +37,8 @@ jobs:
           - cypress/e2e/00_smoke/10_Totem.cy.js
 
     runs-on: ubuntu-latest
-    container: cypress/included:15.21.1
+    # container: cypress/included:15.21.1
+    container: cypress/included:16.2.1
     steps:
       - name: Checkout do Código
         uses: actions/checkout@v4

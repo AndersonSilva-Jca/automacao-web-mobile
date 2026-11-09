@@ -75,9 +75,9 @@ Login
         Log To Console    \n[INFO] Banner de cookie não apareceu. Seguindo o fluxo...
     END
 Checkout
-    Wait Until Element Is Visible    locator=xpath=//android.widget.EditText[@resource-id="origin"]    timeout=60s
+    Wait Until Element Is Visible    locator=xpath=//android.widget.TextView[@text="Origem"]    timeout=60s
     Log To Console    \n Elemento "Buscar" visível
-    Click Element    locator=xpath=//android.widget.EditText[@resource-id="origin"]
+    Click Element    locator=xpath=//android.widget.TextView[@text="Origem"]
     Wait Until Element Is Visible    locator=xpath=//android.widget.TextView[@text="Origem"]    timeout=60s
     Input Text    android=new UiSelector().resourceId("locationSearch")    Sao Paulo (Todos)
     Wait Until Element Is Visible    locator=xpath=//android.view.ViewGroup[@content-desc="São Paulo (Todos) (SP), Localidade de Grupo"]    timeout=60s
