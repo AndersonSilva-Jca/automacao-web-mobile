@@ -28,7 +28,7 @@ Deve realizar o fluxo até o checkout de pagamento
     # Click Element    accessibility_id=Rio de Janeiro (Todos) (RJ), Terminal Rodoviário
     # Click Element    accessibility_id=Rio de Janeiro (Todos) (RJ), Terminal Rodoviário
     Click Element    locator=xpath=//android.widget.TextView[@text="Rio de Janeiro (Todos) (RJ)"]
-    Click Element    locator=xpath=//android.widget.TextView[@text="Rio de Janeiro (Todos) (RJ)"]
+    # Click Element    locator=xpath=//android.widget.TextView[@text="Rio de Janeiro (Todos) (RJ)"]
     # Click Element    xpath=//android.widget.TextView[@text="São Paulo (Todos) (SP)"]
     log To Console    \nOrigem selecionado com sucesso!
     Sleep    1s
@@ -72,12 +72,17 @@ Deve realizar o fluxo até o checkout de pagamento
     Wait Until Element Is Visible    android=new UiSelector().className("android.view.ViewGroup").instance(47)    timeout=90s
     Log To Console    \n Tela de Passagens Exibida com sucesso!
 
-    Swipe    start_x=524    start_y=2141    end_x=554    end_y=1006    duration=1s
-    Swipe    start_x=535    start_y=2097    end_x=556    end_y=960    duration=1s
+    Swipe    start_x=539    start_y=2116    end_x=547    end_y=709    duration=1s
+    Swipe    start_x=558    start_y=2127    end_x=595    end_y=654    duration=1s
+    Swipe    start_x=535    start_y=2116    end_x=558    end_y=543    duration=1s
+    Swipe    start_x=558    start_y=2116    end_x=576    end_y=1156    duration=1s
     # Swipe    start_x=565    start_y=2113    end_x=556    end_y=1450    duration=1s
-    # Swipe    start_x=489    start_y=1791    end_x=500    end_y=919    duration=1s
+    # Swipe    start_x=489    start_y=1791    end_x=500    end_y=919 
 
-
+# Swipe    ${539}    ${2116}    ${547}    ${709}
+# Swipe    ${558}    ${2127}    ${595}    ${654}
+# Swipe    ${535}    ${2116}    ${558}    ${543}
+# Swipe    ${558}    ${2116}    ${576}    ${1156}
 
 
     Click Element    xpath=//android.view.View

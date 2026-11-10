@@ -57,7 +57,7 @@ module.exports = defineConfig({
     userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
     testIsolation: true,
     retries: {
-      runMode: 1, // O GitHub Actions vai tentar até 3 vezes se o elemento sumir do DOM
+      runMode: 2, // O GitHub Actions vai tentar até 3 vezes se o elemento sumir do DOM
       openMode: 0, // No seu PC desenvolvendo, ele falha de primeira para você ver o erro
     },
     // baseUrl: "https://www.viacaocometa.com.br",
