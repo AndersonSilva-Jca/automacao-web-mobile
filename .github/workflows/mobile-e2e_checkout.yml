@@ -1,4 +1,4 @@
-name: Mobile E2E
+name: Mobile Checkout E2E
 
 on:
   workflow_dispatch:
