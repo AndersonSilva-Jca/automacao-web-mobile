@@ -14,6 +14,7 @@ Library     ../libraries/GmailHelper.py
 Deve realizar o fluxo até o checkout de pagamento
     Start session
     Login
+    
     log To Console    \nTela de login exibida com sucesso!
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Buscar"]    timeout=60s
     Log To Console    \n Elemento "Buscar" visível
@@ -21,23 +22,23 @@ Deve realizar o fluxo até o checkout de pagamento
     Wait Until Element Is Visible    android=new UiSelector().resourceId("locationSearch")    timeout=60s
     Sleep    1s
     log To Console    \nTela de busca exibida com sucesso!
-    Input Text    android=new UiSelector().resourceId("locationSearch")    Rio de Janeiro (Novo Rio) (RJ)
-    Wait Until Element Is Visible    accessibility_id=Rio de Janeiro (Novo Rio) (RJ), Terminal Rodoviário    timeout=60s
+    Input Text    locator=xpath=//android.widget.EditText[@resource-id="locationSearch"]    text=Rio de Janeiro (Todos) (RJ)
+    Wait Until Element Is Visible    locator=xpath=//android.widget.TextView[@text="Rio de Janeiro (Todos) (RJ)"]    timeout=60s
     Sleep    500ms
-    # Click Element    accessibility_id=Rio de Janeiro (Novo Rio) (RJ), Terminal Rodoviário
-    # Click Element    accessibility_id=Rio de Janeiro (Novo Rio) (RJ), Terminal Rodoviário
-    Click Element    xpath=//android.widget.TextView[@text="Rio de Janeiro (Novo Rio) (RJ)"]
-    Click Element    xpath=//android.widget.TextView[@text="Rio de Janeiro (Novo Rio) (RJ)"]
-    # Click Element    xpath=//android.widget.TextView[@text="São Paulo (Rod. Tietê) (SP)"]
+    # Click Element    accessibility_id=Rio de Janeiro (Todos) (RJ), Terminal Rodoviário
+    # Click Element    accessibility_id=Rio de Janeiro (Todos) (RJ), Terminal Rodoviário
+    Click Element    locator=xpath=//android.widget.TextView[@text="Rio de Janeiro (Todos) (RJ)"]
+    Click Element    locator=xpath=//android.widget.TextView[@text="Rio de Janeiro (Todos) (RJ)"]
+    # Click Element    xpath=//android.widget.TextView[@text="São Paulo (Todos) (SP)"]
     log To Console    \nOrigem selecionado com sucesso!
     Sleep    1s
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Destino"]    timeout=60s
-    Input Text    android=new UiSelector().resourceId("locationSearch")    Sao Paulo (Tietê)
-    Wait Until Element Is Visible    accessibility_id=São Paulo (Tietê) (SP), Terminal Rodoviário
-    Click Element    accessibility_id=São Paulo (Tietê) (SP), Terminal Rodoviário
-    Click Element    accessibility_id=São Paulo (Tietê) (SP), Terminal Rodoviário
-    # Click Element    xpath=//android.widget.TextView[@text="São Paulo (Rod. Tietê) (SP)"]
-    # Click Element    xpath=//android.widget.TextView[@text="São Paulo (Rod. Tietê) (SP)"]
+    Input Text    locator=xpath=//android.widget.EditText[@resource-id="locationSearch"]    text=Sao Paulo (Todos)
+    Wait Until Element Is Visible    locator=xpath=//android.widget.TextView[@text="São Paulo (Todos) (SP)"]    timeout=60s
+    Click Element    locator=xpath=//android.widget.TextView[@text="São Paulo (Todos) (SP)"]
+    Click Element    locator=xpath=//android.widget.TextView[@text="São Paulo (Todos) (SP)"]
+    # Click Element    xpath=//android.widget.TextView[@text="São Paulo (Rod. Todos) (SP)"]
+    # Click Element    xpath=//android.widget.TextView[@text="São Paulo (Rod. Todos) (SP)"]
     log To Console    \nDestino selecionado com sucesso!
     Sleep    1s
     Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@resource-id="calendarComponentContainer"]    timeout=30
@@ -71,7 +72,13 @@ Deve realizar o fluxo até o checkout de pagamento
     Wait Until Element Is Visible    android=new UiSelector().className("android.view.ViewGroup").instance(47)    timeout=90s
     Log To Console    \n Tela de Passagens Exibida com sucesso!
 
-    Swipe    start_x=489    start_y=1791    end_x=500    end_y=919    duration=1s
+    Swipe    start_x=524    start_y=2141    end_x=554    end_y=1006    duration=1s
+    Swipe    start_x=535    start_y=2097    end_x=556    end_y=960    duration=1s
+    # Swipe    start_x=565    start_y=2113    end_x=556    end_y=1450    duration=1s
+    # Swipe    start_x=489    start_y=1791    end_x=500    end_y=919    duration=1s
+
+
+
 
     Click Element    xpath=//android.view.View
 

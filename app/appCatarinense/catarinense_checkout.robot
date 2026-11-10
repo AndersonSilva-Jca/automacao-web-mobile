@@ -13,18 +13,19 @@ Test Teardown    Run Keywords
 *** Test Cases ***
 Deve realizar o fluxo até o checkout de pagamento
     Start session
-    # Login
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Buscar"]    timeout=60s
+    Login
+    Wait Until Element Is Visible    locator=xpath=//android.widget.TextView[@text="Buscar"]    timeout=60s
     Log To Console    \n Elemento "Buscar" visível
-    Click Element    xpath=//android.widget.EditText[@resource-id="origin"]
-    Wait Until Element Is Visible    android=new UiSelector().resourceId("locationSearch")    timeout=60s
-    Input Text    android=new UiSelector().resourceId("locationSearch")    Sao Paulo (Todos) (SP)
-    Wait Until Element Is Visible    accessibility_id=São Paulo (Todos) (SP), Localidade de Grupo    timeout=60s
-    Click Element    accessibility_id=São Paulo (Todos) (SP), Localidade de Grupo
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Destino"]    timeout=60s
-    Input Text    android=new UiSelector().resourceId("locationSearch")    Rio de Janeiro (Novo Rio) (RJ)
-    Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Rio de Janeiro (Novo Rio) (RJ)"]    timeout=60s
-    Click Element    xpath=//android.widget.TextView[@text="Rio de Janeiro (Novo Rio) (RJ)"]
+    Click Element    locator=xpath=//android.widget.EditText[@resource-id="origin"]
+    Wait Until Element Is Visible    locator=android=new UiSelector().resourceId("locationSearch")    timeout=60s
+    Input Text    locator=android=new UiSelector().resourceId("locationSearch")    text=Sao Paulo (Todos) (SP)
+    Wait Until Element Is Visible    locator=accessibility_id=São Paulo (Todos) (SP), Localidade de Grupo    timeout=60s
+    Click Element    locator=accessibility_id=São Paulo (Todos) (SP), Localidade de Grupo
+    Wait Until Element Is Visible    locator=xpath=//android.widget.TextView[@text="Destino"]    timeout=60s
+    Input Text    locator=android=new UiSelector().resourceId("locationSearch")    text=Rio de Janeiro (Todos) (RJ)
+    Wait Until Element Is Visible    locator=xpath=//android.widget.TextView[@text="Rio de Janeiro (Todos) (RJ)"]    timeout=60s
+    Click Element    locator=xpath=//android.widget.TextView[@text="Rio de Janeiro (Todos) (RJ)"]
+    Click Element    locator=xpath=//android.widget.TextView[@text="Rio de Janeiro (Todos) (RJ)"]
 
      ${data_ida}=    obter_dia_aleatorio_ida
     Log To Console    \nData gerada: ${data_ida}
@@ -59,8 +60,9 @@ Deve realizar o fluxo até o checkout de pagamento
 
     Wait Until Element Is Visible    android=new UiSelector().text("Passagem de IDA")    timeout=60s
 
-    Swipe    start_x=503    start_y=2040    end_x=522    end_y=28    duration=1s
-
+    # Swipe    start_x=503    start_y=2040    end_x=522    end_y=28    duration=1s
+    Swipe    start_x=524    start_y=2141    end_x=554    end_y=1006    duration=1s
+    Swipe    start_x=535    start_y=2097    end_x=556    end_y=960    duration=1s
     Click Element    xpath=//android.view.View
 
     Tratar Banner De Horario Se Aparecer
