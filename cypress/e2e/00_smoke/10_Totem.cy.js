@@ -20,7 +20,7 @@ describe("Totem", () => {
     cy.get("#agencyId").should("be.visible").click({ force: true });
     cy.get("#agencyId").should("be.visible").click({ force: true });
 
-    const agenciaDigits = ["1", "2", "8", "6", "9", "7"];
+    const agenciaDigits = ["1", "8", "6", "9", "7"];
     agenciaDigits.forEach((digit) => {
       cy.contains("button", digit).click({ force: true });
       cy.wait(200);
@@ -45,6 +45,7 @@ describe("Totem", () => {
     cy.get(".bg-gray-50 > .gap-4 > :nth-child(2)").should("be.visible").click();
 
     cy.get(".text-colors-black-light").should("be.visible").log("Quantos Passageiros serão?");
+    // cy.get(":nth-child(3) > .font-medium > div > .injected-svg").click();
     cy.get(".gap-4 > .border").should("be.visible");
     cy.get(".gap-4 > :nth-child(2) > .text-xl").click();
     cy.get(".gap-4 > .bg-primary").should("be.visible").click();
