@@ -36,10 +36,12 @@ class OfferPage {
   }
 
   passagemExperienciaWemobi() {
+    cy.wait(5000);
     cy.selecionarPassagemExperienciaWemobi();
   }
 
   passagemSemExperienciaWemobi() {
+    cy.wait(5000);
     cy.selecionarPassagemSemExperienciaWemobi();
   }
 }
