@@ -16,15 +16,15 @@ const teste = "https://www.catarinense.com.br/disponibilidade?at_preview_token=t
 
 describe("Catarinense", () => {
   beforeEach(() => {
-    cy.clearCookies();
+    // cy.clearCookies();
     // cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.once("uncaught:exception", () => false);
     Cypress.on("uncaught:exception", () => false);
   });
 
   it("Catarinense - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
+    cy.visit(catarinense);
     cy.env(["login", "senha"]).then(() => {
-      cy.visit(catarinense);
       cy.get(".img-header-logo").click();
       LoginPage.abrirModalLogin();
       LoginPage.preencherUsuario();

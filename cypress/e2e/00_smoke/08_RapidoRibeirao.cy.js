@@ -15,15 +15,15 @@ const rapidoRibeirao = "https://www.rapidoribeiraopreto.com.br/?utm_source=synth
 
 describe("Rapido Ribeirão", () => {
   beforeEach(() => {
-    cy.clearCookies();
+    // cy.clearCookies();
     // cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.once("uncaught:exception", () => false);
     Cypress.on("uncaught:exception", () => false);
   });
 
   it("Rapido Ribeirão - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
+    cy.visit(rapidoRibeirao);
     cy.env(["login", "senha"]).then(() => {
-      cy.visit(rapidoRibeirao);
       LoginPage.abrirModalLogin();
       LoginPage.preencherUsuario();
       LoginPage.PreencherSenha();

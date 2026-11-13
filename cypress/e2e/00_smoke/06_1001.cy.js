@@ -15,15 +15,15 @@ const viacao1001 = "https://www.autoviacao1001.com.br/?utm_source=synthetic_test
 
 describe("Auto Viação 1001", () => {
   beforeEach(() => {
-    cy.clearCookies();
+    // cy.clearCookies();
     // cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.once("uncaught:exception", () => false);
     Cypress.on("uncaught:exception", () => false);
   });
 
   it("Auto Viação 1001 - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
+    cy.visit(viacao1001);
     cy.env(["login", "senha"]).then(() => {
-      cy.visit(viacao1001);
       LoginPage.abrirModalLogin();
       LoginPage.preencherUsuario();
       LoginPage.PreencherSenha();

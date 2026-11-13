@@ -16,15 +16,15 @@ const expressoSul = "https://www.expressodosul.com.br/?utm_source=synthetic_test
 
 describe("Expresso do Sul", () => {
   beforeEach(() => {
-    cy.clearCookies();
+    // cy.clearCookies();
     // cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.once("uncaught:exception", () => false);
     Cypress.on("uncaught:exception", () => false);
   });
 
   it("Expresso Sul - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
+    cy.visit(expressoSul);
     cy.env(["login", "senha"]).then(() => {
-      cy.visit(expressoSul, { failOnStatusCode: false });
       LoginPage.abrirModalLogin();
       LoginPage.preencherUsuario();
       LoginPage.PreencherSenha();
