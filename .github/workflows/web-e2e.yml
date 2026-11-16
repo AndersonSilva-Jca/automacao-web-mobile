@@ -232,7 +232,7 @@ jobs:
                     <td style="padding: 12px; border: 1px solid #00ffa2; font-weight: bold; width: 25%;">Ambientes:</td>
                     <td style="padding: 12px; border: 1px solid #00ffa2;">EBUS / UTP</td>
                   </tr>
-                  <tr>
+                  <tr> 
                     <td style="padding: 12px; border: 1px solid #00ffa2; font-weight: bold;">Escopo Validado:</td>
                     <td style="padding: 12px; border: 1px solid #00ffa2;"><strong>[00] Smoke Tests - Críticos - Checkout</strong> (Busca de Destinos, Datas, Passagens e Seleção de Assentos).</td>
                   </tr>
@@ -300,41 +300,42 @@ jobs:
       - name: Enviar Alerta no Telegram
         if: env.CYPRESS_OUTCOME == 'failure'
         run: |
+
           # 1. URLs Atualizadas
-          LINK_RELATORIO="https://pub-9c4151f873204a7b814dfbcb4e0036bc.r2.dev/reports/${{ github.run_number }}/01_e2e/index.html"
-          LINK_GITHUB="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          LINK_RELATORIO="https://pub-9c4151f873204a7b814dfbcb4e0036bc.r2.dev/reports/3080/01_e2e/index.html"
+          LINK_GITHUB="https://github.com/AndersonSilva-Jca/automacao-web-mobile/actions/runs/43908277294"
           LINK_DASHBOARD="https://script.google.com/macros/s/AKfycby6v2p1_k9ch5st11OeBy7Nermci8fIh0Y9A4RwroXO5HdIsGDF03BUg6hgHVsFou6_1A/exec"
 
-          # 2. Constrói o texto do alerta formatado em Markdown
+          # 2. Constrói o texto do alerta formatado em HTML
           TEXTO_MENSAGEM=$(cat <<EOF
-          🚨 *[ALERTA WEB] EBus/UTP*
+          🚨 <b>[ALERTA WEB] EBus/UTP</b>
 
           Os testes E2E do Cypress falharam no ambiente de Operação.
 
-          *📊 INFORMAÇÕES DA EXECUÇÃO:*
-          • *ID da Run:* #${{ github.run_number }}
-          • *Data:* ${{ env.DATA_ALERTA }}
-          • *Hora:* ${{ env.HORA_ALERTA }} (Brasília)
-          • *Ferramenta:* Cypress Web
+          📊 <b>INFORMAÇÕES DA EXECUÇÃO:</b>
+          • <b>ID da Run:</b> #3080
+          • <b>Data:</b> 16/11/2026
+          • <b>Hora:</b> 13:39:03 (Brasília)
+          • <b>Ferramenta:</b> Cypress Web
 
-          *🔗 LINKS DE ACESSO:*
-          📄 *Relatório HTML:*
+          🔗 <b>LINKS DE ACESSO:</b>
+          📄 <b>Relatório HTML:</b>
           $LINK_RELATORIO
 
-          📈 *Dashboard:*
+          📈 <b>Dashboard:</b>
           $LINK_DASHBOARD
 
-          🛠️ *Execução no GitHub:*
+          🛠️ <b>Execução no GitHub:</b>
           $LINK_GITHUB
           EOF
           )
 
-          # 3. Disparar o curl direto para a API do Telegram
+          # 3. Disparar o curl direto para a API do Telegram com parse_mode=HTML
           echo "📱 Disparando alerta de falha para o Telegram..."
-          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
-            -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
+          curl -s -X POST "https://api.telegram.org/bot***/sendMessage" \
+            -d "chat_id=***" \
             -d "text=$TEXTO_MENSAGEM" \
-            -d "parse_mode=Markdown" \
+            -d "parse_mode=HTML" \
             -d "disable_web_page_preview=true"
 
       # - name: Enviar Alerta no WhatsApp Privado Anderson
@@ -375,3 +376,14 @@ jobs:
       #     # 4. Dispara o curl para o WhatsApp do Anderson
       #     echo "📱 Disparando alerta para Anderson..."
       #     curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ANDERSON }}&text=${TEXTO_CODIFICADO}&apikey=7972786"
+
+# // {
+# //   "timeZone": "America/Sao_Paulo",
+# //   "dependencies": {},
+# //   "exceptionLogging": "STACKDRIVER",
+# //   "runtimeVersion": "V8",
+# //   "webapp": {
+# //     "executeAs": "USER_DEPLOYING",
+# //     "access": "ANYONE_ANONYMOUS"
+# //   }
+# // }
