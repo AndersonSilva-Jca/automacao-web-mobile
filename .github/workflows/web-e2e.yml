@@ -74,6 +74,8 @@ jobs:
           GMAIL_MAIL: ${{ secrets.GMAIL_MAIL }}
           GMAIL_APP_PASS: ${{ secrets.GMAIL_APP_PASS }}
           WA_PHONE_ANDERSON: ${{ secrets.WA_PHONE_ANDERSON }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           AWS_R2_ACCESS_KEY_ID: ${{ secrets.CYPRESS_R2_ACCESS_KEY_ID }}
           AWS_R2_SECRET_ACCESS_KEY: ${{ secrets.CYPRESS_R2_SECRET_ACCESS_KEY }}
           AWS_R2_ACCOUNT_ID: ${{ secrets.CYPRESS_R2_ACCOUNT_ID }}
@@ -295,16 +297,16 @@ jobs:
               <p style="font-size: 12px; color: #999; margin: 0;">Este é um alerta automático gerado pelo sistema de Qualidade de Software (QA).</p>
             </div>
 
-      - name: Enviar Alerta no WhatsApp Privado Anderson
+      - name: Enviar Alerta no Telegram
         if: env.CYPRESS_OUTCOME == 'failure'
         run: |
-          # 1. URLs Atualizadas (Relatório R2, Pipeline do GitHub e Dashboard)
+          # 1. URLs Atualizadas
           LINK_RELATORIO="https://pub-9c4151f873204a7b814dfbcb4e0036bc.r2.dev/reports/${{ github.run_number }}/01_e2e/index.html"
           LINK_GITHUB="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           LINK_DASHBOARD="https://script.google.com/macros/s/AKfycby6v2p1_k9ch5st11OeBy7Nermci8fIh0Y9A4RwroXO5HdIsGDF03BUg6hgHVsFou6_1A/exec"
 
-          # 2. Constrói o texto do WhatsApp garantindo que multilinhas funcionem corretamente no Shell
-          TEXTO_BRUTO=$(cat <<EOF
+          # 2. Constrói o texto do alerta formatado em Markdown
+          TEXTO_MENSAGEM=$(cat <<EOF
           🚨 *[ALERTA WEB] EBus/UTP*
 
           Os testes E2E do Cypress falharam no ambiente de Operação.
@@ -327,9 +329,49 @@ jobs:
           EOF
           )
 
-          # 3. Faz o URL Encode usando Python para evitar quebras no curl
-          TEXTO_CODIFICADO=$(python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))" "$TEXTO_BRUTO")
+          # 3. Disparar o curl direto para a API do Telegram
+          echo "📱 Disparando alerta de falha para o Telegram..."
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
+            -d "text=$TEXTO_MENSAGEM" \
+            -d "parse_mode=Markdown" \
+            -d "disable_web_page_preview=true"
 
-          # 4. Dispara o curl para o WhatsApp do Anderson
-          echo "📱 Disparando alerta para Anderson..."
-          curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ANDERSON }}&text=${TEXTO_CODIFICADO}&apikey=7972786"
+      # - name: Enviar Alerta no WhatsApp Privado Anderson
+      #   if: env.CYPRESS_OUTCOME == 'failure'
+      #   run: |
+      #     # 1. URLs Atualizadas (Relatório R2, Pipeline do GitHub e Dashboard)
+      #     LINK_RELATORIO="https://pub-9c4151f873204a7b814dfbcb4e0036bc.r2.dev/reports/${{ github.run_number }}/01_e2e/index.html"
+      #     LINK_GITHUB="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+      #     LINK_DASHBOARD="https://script.google.com/macros/s/AKfycby6v2p1_k9ch5st11OeBy7Nermci8fIh0Y9A4RwroXO5HdIsGDF03BUg6hgHVsFou6_1A/exec"
+
+      #     # 2. Constrói o texto do WhatsApp garantindo que multilinhas funcionem corretamente no Shell
+      #     TEXTO_BRUTO=$(cat <<EOF
+      #     🚨 *[ALERTA WEB] EBus/UTP*
+
+      #     Os testes E2E do Cypress falharam no ambiente de Operação.
+
+      #     *📊 INFORMAÇÕES DA EXECUÇÃO:*
+      #     • *ID da Run:* #${{ github.run_number }}
+      #     • *Data:* ${{ env.DATA_ALERTA }}
+      #     • *Hora:* ${{ env.HORA_ALERTA }} (Brasília)
+      #     • *Ferramenta:* Cypress Web
+
+      #     *🔗 LINKS DE ACESSO:*
+      #     📄 *Relatório HTML:*
+      #     $LINK_RELATORIO
+
+      #     📈 *Dashboard:*
+      #     $LINK_DASHBOARD
+
+      #     🛠️ *Execução no GitHub:*
+      #     $LINK_GITHUB
+      #     EOF
+      #     )
+
+      #     # 3. Faz o URL Encode usando Python para evitar quebras no curl
+      #     TEXTO_CODIFICADO=$(python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))" "$TEXTO_BRUTO")
+
+      #     # 4. Dispara o curl para o WhatsApp do Anderson
+      #     echo "📱 Disparando alerta para Anderson..."
+      #     curl -f -s -X GET "https://api.callmebot.com/whatsapp.php?phone=${{ secrets.WA_PHONE_ANDERSON }}&text=${TEXTO_CODIFICADO}&apikey=7972786"

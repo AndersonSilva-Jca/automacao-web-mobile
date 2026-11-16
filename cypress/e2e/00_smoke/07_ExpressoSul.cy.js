@@ -39,12 +39,5 @@ describe("Expresso do Sul", () => {
     SeatMapPage.selecionarAssento();
     // CheckoutPage.resumoDaCompraExpressoDoSul();
     CheckoutPage.resumoDaCompra();
-    // cy.get(loc.LOADER).should('not.be.visible')
-    // cy.url({ timeout: 90000 }).should('include', '/pagamento')
-    // Não finalizar a compra para evitar transações reais
-    // cy.get(loc.LOADER).should('not.exist')
-    // cy.get('#tab-pix').click()
-    // cy.get('.conditions-check', { timeout: 20000 }).click({ force: true })
-    // cy.get('#payment-submit').should('be.visible').and('not.be.disabled').click();
   });
 });
