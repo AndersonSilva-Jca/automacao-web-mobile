@@ -36,12 +36,14 @@ class OfferPage {
   }
 
   passagemExperienciaWemobi() {
-    cy.wait(5000);
+    cy.get('[alt="loader"]').should("not.exist");
+    cy.wait(7000);
     cy.selecionarPassagemExperienciaWemobi();
   }
 
   passagemSemExperienciaWemobi() {
-    cy.wait(5000);
+    cy.get('[alt="loader"]').should("not.exist");
+    cy.wait(7000);
     cy.selecionarPassagemSemExperienciaWemobi();
   }
 }

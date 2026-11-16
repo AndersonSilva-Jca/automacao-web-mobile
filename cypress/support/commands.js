@@ -843,7 +843,6 @@ Cypress.Commands.add("selecionarPassagemSemExperienciaWemobi", () => {
 });
 
 Cypress.Commands.add("selecionarPassagemExperienciaWemobi", () => {
-  cy.wait(5000);
   cy.get(".container-max-width-1400 > :nth-child(4)").should("be.visible");
   cy.contains("ESCOLHER PASSAGENS", { timeout: 90000 }).should("be.visible");
   cy.log("⏳ Aguardando estabilização da página de ofertas...");
