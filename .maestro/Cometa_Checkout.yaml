@@ -10,10 +10,19 @@ appId: br.com.viacaocometa.cometaapp
 - inputText: "Kx#9mP$1"
 - hideKeyboard
 - tapOn: "Entrar"
+- waitForAnimationToEnd
 - assertVisible:
     id: "origin"
+- assertVisible: "Comprar passagens"
+- assertVisible: "Destino"
+- assertVisible:
+    id: "inputCalendarContainer"
 - tapOn:
     id: "origin"
+- waitForAnimationToEnd
+- assertVisible: "Origem"
+- assertVisible:
+    point: 0%,10%
 - inputText: "Sao Paulo (Todos)"
 - extendedWaitUntil:
     visible: "S\u00e3o Paulo (Todos) (SP), Localidade de Grupo"
