@@ -1,3 +1,319 @@
+# name: Mobile Maestro E2E
+
+# on:
+#   workflow_dispatch:
+
+# concurrency:
+#   group: ${{ github.workflow }}-${{ github.ref }}
+#   cancel-in-progress: false
+
+# env:
+#   RESULTS_DIR: results
+#   R2_PUBLIC_URL: "https://pub-8f8304dd624445aca80dcb98bc5a78d0.r2.dev"
+
+# jobs:
+#   maestro-mobile-tests:
+#     runs-on: ubuntu-latest
+
+#     permissions:
+#       contents: read
+#       id-token: write
+
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v4
+
+#       - name: Setup Python
+#         uses: actions/setup-python@v5
+#         with:
+#           python-version: "3.11"
+
+#       - name: Setup Node 20
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: 20
+
+#       - name: Cache Appium / CLI drivers
+#         uses: actions/cache@v4
+#         with:
+#           path: ~/.cache/pip
+#           key: ${{ runner.os }}-pip-maestro
+
+#       - name: Instalar Maestro CLI
+#         run: |
+#           curl -Ls "https://get.maestro.mobile.dev" | bash
+#           echo "$HOME/.maestro/bin" >> $GITHUB_PATH
+
+#       - name: Enable KVM group permissions
+#         run: |
+#           sudo chmod 666 /dev/kvm
+
+#       - name: Run Tests with Android Emulator & Maestro
+#         id: run_tests
+#         uses: reactivecircus/android-emulator-runner@v2
+#         env:
+#           LOGIN: ${{ secrets.LOGIN }}
+#           SENHA: ${{ secrets.SENHA }}
+#           LOGIN2: ${{ secrets.LOGIN2 }}
+#           SENHA2: ${{ secrets.SENHA2 }}
+#           GMAIL_USER: ${{ secrets.GMAIL_USER }}
+#           GMAIL_APP_PASS: ${{ secrets.GMAIL_APP_PASS }}
+#           MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+#           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#           REMETENTE_APP: ${{ secrets.REMETENTE_APP }}
+#           WA_PHONE_ANDERSON: ${{ secrets.WA_PHONE_ANDERSON }}
+#         with:
+#           api-level: 30
+#           target: google_apis
+#           arch: x86_64
+#           profile: pixel_7
+#           disable-animations: true
+#           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
+#           script: |
+#             export PATH="$PATH:$HOME/.maestro/bin"
+#             echo "=== Emulator pronto e bootado automaticamente ==="
+#             adb devices
+#             echo "Instalando os aplicativos..."
+
+#             adb install-multiple ./app/apks/wemobi/*.apk || true
+#             adb install-multiple ./app/apks/cometa/*.apk || true
+#             adb install-multiple ./app/apks/1001/*.apk || true
+#             adb install-multiple ./app/apks/catarinense/*.apk || true
+
+#             echo "Criando pasta de resultados..."
+#             mkdir -p $RESULTS_DIR
+
+#             echo "Iniciando a execução dos fluxos do Maestro..."
+#             # Executa a pasta .maestro gerando o relatório JUnit XML e salvando artefatos
+#             maestro test .maestro/ --format junit --output $RESULTS_DIR/junit.xml --test-output-dir $RESULTS_DIR || true
+
+#       - name: Coletar e Organizar Evidências (Screenshots)
+#         if: always()
+#         run: |
+#           # Garante que qualquer print gerado pelo Maestro seja copiado para a pasta de resultados
+#           find ~/.maestro -name "*.png" -exec cp {} $RESULTS_DIR/ 2>/dev/null || true
+#           find . -name "*.png" -exec cp {} $RESULTS_DIR/ 2>/dev/null || true
+
+#       - name: Limpar APKs do Workspace para liberar espaço
+#         if: always()
+#         run: |
+#           rm -rf app/apks/
+
+#       - name: Deploy do Relatório para Cloudflare R2
+#         if: always()
+#         env:
+#           AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+#           AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+#           AWS_DEFAULT_REGION: auto
+#         run: |
+#           aws s3 sync $RESULTS_DIR/ s3://allure-reports/reports/maestro-run-${{ github.run_number }} \
+#             --endpoint-url https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
+
+#       - name: Enviar resultados para o Dashboard (Apps Script)
+#         if: always()
+#         env:
+#           GITHUB_RUN_NUMBER: ${{ github.run_number }}
+#           APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
+#           R2_PUBLIC_URL: ${{ env.R2_PUBLIC_URL }}
+#         run: |
+#           npm install xml2js
+#           node scripts/enviar-resultados-appscript-mobile.js
+
+#       - name: Extrair Métricas do JUnit XML do Maestro
+#         if: always()
+#         id: metrics
+#         shell: python
+#         run: |
+#           import os
+#           import xml.etree.ElementTree as ET
+#           from datetime import datetime
+#           import zoneinfo
+
+#           results_dir = os.environ.get("RESULTS_DIR", "results")
+#           passed, failed, skipped = 0, 0, 0
+#           error_details = "Nenhuma falha crítica registrada no arquivo JUnit do Maestro."
+#           junit_file = os.path.join(results_dir, "junit.xml")
+
+#           if os.path.exists(junit_file) and os.path.getsize(junit_file) > 0:
+#               try:
+#                   tree = ET.parse(junit_file)
+#                   root = tree.getroot()
+#                   testsuites = root.findall(".//testsuite") if root.tag != 'testsuite' else [root]
+#                   for ts in testsuites:
+#                       tests = int(ts.get("tests", 0))
+#                       failures = int(ts.get("failures", 0))
+#                       errors = int(ts.get("errors", 0))
+#                       skp = int(ts.get("skipped", 0))
+#                       failed += failures + errors
+#                       skipped += skp
+#                       passed += (tests - failures - errors - skp)
+
+#                   errors_list = []
+#                   for testcase in root.findall(".//testcase"):
+#                       failure = testcase.find("failure")
+#                       error = testcase.find("error")
+#                       if failure is not None or error is not None:
+#                           elem = failure if failure is not None else error
+#                           tc_name = testcase.get("name", "Unknown Test")
+#                           err_msg = elem.text if elem.text else elem.get("message", "Sem mensagem detalhada.")
+#                           err_msg = err_msg.replace("\n", " ").replace("\r", "").strip()
+#                           errors_list.append(f"<li><strong>{tc_name}:</strong> {err_msg}</li>")
+#                   if errors_list:
+#                       error_details = "".join(errors_list)
+#               except Exception as e:
+#                   error_details = f"<li>Erro ao processar JUnit XML: {str(e)}</li>"
+#                   failed = 1
+
+#           total = passed + failed + skipped
+#           status_str = "Monitoramento Maestro Finalizado com Sucesso" if failed == 0 and total > 0 else "FALHOU ❌"
+#           status_raw = "success" if failed == 0 and total > 0 else "failure"
+#           sp_tz = zoneinfo.ZoneInfo("America/Sao_Paulo")
+#           now_str = datetime.now(sp_tz).strftime("%d/%m/%Y às %H:%M")
+
+#           with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as f:
+#               f.write(f"passed={passed}\n")
+#               f.write(f"failed={failed}\n")
+#               f.write(f"skipped={skipped}\n")
+#               f.write(f"total={total}\n")
+#               f.write(f"status={status_str}\n")
+#               f.write(f"status_raw={status_raw}\n")
+#               f.write(f"datetime={now_str}\n")
+#               f.write(f"errors={error_details}\n")
+
+#       - name: Extrair Evidências (print) de Falhas
+#         if: always()
+#         id: evidence
+#         shell: python
+#         run: |
+#           import glob
+#           import os
+#           screenshot_link = ""
+#           base_url = f"{os.environ.get('R2_PUBLIC_URL')}/reports/maestro-run-${{ github.run_number }}"
+#           results_dir = os.environ.get("RESULTS_DIR", "results")
+
+#           png_files = glob.glob(os.path.join(results_dir, "*.png"))
+#           if png_files:
+#               png_files.sort(key=os.path.getmtime, reverse=True)
+#               filename = os.path.basename(png_files[0])
+#               screenshot_link = f"{base_url}/{filename}"
+
+#           with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as out:
+#               out.write(f"screenshot_link={screenshot_link}\n")
+
+#       - name: GitHub Summary
+#         if: always()
+#         run: |
+#           METRICS_URL="${{ env.R2_PUBLIC_URL }}/reports/maestro-run-${{ github.run_number }}/junit.xml"
+#           echo "## ${{ steps.metrics.outputs.status }} — Run #${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+#           echo "| | Qtd |" >> $GITHUB_STEP_SUMMARY
+#           echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+#           echo "| ✅ Passed  | ${{ steps.metrics.outputs.passed }}  |" >> $GITHUB_STEP_SUMMARY
+#           echo "| ❌ Failed  | ${{ steps.metrics.outputs.failed }}  |" >> $GITHUB_STEP_SUMMARY
+#           echo "| 🔢 Total   | ${{ steps.metrics.outputs.total }}   |" >> $GITHUB_STEP_SUMMARY
+#           echo "" >> $GITHUB_STEP_SUMMARY
+#           echo "📊 [Baixar JUnit XML Report]($METRICS_URL)" >> $GITHUB_STEP_SUMMARY
+
+#       - name: Enviar E-mail de Sucesso
+#         if: always() && steps.metrics.outputs.status_raw == 'success'
+#         uses: dawidd6/action-send-mail@v4
+#         with:
+#           server_address: smtp.gmail.com
+#           server_port: 465
+#           username: ${{ secrets.MAIL_USERNAME }}
+#           password: ${{ secrets.MAIL_PASSWORD }}
+#           subject: "✅[MAESTRO MOBILE] Monitoramento Contínuo - Sucesso"
+#           to: anderson.ssantos@jcatlm.com.br
+#           from: "Monitoramento Maestro"
+#           html_body: |
+#             <!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
+#             <style>
+#               body{font-family:Arial,sans-serif;background:#f4f4f4;padding:20px}
+#               .wrap{max-width:620px;margin:auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+#               .hdr{padding:28px 32px;text-align:center;background:#1a7f37}
+#               .hdr h1{color:#fff;margin:0;font-size:24px}
+#               .hdr p{color:rgba(255,255,255,.8);margin:6px 0 0;font-size:13px}
+#               .body{padding:28px 32px}
+#               .cards{display:flex;gap:10px;margin-bottom:24px}
+#               .card{flex:1;text-align:center;padding:16px 6px;border-radius:6px;background:#f6f8fa;border:1px solid #e1e4e8}
+#               .card .n{font-size:28px;font-weight:800;display:block}
+#               .green{color:#1a7f37}.red{color:#cf222e}.blue{color:#0969da}
+#               a.btn{display:block;text-align:center;padding:13px;border-radius:6px;text-decoration:none;font-weight:700;font-size:14px;margin-bottom:10px}
+#               .btn-gray{background:#f6f8fa;color:#24292f;border:1px solid #d0d7de}
+#               .footer{background:#f6f8fa;border-top:1px solid #e1e4e8;padding:14px 32px;text-align:center;font-size:11px;color:#8c959f}
+#             </style></head><body>
+#             <div class="wrap">
+#               <div class="hdr">
+#                 <h1>${{ steps.metrics.outputs.status }}</h1>
+#                 <p>Run #${{ github.run_number }} · ${{ steps.metrics.outputs.datetime }}</p>
+#               </div>
+#               <div class="body">
+#                 <div class="cards">
+#                   <div class="card"><span class="n green">${{ steps.metrics.outputs.passed }}</span><div class="l">✅ Passed</div></div>
+#                   <div class="card"><span class="n red">${{ steps.metrics.outputs.failed }}</span><div class="l">❌ Failed</div></div>
+#                   <div class="card"><span class="n blue">${{ steps.metrics.outputs.total }}</span><div class="l">🔢 Total</div></div>
+#                 </div>
+#                 <a class="btn btn-gray" href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}">⚙️ Ver Execução no GitHub Actions</a>
+#               </div>
+#               <div class="footer">Gerado automaticamente por Maestro · Não responda este e-mail</div>
+#             </div></body></html>
+
+#       - name: Enviar E-mail de Falha
+#         if: always() && steps.metrics.outputs.status_raw == 'failure'
+#         uses: dawidd6/action-send-mail@v4
+#         with:
+#           server_address: smtp.gmail.com
+#           server_port: 465
+#           username: ${{ secrets.MAIL_USERNAME }}
+#           password: ${{ secrets.MAIL_PASSWORD }}
+#           subject: "🚨[ALERTA MAESTRO MOBILE] Falha no Monitoramento"
+#           to: anderson.ssantos@jcatlm.com.br,qa.monitor@odptech.com.br,maysa.marco@jcatlm.com.br,anderson.psilva@jcatlm.com.br,ariane.izac@jcatlm.com.br,ana.soliveira@jcatlm.com.br
+#           from: "Monitoramento Maestro"
+#           html_body: |
+#             <!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
+#             <style>
+#               body{font-family:Arial,sans-serif;background:#f4f4f4;padding:20px}
+#               .wrap{max-width:620px;margin:auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+#               .hdr{padding:28px 32px;text-align:center;background:#cf222e}
+#               .hdr h1{color:#fff;margin:0;font-size:24px}
+#               .hdr p{color:rgba(255,255,255,.8);margin:6px 0 0;font-size:13px}
+#               .body{padding:28px 32px}
+#               .alert-box{background-color:#fff9c4;border:1px solid #fbc02d;padding:16px;border-radius:6px;margin-bottom:24px;font-size:14px;color:#24292f}
+#               .alert-box h3{margin:0 0 8px 0;color:#d32f2f;font-size:16px}
+#               .alert-box ul{margin:8px 0 0 0;padding-left:20px;color:#57606a}
+#               .cards{display:flex;gap:10px;margin-bottom:24px}
+#               .card{flex:1;text-align:center;padding:16px 6px;border-radius:6px;background:#f6f8fa;border:1px solid #e1e4e8}
+#               .card .n{font-size:28px;font-weight:800;display:block}
+#               .green{color:#1a7f37}.red{color:#cf222e}.blue{color:#0969da}
+#               a.btn{display:block;text-align:center;padding:13px;border-radius:6px;text-decoration:none;font-weight:700;font-size:14px;margin-bottom:10px}
+#               .btn-gray{background:#f6f8fa;color:#24292f;border:1px solid #d0d7de}
+#               .footer{background:#f6f8fa;border-top:1px solid #e1e4e8;padding:14px 32px;text-align:center;font-size:11px;color:#8c959f}
+#             </style></head><body>
+#             <div class="wrap">
+#               <div class="hdr">
+#                 <h1>🚨 ${{ steps.metrics.outputs.status }}</h1>
+#                 <p>Run #${{ github.run_number }} · ${{ steps.metrics.outputs.datetime }}</p>
+#               </div>
+#               <div class="body">
+#                 <div class="alert-box">
+#                   <h3>⚠️ Falha Detectada no Maestro</h3>
+#                   O teste automatizado mobile encontrou um erro.
+#                   <strong>Detalhes:</strong>
+#                   <ul>
+#                     ${{ steps.metrics.outputs.errors }}
+#                   </ul>
+#                 </div>
+#                 <div class="cards">
+#                   <div class="card"><span class="n green">${{ steps.metrics.outputs.passed }}</span><div class="l">✅ Passed</div></div>
+#                   <div class="card"><span class="n red">${{ steps.metrics.outputs.failed }}</span><div class="l">❌ Failed</div></div>
+#                   <div class="card"><span class="n blue">${{ steps.metrics.outputs.total }}</span><div class="l">🔢 Total</div></div>
+#                 </div>
+#                 ${{ steps.evidence.outputs.screenshot_link && format('<a class="btn btn-gray" href="{0}">🖼️ Ver Print da Tela de Erro</a>', steps.evidence.outputs.screenshot_link) }}
+#                 <a class="btn btn-gray" href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}">⚙️ Ver Log Completo no GitHub Actions</a>
+#               </div>
+#               <div class="footer">Gerado automaticamente por Maestro · Não responda este e-mail</div>
+#             </div></body></html>
+
 name: Mobile Maestro E2E
 
 on:
@@ -33,12 +349,6 @@ jobs:
         with:
           node-version: 20
 
-      - name: Cache Appium / CLI drivers
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-maestro
-
       - name: Instalar Maestro CLI
         run: |
           curl -Ls "https://get.maestro.mobile.dev" | bash
@@ -56,13 +366,7 @@ jobs:
           SENHA: ${{ secrets.SENHA }}
           LOGIN2: ${{ secrets.LOGIN2 }}
           SENHA2: ${{ secrets.SENHA2 }}
-          GMAIL_USER: ${{ secrets.GMAIL_USER }}
-          GMAIL_APP_PASS: ${{ secrets.GMAIL_APP_PASS }}
-          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
-          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REMETENTE_APP: ${{ secrets.REMETENTE_APP }}
-          WA_PHONE_ANDERSON: ${{ secrets.WA_PHONE_ANDERSON }}
         with:
           api-level: 30
           target: google_apis
@@ -72,244 +376,33 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
           script: |
             export PATH="$PATH:$HOME/.maestro/bin"
-            echo "=== Emulator pronto e bootado automaticamente ==="
-            adb devices
-            echo "Instalando os aplicativos..."
-
-            adb install-multiple ./app/apks/wemobi/*.apk || true
+            echo "=== Instalando APKs ==="
             adb install-multiple ./app/apks/cometa/*.apk || true
             adb install-multiple ./app/apks/1001/*.apk || true
-            adb install-multiple ./app/apks/catarinense/*.apk || true
 
-            echo "Criando pasta de resultados..."
             mkdir -p $RESULTS_DIR
 
-            echo "Iniciando a execução dos fluxos do Maestro..."
-            # Executa a pasta .maestro gerando o relatório JUnit XML e salvando artefatos
-            maestro test .maestro/ --format junit --output $RESULTS_DIR/junit.xml --test-output-dir $RESULTS_DIR || true
+            echo "=== Executando Maestro com gravação de vídeo/prints ==="
+            # O Maestro roda os testes e gera o JUnit XML
+            maestro test .maestro/ --format junit --output $RESULTS_DIR/output.xml --test-output-dir $RESULTS_DIR || true
 
-      - name: Coletar e Organizar Evidências (Screenshots)
+      - name: Coletar Evidências (Screenshots e Logs)
         if: always()
         run: |
-          # Garante que qualquer print gerado pelo Maestro seja copiado para a pasta de resultados
-          find ~/.maestro -name "*.png" -exec cp {} $RESULTS_DIR/ 2>/dev/null || true
+          # Copia qualquer evidência gerada pelo Maestro para a pasta results
+          find ~/.maestro -type f \( -name "*.png" -o -name "*.mp4" -o -name "*.log" \) -exec cp {} $RESULTS_DIR/ 2>/dev/null || true
           find . -name "*.png" -exec cp {} $RESULTS_DIR/ 2>/dev/null || true
 
-      - name: Limpar APKs do Workspace para liberar espaço
+      - name: Upload dos Artefatos de Evidência (Prints e Vídeos)
         if: always()
-        run: |
-          rm -rf app/apks/
-
-      - name: Deploy do Relatório para Cloudflare R2
-        if: always()
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: auto
-        run: |
-          aws s3 sync $RESULTS_DIR/ s3://allure-reports/reports/maestro-run-${{ github.run_number }} \
-            --endpoint-url https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
-
-      - name: Enviar resultados para o Dashboard (Apps Script)
-        if: always()
-        env:
-          GITHUB_RUN_NUMBER: ${{ github.run_number }}
-          APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
-          R2_PUBLIC_URL: ${{ env.R2_PUBLIC_URL }}
-        run: |
-          npm install xml2js
-          node scripts/enviar-resultados-appscript-mobile.js
-
-      - name: Extrair Métricas do JUnit XML do Maestro
-        if: always()
-        id: metrics
-        shell: python
-        run: |
-          import os
-          import xml.etree.ElementTree as ET
-          from datetime import datetime
-          import zoneinfo
-
-          results_dir = os.environ.get("RESULTS_DIR", "results")
-          passed, failed, skipped = 0, 0, 0
-          error_details = "Nenhuma falha crítica registrada no arquivo JUnit do Maestro."
-          junit_file = os.path.join(results_dir, "junit.xml")
-
-          if os.path.exists(junit_file) and os.path.getsize(junit_file) > 0:
-              try:
-                  tree = ET.parse(junit_file)
-                  root = tree.getroot()
-                  testsuites = root.findall(".//testsuite") if root.tag != 'testsuite' else [root]
-                  for ts in testsuites:
-                      tests = int(ts.get("tests", 0))
-                      failures = int(ts.get("failures", 0))
-                      errors = int(ts.get("errors", 0))
-                      skp = int(ts.get("skipped", 0))
-                      failed += failures + errors
-                      skipped += skp
-                      passed += (tests - failures - errors - skp)
-
-                  errors_list = []
-                  for testcase in root.findall(".//testcase"):
-                      failure = testcase.find("failure")
-                      error = testcase.find("error")
-                      if failure is not None or error is not None:
-                          elem = failure if failure is not None else error
-                          tc_name = testcase.get("name", "Unknown Test")
-                          err_msg = elem.text if elem.text else elem.get("message", "Sem mensagem detalhada.")
-                          err_msg = err_msg.replace("\n", " ").replace("\r", "").strip()
-                          errors_list.append(f"<li><strong>{tc_name}:</strong> {err_msg}</li>")
-                  if errors_list:
-                      error_details = "".join(errors_list)
-              except Exception as e:
-                  error_details = f"<li>Erro ao processar JUnit XML: {str(e)}</li>"
-                  failed = 1
-
-          total = passed + failed + skipped
-          status_str = "Monitoramento Maestro Finalizado com Sucesso" if failed == 0 and total > 0 else "FALHOU ❌"
-          status_raw = "success" if failed == 0 and total > 0 else "failure"
-          sp_tz = zoneinfo.ZoneInfo("America/Sao_Paulo")
-          now_str = datetime.now(sp_tz).strftime("%d/%m/%Y às %H:%M")
-
-          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as f:
-              f.write(f"passed={passed}\n")
-              f.write(f"failed={failed}\n")
-              f.write(f"skipped={skipped}\n")
-              f.write(f"total={total}\n")
-              f.write(f"status={status_str}\n")
-              f.write(f"status_raw={status_raw}\n")
-              f.write(f"datetime={now_str}\n")
-              f.write(f"errors={error_details}\n")
-
-      - name: Extrair Evidências (print) de Falhas
-        if: always()
-        id: evidence
-        shell: python
-        run: |
-          import glob
-          import os
-          screenshot_link = ""
-          base_url = f"{os.environ.get('R2_PUBLIC_URL')}/reports/maestro-run-${{ github.run_number }}"
-          results_dir = os.environ.get("RESULTS_DIR", "results")
-
-          png_files = glob.glob(os.path.join(results_dir, "*.png"))
-          if png_files:
-              png_files.sort(key=os.path.getmtime, reverse=True)
-              filename = os.path.basename(png_files[0])
-              screenshot_link = f"{base_url}/{filename}"
-              
-          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as out:
-              out.write(f"screenshot_link={screenshot_link}\n")
+        uses: actions/upload-artifact@v4
+        with:
+          name: maestro-evidencias-run-${{ github.run_number }}
+          path: ${{ env.RESULTS_DIR }}
+          retention-days: 7
 
       - name: GitHub Summary
         if: always()
         run: |
-          METRICS_URL="${{ env.R2_PUBLIC_URL }}/reports/maestro-run-${{ github.run_number }}/junit.xml"
-          echo "## ${{ steps.metrics.outputs.status }} — Run #${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
-          echo "| | Qtd |" >> $GITHUB_STEP_SUMMARY
-          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
-          echo "| ✅ Passed  | ${{ steps.metrics.outputs.passed }}  |" >> $GITHUB_STEP_SUMMARY
-          echo "| ❌ Failed  | ${{ steps.metrics.outputs.failed }}  |" >> $GITHUB_STEP_SUMMARY
-          echo "| 🔢 Total   | ${{ steps.metrics.outputs.total }}   |" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "📊 [Baixar JUnit XML Report]($METRICS_URL)" >> $GITHUB_STEP_SUMMARY
-
-      - name: Enviar E-mail de Sucesso
-        if: always() && steps.metrics.outputs.status_raw == 'success'
-        uses: dawidd6/action-send-mail@v4
-        with:
-          server_address: smtp.gmail.com
-          server_port: 465
-          username: ${{ secrets.MAIL_USERNAME }}
-          password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "✅[MAESTRO MOBILE] Monitoramento Contínuo - Sucesso"
-          to: anderson.ssantos@jcatlm.com.br
-          from: "Monitoramento Maestro"
-          html_body: |
-            <!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
-            <style>
-              body{font-family:Arial,sans-serif;background:#f4f4f4;padding:20px}
-              .wrap{max-width:620px;margin:auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.1)}
-              .hdr{padding:28px 32px;text-align:center;background:#1a7f37}
-              .hdr h1{color:#fff;margin:0;font-size:24px}
-              .hdr p{color:rgba(255,255,255,.8);margin:6px 0 0;font-size:13px}
-              .body{padding:28px 32px}
-              .cards{display:flex;gap:10px;margin-bottom:24px}
-              .card{flex:1;text-align:center;padding:16px 6px;border-radius:6px;background:#f6f8fa;border:1px solid #e1e4e8}
-              .card .n{font-size:28px;font-weight:800;display:block}
-              .green{color:#1a7f37}.red{color:#cf222e}.blue{color:#0969da}
-              a.btn{display:block;text-align:center;padding:13px;border-radius:6px;text-decoration:none;font-weight:700;font-size:14px;margin-bottom:10px}
-              .btn-gray{background:#f6f8fa;color:#24292f;border:1px solid #d0d7de}
-              .footer{background:#f6f8fa;border-top:1px solid #e1e4e8;padding:14px 32px;text-align:center;font-size:11px;color:#8c959f}
-            </style></head><body>
-            <div class="wrap">
-              <div class="hdr">
-                <h1>${{ steps.metrics.outputs.status }}</h1>
-                <p>Run #${{ github.run_number }} · ${{ steps.metrics.outputs.datetime }}</p>
-              </div>
-              <div class="body">
-                <div class="cards">
-                  <div class="card"><span class="n green">${{ steps.metrics.outputs.passed }}</span><div class="l">✅ Passed</div></div>
-                  <div class="card"><span class="n red">${{ steps.metrics.outputs.failed }}</span><div class="l">❌ Failed</div></div>
-                  <div class="card"><span class="n blue">${{ steps.metrics.outputs.total }}</span><div class="l">🔢 Total</div></div>
-                </div>
-                <a class="btn btn-gray" href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}">⚙️ Ver Execução no GitHub Actions</a>
-              </div>
-              <div class="footer">Gerado automaticamente por Maestro · Não responda este e-mail</div>
-            </div></body></html>
-
-      - name: Enviar E-mail de Falha
-        if: always() && steps.metrics.outputs.status_raw == 'failure'
-        uses: dawidd6/action-send-mail@v4
-        with:
-          server_address: smtp.gmail.com
-          server_port: 465
-          username: ${{ secrets.MAIL_USERNAME }}
-          password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "🚨[ALERTA MAESTRO MOBILE] Falha no Monitoramento"
-          to: anderson.ssantos@jcatlm.com.br,qa.monitor@odptech.com.br,maysa.marco@jcatlm.com.br,anderson.psilva@jcatlm.com.br,ariane.izac@jcatlm.com.br,ana.soliveira@jcatlm.com.br
-          from: "Monitoramento Maestro"
-          html_body: |
-            <!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
-            <style>
-              body{font-family:Arial,sans-serif;background:#f4f4f4;padding:20px}
-              .wrap{max-width:620px;margin:auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.1)}
-              .hdr{padding:28px 32px;text-align:center;background:#cf222e}
-              .hdr h1{color:#fff;margin:0;font-size:24px}
-              .hdr p{color:rgba(255,255,255,.8);margin:6px 0 0;font-size:13px}
-              .body{padding:28px 32px}
-              .alert-box{background-color:#fff9c4;border:1px solid #fbc02d;padding:16px;border-radius:6px;margin-bottom:24px;font-size:14px;color:#24292f}
-              .alert-box h3{margin:0 0 8px 0;color:#d32f2f;font-size:16px}
-              .alert-box ul{margin:8px 0 0 0;padding-left:20px;color:#57606a}
-              .cards{display:flex;gap:10px;margin-bottom:24px}
-              .card{flex:1;text-align:center;padding:16px 6px;border-radius:6px;background:#f6f8fa;border:1px solid #e1e4e8}
-              .card .n{font-size:28px;font-weight:800;display:block}
-              .green{color:#1a7f37}.red{color:#cf222e}.blue{color:#0969da}
-              a.btn{display:block;text-align:center;padding:13px;border-radius:6px;text-decoration:none;font-weight:700;font-size:14px;margin-bottom:10px}
-              .btn-gray{background:#f6f8fa;color:#24292f;border:1px solid #d0d7de}
-              .footer{background:#f6f8fa;border-top:1px solid #e1e4e8;padding:14px 32px;text-align:center;font-size:11px;color:#8c959f}
-            </style></head><body>
-            <div class="wrap">
-              <div class="hdr">
-                <h1>🚨 ${{ steps.metrics.outputs.status }}</h1>
-                <p>Run #${{ github.run_number }} · ${{ steps.metrics.outputs.datetime }}</p>
-              </div>
-              <div class="body">
-                <div class="alert-box">
-                  <h3>⚠️ Falha Detectada no Maestro</h3>
-                  O teste automatizado mobile encontrou um erro.
-                  <strong>Detalhes:</strong>
-                  <ul>
-                    ${{ steps.metrics.outputs.errors }}
-                  </ul>
-                </div>
-                <div class="cards">
-                  <div class="card"><span class="n green">${{ steps.metrics.outputs.passed }}</span><div class="l">✅ Passed</div></div>
-                  <div class="card"><span class="n red">${{ steps.metrics.outputs.failed }}</span><div class="l">❌ Failed</div></div>
-                  <div class="card"><span class="n blue">${{ steps.metrics.outputs.total }}</span><div class="l">🔢 Total</div></div>
-                </div>
-                ${{ steps.evidence.outputs.screenshot_link && format('<a class="btn btn-gray" href="{0}">🖼️ Ver Print da Tela de Erro</a>', steps.evidence.outputs.screenshot_link) }}
-                <a class="btn btn-gray" href="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}">⚙️ Ver Log Completo no GitHub Actions</a>
-              </div>
-              <div class="footer">Gerado automaticamente por Maestro · Não responda este e-mail</div>
-            </div></body></html>
+          echo "## Maestro Execution Summary — Run #${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+          echo "📥 Baixe os artefatos na aba **Actions > Run #${{ github.run_number }} > Artifacts** para ver os prints e relatórios detalhados da falha." >> $GITHUB_STEP_SUMMARY
