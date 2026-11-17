@@ -687,6 +687,7 @@ Cypress.Commands.add("selecionarAssentoAleatorio1001", () => {
 // Cypress.Commands.add("selecionarAssentoAleatorio", () => {
 
 Cypress.Commands.add("selecionarAssentoAleatorio", () => {
+  cy.wait(5000); // Aguarda 5 segundos para garantir que o mapa de assentos esteja carregado
   cy.get('button.outer-seat[id^="seat-"]:not(:has(.occupied-seat))', { timeout: 90000 })
     .should("be.visible")
     .then(($seats) => {
