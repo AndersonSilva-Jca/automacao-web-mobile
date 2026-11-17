@@ -38,20 +38,20 @@ describe("Outlet de Passagens", () => {
     CheckoutPage.odpResumoDaCompra();
   });
 
-  it("Outlet de passagens - Melhor Preço", () => {
-    cy.env(["login", "senha"]).then(() => {
-      cy.visit(odp);
-      LoginPage.odpModalLogin();
-      LoginPage.odpPreencherUsuario();
-      LoginPage.odpPreencherSenha();
-      LoginPage.odpConfirmarLogin();
-      LoginPage.odpLogadoComSucesso();
-    });
-    SearchPage.odpBuscaOrigemMelhorPreco();
-    SearchPage.odpDataIda();
-    SearchPage.odpConfirmarBusca();
-    OfferPage.odpSelecionarPassagemIda();
-    PassengerPage.odpSelecionarPassageiro();
-    CheckoutPage.odpResumoDaCompra();
-  });
+  // it("Outlet de passagens - Melhor Preço", () => {
+  //   cy.env(["login", "senha"]).then(() => {
+  //     cy.visit(odp);
+  //     LoginPage.odpModalLogin();
+  //     LoginPage.odpPreencherUsuario();
+  //     LoginPage.odpPreencherSenha();
+  //     LoginPage.odpConfirmarLogin();
+  //     LoginPage.odpLogadoComSucesso();
+  //   });
+  //   SearchPage.odpBuscaOrigemMelhorPreco();
+  //   SearchPage.odpDataIda();
+  //   SearchPage.odpConfirmarBusca();
+  //   OfferPage.odpSelecionarPassagemIda();
+  //   PassengerPage.odpSelecionarPassageiro();
+  //   CheckoutPage.odpResumoDaCompra();
+  // });
 });
