@@ -17,13 +17,8 @@ appId: br.com.autoviacao1001.autoviacao1001app
 - assertVisible: "Destino"
 - assertVisible:
     id: "inputCalendarContainer"
-# - tapOn:
-#     id: "origin"
-# - tapOn:
-#     id: "origin"
-- tapOn:
-    point: 4%,43%
-- waitForAnimationToEnd
+- doubleTapOn:
+    id: "origin"
 - assertVisible: "Origem"
 - assertVisible:
     point: 0%,10%
