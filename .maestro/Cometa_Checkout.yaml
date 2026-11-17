@@ -17,10 +17,12 @@ appId: br.com.viacaocometa.cometaapp
 - assertVisible: "Destino"
 - assertVisible:
     id: "inputCalendarContainer"
+# - tapOn:
+#     id: "origin"
+# - tapOn:
+#     id: "origin"
 - tapOn:
-    id: "origin"
-- tapOn:
-    id: "origin"
+    point: 4%,43%
 - waitForAnimationToEnd
 - assertVisible: "Origem"
 - assertVisible:
