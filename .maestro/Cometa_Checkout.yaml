@@ -10,14 +10,14 @@ appId: br.com.viacaocometa.cometaapp
 - inputText: "Kx#9mP$1"
 - hideKeyboard
 - tapOn: "Entrar"
-- waitForAnimationToEnd
 - assertVisible:
     id: "origin"
 - assertVisible: "Comprar passagens"
 - assertVisible: "Destino"
 - assertVisible:
     id: "inputCalendarContainer"
-- doubleTapOn:
+- tapOn: "Comprar passagens"
+- tapOn:
     id: "origin"
 - assertVisible: "Origem"
 - assertVisible:

@@ -17,7 +17,8 @@ appId: br.com.autoviacao1001.autoviacao1001app
 - assertVisible: "Destino"
 - assertVisible:
     id: "inputCalendarContainer"
-- doubleTapOn:
+- tapOn: "Comprar passagens"
+- tapOn:
     id: "origin"
 - assertVisible: "Origem"
 - assertVisible:
