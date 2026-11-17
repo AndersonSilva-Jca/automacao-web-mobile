@@ -19,6 +19,8 @@ appId: br.com.autoviacao1001.autoviacao1001app
     id: "inputCalendarContainer"
 - tapOn:
     id: "origin"
+- tapOn:
+    id: "origin"
 - waitForAnimationToEnd
 - assertVisible: "Origem"
 - assertVisible:
@@ -101,4 +103,3 @@ appId: br.com.autoviacao1001.autoviacao1001app
           index: 0
 - tapOn: "Continuar "
 - assertVisible: "Digite o CUPOM"
-
