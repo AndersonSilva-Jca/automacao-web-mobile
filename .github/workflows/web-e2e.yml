@@ -38,7 +38,7 @@ jobs:
 
     runs-on: ubuntu-latest
     # container: cypress/included:15.21.1
-    container: cypress/included:16.2.1
+    container: cypress/included:16.3.0
     steps:
       - name: Checkout do Código
         uses: actions/checkout@v4
