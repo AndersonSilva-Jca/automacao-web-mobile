@@ -70,8 +70,8 @@ class LoginPage {
   }
 
   giroPreencherSenha() {
-    cy.env(["senha"]).then((env) => {
-      cy.get(loc.SENHA).should("be.visible").type(env.senha, { log: false }, { delay: 100 });
+    cy.env(["senha1"]).then((env) => {
+      cy.get(loc.SENHA).should("be.visible").type(env.senha1, { log: false }, { delay: 100 });
     });
   }
 
