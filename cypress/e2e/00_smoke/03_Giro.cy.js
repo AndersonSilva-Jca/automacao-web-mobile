@@ -21,7 +21,7 @@ describe("Clube Giro", () => {
   });
 
   it("Giro - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
-    cy.env(["login1", "senha1"]).then(() => {
+    cy.env(["login", "senha"]).then(() => {
       cy.visit(giro);
       LoginPage.giroModalLogin();
       // LoginPage.giroAssertAcesse();

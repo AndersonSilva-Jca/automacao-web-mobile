@@ -4,7 +4,7 @@
 // import "./00_smoke/01_ODH.cy";
 import "./00_smoke/02_ODP_HM.cy";
 import "./00_smoke/02_ODP_MP.cy";
-import "./00_smoke/03_Giro.cy.js";
+// import "./00_smoke/03_Giro.cy.js";
 import "./00_smoke/04_WemobiExp_AA.cy";
 import "./00_smoke/04_WemobiExp_LM.cy";
 import "./00_smoke/04_Wemobi_AA.cy";

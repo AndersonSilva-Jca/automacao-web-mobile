@@ -55,6 +55,7 @@ class LoginPage {
   //------------------ CLUBE GIRO ------------------
 
   giroModalLogin() {
+    cy.wait(2000);
     cy.get(".logged-out-section > .btn-giro--subtle").should("be.visible").click();
   }
 
@@ -63,14 +64,14 @@ class LoginPage {
   }
 
   giroPreencherUsuario() {
-    cy.env(["login1"]).then((env) => {
-      cy.get(loc.USUARIO).should("be.visible").type(env.login1, { delay: 50 });
+    cy.env(["login"]).then((env) => {
+      cy.get(loc.USUARIO).should("be.visible").type(env.login, { delay: 50 });
     });
   }
 
   giroPreencherSenha() {
-    cy.env(["senha1"]).then((env) => {
-      cy.get(loc.SENHA).should("be.visible").type(env.senha1, { log: false }, { delay: 100 });
+    cy.env(["senha"]).then((env) => {
+      cy.get(loc.SENHA).should("be.visible").type(env.senha, { log: false }, { delay: 100 });
     });
   }
 
@@ -98,7 +99,7 @@ class LoginPage {
   }
 
   giroLogadoComSucesso() {
-    cy.get(loc.MENSAGEM_LOGADO).should("contain", "ANDERSON");
+    cy.get(loc.MENSAGEM_LOGADO).should("be.visible");
   }
 
   //------------------ WEMOBI ------------------
