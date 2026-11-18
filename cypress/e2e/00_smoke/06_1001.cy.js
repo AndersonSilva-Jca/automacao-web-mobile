@@ -23,10 +23,10 @@ describe("Auto Viação 1001", () => {
 
   it("Auto Viação 1001 - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
     cy.visit(viacao1001);
-    cy.env(["login", "senha"]).then(() => {
+    cy.env(["login2", "senha2"]).then(() => {
       LoginPage.abrirModalLogin();
-      LoginPage.preencherUsuario();
-      LoginPage.PreencherSenha();
+      LoginPage.preencherUsuario1001();
+      LoginPage.PreencherSenha1001();
       LoginPage.confirmarLogin();
       LoginPage.logadoComSucesso();
     });

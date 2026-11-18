@@ -6,13 +6,57 @@ class LoginPage {
     cy.get(loc.HEADER_BOTAO_LOGIN).click();
   }
 
-  preencherUsuario() {
+  preencherUsuarioCometa() {
     cy.env(["login"]).then((env) => {
       cy.get(loc.USUARIO).type(env.login);
     });
   }
 
-  PreencherSenha() {
+  PreencherSenhaCometa() {
+    cy.env(["senha"]).then((env) => {
+      cy.get(loc.SENHA).type(env.senha, { log: false });
+    });
+  }
+  preencherUsuario1001() {
+    cy.env(["login2"]).then((env) => {
+      cy.get(loc.USUARIO2).type(env.login2);
+    });
+  }
+
+  PreencherSenha1001() {
+    cy.env(["senha2"]).then((env) => {
+      cy.get(loc.SENHA2).type(env.senha2, { log: false });
+    });
+  }
+  preencherUsuarioExpSul() {
+    cy.env(["login2"]).then((env) => {
+      cy.get(loc.USUARIO2).type(env.login2);
+    });
+  }
+
+  PreencherSenhaExpSul() {
+    cy.env(["senha2"]).then((env) => {
+      cy.get(loc.SENHA2).type(env.senha2, { log: false });
+    });
+  }
+  preencherUsuarioRR() {
+    cy.env(["login"]).then((env) => {
+      cy.get(loc.USUARIO).type(env.login);
+    });
+  }
+
+  PreencherSenhaRR() {
+    cy.env(["senha"]).then((env) => {
+      cy.get(loc.SENHA).type(env.senha, { log: false });
+    });
+  }
+  preencherUsuarioCatarinense() {
+    cy.env(["login"]).then((env) => {
+      cy.get(loc.USUARIO).type(env.login);
+    });
+  }
+
+  PreencherSenhaCatarinense() {
     cy.env(["senha"]).then((env) => {
       cy.get(loc.SENHA).type(env.senha, { log: false });
     });

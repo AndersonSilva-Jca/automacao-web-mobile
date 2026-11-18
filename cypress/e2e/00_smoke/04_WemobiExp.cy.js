@@ -20,7 +20,7 @@ describe("Wemobi", () => {
     Cypress.on("uncaught:exception", () => false);
   });
 
-  it("Wemobi - Sem exp. Lugar Marcado", () => {
+  it("Wemobi - exp. Lugar Marcado", () => {
     cy.env(["login", "senha"]).then(() => {
       cy.visit(wemobi);
       LoginPage.wemobiModalLogin();
@@ -29,36 +29,31 @@ describe("Wemobi", () => {
       LoginPage.wemobiConfirmarLogin();
       LoginPage.wemobiLogadoComSucesso();
     });
-    SearchPage.wemobiBuscaRotas();
+    SearchPage.wemobiBuscaRotasExp();
     SearchPage.wemobiDataIda();
     SearchPage.wemobiConfirmarBusca();
-    cy.wait(2000);
-    OfferPage.passagemSemExperienciaWemobi();
     cy.wait(3000);
+    OfferPage.passagemExperienciaWemobi();
     PassengerPage.wemobiSelecionarPassageiro();
-    cy.wait(6000);
     SeatMapPage.wemobiSelecionarAssentoMarcado();
     CheckoutPage.wemobiResumoCompra();
   });
 
-  // it("Wemobi - Sem exp. Assento Aleatório", () => {
-  //   cy.env(["login", "senha"]).then(() => {
-  //     cy.visit(wemobi);
-  //     LoginPage.wemobiModalLogin();
-  //     LoginPage.wemobiPreencherUsuario();
-  //     LoginPage.wemobiPreencherSenha();
-  //     LoginPage.wemobiConfirmarLogin();
-  //     LoginPage.wemobiLogadoComSucesso();
-  //   });
-  //   SearchPage.wemobiBuscaRotas();
-  //   SearchPage.wemobiDataIda();
-  //   SearchPage.wemobiConfirmarBusca();
-  //   cy.wait(2000);
-  //   OfferPage.passagemSemExperienciaWemobi();
-  //   cy.wait(3000);
-  //   PassengerPage.wemobiSelecionarPassageiro();
-  //   cy.wait(6000);
-  //   SeatMapPage.wemobiSelecionarAssentoAleatorio();
-  //   CheckoutPage.wemobiResumoCompra();
-  // });
+  it("Wemobi - exp. Assento Aleatório", () => {
+    cy.env(["login", "senha"]).then(() => {
+      cy.visit(wemobi);
+      LoginPage.wemobiModalLogin();
+      LoginPage.wemobiPreencherUsuario();
+      LoginPage.wemobiPreencherSenha();
+      LoginPage.wemobiConfirmarLogin();
+      LoginPage.wemobiLogadoComSucesso();
+    });
+    SearchPage.wemobiBuscaRotasExp();
+    SearchPage.wemobiDataIda();
+    SearchPage.wemobiConfirmarBusca();
+    OfferPage.passagemExperienciaWemobi();
+    PassengerPage.wemobiSelecionarPassageiro();
+    SeatMapPage.wemobiSelecionarAssentoAleatorio();
+    CheckoutPage.wemobiResumoCompra();
+  });
 });

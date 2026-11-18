@@ -25,8 +25,8 @@ describe("Rapido Ribeirão", () => {
     cy.visit(rapidoRibeirao);
     cy.env(["login", "senha"]).then(() => {
       LoginPage.abrirModalLogin();
-      LoginPage.preencherUsuario();
-      LoginPage.PreencherSenha();
+      LoginPage.preencherUsuarioRR();
+      LoginPage.PreencherSenhaRR();
       LoginPage.confirmarLogin();
       LoginPage.logadoComSucesso();
     });

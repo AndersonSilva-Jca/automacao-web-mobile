@@ -27,8 +27,8 @@ describe("Catarinense", () => {
     cy.env(["login", "senha"]).then(() => {
       cy.get(".img-header-logo").click();
       LoginPage.abrirModalLogin();
-      LoginPage.preencherUsuario();
-      LoginPage.PreencherSenha();
+      LoginPage.preencherUsuarioCatarinense();
+      LoginPage.PreencherSenhaCatarinense();
       LoginPage.confirmarLogin();
       LoginPage.logadoComSucesso();
     });
