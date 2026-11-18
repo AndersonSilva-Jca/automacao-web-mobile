@@ -41,7 +41,9 @@ jobs:
         id: cypress
         continue-on-error: true
         run: |
-          npx cypress run --browser chrome --spec "cypress/e2e/00_smoke/05_Cometa.cy.js, cypress/e2e/00_smoke/06_1001.cy.js, cypress/e2e/00_smoke/07_ExpressoSul.cy.js, cypress/e2e/00_smoke/08_RapidoRibeirao.cy.js, cypress/e2e/00_smoke/09_Catarinense.cy.js"
+          npx cypress run --browser electron --spec \
+            "cypress/e2e/00_smoke/05_Cometa.cy.js,cypress/e2e/00_smoke/06_1001.cy.js,cypress/e2e/00_smoke/07_ExpressoSul.cy.js,cypress/e2e/00_smoke/08_RapidoRibeirao.cy.js,cypress/e2e/00_smoke/09_Catarinense.cy.js"
+
         env:
           ELECTRON_EXTRA_LAUNCH_ARGS: "--disable-gpu --disable-dev-shm-usage --no-sandbox"
           APPS_SCRIPT_URL: ${{ secrets.APPS_SCRIPT_URL }}
