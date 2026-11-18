@@ -102,7 +102,6 @@ jobs:
           MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REMETENTE_APP: ${{ secrets.REMETENTE_APP }}
-          WA_PHONE_ALFREDO: ${{ secrets.WA_PHONE_ALFREDO }}
           WA_PHONE_ANDERSON: ${{ secrets.WA_PHONE_ANDERSON }}
 
         with:
