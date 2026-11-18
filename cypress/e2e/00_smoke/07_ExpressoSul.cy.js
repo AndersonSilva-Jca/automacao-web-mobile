@@ -37,7 +37,6 @@ describe("Expresso do Sul", () => {
     OfferPage.selecionarPassagemIdaExpressoSul();
     PassengerPage.selecionarPassageiro();
     SeatMapPage.selecionarAssento();
-    // CheckoutPage.resumoDaCompraExpressoDoSul();
     CheckoutPage.resumoDaCompra();
   });
 });
