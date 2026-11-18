@@ -7,25 +7,25 @@ class LoginPage {
   }
 
   preencherUsuarioCometa() {
-    cy.env(["login"]).then((env) => {
-      cy.get(loc.USUARIO).type(env.login);
+    cy.env(["login4"]).then((env) => {
+      cy.get(loc.USUARIO).type(env.login4);
     });
   }
 
   PreencherSenhaCometa() {
-    cy.env(["senha"]).then((env) => {
-      cy.get(loc.SENHA).type(env.senha, { log: false });
+    cy.env(["senha4"]).then((env) => {
+      cy.get(loc.SENHA).type(env.senha4, { log: false });
     });
   }
   preencherUsuario1001() {
-    cy.env(["login2"]).then((env) => {
-      cy.get(loc.USUARIO).type(env.login2);
+    cy.env(["login4"]).then((env) => {
+      cy.get(loc.USUARIO).type(env.login4);
     });
   }
 
   PreencherSenha1001() {
-    cy.env(["senha2"]).then((env) => {
-      cy.get(loc.SENHA).type(env.senha2, { log: false });
+    cy.env(["senha4"]).then((env) => {
+      cy.get(loc.SENHA).type(env.senha4, { log: false });
     });
   }
   preencherUsuarioExpSul() {
