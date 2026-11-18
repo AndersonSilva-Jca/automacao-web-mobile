@@ -29,14 +29,14 @@ class LoginPage {
     });
   }
   preencherUsuarioExpSul() {
-    cy.env(["login2"]).then((env) => {
-      cy.get(loc.USUARIO).type(env.login2);
+    cy.env(["login"]).then((env) => {
+      cy.get(loc.USUARIO).type(env.login);
     });
   }
 
   PreencherSenhaExpSul() {
-    cy.env(["senha2"]).then((env) => {
-      cy.get(loc.SENHA).type(env.senha2, { log: false });
+    cy.env(["senha"]).then((env) => {
+      cy.get(loc.SENHA).type(env.senha, { log: false });
     });
   }
   preencherUsuarioRR() {
