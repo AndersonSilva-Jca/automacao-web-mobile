@@ -45,8 +45,8 @@ class OfferPage {
   passagemSemExperienciaWemobi() {
     cy.get('[alt="loader"]').should("not.exist");
     cy.wait(7000);
-    cy.selecionarPassagemAleatoria1();
-    // cy.selecionarPassagemSemExperienciaWemobi();
+    // cy.selecionarPassagemAleatoria1();
+    cy.selecionarPassagemSemExperienciaWemobi();
   }
 }
 

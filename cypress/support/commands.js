@@ -684,8 +684,6 @@ Cypress.Commands.add("selecionarAssentoAleatorio1001", () => {
 //   cy.get("#btn-proceed").click({ force: true });
 // });
 
-// Cypress.Commands.add("selecionarAssentoAleatorio", () => {
-
 Cypress.Commands.add("selecionarAssentoAleatorio", () => {
   cy.wait(5000); // Aguarda 5 segundos para garantir que o mapa de assentos esteja carregado
   cy.get('button.outer-seat[id^="seat-"]:not(:has(.occupied-seat))', { timeout: 90000 })
@@ -704,6 +702,59 @@ Cypress.Commands.add("selecionarAssentoAleatorio", () => {
   // cy.get('[style="background: #FFFFFF;; box-shadow: undefined;-webkit-box-shadow: undefined;-moz-box-shadow: undefined;; border-radius: undefinedpx;"] > .origin-destination > .show-more-details-container > .trip-details-container > .trip-details-show-passenger > .passenger-division').click();
   // cy.get('[style="background: #FFFFFF;; box-shadow: undefined;-webkit-box-shadow: undefined;-moz-box-shadow: undefined;; border-radius: undefinedpx;"] > .origin-destination > .show-more-details-container > .trip-details-container > .trip-details-show-passenger > .cart-passenger-list > ul > .passenger-card > .passenger-card__row > .passenger-card__price > .passenger-card__price-pix').should("be.visible");
 });
+
+// Cypress.Commands.add("selecionarAssentoAleatorio", () => {
+//   // 1. Intercepta a chamada da API de transação de assento para capturar o erro/response
+//   cy.intercept('POST', '**/seat/v1/transactSeat').as('transactSeat');
+
+//   cy.wait(5000); // Aguarda 5 segundos para garantir que o mapa de assentos esteja carregado
+
+//   const tentarSelecionarAssento = () => {
+//     cy.get('button.outer-seat[id^="seat-"]:not(:has(.occupied-seat))', { timeout: 90000 })
+//       .should("be.visible")
+//       .then(($seats) => {
+//         const ids = $seats.map((i, el) => el.id).get();
+//         const randomId = ids[Math.floor(Math.random() * ids.length)];
+
+//         cy.log(`🎯 Tentando selecionar o assento: #${randomId}`);
+//         cy.get(`#${randomId}`).scrollIntoView().should("be.visible").click({ force: true });
+//       });
+
+//     // 2. Aguarda a resposta da API de transação
+//     cy.wait('@transactSeat', { timeout: 15000 }).then((interception) => {
+//       const statusCode = interception.response.statusCode;
+//       const responseBody = interception.response.body;
+
+//       if (statusCode !== 200) {
+//         cy.log(`⚠️ Assento ocupado/indisponível na API (Status ${statusCode}). Tentando outro...`);
+
+//         // Adiciona os detalhes do erro no contexto do mochawesome
+//         Cypress.log({
+//           name: 'API Error Response',
+//           message: JSON.stringify(responseBody)
+//         });
+
+//         // Fecha o modal de aviso caso ele tenha aparecido na tela
+//         cy.get('body').then(($body) => {
+//           if ($body.text().includes("Este assento está indisponível")) {
+//             cy.contains("Fechar", { timeout: 3000 }).click({ force: true }).catch(() => {});
+//           }
+//         });
+
+//         // Tenta selecionar outro assento recursivamente
+//         return tentarSelecionarAssento();
+//       } else {
+//         cy.log("✅ Assento reservado com sucesso pela API!");
+//       }
+//     });
+//   };
+
+//   // Inicia a tentativa de seleção
+//   tentarSelecionarAssento();
+
+//   // 3. Prossegue para o botão de avançar
+//   cy.get("#btn-proceed", { timeout: 90000 }).should("be.visible").and("not.be.disabled");
+// });
 
 Cypress.Commands.add("selecionarDoisAssentosAleatorios", () => {
   const selecionar = (tentativas = 0) => {
@@ -764,29 +815,117 @@ Cypress.Commands.add("aceitarTermosSeExistirem", () => {
   });
 });
 
+// Cypress.Commands.add("selecionarPassagemSemExperienciaWemobi", () => {
+//   cy.contains("ESCOLHER PASSAGENS", { timeout: 90000 }).should("be.visible");
+//   cy.log("⏳ Aguardando estabilização da página de ofertas...");
+
+//   cy.get("li.list-companies-item", { timeout: 90000 }).should("be.visible");
+
+//   cy.wait(1000);
+//   cy.scrollTo("bottom");
+//   cy.wait(1000);
+
+//   // 1. Filtra APENAS os cards de empresas que NÃO contêm a "Experiência wemobi"
+//   cy.get("li.list-companies-item")
+//     .filter((_, el) => {
+//       const temWemobi = Cypress.$(el).find('button[data-offer-marketplace-text="Experiência wemobi"]').length > 0;
+//       return !temWemobi; // Retorna apenas se NÃO for Experiência wemobi
+//     })
+//     .then(($empresasOutras) => {
+//       // Falha o teste se só existirem passagens com a Experiência wemobi
+//       if ($empresasOutras.length === 0) {
+//         throw new Error("❌ Teste interrompido: Apenas passagens 'Experiência wemobi' estão disponíveis!");
+//       }
+
+//       // 2. Extrai as ofertas válidas das outras empresas
+//       const ofertasValidas = [];
+
+//       $empresasOutras.each((_, empresaEl) => {
+//         const ofertas = Cypress.$(empresaEl).find('li[data-js^="offer-element-"]:has(.available)');
+
+//         ofertas.each((_, ofertaEl) => {
+//           const textoClasse = Cypress.$(ofertaEl).find('[data-js^="classtype"]').text().toUpperCase();
+//           const temBotaoAtivo = Cypress.$(ofertaEl).find('button[data-js="buy-ticket"]:not([disabled])').length > 0;
+
+//           if (!textoClasse.includes("CAMA") && temBotaoAtivo) {
+//             ofertasValidas.push(ofertaEl);
+//           }
+//         });
+//       });
+
+//       const total = ofertasValidas.length;
+//       if (total === 0) throw new Error("❌ Nenhuma oferta válida (não-CAMA e com botão ativo) encontrada fora da Experiência wemobi!");
+
+//       // 3. Sorteia uma oferta entre as empresas tradicionais/parceiras
+//       const randomIndex = Math.floor(Math.random() * total);
+//       const escolha = ofertasValidas[randomIndex];
+//       const $btnCompra = Cypress.$(escolha).find('button[data-js="buy-ticket"]');
+
+//       cy.log(`🎰 Sorteada opção tradicional/parceira ${randomIndex + 1} de ${total}`);
+
+//       cy.wait(500);
+//       cy.wrap($btnCompra)
+//         .parents(".available")
+//         .invoke("show")
+
+//         .wrap($btnCompra)
+//         .invoke("show")
+//         .scrollIntoView({ offset: { top: -150 } })
+//         .should("exist")
+//         .and("not.be.disabled")
+//         .click({ force: true });
+
+//       cy.wait(3000);
+
+//       // 4. Trata o modal da madrugada
+//       cy.get("body").then(($body) => {
+//         if ($body.find('[data-js="button-agree"]').is(":visible")) {
+//           cy.log("⚠️ Confirmando modal de madrugada...");
+//           cy.get('[data-js="button-agree"]').click({ force: true });
+
+//           cy.wait(2000);
+//           cy.url().then((urlAtual) => {
+//             if (urlAtual.includes("/disponibilidade")) {
+//               cy.wrap($btnCompra).click({ force: true });
+//             }
+//           });
+//         }
+//       });
+//     });
+// });
+
 Cypress.Commands.add("selecionarPassagemSemExperienciaWemobi", () => {
   cy.contains("ESCOLHER PASSAGENS", { timeout: 90000 }).should("be.visible");
+
   cy.log("⏳ Aguardando estabilização da página de ofertas...");
 
   cy.get("li.list-companies-item", { timeout: 90000 }).should("be.visible");
 
   cy.wait(1000);
+
   cy.scrollTo("bottom");
+
   cy.wait(1000);
 
   // 1. Filtra APENAS os cards de empresas que NÃO contêm a "Experiência wemobi"
+
   cy.get("li.list-companies-item")
+
     .filter((_, el) => {
       const temWemobi = Cypress.$(el).find('button[data-offer-marketplace-text="Experiência wemobi"]').length > 0;
+
       return !temWemobi; // Retorna apenas se NÃO for Experiência wemobi
     })
+
     .then(($empresasOutras) => {
       // Falha o teste se só existirem passagens com a Experiência wemobi
+
       if ($empresasOutras.length === 0) {
         throw new Error("❌ Teste interrompido: Apenas passagens 'Experiência wemobi' estão disponíveis!");
       }
 
       // 2. Extrai as ofertas válidas das outras empresas
+
       const ofertasValidas = [];
 
       $empresasOutras.each((_, empresaEl) => {
@@ -794,6 +933,7 @@ Cypress.Commands.add("selecionarPassagemSemExperienciaWemobi", () => {
 
         ofertas.each((_, ofertaEl) => {
           const textoClasse = Cypress.$(ofertaEl).find('[data-js^="classtype"]').text().toUpperCase();
+
           const temBotaoAtivo = Cypress.$(ofertaEl).find('button[data-js="buy-ticket"]:not([disabled])').length > 0;
 
           if (!textoClasse.includes("CAMA") && temBotaoAtivo) {
@@ -803,36 +943,51 @@ Cypress.Commands.add("selecionarPassagemSemExperienciaWemobi", () => {
       });
 
       const total = ofertasValidas.length;
+
       if (total === 0) throw new Error("❌ Nenhuma oferta válida (não-CAMA e com botão ativo) encontrada fora da Experiência wemobi!");
 
       // 3. Sorteia uma oferta entre as empresas tradicionais/parceiras
+
       const randomIndex = Math.floor(Math.random() * total);
+
       const escolha = ofertasValidas[randomIndex];
+
       const $btnCompra = Cypress.$(escolha).find('button[data-js="buy-ticket"]');
 
       cy.log(`🎰 Sorteada opção tradicional/parceira ${randomIndex + 1} de ${total}`);
 
       cy.wait(500);
+
       cy.wrap($btnCompra)
+
         .parents(".available")
+
         .invoke("show")
 
         .wrap($btnCompra)
+
         .invoke("show")
+
         .scrollIntoView({ offset: { top: -150 } })
+
         .should("exist")
+
         .and("not.be.disabled")
+
         .click({ force: true });
 
       cy.wait(3000);
 
       // 4. Trata o modal da madrugada
+
       cy.get("body").then(($body) => {
         if ($body.find('[data-js="button-agree"]').is(":visible")) {
           cy.log("⚠️ Confirmando modal de madrugada...");
+
           cy.get('[data-js="button-agree"]').click({ force: true });
 
           cy.wait(2000);
+
           cy.url().then((urlAtual) => {
             if (urlAtual.includes("/disponibilidade")) {
               cy.wrap($btnCompra).click({ force: true });
@@ -843,6 +998,189 @@ Cypress.Commands.add("selecionarPassagemSemExperienciaWemobi", () => {
     });
 });
 
+// Cypress.Commands.add("selecionarPassagemExperienciaWemobi", () => {
+//   cy.get(".container-max-width-1400 > :nth-child(4)").should("be.visible");
+//   cy.contains("ESCOLHER PASSAGENS", { timeout: 90000 }).should("be.visible");
+//   cy.log("⏳ Aguardando estabilização da página de ofertas...");
+
+//   cy.get("li.list-companies-item", { timeout: 90000 }).should("be.visible");
+
+//   // 1. VERIFICAÇÃO INICIAL GLOBAL: Procura se o bug do template (R\$$price$decimal) está visível na página atual
+//   // cy.get("body").then(($body) => {
+//   //   const textoPagina = $body.text();
+//   //   const temErroTemplateGlobal = textoPagina.includes("$price") || textoPagina.includes("$decimal");
+//   //   if (temErroTemplateGlobal) {
+//   //     cy.log("⚠️ Bug de template (R$$price$decimal) detetado na data atual. Avançando um dia no calendário...");
+
+//   //     // Clica no seletor para avançar um dia
+//   //     cy.get(":nth-child(5) > .prev-date").should("be.visible").click({ force: true });
+
+//   //     // Aguarda os novos resultados carregarem após a mudança de dia
+//   //     cy.wait(4000);
+//   //   } else {
+//   //     cy.log("✅ Nenhum erro de template global detetado na data atual.");
+//   //   }
+//   // });
+
+//   // 2. LOGICA ORIGINAL DA WEMOBI (Mantida exatamente como você pediu, limpa e intacta)
+//   cy.get("li.list-companies-item")
+//     .filter((_, el) => {
+//       return Cypress.$(el).find('button[data-offer-marketplace-text="Experiência wemobi"]').length > 0;
+//     })
+//     .then(($empresasWemobi) => {
+//       // Falha o teste se não houver nenhuma empresa com a Experiência wemobi na página atual
+//       if ($empresasWemobi.length === 0) {
+//         throw new Error("❌ Teste interrompido: Nenhuma passagem 'Experiência wemobi' foi encontrada!");
+//       }
+
+//       // Extrai as ofertas válidas contidas APENAS nos cards da Experiência wemobi
+//       const ofertasValidas = [];
+
+//       $empresasWemobi.each((_, empresaEl) => {
+//         const ofertas = Cypress.$(empresaEl).find('li[data-js^="offer-element-"]:has(.available)');
+
+//         ofertas.each((_, ofertaEl) => {
+//           const textoClasse = Cypress.$(ofertaEl).find('[data-js^="classtype"]').text().toUpperCase();
+//           const temBotaoAtivo = Cypress.$(ofertaEl).find('button[data-js="buy-ticket"]:not([disabled])').length > 0;
+
+//           if (!textoClasse.includes("CAMA") && temBotaoAtivo) {
+//             ofertasValidas.push(ofertaEl);
+//           }
+//         });
+//       });
+
+//       const total = ofertasValidas.length;
+//       if (total === 0) throw new Error("❌ Nenhuma oferta válida (não-CAMA e com botão ativo) encontrada na Experiência wemobi!");
+
+//       // Sorteia uma oferta entre as válidas
+//       const randomIndex = Math.floor(Math.random() * total);
+//       const escolha = ofertasValidas[randomIndex];
+//       const $btnCompra = Cypress.$(escolha).find('button[data-js="buy-ticket"]');
+
+//       cy.log(`🎰 Sorteada opção Experiência wemobi ${randomIndex + 1} de ${total}`);
+
+//       cy.wait(500);
+//       cy.wrap($btnCompra)
+//         .parents(".available")
+//         .invoke("show")
+//         .wrap($btnCompra)
+//         .invoke("show")
+//         .scrollIntoView({ offset: { top: -150 } })
+//         .should("exist")
+//         .and("not.be.disabled")
+//         .click({ force: true });
+
+//       cy.wait(3000);
+
+//       // Trata o modal da madrugada caso apareça
+//       cy.get("body").then(($bodyModal) => {
+//         if ($bodyModal.find('[data-js="button-agree"]').is(":visible")) {
+//           cy.log("⚠️ Confirmando modal de madrugada...");
+//           cy.get('[data-js="button-agree"]').click({ force: true });
+
+//           cy.wait(3000);
+//           cy.url().then((urlAtual) => {
+//             if (urlAtual.includes("/disponibilidade")) {
+//               cy.wrap($btnCompra).click({ force: true });
+//             }
+//           });
+//         }
+//       });
+//     });
+// });
+
+// Cypress.Commands.add("selecionarPassagemExperienciaWemobi", () => {
+//   cy.get(".container-max-width-1400 > :nth-child(4)").should("be.visible");
+//   cy.contains("ESCOLHER PASSAGENS", { timeout: 90000 }).should("be.visible");
+//   cy.log("⏳ Aguardando estabilização da página de ofertas...");
+
+//   cy.get("li.list-companies-item", { timeout: 90000 }).should("be.visible");
+
+//   // 1. VERIFICAÇÃO INICIAL GLOBAL: Procura se o bug do template (R\$$price$decimal) está visível na página atual
+//   // cy.get("body").then(($body) => {
+//   //   const textoPagina = $body.text();
+//   //   const temErroTemplateGlobal = textoPagina.includes("$price") || textoPagina.includes("$decimal");
+//   //   if (temErroTemplateGlobal) {
+//   //     cy.log("⚠️ Bug de template (R$$price$decimal) detetado na data atual. Avançando um dia no calendário...");
+
+//   //     // Clica no seletor para avançar um dia
+//   //     cy.get(":nth-child(5) > .prev-date").should("be.visible").click({ force: true });
+
+//   //     // Aguarda os novos resultados carregarem após a mudança de dia
+//   //     cy.wait(4000);
+//   //   } else {
+//   //     cy.log("✅ Nenhum erro de template global detetado na data atual.");
+//   //   }
+//   // });
+
+//   // 2. LOGICA ORIGINAL DA WEMOBI (Mantida exatamente como você pediu, limpa e intacta)
+//   cy.get("li.list-companies-item")
+//     .filter((_, el) => {
+//       return Cypress.$(el).find('button[data-offer-marketplace-text="Experiência wemobi"]').length > 0;
+//     })
+//     .then(($empresasWemobi) => {
+//       // Falha o teste se não houver nenhuma empresa com a Experiência wemobi na página atual
+//       if ($empresasWemobi.length === 0) {
+//         throw new Error("❌ Teste interrompido: Nenhuma passagem 'Experiência wemobi' foi encontrada!");
+//       }
+
+//       // Extrai as ofertas válidas contidas APENAS nos cards da Experiência wemobi
+//       const ofertasValidas = [];
+
+//       $empresasWemobi.each((_, empresaEl) => {
+//         const ofertas = Cypress.$(empresaEl).find('li[data-js^="offer-element-"]:has(.available)');
+
+//         ofertas.each((_, ofertaEl) => {
+//           const textoClasse = Cypress.$(ofertaEl).find('[data-js^="classtype"]').text().toUpperCase();
+//           const temBotaoAtivo = Cypress.$(ofertaEl).find('button[data-js="buy-ticket"]:not([disabled])').length > 0;
+
+//           if (!textoClasse.includes("CAMA") && temBotaoAtivo) {
+//             ofertasValidas.push(ofertaEl);
+//           }
+//         });
+//       });
+//       cy.scrollTo("bottom");
+
+//       const total = ofertasValidas.length;
+//       if (total === 0) throw new Error("❌ Nenhuma oferta válida (não-CAMA e com botão ativo) encontrada na Experiência wemobi!");
+
+//       // Sorteia uma oferta entre as válidas
+//       const randomIndex = Math.floor(Math.random() * total);
+//       const escolha = ofertasValidas[randomIndex];
+//       const $btnCompra = Cypress.$(escolha).find('button[data-js="buy-ticket"]');
+
+//       cy.log(`🎰 Sorteada opção Experiência wemobi ${randomIndex + 1} de ${total}`);
+
+//       cy.wait(500);
+//       // cy.wait(1000);
+
+//       // Correção aplicada: garante o scroll, visibilidade e força o clique de forma estável
+//       cy.wrap($btnCompra)
+//         .scrollIntoView({ offset: { top: -150 } })
+//         .should("be.visible")
+//         .click({ force: true });
+
+//       cy.wait(3000);
+
+//       // Trata o modal da madrugada caso apareça
+//       cy.get("body").then(($bodyModal) => {
+//         if ($bodyModal.find('[data-js="button-agree"]').is(":visible")) {
+//           cy.log("⚠️ Confirmando modal de madrugada...");
+//           cy.get('[data-js="button-agree"]').click({ force: true });
+
+//           cy.wait(3000);
+//           cy.url().then((urlAtual) => {
+//             if (urlAtual.includes("/disponibilidade")) {
+//               cy.wrap($btnCompra)
+//                 .scrollIntoView({ offset: { top: -150 } })
+//                 .click({ force: true });
+//             }
+//           });
+//         }
+//       });
+//     });
+// });
+
 Cypress.Commands.add("selecionarPassagemExperienciaWemobi", () => {
   cy.get(".container-max-width-1400 > :nth-child(4)").should("be.visible");
   cy.contains("ESCOLHER PASSAGENS", { timeout: 90000 }).should("be.visible");
@@ -850,69 +1188,53 @@ Cypress.Commands.add("selecionarPassagemExperienciaWemobi", () => {
 
   cy.get("li.list-companies-item", { timeout: 90000 }).should("be.visible");
 
-  // 1. VERIFICAÇÃO INICIAL GLOBAL: Procura se o bug do template (R\$$price$decimal) está visível na página atual
-  // cy.get("body").then(($body) => {
-  //   const textoPagina = $body.text();
-  //   const temErroTemplateGlobal = textoPagina.includes("$price") || textoPagina.includes("$decimal");
-  //   if (temErroTemplateGlobal) {
-  //     cy.log("⚠️ Bug de template (R$$price$decimal) detetado na data atual. Avançando um dia no calendário...");
+  const tentarComRolagem = (tentativa = 1) => {
+    cy.log(`🔄 Tentativa ${tentativa} de encontrar passagens disponíveis...`);
 
-  //     // Clica no seletor para avançar um dia
-  //     cy.get(":nth-child(5) > .prev-date").should("be.visible").click({ force: true });
+    // Busca botões de compra da Experiência Wemobi que NÃO estejam desabilitados (ou seja, com .available e sem disabled)
+    cy.get("li.list-companies-item").then(($empresas) => {
+      const $empresasWemobi = $empresas.filter((_, el) => {
+        return Cypress.$(el).find('button[data-offer-marketplace-text="Experiência wemobi"]').length > 0;
+      });
 
-  //     // Aguarda os novos resultados carregarem após a mudança de dia
-  //     cy.wait(4000);
-  //   } else {
-  //     cy.log("✅ Nenhum erro de template global detetado na data atual.");
-  //   }
-  // });
-
-  // 2. LOGICA ORIGINAL DA WEMOBI (Mantida exatamente como você pediu, limpa e intacta)
-  cy.get("li.list-companies-item")
-    .filter((_, el) => {
-      return Cypress.$(el).find('button[data-offer-marketplace-text="Experiência wemobi"]').length > 0;
-    })
-    .then(($empresasWemobi) => {
-      // Falha o teste se não houver nenhuma empresa com a Experiência wemobi na página atual
-      if ($empresasWemobi.length === 0) {
-        throw new Error("❌ Teste interrompido: Nenhuma passagem 'Experiência wemobi' foi encontrada!");
-      }
-
-      // Extrai as ofertas válidas contidas APENAS nos cards da Experiência wemobi
-      const ofertasValidas = [];
+      const botoesDisponiveis = [];
 
       $empresasWemobi.each((_, empresaEl) => {
+        // Encontra todos os botões de compra ativos e que não sejam da classe CAMA
         const ofertas = Cypress.$(empresaEl).find('li[data-js^="offer-element-"]:has(.available)');
 
         ofertas.each((_, ofertaEl) => {
           const textoClasse = Cypress.$(ofertaEl).find('[data-js^="classtype"]').text().toUpperCase();
-          const temBotaoAtivo = Cypress.$(ofertaEl).find('button[data-js="buy-ticket"]:not([disabled])').length > 0;
+          const $btn = Cypress.$(ofertaEl).find('button[data-js="buy-ticket"]:not([disabled])');
 
-          if (!textoClasse.includes("CAMA") && temBotaoAtivo) {
-            ofertasValidas.push(ofertaEl);
+          if (!textoClasse.includes("CAMA") && $btn.length > 0) {
+            botoesDisponiveis.push($btn[0]);
           }
         });
       });
 
-      const total = ofertasValidas.length;
-      if (total === 0) throw new Error("❌ Nenhuma oferta válida (não-CAMA e com botão ativo) encontrada na Experiência wemobi!");
+      // SE NÃO ENCONTROU NENHUM BOTÃO E AINDA TENTOU POUCAS VEZES, ROLA A TELA
+      if (botoesDisponiveis.length === 0 && tentativa < 4) {
+        cy.log("⚠️ Nenhum botão de compra visível na tela. Rolando para baixo para carregar mais...");
+        cy.scrollTo("bottom", { ensureScrollable: false });
+        cy.wait(2000);
+        return tentarComRolagem(tentativa + 1);
+      }
 
-      // Sorteia uma oferta entre as válidas
-      const randomIndex = Math.floor(Math.random() * total);
-      const escolha = ofertasValidas[randomIndex];
-      const $btnCompra = Cypress.$(escolha).find('button[data-js="buy-ticket"]');
+      // SE CONTINUAR SEM NENHUM APÓS ROLAR, FALHA O TESTE COM AVISO CLARO
+      if (botoesDisponiveis.length === 0) {
+        throw new Error("❌ Nenhuma passagem válida (não-CAMA e com botão ativo) encontrada na Experiência wemobi após rolar a página!");
+      }
 
-      cy.log(`🎰 Sorteada opção Experiência wemobi ${randomIndex + 1} de ${total}`);
+      // SE ENCONTROU, SORTEIA UMA E CLICA
+      const randomIndex = Math.floor(Math.random() * botoesDisponiveis.length);
+      const $btnCompra = Cypress.$(botoesDisponiveis[randomIndex]);
 
-      cy.wait(500);
+      cy.log(`🎰 Sorteada 1 opção entre ${botoesDisponiveis.length} disponíveis na Experiência wemobi.`);
+
       cy.wrap($btnCompra)
-        .parents(".available")
-        .invoke("show")
-        .wrap($btnCompra)
-        .invoke("show")
         .scrollIntoView({ offset: { top: -150 } })
-        .should("exist")
-        .and("not.be.disabled")
+        .should("be.visible")
         .click({ force: true });
 
       cy.wait(3000);
@@ -926,14 +1248,19 @@ Cypress.Commands.add("selecionarPassagemExperienciaWemobi", () => {
           cy.wait(3000);
           cy.url().then((urlAtual) => {
             if (urlAtual.includes("/disponibilidade")) {
-              cy.wrap($btnCompra).click({ force: true });
+              cy.wrap($btnCompra)
+                .scrollIntoView({ offset: { top: -150 } })
+                .click({ force: true });
             }
           });
         }
       });
     });
-});
+  };
 
+  // Inicia o processo
+  tentarComRolagem();
+});
 // Cypress.Commands.add("selecionarPassagemExperienciaWemobi", () => {
 //   const tentarBuscarOuAvancar = (tentativa = 1, maxTentativas = 5) => {
 //     if (tentativa > maxTentativas) {
