@@ -40,6 +40,8 @@ module.exports = defineConfig({
     senha1: process.env.SENHA1,
     login2: process.env.LOGIN2,
     senha2: process.env.SENHA2,
+    login4: process.env.LOGIN4,
+    senha4: process.env.SENHA4,
     mailUsername: process.env.MAIL_USERNAME,
     mailPassword: process.env.MAIL_PASSWORD,
     gmailAppPass: process.env.GMAIL_APP_PASS,
