@@ -685,22 +685,73 @@ Cypress.Commands.add("selecionarAssentoAleatorio1001", () => {
 // });
 
 Cypress.Commands.add("selecionarAssentoAleatorio", () => {
-  cy.wait(5000); // Aguarda 5 segundos para garantir que o mapa de assentos esteja carregado
-  cy.get('button.outer-seat[id^="seat-"]:not(:has(.occupied-seat))', { timeout: 90000 })
-    .should("be.visible")
-    .then(($seats) => {
-      const ids = $seats.map((i, el) => el.id).get();
-      const randomId = ids[Math.floor(Math.random() * ids.length)];
+  // 1. Intercepta a chamada da API de transação de assento para monitorar o status
+  cy.intercept("POST", "**/seat/v1/transactSeat").as("transactSeat");
 
-      cy.wrap(randomId).as("idSorteado");
+  cy.wait(5000); // Aguarda o mapa carregar completamente
+
+  const tentarSelecionarIndex = (indiceTentativa = 0) => {
+    // Busca todos os assentos disponíveis (que não estão ocupados)
+    cy.get('button.outer-seat[id^="seat-"]:not(:has(.occupied-seat))').then(($seats) => {
+      if ($seats.length === 0) {
+        throw new Error("❌ Nenhum assento livre encontrado no mapa!");
+      }
+
+      // Sorteia um índice aleatório entre os assentos disponíveis na tela
+      const randomIndex = Math.floor(Math.random() * $seats.length);
+      const $assentoEscolhido = $seats.eq(randomIndex);
+      const idAssento = $assentoEscolhido.attr("id");
+
+      cy.log(`🎯 Tentativa ${indiceTentativa + 1}: Tentando o assento #${idAssento}`);
+
+      // Rola até o assento e clica forçadamente para evitar bloqueios de UI
+      cy.wrap($assentoEscolhido)
+        .scrollIntoView({ offset: { top: -150 } })
+        .should("be.visible")
+        .click({ force: true });
+
+      // 2. Aguarda a resposta da API de transação
+      cy.wait("@transactSeat", { timeout: 15000 }).then((interception) => {
+        const statusCode = interception.response.statusCode;
+        const responseBody = interception.response.body;
+
+        if (statusCode !== 200) {
+          cy.log(`⚠️ Assento #${idAssento} ocupado/indisponível (API StatusCode: ${statusCode}). Tentando outro...`);
+
+          // Loga os detalhes no relatório do Mochawesome
+          Cypress.log({
+            name: "API TransactSeat Error",
+            message: JSON.stringify(responseBody),
+          });
+
+          // Trata o modal de aviso caso ele apareça na tela
+          cy.get("body").then(($body) => {
+            // Procura pelo botão de fechar do modal amarelo de indisponibilidade
+            const $btnFechar = $body.find('button:contains("Fechar")');
+            if ($btnFechar.length > 0) {
+              cy.wrap($btnFechar).first().click({ force: true });
+              cy.wait(1000);
+            }
+          });
+
+          // Evita loop infinito caso passe de 10 tentativas seguidas
+          if (indiceTentativa < 10) {
+            return tentarSelecionarIndex(indiceTentativa + 1);
+          } else {
+            throw new Error("❌ Limite de tentativas excedido: Muitos assentos retornaram indisponíveis na API.");
+          }
+        } else {
+          cy.log(`✅ Assento #${idAssento} selecionado e reservado com sucesso!`);
+        }
+      });
     });
-  cy.get("@idSorteado").then((id) => {
-    cy.get(`#${id}`).scrollIntoView().should("be.visible").click({ force: true });
-  });
+  };
 
+  // Inicia o processo de seleção com tratamento de erro
+  tentarSelecionarIndex();
+
+  // 3. Garante que o botão de prosseguir está ativo para avançar a compra
   cy.get("#btn-proceed", { timeout: 90000 }).should("be.visible").and("not.be.disabled");
-  // cy.get('[style="background: #FFFFFF;; box-shadow: undefined;-webkit-box-shadow: undefined;-moz-box-shadow: undefined;; border-radius: undefinedpx;"] > .origin-destination > .show-more-details-container > .trip-details-container > .trip-details-show-passenger > .passenger-division').click();
-  // cy.get('[style="background: #FFFFFF;; box-shadow: undefined;-webkit-box-shadow: undefined;-moz-box-shadow: undefined;; border-radius: undefinedpx;"] > .origin-destination > .show-more-details-container > .trip-details-container > .trip-details-show-passenger > .cart-passenger-list > ul > .passenger-card > .passenger-card__row > .passenger-card__price > .passenger-card__price-pix').should("be.visible");
 });
 
 // Cypress.Commands.add("selecionarAssentoAleatorio", () => {
