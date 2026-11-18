@@ -26,8 +26,8 @@ describe("Expresso do Sul", () => {
     cy.visit(expressoSul);
     cy.env(["login2", "senha2"]).then(() => {
       LoginPage.abrirModalLogin();
-      LoginPage.preencherUsuarioExpressoSul();
-      LoginPage.PreencherSenhaExpressoSul();
+      LoginPage.preencherUsuarioExpSul();
+      LoginPage.PreencherSenhaExpSul();
       LoginPage.confirmarLogin();
       LoginPage.logadoComSucesso();
     });

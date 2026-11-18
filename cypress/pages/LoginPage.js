@@ -19,24 +19,24 @@ class LoginPage {
   }
   preencherUsuario1001() {
     cy.env(["login2"]).then((env) => {
-      cy.get(loc.USUARIO2).type(env.login2);
+      cy.get(loc.USUARIO).type(env.login2);
     });
   }
 
   PreencherSenha1001() {
     cy.env(["senha2"]).then((env) => {
-      cy.get(loc.SENHA2).type(env.senha2, { log: false });
+      cy.get(loc.SENHA).type(env.senha2, { log: false });
     });
   }
   preencherUsuarioExpSul() {
     cy.env(["login2"]).then((env) => {
-      cy.get(loc.USUARIO2).type(env.login2);
+      cy.get(loc.USUARIO).type(env.login2);
     });
   }
 
   PreencherSenhaExpSul() {
     cy.env(["senha2"]).then((env) => {
-      cy.get(loc.SENHA2).type(env.senha2, { log: false });
+      cy.get(loc.SENHA).type(env.senha2, { log: false });
     });
   }
   preencherUsuarioRR() {
