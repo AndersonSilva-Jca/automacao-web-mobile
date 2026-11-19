@@ -7,8 +7,8 @@ Library             ../resources/GeradorDataVolta.py
 
 *** Variables ***
 ${ENTRAR}               id=user
-${LOGIN2}               ${EMPTY}
-${SENHA2}               ${EMPTY}
+${MB_LOGIN2}               ${EMPTY}
+${MB_SENHA2}               ${EMPTY}
 ${MAIL_USERNAME}        ${EMPTY}
 ${GMAIL_APP_PASS}       ${EMPTY}
 
@@ -18,12 +18,12 @@ Carregar Variaveis De Ambiente
     [Documentation]    Carrega o arquivo .env e cria as variáveis globais para o teste.
     Evaluate    __import__('dotenv').load_dotenv(dotenv_path='app/.env')
 
-    ${env_login2}=    Get Environment Variable    LOGIN2
-    ${env_senha2}=    Get Environment Variable    SENHA2
+    ${env_mb_login2}=    Get Environment Variable    MB_LOGIN2
+    ${env_mb_senha2}=    Get Environment Variable    MB_SENHA2
     ${env_mail_username}=    Get Environment Variable    MAIL_USERNAME
 
-    Set Global Variable    ${LOGIN2}    ${env_login2}
-    Set Global Variable    ${SENHA2}    ${env_senha2}
+    Set Global Variable    ${MB_LOGIN2}    ${env_mb_login2}
+    Set Global Variable    ${MB_SENHA2}    ${env_mb_senha2}
     Set Global Variable    ${MAIL_USERNAME}    ${env_mail_username}
 
 Start session
@@ -53,8 +53,8 @@ Login
     
     Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="user"]    timeout=240s
     Log To Console    \nFazendo o Login...
-    Input Text    xpath=//android.widget.EditText[@resource-id="user"]    ${LOGIN2}
-    Input Password    xpath=//android.widget.EditText[@resource-id="password"]    ${SENHA2}
+    Input Text    xpath=//android.widget.EditText[@resource-id="user"]    ${MB_LOGIN2}
+    Input Password    xpath=//android.widget.EditText[@resource-id="password"]    ${MB_SENHA2}
     Wait Until Element Is Visible
     ...    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
     ...    timeout=60s

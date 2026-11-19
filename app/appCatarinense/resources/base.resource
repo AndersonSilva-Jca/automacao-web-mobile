@@ -6,8 +6,14 @@ Library    Collections
 
 
 *** Variables ***
+${LOGIN}                ${EMPTY}
+${SENHA}                ${EMPTY}
+${LOGIN1}                ${EMPTY}
+${SENHA1}                ${EMPTY}
 ${LOGIN2}                ${EMPTY}
 ${SENHA2}                ${EMPTY}
+${MB_LOGIN2}                ${EMPTY}
+${MB_SENHA2}                ${EMPTY}
 ${GMAIL_USER}           ${EMPTY}
 ${GMAIL_APP_PASS}       ${EMPTY}
 
@@ -18,14 +24,26 @@ Carregar Variaveis De Ambiente
     Evaluate    __import__('dotenv').load_dotenv(dotenv_path='app/.env')
 
     # 1. Coleta os dados do sistema operacional (.env local ou CI)
+    ${env_login}=    Get Environment Variable    LOGIN
+    ${env_senha}=    Get Environment Variable    SENHA
+    ${env_login1}=    Get Environment Variable    LOGIN1
+    ${env_senha1}=    Get Environment Variable    SENHA1
     ${env_login2}=    Get Environment Variable    LOGIN2
     ${env_senha2}=    Get Environment Variable    SENHA2
+    ${env_mb_login2}=    Get Environment Variable    MB_LOGIN2
+    ${env_mb_senha2}=    Get Environment Variable    MB_SENHA2
     ${env_gmail_pass}=    Get Environment Variable    GMAIL_APP_PASS
     ${env_gmail_user}=    Get Environment Variable    GMAIL_USER
 
     # 2. Injeta os valores como GLOBAL
+    Set Global Variable    ${LOGIN}    ${env_login}
+    Set Global Variable    ${SENHA}    ${env_senha}
+    Set Global Variable    ${LOGIN1}    ${env_login1}
+    Set Global Variable    ${SENHA1}    ${env_senha1}
     Set Global Variable    ${LOGIN2}    ${env_login2}
     Set Global Variable    ${SENHA2}    ${env_senha2}
+    Set Global Variable    ${MB_LOGIN2}    ${env_mb_login2}
+    Set Global Variable    ${MB_SENHA2}    ${env_mb_senha2}
     Set Global Variable    ${GMAIL_USER}    ${env_gmail_user}
     Set Global Variable    ${GMAIL_APP_PASS}    ${env_gmail_pass}
 
@@ -58,8 +76,8 @@ Login
     Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Acesse sua conta"]    timeout=60s
     Log To Console    \n Assert Acesse sua conta
     Click Element    xpath=//android.widget.EditText[@resource-id="user"]
-    Input Text    xpath=//android.widget.EditText[@resource-id="user"]    ${LOGIN2}
-    Input Password    xpath=//android.widget.EditText[@resource-id="password"]    ${SENHA2}
+    Input Text    xpath=//android.widget.EditText[@resource-id="user"]    ${MB_LOGIN2}
+    Input Password    xpath=//android.widget.EditText[@resource-id="password"]    ${MB_SENHA2}
     Click Element    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
   
 Close session
