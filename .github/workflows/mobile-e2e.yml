@@ -84,6 +84,8 @@ jobs:
         env:
           LOGIN: ${{ secrets.LOGIN }}
           SENHA: ${{ secrets.SENHA }}
+          LOGIN1: ${{ secrets.LOGIN1 }}
+          SENHA1: ${{ secrets.SENHA1 }}
           LOGIN2: ${{ secrets.LOGIN2 }}
           SENHA2: ${{ secrets.SENHA2 }}
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
