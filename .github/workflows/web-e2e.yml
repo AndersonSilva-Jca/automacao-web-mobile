@@ -25,13 +25,10 @@ jobs:
         spec:
           - cypress/e2e/00_smoke/00_Healthcheck_fretur.cy.js
           - cypress/e2e/00_smoke/01_ODH.cy.js
-          - cypress/e2e/00_smoke/02_ODP_HM.cy.js
-          - cypress/e2e/00_smoke/02_ODP_MP.cy.js
+          - cypress/e2e/00_smoke/02_ODP.cy.js
           - cypress/e2e/00_smoke/03_Giro.cy.js
-          - cypress/e2e/00_smoke/04_Wemobi_AA.cy.js
-          - cypress/e2e/00_smoke/04_Wemobi_LM.cy.js
-          - cypress/e2e/00_smoke/04_WemobiExp_AA.cy.js
-          - cypress/e2e/00_smoke/04_WemobiExp_LM.cy.js
+          - cypress/e2e/00_smoke/04_Wemobi.cy.js
+          - cypress/e2e/00_smoke/04_WemobiExp.cy.js
           - cypress/e2e/00_smoke/05_Cometa.cy.js
           - cypress/e2e/00_smoke/06_1001.cy.js
           - cypress/e2e/00_smoke/07_ExpressoSul.cy.js
