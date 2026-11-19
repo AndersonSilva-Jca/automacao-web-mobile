@@ -7,10 +7,17 @@ Library             ../resources/GeradorDataVolta.py
 
 *** Variables ***
 ${ENTRAR}               id=user
-${MB_LOGIN2}               ${EMPTY}
-${MB_SENHA2}               ${EMPTY}
-${MAIL_USERNAME}        ${EMPTY}
+${LOGIN}                ${EMPTY}
+${SENHA}                ${EMPTY}
+${LOGIN1}                ${EMPTY}
+${SENHA1}                ${EMPTY}
+${LOGIN2}                ${EMPTY}
+${SENHA2}                ${EMPTY}
+${MB_LOGIN2}                ${EMPTY}
+${MB_SENHA2}                ${EMPTY}
+${GMAIL_USER}           ${EMPTY}
 ${GMAIL_APP_PASS}       ${EMPTY}
+
 
 
 *** Keywords ***
@@ -18,13 +25,27 @@ Carregar Variaveis De Ambiente
     [Documentation]    Carrega o arquivo .env e cria as variáveis globais para o teste.
     Evaluate    __import__('dotenv').load_dotenv(dotenv_path='app/.env')
 
+  ${env_login}=    Get Environment Variable    LOGIN
+    ${env_senha}=    Get Environment Variable    SENHA
+    ${env_login1}=    Get Environment Variable    LOGIN1
+    ${env_senha1}=    Get Environment Variable    SENHA1
+    ${env_login2}=    Get Environment Variable    LOGIN2
+    ${env_senha2}=    Get Environment Variable    SENHA2
     ${env_mb_login2}=    Get Environment Variable    MB_LOGIN2
     ${env_mb_senha2}=    Get Environment Variable    MB_SENHA2
-    ${env_mail_username}=    Get Environment Variable    MAIL_USERNAME
+    ${env_gmail_pass}=    Get Environment Variable    GMAIL_APP_PASS
+    ${env_gmail_user}=    Get Environment Variable    GMAIL_USER
 
+    Set Global Variable    ${LOGIN}    ${env_login}
+    Set Global Variable    ${SENHA}    ${env_senha}
+    Set Global Variable    ${LOGIN1}    ${env_login1}
+    Set Global Variable    ${SENHA1}    ${env_senha1}
+    Set Global Variable    ${LOGIN2}    ${env_login2}
+    Set Global Variable    ${SENHA2}    ${env_senha2}
     Set Global Variable    ${MB_LOGIN2}    ${env_mb_login2}
     Set Global Variable    ${MB_SENHA2}    ${env_mb_senha2}
-    Set Global Variable    ${MAIL_USERNAME}    ${env_mail_username}
+    Set Global Variable    ${GMAIL_USER}    ${env_gmail_user}
+    Set Global Variable    ${GMAIL_APP_PASS}    ${env_gmail_pass}
 
 Start session
     Carregar Variaveis De Ambiente
@@ -49,18 +70,39 @@ Start session
     ...    appium:connectHardwareKeyboard=${True}
     ...    appium:socketConnectionTimeout=${90000}
 
+# Tratar Banner De Bem-vindo Aparecer
+    #     ${cookie_visivel}=    Run Keyword And Return Status
+    # ...    Wait Until Element Is Visible    xpath=//android.view.View[@text="Bem-vindo à wemobi!"]    timeout=15s
+
+    # # 2. Se a resposta for True, ele entra no bloco e clica para aceitar
+    # IF    ${cookie_visivel}
+    #     Log To Console    \n[INFO] Banner de Bem-vindo detectado. Pulando...
+    #     Click Element    xpath=//android.widget.Button[@content-desc="Skip"]
+    # ELSE
+    #     Log To Console    \n[INFO] Banner de Bem-vindo não apareceu. Seguindo o fluxo...
+    # END
 Login
-    
-    Wait Until Element Is Visible    xpath=//android.widget.EditText[@resource-id="user"]    timeout=240s
+
+    ${cookie_visivel}=    Run Keyword And Return Status
+    ...    Wait Until Element Is Visible    xpath=//android.view.View[@text="Bem-vindo à wemobi!"]    timeout=15s
+
+    # 2. Se a resposta for True, ele entra no bloco e clica para aceitar
+    IF    ${cookie_visivel}
+        Log To Console    \n[INFO] Banner de Bem-vindo detectado. Pulando...
+        Click Element    xpath=//android.widget.Button[@content-desc="Skip"]
+    ELSE
+        Log To Console    \n[INFO] Banner de Bem-vindo não apareceu. Seguindo o fluxo...
+    END
+    Wait Until Element Is Visible    xpath=//android.widget.EditText[@text="Ex: joaopedro@gmail.com"]    timeout=60s
     Log To Console    \nFazendo o Login...
-    Input Text    xpath=//android.widget.EditText[@resource-id="user"]    ${MB_LOGIN2}
-    Input Password    xpath=//android.widget.EditText[@resource-id="password"]    ${MB_SENHA2}
+    Input Text    xpath=//android.widget.EditText[@text="Ex: joaopedro@gmail.com"]    ${LOGIN}
+    Input Password    xpath=//android.widget.EditText[@text="Digite sua senha"]    ${SENHA}
     Wait Until Element Is Visible
-    ...    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
+    ...    xpath=//android.widget.TextView[@text="Continuar"]
     ...    timeout=60s
-    Click Element    xpath=//android.view.ViewGroup[@content-desc="Entrar"]/android.view.View
+    Click Element    xpath=//android.widget.TextView[@text="Continuar"]
     Wait Until Element Is Visible
-    ...    xpath=//android.view.ViewGroup[@content-desc="Buscar"]/android.view.View    timeout=90s
+    ...    xpath=//android.widget.Button[@content-desc="Buscar passagem"]    timeout=90s
     Log To Console    \nTela de Busca exibida com sucesso!
 
     
@@ -257,4 +299,17 @@ Aguardar Elemento Com Retry
     END
     Wait Until Element Is Visible    ${locator}    timeout=${timeout}
 
+# Tratar Banner De Bem-vindo Aparecer
+#     # 1. Verifica se o elemento aparece na tela em até 5 segundos
+#     # O Robot guarda True (se achou) ou False (se não achou) na variável
+#     ${cookie_visivel}=    Run Keyword And Return Status
+#     ...    Wait Until Element Is Visible    xpath=//android.view.View[@text="Bem-vindo à wemobi!"]    timeout=60s
+
+#     # 2. Se a resposta for True, ele entra no bloco e clica para aceitar
+#     IF    ${cookie_visivel}
+#         Log To Console    \n[INFO] Banner de Bem-vindo detectado. Pulando...
+#         Click Element    xpath=//android.widget.TextView[@text="Pular"]
+#     ELSE
+#         Log To Console    \n[INFO] Banner de Bem-vindo não apareceu. Seguindo o fluxo...
+#     END
 
