@@ -132,8 +132,8 @@ Cypress.Commands.add("selecionarAssentoAleatorioWemobi", () => {
   cy.get("@idSorteado").then((id) => {
     cy.get(`#${id}`).scrollIntoView().should("be.visible").click({ force: true });
   });
-  cy.get("#seat-reservation-v2-button-proceed").should("be.visible").log("Assento selecionado");
-  cy.get("#seat-reservation-v2-button-proceed", { timeout: 90000 }).should("be.visible").and("not.be.disabled").click();
+  cy.get("#btn-proceed").should("be.visible").log("Assento selecionado");
+  cy.get("#btn-proceed", { timeout: 90000 }).should("be.visible").and("not.be.disabled").click();
 });
 
 Cypress.Commands.add("selecionarAssentoAleatorioODP", () => {
