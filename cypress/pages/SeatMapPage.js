@@ -70,7 +70,7 @@ class SeatMapPage {
     cy.get(loc.WEMOBI_BOTAO_RESERVAR_ASSENTO).click().log("Selecionando assento");
     cy.get('[data-value="random-seat"]').click();
     cy.get(".reservation-passenger-list > .reservation-passenger-item > .seat-tag").should("be.visible").log("Assento Aleatório selecionado com sucesso !");
-    cy.get("#seat-reservation-v2-button-proceed").click({ force: true });
+    cy.get("#btn-proceed").click({ force: true });
   }
 }
 
