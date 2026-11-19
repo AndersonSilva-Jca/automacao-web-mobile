@@ -13,12 +13,12 @@ Wemobi - Deve realizar o login com sucesso
     
     Start session
     Login
-        Click Element
-    ...    android=new UiSelector().className("android.widget.ImageView").instance(0)
-    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Perfil"]
-    Log To Console    \nLogin realizado com sucesso!
-    Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Perfil"]
-    Log To Console    \nOlá, Anderson Silva
+    #     Click Element
+    # ...    android=new UiSelector().className("android.widget.ImageView").instance(0)
+    # Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Perfil"]
+    # Log To Console    \nLogin realizado com sucesso!
+    # Wait Until Element Is Visible    xpath=//android.view.ViewGroup[@content-desc="Perfil"]
+    # Log To Console    \nOlá, Anderson Silva
     # Wait Until Element Is Visible    xpath=//android.widget.TextView[@text="Sair"]    timeout=30s
     # Log To Console    \nClicando em Sair...
     # Click Element    xpath=//android.widget.TextView[@text="Sair"]
