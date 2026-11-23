@@ -21,14 +21,14 @@ describe("Wemobi", () => {
   });
 
   it("Wemobi - Sem exp. Lugar Marcado", () => {
-    cy.env(["login", "senha"]).then(() => {
-      cy.visit(wemobi);
-      LoginPage.wemobiModalLogin();
-      LoginPage.wemobiPreencherUsuario();
-      LoginPage.wemobiPreencherSenha();
-      LoginPage.wemobiConfirmarLogin();
-      LoginPage.wemobiLogadoComSucesso();
-    });
+    // cy.env(["login", "senha"]).then(() => {
+    cy.visit(wemobi);
+    LoginPage.wemobiModalLogin();
+    LoginPage.wemobiPreencherUsuario();
+    LoginPage.wemobiPreencherSenha();
+    LoginPage.wemobiConfirmarLogin();
+    LoginPage.wemobiLogadoComSucesso();
+    // });
     SearchPage.wemobiBuscaRotas();
     SearchPage.wemobiDataIda();
     SearchPage.wemobiConfirmarBusca();
@@ -42,14 +42,14 @@ describe("Wemobi", () => {
   });
 
   it("Wemobi - Sem exp. Assento Aleatório", () => {
-    cy.env(["login", "senha"]).then(() => {
-      cy.visit(wemobi);
-      LoginPage.wemobiModalLogin();
-      LoginPage.wemobiPreencherUsuario();
-      LoginPage.wemobiPreencherSenha();
-      LoginPage.wemobiConfirmarLogin();
-      LoginPage.wemobiLogadoComSucesso();
-    });
+    // cy.env(["login", "senha"]).then(() => {
+    cy.visit(wemobi);
+    LoginPage.wemobiModalLogin();
+    LoginPage.wemobiPreencherUsuario();
+    LoginPage.wemobiPreencherSenha();
+    LoginPage.wemobiConfirmarLogin();
+    LoginPage.wemobiLogadoComSucesso();
+    // });
     SearchPage.wemobiBuscaRotas();
     SearchPage.wemobiDataIda();
     SearchPage.wemobiConfirmarBusca();
