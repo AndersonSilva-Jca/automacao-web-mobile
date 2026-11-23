@@ -24,14 +24,14 @@ describe("Catarinense", () => {
 
   it("Catarinense - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
     cy.visit(catarinense);
-    cy.env(["login", "senha"]).then(() => {
-      cy.get(".img-header-logo").click();
-      LoginPage.abrirModalLogin();
-      LoginPage.preencherUsuarioCatarinense();
-      LoginPage.PreencherSenhaCatarinense();
-      LoginPage.confirmarLogin();
-      LoginPage.logadoComSucesso();
-    });
+    // cy.env(["login", "senha"]).then(() => {
+    cy.get(".img-header-logo").click();
+    LoginPage.abrirModalLogin();
+    LoginPage.preencherUsuarioCatarinense();
+    LoginPage.PreencherSenhaCatarinense();
+    LoginPage.confirmarLogin();
+    LoginPage.logadoComSucesso();
+    // });
     SearchPage.buscaTopRotasCatarinense();
     SearchPage.dataIda();
     SearchPage.confirmarBusca();

@@ -23,13 +23,13 @@ describe("Auto Viação 1001", () => {
 
   it("Auto Viação 1001 - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
     cy.visit(viacao1001);
-    cy.env(["login4", "senha4"]).then(() => {
-      LoginPage.abrirModalLogin();
-      LoginPage.preencherUsuario1001();
-      LoginPage.PreencherSenha1001();
-      LoginPage.confirmarLogin();
-      LoginPage.logadoComSucesso();
-    });
+    // cy.env(["login4", "senha4"]).then(() => {
+    LoginPage.abrirModalLogin();
+    LoginPage.preencherUsuario1001();
+    LoginPage.PreencherSenha1001();
+    LoginPage.confirmarLogin();
+    LoginPage.logadoComSucesso();
+    // });
     SearchPage.buscaTopRotas1001();
     SearchPage.dataIda();
     SearchPage.confirmarBusca();

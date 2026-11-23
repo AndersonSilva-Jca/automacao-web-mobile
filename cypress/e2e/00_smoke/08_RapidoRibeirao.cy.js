@@ -23,13 +23,13 @@ describe("Rapido Ribeirão", () => {
 
   it("Rapido Ribeirão - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
     cy.visit(rapidoRibeirao);
-    cy.env(["login", "senha"]).then(() => {
-      LoginPage.abrirModalLogin();
-      LoginPage.preencherUsuarioRR();
-      LoginPage.PreencherSenhaRR();
-      LoginPage.confirmarLogin();
-      LoginPage.logadoComSucesso();
-    });
+    // cy.env(["login", "senha"]).then(() => {
+    LoginPage.abrirModalLogin();
+    LoginPage.preencherUsuarioRR();
+    LoginPage.PreencherSenhaRR();
+    LoginPage.confirmarLogin();
+    LoginPage.logadoComSucesso();
+    // });
     SearchPage.buscaTopRotasRapidoRibeirao();
     SearchPage.dataIda();
     SearchPage.confirmarBusca();

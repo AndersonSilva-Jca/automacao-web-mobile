@@ -24,13 +24,13 @@ describe("Expresso do Sul", () => {
 
   it("Expresso Sul - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
     cy.visit(expressoSul);
-    cy.env(["login", "senha"]).then(() => {
+    // cy.env(["login", "senha"]).then(() => {
       LoginPage.abrirModalLogin();
       LoginPage.preencherUsuarioExpSul();
       LoginPage.PreencherSenhaExpSul();
       LoginPage.confirmarLogin();
       LoginPage.logadoComSucesso();
-    });
+    // });
     SearchPage.buscaOrigemExpressoSul();
     SearchPage.dataIda();
     SearchPage.confirmarBusca();
