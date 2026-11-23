@@ -109,7 +109,7 @@ class CheckoutPage {
 
   //------------------ WEMOBI ------------------
   wemobiResumoCompra() {
-    cy.get(loc.ASSERT_SUBTOTAL).should("contain", "Subtotal dos assentos").log("Subtotal dos assentos");
+    cy.get(loc.WEMOBI_ASSERT_SUBTOTAL).should("contain", "Subtotal do assento").log("Subtotal do assento");
     cy.get(loc.WEMOBI_ASSERT_TAXASERVICO).should("contain", "Taxa de serviço").log("Taxa de serviço");
     cy.get(loc.ASSERT_WEMOBI_VALORTOTAL).should("contain", "Valor total").log("Valor total das passagens");
     cy.get('[data-js="tab-card"]').should("be.visible").log("Aba do Cartão de Crédito");

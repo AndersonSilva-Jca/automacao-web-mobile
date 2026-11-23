@@ -36,7 +36,8 @@ const loc = {
   WEMOBI_BOTAO_RESERVAR_ASSENTO: "#reservation-seat-0",
   WEMOBI_BOTAO_ESCOLHER_ASSENTO: '[data-value="choose-seat"] > .option-content',
   WEMOBI_ABA_PAGAMENTOS: ".payment-type-container > .col-12 > .active",
-  WEMOBI_ASSERT_TAXASERVICO: '[data-js="convenience-fee-pix-container"] > .title-value > .title > .cmp-text > p',
+  WEMOBI_ASSERT_TAXASERVICO: ".title-tooltip > .title",
+  WEMOBI_ASSERT_SUBTOTAL: '[data-js="subtotal-seats-container"] > .title-value',
 
   ODP_XPATH_SP_TIETE: '//*[@id="São-Paulo---Rodoviária-Tietê-(SP)"]/p[1]',
   ODP_SP_TIETE: "São Paulo - Rodoviária Tietê (SP)",
@@ -66,7 +67,7 @@ const loc = {
   ASSERT_SUBTOTAL: '[data-js="subtotal-seats-container"] > .title-value > .title > .cmp-text > p',
   ASSERT_TAXASERVICO: ".title-tooltip > .title",
   ASSERT_VALORTOTAL: "[data-js='total-container'] > .title > .total-title-main",
-  ASSERT_WEMOBI_VALORTOTAL: ".title > .cmp-text > p > b",
+  ASSERT_WEMOBI_VALORTOTAL: "[data-js='total-full-container'] > .title > .total-title-main",
   LOADER: '[alt="loader"]',
 
   LINK_INFO_VIAGEM_UTP: ".at-element-marker > :nth-child(1)",

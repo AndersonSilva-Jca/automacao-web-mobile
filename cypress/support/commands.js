@@ -1790,10 +1790,10 @@ Cypress.Commands.add("fecharModalGiro", () => {
 
 Cypress.Commands.add("fecharModalUpgradePoltrona", () => {
   cy.get("body").then(($body) => {
-    if ($body.find("#modal-upsel").length > 0 && $body.find("#modal-upsel").is(":visible")) {
+    if ($body.find(".modal-upsell-v2-header").length > 0 && $body.find(".modal-upsell-v2-header").is(":visible")) {
       cy.log("⚠️ Modal de upgrade detectado — fechando...");
-      cy.get("#modal-upsel", { timeout: 90000 }).should("be.visible");
-      cy.get("#close-modal-upsel").click({ force: true });
+      cy.get(".modal-upsell-v2-header", { timeout: 90000 }).should("be.visible");
+      cy.get(".modal-upsell-v2-header__close > .jca-ico-close").click({ force: true });
     } else {
       cy.log("✅ Sem modal de upgrade");
     }
