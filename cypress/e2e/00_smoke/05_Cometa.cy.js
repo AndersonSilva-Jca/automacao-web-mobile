@@ -23,13 +23,13 @@ describe("Viação Cometa", () => {
 
   it("Viação Cometa - Deve fazer login, busca de destinos, selecionar datas, seleção de passagens, selecionar assentos", () => {
     cy.visit(cometa);
-    cy.env(["login4", "senha4"]).then(() => {
-      LoginPage.abrirModalLogin();
-      LoginPage.preencherUsuarioCometa();
-      LoginPage.PreencherSenhaCometa();
-      LoginPage.confirmarLogin();
-      LoginPage.logadoComSucesso();
-    });
+    // cy.env(["login4", "senha4"]).then(() => {
+    LoginPage.abrirModalLogin();
+    LoginPage.preencherUsuarioCometa();
+    LoginPage.PreencherSenhaCometa();
+    LoginPage.confirmarLogin();
+    LoginPage.logadoComSucesso();
+    // });///
     SearchPage.buscaTopRotasCometa();
     SearchPage.dataIda();
     SearchPage.confirmarBusca();

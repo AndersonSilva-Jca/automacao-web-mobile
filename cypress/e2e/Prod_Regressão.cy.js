@@ -1,14 +1,11 @@
 /// <reference types='cypress' />
-// import "./00_smoke/00_Healthcheck_fretur.cy";
-// import "./00_smoke/10_Totem.cy.js";
-// import "./00_smoke/01_ODH.cy";
+import "./00_smoke/00_Healthcheck_fretur.cy";
+import "./00_smoke/10_Totem.cy.js";
+import "./00_smoke/01_ODH.cy";
 import "./00_smoke/02_ODP.cy";
-import "./00_smoke/02_ODP_MP.cy";
-// import "./00_smoke/03_Giro.cy.js";
+import "./00_smoke/03_Giro.cy.js";
 import "./00_smoke/04_WemobiExp.cy";
-import "./00_smoke/04_WemobiExp_LM.cy";
 import "./00_smoke/04_Wemobi.cy";
-import "./00_smoke/04_Wemobi_LM.cy";
 
 // UTP;
 // import "./00_smoke/05_Cometa.cy.js";
