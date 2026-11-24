@@ -384,7 +384,14 @@ jobs:
 
             echo "=== Executando Maestro com gravação de vídeo/prints ==="
             # O Maestro roda os testes e gera o JUnit XML
-            maestro test .maestro/ --format junit --output $RESULTS_DIR/output.xml --test-output-dir $RESULTS_DIR || true
+            maestro test .maestro/ \
+              -e LOGIN="$LOGIN" \
+              -e SENHA="$SENHA" \
+              -e LOGIN2="$LOGIN2" \
+              -e SENHA2="$SENHA2" \
+              --format junit \
+              --output $RESULTS_DIR/output.xml \
+              --test-output-dir $RESULTS_DIR || true
 
       - name: Coletar Evidências (Screenshots e Logs)
         if: always()
