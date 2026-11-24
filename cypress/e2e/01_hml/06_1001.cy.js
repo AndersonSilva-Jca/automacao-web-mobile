@@ -16,7 +16,6 @@ const viacao1001 = "https://autoviacao1001stage.vendasjca.com.br/";
 describe("Auto Viação 1001", () => {
   beforeEach(() => {
     cy.clearCookies();
-    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.once("uncaught:exception", () => false);
     Cypress.on("uncaught:exception", () => false);
   });

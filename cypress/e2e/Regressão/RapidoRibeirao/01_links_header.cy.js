@@ -8,7 +8,6 @@ const rapidoRibeirao = "https://www.rapidoribeiraopreto.com.br/?utm_source=synth
 describe("Validar link informações de viagens", () => {
   beforeEach(() => {
     cy.clearCookies();
-    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.visit(rapidoRibeirao);
   });
   it("Validar link informações de Viagem - Bagagem", () => {

@@ -9,7 +9,6 @@ const odp = "https://www.outletdepassagens.com.br/?utm_source=synthetic_test&utm
 describe("Validar cards de Melhores Destinos", () => {
   beforeEach(() => {
     cy.clearCookies();
-    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.visit(odp);
   });
 

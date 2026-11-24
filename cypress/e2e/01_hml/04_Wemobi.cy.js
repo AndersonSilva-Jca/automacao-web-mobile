@@ -16,7 +16,6 @@ const wemobi = "https://wemobistage.vendasjca.com.br/";
 describe("Wemobi", () => {
   beforeEach(() => {
     cy.clearCookies();
-    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.once("uncaught:exception", () => false);
     Cypress.on("uncaught:exception", () => false);
   });

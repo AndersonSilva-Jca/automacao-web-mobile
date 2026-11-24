@@ -40,25 +40,25 @@ class LoginPage {
     });
   }
   preencherUsuarioRR() {
-    cy.env(["login"]).then((env) => {
-      cy.get(loc.USUARIO).type(env.login);
+    cy.env(["login2"]).then((env) => {
+      cy.get(loc.USUARIO).type(env.login2);
     });
   }
 
   PreencherSenhaRR() {
-    cy.env(["senha"]).then((env) => {
-      cy.get(loc.SENHA).type(env.senha, { log: false });
+    cy.env(["senha2"]).then((env) => {
+      cy.get(loc.SENHA).type(env.senha2, { log: false });
     });
   }
   preencherUsuarioCatarinense() {
-    cy.env(["login"]).then((env) => {
-      cy.get(loc.USUARIO).type(env.login);
+    cy.env(["login2"]).then((env) => {
+      cy.get(loc.USUARIO).type(env.login2);
     });
   }
 
   PreencherSenhaCatarinense() {
-    cy.env(["senha"]).then((env) => {
-      cy.get(loc.SENHA).type(env.senha, { log: false });
+    cy.env(["senha2"]).then((env) => {
+      cy.get(loc.SENHA).type(env.senha2, { log: false });
     });
   }
 

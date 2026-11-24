@@ -16,7 +16,6 @@ const wemobi = "https://www.wemobi.me";
 describe("Validar link do clube giro", () => {
   beforeEach(() => {
     cy.clearCookies();
-    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.visit(expressoSul);
   });
 

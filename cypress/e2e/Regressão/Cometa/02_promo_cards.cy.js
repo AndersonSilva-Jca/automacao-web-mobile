@@ -8,7 +8,6 @@ import loc from "../../../support/locators.js";
 describe("Validar cards de promoção", () => {
   beforeEach(() => {
     cy.clearCookies();
-    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.visit(cometa);
   });
 

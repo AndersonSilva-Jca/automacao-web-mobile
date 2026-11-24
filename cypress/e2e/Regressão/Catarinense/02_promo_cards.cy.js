@@ -7,7 +7,6 @@ const catarinense = "https://www.catarinense.com.br/?utm_source=synthetic_test&u
 describe("Validar cards de promoção", () => {
   beforeEach(() => {
     cy.clearCookies();
-    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.visit(catarinense);
   });
 

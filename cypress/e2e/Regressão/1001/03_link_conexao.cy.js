@@ -8,7 +8,6 @@ const viacao1001 = "https://www.autoviacao1001.com.br/?utm_source=synthetic_test
 describe("Validar link do clube giro", () => {
   beforeEach(() => {
     cy.clearCookies();
-    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.visit(viacao1001);
   });
 

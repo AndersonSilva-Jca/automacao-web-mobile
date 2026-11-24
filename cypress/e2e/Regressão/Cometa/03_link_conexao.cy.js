@@ -7,7 +7,6 @@ const cometa = "https://www.viacaocometa.com.br/?utm_source=synthetic_test&utm_m
 describe("Validar link do clube giro", () => {
   beforeEach(() => {
     cy.clearCookies();
-    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.visit(cometa);
   });
 

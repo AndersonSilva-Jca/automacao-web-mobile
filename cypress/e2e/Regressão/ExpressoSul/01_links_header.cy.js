@@ -9,7 +9,6 @@ import loc from "../../../support/locators";
 describe("Validar link informações de viagens", () => {
   beforeEach(() => {
     cy.clearCookies();
-    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.visit(expressoSul);
   });
   it("Validar link informações de Viagem - Bagagem", () => {

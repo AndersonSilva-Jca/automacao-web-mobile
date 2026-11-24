@@ -8,7 +8,6 @@ const rapidoRibeirao = "https://www.rapidoribeiraopreto.com.br/?utm_source=synth
 describe("Validar link do clube giro", () => {
   beforeEach(() => {
     cy.clearCookies();
-    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.visit(rapidoRibeirao);
   });
 

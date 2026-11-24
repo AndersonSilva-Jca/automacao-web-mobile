@@ -17,7 +17,6 @@ const expressoSul = "https://jca-dev65.adobecqms.net/expressosul";
 describe("Expresso Sul", () => {
   beforeEach(() => {
     cy.clearCookies();
-    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.once("uncaught:exception", () => false);
     Cypress.on("uncaught:exception", () => false);
   });

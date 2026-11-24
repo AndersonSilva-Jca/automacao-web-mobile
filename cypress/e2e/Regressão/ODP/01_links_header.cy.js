@@ -9,7 +9,6 @@ const odp = "https://www.outletdepassagens.com.br/?utm_source=synthetic_test&utm
 describe("Validar link Sobre", () => {
   beforeEach(() => {
     cy.clearCookies();
-    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.visit(odp);
   });
   it("Validar link Sobre - Sobre o Outlet ", () => {

@@ -15,7 +15,6 @@ const odp = "https://outletdepassagensstage.vendasjca.com.br/";
 describe("Outlet de Passagens", () => {
   beforeEach(() => {
     cy.clearCookies();
-    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.once("uncaught:exception", () => false);
     Cypress.on("uncaught:exception", () => false);
   });

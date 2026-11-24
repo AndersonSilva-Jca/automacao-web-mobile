@@ -9,7 +9,6 @@ const wemobi = "https://www.wemobi.me/?utm_source=synthetic_test&utm_medium=inte
 describe("Validar link do clube giro", () => {
   beforeEach(() => {
     cy.clearCookies();
-    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.visit(wemobi);
   });
 

@@ -7,7 +7,6 @@ const catarinense = "https://www.catarinense.com.br/?utm_source=synthetic_test&u
 describe("Validar link do clube giro", () => {
   beforeEach(() => {
     cy.clearCookies();
-    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.visit(catarinense);
   });
 

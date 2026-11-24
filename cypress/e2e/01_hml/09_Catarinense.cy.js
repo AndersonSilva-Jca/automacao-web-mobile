@@ -16,7 +16,6 @@ const catarinense = "https://catarinensestage.vendasjca.com.br/";
 describe("Catarinense", () => {
   beforeEach(() => {
     cy.clearCookies();
-    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.once("uncaught:exception", () => false);
     Cypress.on("uncaught:exception", () => false);
   });

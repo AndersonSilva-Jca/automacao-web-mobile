@@ -9,7 +9,6 @@ import loc from "../../../support/locators.js";
 describe("Validar link informações de viagens", () => {
   beforeEach(() => {
     cy.clearCookies();
-    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.visit(cometa);
   });
   it("Validar link informações de Viagem - Bagagem", () => {

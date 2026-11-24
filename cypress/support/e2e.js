@@ -92,7 +92,7 @@ let networkLog = [];
 beforeEach(() => {
   networkLog = [];
 
-  cy.intercept({ resourceType: /xhr|fetch/ }, (req) => {
+  cy.intercept({ resourceType: /xhr|fetch/, log: false }, (req) => {
     req.on("response", (res) => {
       const ehApiRelevante = req.url.includes("jcatlm") || req.url.includes("vendasjca.com.br") || req.url.includes("outletdehoteis") || req.url.includes("api-gateway");
 

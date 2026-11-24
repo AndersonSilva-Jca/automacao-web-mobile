@@ -16,7 +16,6 @@ const giro = "https://clubegirostage.vendasjca.com.br/";
 describe("Clube Giro", () => {
   beforeEach(() => {
     cy.clearCookies();
-    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.once("uncaught:exception", () => false);
     Cypress.on("uncaught:exception", () => false);
   });

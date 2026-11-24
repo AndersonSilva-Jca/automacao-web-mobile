@@ -9,7 +9,6 @@ const giro = "https://www.clubegiro.com.br/?utm_source=synthetic_test&utm_medium
 describe("Validar links do header", () => {
   beforeEach(() => {
     cy.clearCookies();
-    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.visit(giro);
   });
   it("Validar link O Programa - Sobre o Clube", () => {

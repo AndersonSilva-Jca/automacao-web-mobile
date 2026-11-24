@@ -7,7 +7,6 @@ const catarinense = "https://www.catarinense.com.br/?utm_source=synthetic_test&u
 describe("Validar link informações de viagens", () => {
   beforeEach(() => {
     cy.clearCookies();
-    cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.visit(catarinense);
   });
   it("Validar link informações de Viagem - Bagagem", () => {
