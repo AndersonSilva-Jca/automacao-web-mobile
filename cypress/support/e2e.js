@@ -86,13 +86,16 @@ Cypress.on("test:after:run", (test, runnable) => {
 //   screenshotOnRunFailure: false,
 // });
 
-// Variável global para armazenar os logs de erro das APIs
 let networkLog = [];
 
 beforeEach(() => {
   networkLog = [];
 
-  cy.intercept({ resourceType: /xhr|fetch/, log: false }, (req) => {
+  // 1) Suprime o log visual de qualquer xhr/fetch no command log/vídeo
+  cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
+
+  // 2) Captura de verdade, em paralelo, sem aparecer no log
+  cy.intercept({ resourceType: /xhr|fetch/ }, (req) => {
     req.on("response", (res) => {
       const ehApiRelevante = req.url.includes("jcatlm") || req.url.includes("vendasjca.com.br") || req.url.includes("outletdehoteis") || req.url.includes("api-gateway");
 
