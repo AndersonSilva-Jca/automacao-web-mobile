@@ -15,20 +15,17 @@ const wemobi = "https://www.wemobi.me/?utm_source=synthetic_test&utm_medium=inte
 describe("Wemobi", () => {
   beforeEach(() => {
     cy.clearCookies();
-    // cy.intercept({ resourceType: /xhr|fetch/ }, { log: false });
     cy.once("uncaught:exception", () => false);
     Cypress.on("uncaught:exception", () => false);
   });
 
   it("Wemobi - exp. Lugar Marcado", () => {
-    // cy.env(["login", "senha"]).then(() => {
     cy.visit(wemobi);
     LoginPage.wemobiModalLogin();
     LoginPage.wemobiPreencherUsuario();
     LoginPage.wemobiPreencherSenha();
     LoginPage.wemobiConfirmarLogin();
     LoginPage.wemobiLogadoComSucesso();
-    // });
     SearchPage.wemobiBuscaRotasExp();
     SearchPage.wemobiDataIda();
     SearchPage.wemobiConfirmarBusca();
@@ -40,14 +37,12 @@ describe("Wemobi", () => {
   });
 
   it("Wemobi - exp. Assento Aleatório", () => {
-    // cy.env(["login", "senha"]).then(() => {
     cy.visit(wemobi);
     LoginPage.wemobiModalLogin();
     LoginPage.wemobiPreencherUsuario();
     LoginPage.wemobiPreencherSenha();
     LoginPage.wemobiConfirmarLogin();
     LoginPage.wemobiLogadoComSucesso();
-    // });
     SearchPage.wemobiBuscaRotasExp();
     SearchPage.wemobiDataIda();
     SearchPage.wemobiConfirmarBusca();
