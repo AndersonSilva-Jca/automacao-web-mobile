@@ -92,8 +92,6 @@ let networkLog = [];
 beforeEach(() => {
   networkLog = [];
 
-  // Removemos o cy.intercept com { log: false } que estava mockando as requisições da aplicação.
-  // Mantemos apenas a interceptação para escutar e registrar os erros reais:
   cy.intercept({ resourceType: /xhr|fetch/ }, (req) => {
     req.on("response", (res) => {
       const ehApiRelevante = req.url.includes("jcatlm") || req.url.includes("vendasjca.com.br") || req.url.includes("outletdehoteis") || req.url.includes("api-gateway");
@@ -117,4 +115,13 @@ beforeEach(() => {
       }
     });
   });
+});
+
+afterEach(function () {
+  if (networkLog.length > 0) {
+    cy.addTestContext({
+      title: `🚨 ${networkLog.length} chamada(s) de API com erro`,
+      value: JSON.stringify(networkLog, null, 2),
+    });
+  }
 });
