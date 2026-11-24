@@ -133,6 +133,7 @@ Cypress.Commands.add("selecionarAssentoAleatorioWemobi", () => {
     cy.get(`#${id}`).scrollIntoView().should("be.visible").click({ force: true });
   });
   cy.get("#btn-proceed").should("be.visible").log("Assento selecionado");
+  cy.wait(3000);
   cy.get("#btn-proceed", { timeout: 90000 }).should("be.visible").and("not.be.disabled").click();
 });
 
