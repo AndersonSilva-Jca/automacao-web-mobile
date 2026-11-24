@@ -61,25 +61,24 @@ Cypress.on("uncaught:exception", (err, runnable) => {
 });
 require("cypress-xpath");
 
-Cypress.on("test:after:run", (test, runnable) => {
-  if (test.state === "failed") {
-    // Tira o screenshot da tela
-    cy.screenshot({
-      onAfterScreenshot($el, props) {
-        // Leitura do arquivo do screenshot e conversão para Base64
-        cy.readFile(props.path, "base64").then((base64String) => {
-          const base64Image = `data:image/png;base64,${base64String}`;
-
-          // 'base64Image' agora contém a string no formato exato que você precisa:
-          // "data:image/png;base64,iVBORw0KGgoAAAANSUhEUg..."
-
-          // Aqui você envia a propriedade 'base64Image' para a sua API ou banco que popula o campo 'url_print'
-          console.log(base64Image);
-        });
-      },
-    });
-  }
-});
+// ❌ removido — causava corrupção de estado entre tentativas (retries) por enfileirar
+// cy.screenshot()/cy.readFile() dentro de um evento test:after:run (que roda fora da
+// fila de comandos do teste atual, vazando pra fila do próximo teste/tentativa).
+// Não tinha destino real pro base64 gerado (só um console.log). O screenshot de
+// falha já é capturado automaticamente pelo cypress-mochawesome-reporter.
+//
+// Cypress.on("test:after:run", (test, runnable) => {
+//   if (test.state === "failed") {
+//     cy.screenshot({
+//       onAfterScreenshot($el, props) {
+//         cy.readFile(props.path, "base64").then((base64String) => {
+//           const base64Image = `data:image/png;base64,${base64String}`;
+//           console.log(base64Image);
+//         });
+//       },
+//     });
+//   }
+// });
 
 // Desativa a captura automática de printscreen do Cypress em caso de falhas
 // Cypress.Screenshot.defaults({
