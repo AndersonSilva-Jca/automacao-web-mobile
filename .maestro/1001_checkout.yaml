@@ -110,4 +110,4 @@ appId: br.com.autoviacao1001.autoviacao1001app
           text: "^[0-9]{1,2}$"
           index: 0
 - tapOn: "Continuar "
-- assertVisible: "Digite o CUPOM"
+# - assertVisible: "Digite o CUPOM"

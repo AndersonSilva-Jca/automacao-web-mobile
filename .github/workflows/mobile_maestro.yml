@@ -155,6 +155,8 @@ jobs:
             echo "=== Instalando APKs ==="
             adb install-multiple ./app/apks/cometa/*.apk || true
             adb install-multiple ./app/apks/1001/*.apk || true
+            adb install-multiple ./app/apks/catarinense/*.apk || true
+            adb install-multiple ./app/apks/wemobi/*.apk || true
 
             mkdir -p $RESULTS_DIR
 

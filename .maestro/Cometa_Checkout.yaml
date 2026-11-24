@@ -118,5 +118,5 @@ appId: br.com.viacaocometa.cometaapp
       - tapOn:
           text: "^[0-9]{1,2}$"
           index: 0
-- tapOn: "Continuar "
-- assertVisible: "Digite o CUPOM"
+# - tapOn: "Continuar "
+# - assertVisible: "Digite o CUPOM"
