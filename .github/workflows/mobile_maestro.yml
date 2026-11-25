@@ -321,7 +321,7 @@ jobs:
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "✅[MOBILE MAESTRO] Wemobi/UTP - Monit. Cont."
+          subject: "✅[TESTE MOBILE MAESTRO] Wemobi/UTP - Monit. Cont."
           to: anderson.ssantos@jcatlm.com.br
           from: "Monitoramento Contínuo"
           html_body: |
@@ -369,7 +369,7 @@ jobs:
           server_port: 465
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
-          subject: "🚨[ALERTA MOBILE MAESTRO] Wemobi/UTP - Monit. Cont"
+          subject: "🚨[TESTE ALERTA MOBILE MAESTRO] Wemobi/UTP - Monit. Cont"
           to: anderson.ssantos@jcatlm.com.br
           from: "Monitoramento Contínuo"
           attachments: results/*.png
