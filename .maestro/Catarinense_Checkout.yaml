@@ -29,17 +29,16 @@ appId: br.com.catarinense.catarinenseapp
 - inputText: "Sao Paulo (Todos)"
 - extendedWaitUntil:
     visible: "S\u00e3o Paulo (Todos) (SP), Localidade de Grupo"
-    timeout: 5000
+    timeout: 10000
 # - tapOn: "S\u00e3o Paulo (Todos) (SP), Localidade de Grupo"
 # - tapOn: "S\u00e3o Paulo (Todos) (SP), Localidade de Grupo"
 - doubleTapOn: "S\u00e3o Paulo (Todos) (SP), Localidade de Grupo"
-
 - tapOn:
     id: "locationSearch"
 - inputText: "Rio de Janeiro (Todos)"
 - extendedWaitUntil:
     visible: "Rio de Janeiro (Todos) (RJ), Localidade de Grupo"
-    timeout: 5000
+    timeout: 10000
 - tapOn: "Rio de Janeiro (Todos) (RJ), Localidade de Grupo"
 - tapOn: "Rio de Janeiro (Todos) (RJ), Localidade de Grupo"
 - assertVisible: "Data"

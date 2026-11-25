@@ -55,14 +55,22 @@ appId: br.com.autoviacao1001.autoviacao1001app
 
 - tapOn: "Buscar"
 - assertVisible: "Passagem de\u00a0IDA"
-- swipe:
-    direction: UP
-- swipe:
-    direction: UP
-- swipe:
-    direction: UP
+# Rola de forma controlada até encontrar um botão Comprar visível
+- scrollUntilVisible:
+    element: "Comprar"
+    direction: DOWN
+    timeout: 15000
+- waitForAnimationToEnd
 
-# 1. Clica no botão para comprar a passagem
+# 1. Clica no botão pa
+# - swipe:
+#     direction: UP
+# - swipe:
+#     direction: UP
+# - swipe:
+#     direction: UP
+
+# # 1. Clica no botão para comprar a passagem
 - tapOn: "Comprar"
 
 # 2. Verifica condicionalmente se o modal de madrugada apareceu
