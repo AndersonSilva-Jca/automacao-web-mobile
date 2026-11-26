@@ -62,34 +62,15 @@ appId: br.com.autoviacao1001.autoviacao1001app
     visible: "Passagem de\u00a0IDA"
     timeout: 15000
 - waitForAnimationToEnd
-# - swipe:
-#     direction: UP
-# - swipe:
-#     direction: UP
-# - swipe:
-#     direction: UP
+- scroll
+- waitForAnimationToEnd
+- scroll
+- waitForAnimationToEnd
+- scroll
+- waitForAnimationToEnd
+- scroll
+- tapOn: "Comprar"
 
-# Rola 4 vezes para baixo para avançar na listagem
-- repeat:
-    times: 4
-    commands:
-      - scroll
-      - waitForAnimationToEnd
-
-# Garante que há um card com "a partir de" e clica no "Comprar" correspondente
-- extendedWaitUntil:
-    visible:
-      text: "Comprar"
-      below: "a partir de"
-    timeout: 15000
-
-- tapOn:
-    text: "Comprar"
-    below: "a partir de"
-
-# 1. Clica no botão para comprar a passage
-
-# 2. Verifica condicionalmente se o modal de madrugada apareceu
 - runFlow:
     when:
       visible: "Atenção!"
