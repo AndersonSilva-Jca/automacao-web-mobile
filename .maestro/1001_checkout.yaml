@@ -22,11 +22,6 @@ appId: br.com.autoviacao1001.autoviacao1001app
 - extendedWaitUntil:
     visible: "Origem"
     timeout: 10000
-- extendedWaitUntil:
-    visible: "Usar minha localiza\u00e7\u00e3o"
-    timeout: 10000
-- tapOn: "Usar minha localiza\u00e7\u00e3o"
-
 - inputText: "Sao Paulo (Todos) (SP)"
 - extendedWaitUntil:
     visible: "S\u00e3o Paulo (Todos) (SP), Localidade de Grupo"
