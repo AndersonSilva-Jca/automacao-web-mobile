@@ -96,6 +96,7 @@ appId: br.com.autoviacao1001.autoviacao1001app
     commands:
       - assertVisible: "Aten\u00e7\u00e3o!"
       - assertVisible: "Ok, entendi!"
+      - waitForAnimationToEnd
       - tapOn: "Ok, entendi!"
 
 - tapOn: "Adicione um passageiro salvo"
