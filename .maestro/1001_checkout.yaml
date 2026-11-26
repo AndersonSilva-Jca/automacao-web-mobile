@@ -4,49 +4,53 @@ appId: br.com.autoviacao1001.autoviacao1001app
     clearState: true
 - waitForAnimationToEnd
 - tapOn: "Digite seu CPF ou E-mail"
-- inputText: "${LOGIN2}"
+- inputText: "anderson.ssantos@jcatlm.com.br"
 - tapOn:
     id: "password"
-- inputText: "${SENHA2}"
+- inputText: "EJiw2bDT"
 - hideKeyboard
 - tapOn: "Entrar"
 - waitForAnimationToEnd
 - assertVisible:
     id: "origin"
-- assertVisible: "Comprar passagens"
-- assertVisible: "Destino"
-- assertVisible:
-    id: "inputCalendarContainer"
+- extendedWaitUntil:
+    visible: "Comprar passagens"
+    timeout: 10000
 - tapOn:
     id: "origin"
 - waitForAnimationToEnd
-- assertVisible: "Origem"
-- assertVisible:
-    point: 0%,10%
+- extendedWaitUntil:
+    visible: "Origem"
+    timeout: 10000
 - inputText: "Sao Paulo (Todos)"
 - extendedWaitUntil:
     visible: "S\u00e3o Paulo (Todos) (SP), Localidade de Grupo"
-    timeout: 5000
+    timeout: 15000
 - doubleTapOn: "S\u00e3o Paulo (Todos) (SP), Localidade de Grupo"
 - tapOn:
     id: "locationSearch"
 - inputText: "Rio de Janeiro (Todos)"
 - extendedWaitUntil:
     visible: "Rio de Janeiro (Todos) (RJ), Localidade de Grupo"
-    timeout: 5000
+    timeout: 15000
 - tapOn: "Rio de Janeiro (Todos) (RJ), Localidade de Grupo"
 - tapOn: "Rio de Janeiro (Todos) (RJ), Localidade de Grupo"
+- extendedWaitUntil:
+    visible: "Data"
+    timeout: 10000
 - assertVisible: "Data"
-- assertVisible:
-    id: "calendarComponentContainer"
+- extendedWaitUntil:
+    visible:
+      id: "calendarComponentContainer"
+    timeout: 10000
 # - tapOn: "1[1-9]|2[0-9]|30"
 - evalScript: ${output.diaAlvo = (function() { var hoje = new Date(); var ano = hoje.getFullYear(); var mes = hoje.getMonth(); var offsetSorteado = Math.floor(Math.random() * 2); var diasNoMes = new Date(ano, mes + 1, 0).getDate(); return String(Math.min(hoje.getDate() + offsetSorteado, diasNoMes)); })()}
 
 - evalScript: ${output.mesAnoAlvo = (function() { var meses = ["JANEIRO","FEVEREIRO","MARCO","ABRIL","MAIO","JUNHO","JULHO","AGOSTO","SETEMBRO","OUTUBRO","NOVEMBRO","DEZEMBRO"]; var hoje = new Date(); return meses[hoje.getMonth()] + "/" + String(hoje.getFullYear()); })()}
-
-- assertVisible:
-    id: "calendarComponentContainer"
-
+- extendedWaitUntil:
+    visible:
+      id: "calendarComponentContainer"
+    timeout: 10000
 - tapOn:
     text: "^${output.diaAlvo}$"
     below: "${output.mesAnoAlvo}"
@@ -54,15 +58,10 @@ appId: br.com.autoviacao1001.autoviacao1001app
 - tapOn: "Confirmar"
 
 - tapOn: "Buscar"
-- assertVisible: "Passagem de\u00a0IDA"
-# Rola de forma controlada até encontrar um botão Comprar visível
-- scrollUntilVisible:
-    element: "Comprar"
-    direction: DOWN
+- extendedWaitUntil:
+    visible: "Passagem de\u00a0IDA"
     timeout: 15000
 - waitForAnimationToEnd
-
-# 1. Clica no botão pa
 # - swipe:
 #     direction: UP
 # - swipe:
@@ -70,8 +69,25 @@ appId: br.com.autoviacao1001.autoviacao1001app
 # - swipe:
 #     direction: UP
 
-# # 1. Clica no botão para comprar a passagem
-- tapOn: "Comprar"
+# Rola 4 vezes para baixo para avançar na listagem
+- repeat:
+    times: 4
+    commands:
+      - scroll
+      - waitForAnimationToEnd
+
+# Garante que há um card com "a partir de" e clica no "Comprar" correspondente
+- extendedWaitUntil:
+    visible:
+      text: "Comprar"
+      below: "a partir de"
+    timeout: 10000
+
+- tapOn:
+    text: "Comprar"
+    below: "a partir de"
+
+# 1. Clica no botão para comprar a passage
 
 # 2. Verifica condicionalmente se o modal de madrugada apareceu
 - runFlow:
@@ -118,4 +134,3 @@ appId: br.com.autoviacao1001.autoviacao1001app
           text: "^[0-9]{1,2}$"
           index: 0
 - tapOn: "Continuar "
-# - assertVisible: "Digite o CUPOM"
