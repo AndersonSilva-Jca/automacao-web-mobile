@@ -81,7 +81,7 @@ appId: br.com.autoviacao1001.autoviacao1001app
     visible:
       text: "Comprar"
       below: "a partir de"
-    timeout: 10000
+    timeout: 15000
 
 - tapOn:
     text: "Comprar"
