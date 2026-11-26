@@ -4,10 +4,10 @@ appId: br.com.autoviacao1001.autoviacao1001app
     clearState: true
 - waitForAnimationToEnd
 - tapOn: "Digite seu CPF ou E-mail"
-- inputText: "anderson.ssantos@jcatlm.com.br"
+- inputText: "${LOGIN2}"
 - tapOn:
     id: "password"
-- inputText: "EJiw2bDT"
+- inputText: "${SENHA2}"
 - hideKeyboard
 - tapOn: "Entrar"
 - waitForAnimationToEnd
